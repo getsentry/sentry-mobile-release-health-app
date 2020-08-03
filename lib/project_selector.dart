@@ -31,12 +31,12 @@ class _ProjectSelectorState extends State<ProjectSelector> {
           children: [
             Text(
                 'You are already logged in - Expires: ${viewModel.session.expires}'),
-            Center(
-              child: RaisedButton(
-                child: Text('Logout'),
-                onPressed: () => viewModel.logout(),
-              ),
-            ),
+            // Center(
+            //   child: RaisedButton(
+            //     child: Text('Logout'),
+            //     onPressed: () => viewModel.getOrganizations(),
+            //   ),
+            // ),
           ],
         ),
       );
@@ -84,7 +84,6 @@ class ProjectViewModel {
 
   final Cookie session;
   final Function(Cookie session) getOrganizations;
-  final Function() logout;
 
   static ProjectViewModel fromStore(Store<AppState> store) => ProjectViewModel(
       session: store.state.globalState.session,
