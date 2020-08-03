@@ -1,13 +1,12 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:http/http.dart';
-import 'package:webview_cookie_manager/webview_cookie_manager.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:sentry_mobile/redux/state/app_state.dart';
 import 'package:sentry_mobile/login_viewmodel.dart';
+import 'package:sentry_mobile/redux/state/app_state.dart';
+import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 
 class Login extends StatefulWidget {
   const Login({Key key}) : super(key: key);
@@ -17,43 +16,30 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final flutterWebviewPlugin = FlutterWebviewPlugin();
+  void loginFlow(LoginViewModel viewModel) async {
+    print('webview');
+    final flutterWebviewPlugin = FlutterWebviewPlugin();
+    final cookieManager = WebviewCookieManager();
+    await cookieManager.clearCookies();
+    print('cleaned cookies');
 
-  StreamSubscription _onDestroy;
-  StreamSubscription<String> _onUrlChanged;
-  StreamSubscription<WebViewStateChanged> _onStateChanged;
-  final cookieManager = WebviewCookieManager();
+    const loginUrl = 'https://sentry.io/auth/login/';
+    // Google won't let you login with the default user-agent so setting something known
+    final userAgent = Platform.isAndroid
+        ? 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Mobile Safari/537.36'
+        : 'Mozilla/5.0 (iPhone; CPU OS 13_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/23.0 Mobile/15E148 Safari/605.1.15';
 
-  @override
-  void dispose() {
-    // Every listener should be canceled, the same should be done with this stream.
-    _onDestroy.cancel();
-    _onUrlChanged.cancel();
-    _onStateChanged.cancel();
-    flutterWebviewPlugin.dispose();
-    super.dispose();
-  }
+    await flutterWebviewPlugin.launch(loginUrl,
+        hidden: false,
+        rect: Rect.fromLTWH(0.0, Scaffold.of(context).appBarMaxHeight, MediaQuery.of(context).size.width, MediaQuery.of(context).size.height - Scaffold.of(context).appBarMaxHeight - 60),
+        userAgent: userAgent,
+        clearCache: true,
+        clearCookies: true);
 
-  @override
-  void initState() {
-    super.initState();
-    print('init state login view');
+    // We need to read cookies otherwise this is broken somehow
+    await flutterWebviewPlugin.getCookies();
 
-    flutterWebviewPlugin.close();
-
-    // Add a listener to on destroy WebView, so you can make came actions.
-    _onDestroy = flutterWebviewPlugin.onDestroy.listen((_) {
-      print('destroy');
-    });
-
-    _onStateChanged =
-        flutterWebviewPlugin.onStateChanged.listen((WebViewStateChanged state) {
-      print('onStateChanged: ${state.type} ${state.url}');
-    });
-
-    // Add a listener to on url changed
-    _onUrlChanged =
-        flutterWebviewPlugin.onUrlChanged.listen((String url) async {
+    flutterWebviewPlugin.onUrlChanged.listen((String url) async {
       if (!url.contains('https://sentry.io')) {
         // We return here, it crashes if we fetch cookies from pages like google
         return;
@@ -61,6 +47,7 @@ class _LoginState extends State<Login> {
       print('urlChanged: $url');
 
       final cookies = await cookieManager.getCookies(url);
+
       final session =
           cookies.firstWhere((c) => c.name == 'session', orElse: () => null);
       if (session != null) {
@@ -88,13 +75,13 @@ class _LoginState extends State<Login> {
         }
       }
       print('URL changed: $url $session');
-      if (mounted) {
-        if (session != null) {
-          flutterWebviewPlugin.close();
-          final store = StoreProvider.of<AppState>(context);
-          final viewModel = LoginViewModel.fromStore(store);
-          viewModel.login(session);
-        }
+
+      if (session != null) {
+        flutterWebviewPlugin.close();
+        final store = StoreProvider.of<AppState>(context);
+        final viewModel = LoginViewModel.fromStore(store);
+        viewModel.login(session);
+        flutterWebviewPlugin.dispose();
       }
     });
   }
@@ -105,30 +92,30 @@ class _LoginState extends State<Login> {
       return Container(
         child: Column(
           children: [
-            Text('You are already logged in - Expires: ${viewModel.session.expires}'),
+            Text(
+                'You are already logged in - Expires: ${viewModel.session.expires}'),
             Center(
               child: RaisedButton(
                 child: Text('Logout'),
-                onPressed: () {
-                viewModel.logout();
-                },
+                onPressed: () => viewModel.logout(),
               ),
             ),
           ],
         ),
       );
     }
-    print('webview');
-    const loginUrl = 'https://sentry.io/auth/login/';
-    // Google won't let you login with the default user-agent so setting something known
-    final userAgent = Platform.isAndroid
-        ? 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Mobile Safari/537.36'
-        : 'Mozilla/5.0 (iPhone; CPU OS 13_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/23.0 Mobile/15E148 Safari/605.1.15';
-    return WebviewScaffold(
-        url: loginUrl,
-        clearCookies: viewModel.session == null,
-        resizeToAvoidBottomInset: true,
-        userAgent: userAgent);
+    return Container(
+      child: Column(
+        children: [
+          Center(
+            child: RaisedButton(
+              child: Text('Login'),
+              onPressed: () => loginFlow(viewModel),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
