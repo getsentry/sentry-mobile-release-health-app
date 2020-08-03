@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:http/http.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 // import 'app_bar.dart';
 
@@ -22,6 +23,7 @@ class _LoginState extends State<Login> {
   StreamSubscription<String> _onUrlChanged;
   StreamSubscription<WebViewStateChanged> _onStateChanged;
   final cookieManager = WebviewCookieManager();
+  final storage = FlutterSecureStorage();
 
   String token;
 
@@ -54,6 +56,12 @@ class _LoginState extends State<Login> {
     // Add a listener to on url changed
     _onUrlChanged =
         flutterWebviewPlugin.onUrlChanged.listen((String url) async {
+      if (!url.contains('https://sentry.io')) {
+        // We return here, it crashes if we fetch cookies from pages like google
+        return;
+      }
+      print('urlChanged: $url');
+
       final cookies = await cookieManager.getCookies(url);
       final session =
           cookies.firstWhere((c) => c.name == 'session', orElse: () => null);
@@ -83,6 +91,9 @@ class _LoginState extends State<Login> {
       }
 
       if (mounted) {
+        if (session != null) {
+          await storage.write(key: 'session', value: session.toString());
+        }
         setState(() {
           // print('URL changed: $url');
           if (session != null) {

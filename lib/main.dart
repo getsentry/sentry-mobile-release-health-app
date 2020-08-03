@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'app_bar.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() {
   runApp(MyApp());
@@ -35,6 +36,8 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatelessWidget {
   MyHomePage({Key key}) : super(key: key);
 
+  final storage = FlutterSecureStorage();
+
   @override
   Widget build(BuildContext context) {
     return SentryAppBar(
@@ -45,6 +48,17 @@ class MyHomePage extends StatelessWidget {
             Text(
               'Main page body:',
             ),
+            Row(children: <Widget>[
+              Center(
+                child: RaisedButton(
+                  child: Text('Log session'),
+                  onPressed: () async {
+                    final String value = await storage.read(key: 'session');
+                    print('Session: $value');
+                  },
+                ),
+              ),
+            ]),
           ],
         ),
       ),
