@@ -24,11 +24,17 @@ https://flutter.dev/docs/get-started/install
 flutter doctor
 ```
 
-3. Use your editor of choice (recommendation Android Studio with Flutter plugin) 
+3. Install dependencies
+
+```
+flutter pub get
+```
+
+4. Use your editor of choice (recommendation Android Studio with Flutter plugin)
 
 https://flutter.dev/docs/get-started/editor
 
-4. Run the App
+5. Run the App
 
 You can start it from Android Studio in an Simulator, even iOS Simulator.
 
