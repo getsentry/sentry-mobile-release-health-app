@@ -30,12 +30,7 @@ class _LoginState extends State<Login> {
             Center(
               child: RaisedButton(
                 child: Text('Logout'),
-                onPressed: () async {
-                  final cookieManager = WebviewCookieManager();
-                  await cookieManager.clearCookies();
-
-                  viewModel.logout();
-                },
+                onPressed: () => viewModel.logout(),
               ),
             ),
           ],
