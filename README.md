@@ -11,3 +11,29 @@
 
 This is a hackweek project and not a Sentry product.  
 There are no plans of publishing this app to the App Store/Google Play Store.
+
+# Getting started
+
+1. Install Flutter
+
+https://flutter.dev/docs/get-started/install
+
+2. Run to see what you should do:
+
+```
+flutter doctor
+```
+
+3. Use your editor of choice (recommendation Android Studio with Flutter plugin) 
+
+https://flutter.dev/docs/get-started/editor
+
+4. Run the App
+
+You can start it from Android Studio in an Simulator, even iOS Simulator.
+
+or run
+
+```
+flutter run 
+```
