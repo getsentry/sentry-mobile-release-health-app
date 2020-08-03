@@ -38,11 +38,12 @@ class GlobalState {
   GlobalState copyWith({
     String title,
     Cookie session,
+    bool setSessionNull = false,
     FlutterSecureStorage storage,
   }) {
     return GlobalState(
       title: title ?? this.title,
-      session: session ?? this.session,
+      session: setSessionNull ? null: (session ?? this.session),
       storage: storage ?? this.storage,
     );
   }

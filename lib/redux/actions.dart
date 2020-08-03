@@ -5,6 +5,10 @@ class LoginAction {
   final Cookie payload;
 }
 
+class LogoutAction {
+  LogoutAction();
+}
+
 class TitleAction {
   TitleAction(this.payload);
   final String payload;

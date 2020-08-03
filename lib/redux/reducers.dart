@@ -11,11 +11,16 @@ AppState appReducer(AppState state, dynamic action) =>
 
 final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, LoginAction>(_loginAction),
+  TypedReducer<GlobalState, LogoutAction>(_logoutAction),
   TypedReducer<GlobalState, TitleAction>(_titleAction),
 ]);
 
 GlobalState _loginAction(GlobalState state, LoginAction action) {
   return state.copyWith(session: action.payload);
+}
+
+GlobalState _logoutAction(GlobalState state, LogoutAction action) {
+  return state.copyWith(setSessionNull: true);
 }
 
 GlobalState _titleAction(GlobalState state, TitleAction action) {

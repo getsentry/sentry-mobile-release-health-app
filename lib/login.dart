@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:http/http.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:sentry_mobile/redux/state/app_state.dart';
 import 'package:sentry_mobile/login_viewmodel.dart';
@@ -38,6 +37,7 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
+    print('init state login view');
 
     flutterWebviewPlugin.close();
 
@@ -87,9 +87,8 @@ class _LoginState extends State<Login> {
           client.close();
         }
       }
-
+      print('URL changed: $url $session');
       if (mounted) {
-        // print('URL changed: $url');
         if (session != null) {
           flutterWebviewPlugin.close();
           final store = StoreProvider.of<AppState>(context);
@@ -101,6 +100,25 @@ class _LoginState extends State<Login> {
   }
 
   Widget content(LoginViewModel viewModel) {
+    print('UPDATE Login ${viewModel.session}');
+    if (viewModel.session != null) {
+      return Container(
+        child: Column(
+          children: [
+            Text('You are already logged in - Expires: ${viewModel.session.expires}'),
+            Center(
+              child: RaisedButton(
+                child: Text('Logout'),
+                onPressed: () {
+                viewModel.logout();
+                },
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+    print('webview');
     const loginUrl = 'https://sentry.io/auth/login/';
     // Google won't let you login with the default user-agent so setting something known
     final userAgent = Platform.isAndroid
@@ -108,6 +126,8 @@ class _LoginState extends State<Login> {
         : 'Mozilla/5.0 (iPhone; CPU OS 13_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/23.0 Mobile/15E148 Safari/605.1.15';
     return WebviewScaffold(
         url: loginUrl,
+        clearCookies: viewModel.session == null,
+        resizeToAvoidBottomInset: true,
         userAgent: userAgent);
   }
 
