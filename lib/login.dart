@@ -6,8 +6,9 @@ import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:http/http.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
-// import 'app_bar.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:sentry_mobile/redux/state/app_state.dart';
+import 'package:sentry_mobile/login_viewmodel.dart';
 
 class Login extends StatefulWidget {
   const Login({Key key}) : super(key: key);
@@ -23,9 +24,6 @@ class _LoginState extends State<Login> {
   StreamSubscription<String> _onUrlChanged;
   StreamSubscription<WebViewStateChanged> _onStateChanged;
   final cookieManager = WebviewCookieManager();
-  final storage = FlutterSecureStorage();
-
-  String token;
 
   @override
   void dispose() {
@@ -91,23 +89,18 @@ class _LoginState extends State<Login> {
       }
 
       if (mounted) {
+        // print('URL changed: $url');
         if (session != null) {
-          await storage.write(key: 'session', value: session.toString());
+          flutterWebviewPlugin.close();
+          final store = StoreProvider.of<AppState>(context);
+          final viewModel = LoginViewModel.fromStore(store);
+          viewModel.login(session);
         }
-        setState(() {
-          // print('URL changed: $url');
-          if (session != null) {
-            print(session);
-            Navigator.pop(context);
-            flutterWebviewPlugin.close();
-          }
-        });
       }
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget content(LoginViewModel viewModel) {
     const loginUrl = 'https://sentry.io/auth/login/';
     // Google won't let you login with the default user-agent so setting something known
     final userAgent = Platform.isAndroid
@@ -115,9 +108,14 @@ class _LoginState extends State<Login> {
         : 'Mozilla/5.0 (iPhone; CPU OS 13_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/23.0 Mobile/15E148 Safari/605.1.15';
     return WebviewScaffold(
         url: loginUrl,
-        userAgent: userAgent,
-        appBar: AppBar(
-          title: Text('Login...'),
-        ));
+        userAgent: userAgent);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StoreConnector<AppState, LoginViewModel>(
+      builder: (_, viewModel) => content(viewModel),
+      converter: (store) => LoginViewModel.fromStore(store),
+    );
   }
 }
