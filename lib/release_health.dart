@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -11,8 +10,8 @@ Future<List<Release>> fetchReleases() async {
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
-    List responseJson = json.decode(response.body);
-    return responseJson.map((m) => new Release.fromJson(m)).toList();
+    final responseJson = json.decode(response.body) as List;
+    return responseJson.map((dynamic r) => Release.fromJson(r)).toList();
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
@@ -21,17 +20,17 @@ Future<List<Release>> fetchReleases() async {
 }
 
 class Release {
-  final String version;
-  final double crashFreeSessions;
-
   Release({this.version, this.crashFreeSessions});
 
-  factory Release.fromJson(Map<String, dynamic> json) {
+  factory Release.fromJson(dynamic json) {
     return Release(
-      version: json['version'],
-      crashFreeSessions: json['projects'][0]['healthData']['crashFreeSessions'],
-    );
+        version: json['version'] as String,
+        crashFreeSessions:
+            json['projects'][0]['healthData']['crashFreeSessions'] as double);
   }
+
+  final String version;
+  final double crashFreeSessions;
 }
 
 class ReleaseHealth extends StatefulWidget {
@@ -47,7 +46,7 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
   @override
   void initState() {
     super.initState();
-    futureReleases = fetchReleases();
+    fetchData();
   }
 
   Future<void> fetchData() async {
@@ -66,15 +65,15 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
               child: ListView.builder(
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text('${snapshot.data[index].version}'),
-                  );
+                  return Card(
+                      child:
+                          ListTile(title: Text(snapshot.data[index].version)));
                 },
               ),
               onRefresh: fetchData,
             );
           } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
+            return Text('${snapshot.error}');
           }
 
           return Center(
