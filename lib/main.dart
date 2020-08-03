@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
-import 'package:sentry_mobile/issues.dart';
-import 'package:sentry_mobile/login.dart';
-import 'package:sentry_mobile/redux/actions.dart';
-import 'package:sentry_mobile/redux/reducers.dart';
-import 'package:sentry_mobile/redux/state/app_state.dart';
-import 'package:sentry_mobile/release_health.dart';
 
+import 'issues.dart';
+import 'login.dart';
+import 'project_selector.dart';
+import 'redux/actions.dart';
+import 'redux/reducers.dart';
+import 'redux/state/app_state.dart';
+import 'release_health.dart';
 
 Future<Store<AppState>> createStore() async {
 //  var prefs = await SharedPreferences.getInstance();
@@ -36,7 +37,8 @@ void main() async {
 
   final store = await createStore();
 
-  final String session = await store.state.globalState.storage.read(key: 'session');
+  final String session =
+      await store.state.globalState.storage.read(key: 'session');
   print('trying to fetch data from storage $session');
   if (session != null) {
     print('Calling login');
@@ -84,7 +86,7 @@ class MyApp extends StatelessWidget {
               converter: (store) => store.state,
               builder: (context, state) {
                 return DefaultTabController(
-                  length: 3,
+                  length: 4,
                   child: Scaffold(
                     appBar: Header(),
                     bottomNavigationBar: Material(
@@ -108,6 +110,11 @@ class MyApp extends StatelessWidget {
                                 text: 'Settings',
                                 iconMargin: EdgeInsets.only(bottom: 4),
                               ),
+                              Tab(
+                                icon: Icon(Icons.accessibility),
+                                text: 'Project',
+                                iconMargin: EdgeInsets.only(bottom: 4),
+                              ),
                             ],
                           ),
                         )),
@@ -116,6 +123,7 @@ class MyApp extends StatelessWidget {
                         ReleaseHealth(),
                         Issues(),
                         Login(),
+                        ProjectSelector(),
                       ],
                       physics: NeverScrollableScrollPhysics(),
                     ),
@@ -125,39 +133,6 @@ class MyApp extends StatelessWidget {
         ));
   }
 }
-
-//class MyHomePage extends StatelessWidget {
-//  MyHomePage({Key key}) : super(key: key);
-//
-//  final storage = FlutterSecureStorage();
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    return SentryAppBar(
-//      Center(
-//        child: Column(
-//          mainAxisAlignment: MainAxisAlignment.center,
-//          children: <Widget>[
-//            Text(
-//              'Main page body:',
-//            ),
-//            Row(children: <Widget>[
-//              Center(
-//                child: RaisedButton(
-//                  child: Text('Log session'),
-//                  onPressed: () async {
-//                    final String value = await storage.read(key: 'session');
-//                    print('Session: $value');
-//                  },
-//                ),
-//              ),
-//            ]),
-//          ],
-//        ),
-//      ),
-//    );
-//  }
-//}
 
 class Header extends StatelessWidget with PreferredSizeWidget {
   final Store<AppState> store;
