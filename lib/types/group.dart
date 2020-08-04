@@ -9,8 +9,6 @@ class GroupMetadata {
   final String message;
   final String type;
   final String title;
-
-  
 }
 
 class Group {
@@ -22,7 +20,8 @@ class Group {
         userCount = json['userCount'] as int,
         count = json['count'] as int,
         title = json['title'] as String,
-        metadata = GroupMetadata.fromJson(json['metadata'] as Map<String, dynamic>);
+        metadata =
+            GroupMetadata.fromJson(json['metadata'] as Map<String, dynamic>);
 
   final String id;
   final String culprit;

@@ -88,8 +88,6 @@ const String jsonString = '''
   }
 ''';
 
-
-
 class Issues extends StatefulWidget {
   const Issues({Key key}) : super(key: key);
 
@@ -108,10 +106,14 @@ class _IssuesState extends State<Issues> {
 
   void getSampleData() {
     setState(() {
-      Map<String, dynamic> groups = jsonDecode(jsonString) as Map<String, dynamic>;
+      Map<String, dynamic> groups =
+          jsonDecode(jsonString) as Map<String, dynamic>;
 
       final List<dynamic> groupLists = groups['groups'] as List<dynamic>;
-      sampleGroups = groupLists.map((dynamic groupJson) => Group.fromJson(groupJson as Map<String, dynamic>)).toList();
+      sampleGroups = groupLists
+          .map((dynamic groupJson) =>
+              Group.fromJson(groupJson as Map<String, dynamic>))
+          .toList();
     });
   }
 
@@ -123,7 +125,14 @@ class _IssuesState extends State<Issues> {
         itemBuilder: (context, index) {
           final group = sampleGroups[index];
 
-          return Issue(title: group.metadata.type, value: group.title, culprit: group.culprit, userCount: group.userCount, count: group.count, lastSeen: group.lastSeen, firstSeen: group.lastSeen);
+          return Issue(
+              title: group.metadata.type,
+              value: group.title,
+              culprit: group.culprit,
+              userCount: group.userCount,
+              count: group.count,
+              lastSeen: group.lastSeen,
+              firstSeen: group.lastSeen);
         },
       ),
     );
@@ -131,7 +140,14 @@ class _IssuesState extends State<Issues> {
 }
 
 class Issue extends StatelessWidget {
-  Issue({@required this.title, this.value, @required this.culprit, @required this.userCount, @required this.count, @required this.firstSeen, @required this.lastSeen});
+  Issue(
+      {@required this.title,
+      this.value,
+      @required this.culprit,
+      @required this.userCount,
+      @required this.count,
+      @required this.firstSeen,
+      @required this.lastSeen});
   final String title;
   final String value;
   final String culprit;
@@ -139,39 +155,39 @@ class Issue extends StatelessWidget {
   final int count;
   final DateTime firstSeen;
   final DateTime lastSeen;
-  
-  Widget build(BuildContext context) => Card(
-    child: Padding(
-      padding: EdgeInsets.all(14.0),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            flex: 1,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                  Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text(culprit, style: TextStyle(color: Colors.black54)),
-                  Text(value, style: TextStyle(color: Colors.black87)),
-                  Text(
-                    '${timeago.format(lastSeen)} — ${timeago.format(firstSeen)}',
-                  style: TextStyle(color: Colors.black54))
-                ],
-            )
-          ),
-          Row(children: <Widget>[
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 14.0),
-              child: Text(count.toString(), style: TextStyle(fontWeight: FontWeight.bold))
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 14.0),
-              child: Text(userCount.toString(), style: TextStyle(fontWeight: FontWeight.bold))
-            ),
-          ],)
-        ]
-      )
-    ),
-  );
-}
 
+  Widget build(BuildContext context) => Card(
+        child: Padding(
+            padding: EdgeInsets.all(14.0),
+            child: Row(children: <Widget>[
+              Expanded(
+                  flex: 1,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(title,
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text(culprit, style: TextStyle(color: Colors.black54)),
+                      Text(value, style: TextStyle(color: Colors.black87)),
+                      Text(
+                          '${timeago.format(lastSeen)} — ${timeago.format(firstSeen)}',
+                          style: TextStyle(color: Colors.black54))
+                    ],
+                  )),
+              Row(
+                children: <Widget>[
+                  Container(
+                      width: 40,
+                      alignment: Alignment.center,
+                      child: Text(count.toString(),
+                          style: TextStyle(fontWeight: FontWeight.bold))),
+                  Container(
+                      width: 40,
+                      alignment: Alignment.center,
+                      child: Text(userCount.toString(),
+                          style: TextStyle(fontWeight: FontWeight.bold))),
+                ],
+              )
+            ])),
+      );
+}
