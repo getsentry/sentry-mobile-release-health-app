@@ -5,13 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
-import 'issues.dart';
-import 'login.dart';
-import 'project_selector.dart';
-import 'redux/actions.dart';
-import 'redux/reducers.dart';
-import 'redux/state/app_state.dart';
-import 'release_health.dart';
+import 'package:sentry_mobile/issues.dart';
+import 'package:sentry_mobile/settings.dart';
+import 'package:sentry_mobile/redux/actions.dart';
+import 'package:sentry_mobile/redux/reducers.dart';
+import 'package:sentry_mobile/redux/state/app_state.dart';
+import 'package:sentry_mobile/release_health.dart';
 
 Future<Store<AppState>> createStore() async {
 //  var prefs = await SharedPreferences.getInstance();
@@ -86,7 +85,7 @@ class MyApp extends StatelessWidget {
               converter: (store) => store.state,
               builder: (context, state) {
                 return DefaultTabController(
-                  length: 4,
+                  length: 3,
                   child: Scaffold(
                     appBar: Header(),
                     bottomNavigationBar: Material(
@@ -110,11 +109,7 @@ class MyApp extends StatelessWidget {
                                 text: 'Settings',
                                 iconMargin: EdgeInsets.only(bottom: 4),
                               ),
-                              Tab(
-                                icon: Icon(Icons.accessibility),
-                                text: 'Project',
-                                iconMargin: EdgeInsets.only(bottom: 4),
-                              ),
+
                             ],
                           ),
                         )),
@@ -122,8 +117,7 @@ class MyApp extends StatelessWidget {
                       children: [
                         ReleaseHealth(),
                         Issues(),
-                        Login(),
-                        ProjectSelector(),
+                        Settings(),
                       ],
                       physics: NeverScrollableScrollPhysics(),
                     ),
