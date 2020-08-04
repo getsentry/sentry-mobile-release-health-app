@@ -6,6 +6,7 @@ import 'package:redux/redux.dart';
 import 'package:sentry_mobile/redux/actions.dart';
 import 'package:sentry_mobile/redux/state/app_state.dart';
 import 'package:sentry_mobile/types/organization.dart';
+import 'package:sentry_mobile/types/project.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SentryApi {
@@ -43,8 +44,10 @@ void apiMiddleware(
       final response = await api.organizations();
       if (response.statusCode == 200) {
         final responseJson = json.decode(response.body) as List;
-
-        store.dispatch(FetchOrganizationsSuccessAction(List<Map<String, dynamic>>.from(responseJson)));
+        final orgList = List<Map<String, dynamic>>.from(responseJson);
+        final orgs = orgList.map((Map<String, dynamic> r) => Organization.fromJson(r)).toList();
+        store.dispatch(FetchOrganizationsSuccessAction(orgs));
+        store.dispatch(SelectOrganizationAction(orgs.first));
         store.dispatch(
             FetchProjectsAction(store.state.globalState.selectedOrganization));
       } else {
@@ -60,7 +63,10 @@ void apiMiddleware(
       final response = await api.projects(action.payload);
       if (response.statusCode == 200) {
         final responseJson = json.decode(response.body) as List;
-        store.dispatch(FetchProjectsSuccessAction(List<Map<String, dynamic>>.from(responseJson)));
+        final projList = List<Map<String, dynamic>>.from(responseJson);
+        final projs = projList.map((Map<String, dynamic> r) => Project.fromJson(r)).toList();
+        store.dispatch(FetchProjectsSuccessAction(projs));
+        store.dispatch(SelectProjectAction(projs.first));
       } else {
         store.dispatch(FetchProjectsFailureAction());
       }
@@ -81,7 +87,7 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
   @override
   void call(Store<AppState> store, dynamic action, NextDispatcher next) {
     if (action is SelectProjectAction) {
-      preferences.setString('project', action.payload.toString());
+      preferences.setString('project', jsonEncode(action.payload.toJson()));
     }
     next(action);
   }

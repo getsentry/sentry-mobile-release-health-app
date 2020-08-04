@@ -1,9 +1,6 @@
 import 'package:redux/redux.dart';
-
-import 'package:sentry_mobile/redux/state/app_state.dart';
 import 'package:sentry_mobile/redux/actions.dart';
-import 'package:sentry_mobile/types/organization.dart';
-import 'package:sentry_mobile/types/project.dart';
+import 'package:sentry_mobile/redux/state/app_state.dart';
 
 AppState appReducer(AppState state, dynamic action) =>
     AppState(
@@ -29,8 +26,7 @@ GlobalState _logoutAction(GlobalState state, LogoutAction action) {
 }
 
 GlobalState _fetchOrganizationsSuccessAction(GlobalState state, FetchOrganizationsSuccessAction action) {
-  final orgs = action.payload.map((Map<String, dynamic> r) => Organization.fromJson(r)).toList();
-  return state.copyWith(organizations: orgs, selectedOrganization: orgs.first);
+  return state.copyWith(organizations: action.payload);
 }
 
 GlobalState _selectOrganizationAction(GlobalState state, SelectOrganizationAction action) {
@@ -38,8 +34,7 @@ GlobalState _selectOrganizationAction(GlobalState state, SelectOrganizationActio
 }
 
 GlobalState _fetchProjectSuccessAction(GlobalState state, FetchProjectsSuccessAction action) {
-  final projs = action.payload.map((Map<String, dynamic> r) => Project.fromJson(r)).toList();
-  return state.copyWith(projects: projs, selectedProject: projs.first);
+  return state.copyWith(projects: action.payload);
 }
 
 GlobalState _selectProjectAction(GlobalState state, SelectProjectAction action) {

@@ -20,7 +20,8 @@ Future<Store<AppState>> createStore() async {
     appReducer,
     initialState: AppState.initial(),
     middleware: [
-      apiMiddleware
+      apiMiddleware,
+      LocalStorageMiddleware(prefs)
 //      ValidationMiddleware(),
 //      LoggingMiddleware.printer(),
 //      LocalStorageMiddleware(prefs),

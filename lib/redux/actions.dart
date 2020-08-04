@@ -23,7 +23,7 @@ class FetchOrganizationsAction {
 
 class FetchOrganizationsSuccessAction {
   FetchOrganizationsSuccessAction(this.payload);
-  final List<Map<String, dynamic>> payload;
+  final List<Organization> payload;
 }
 
 class FetchOrganizationsFailureAction {
@@ -42,7 +42,7 @@ class FetchProjectsAction {
 
 class FetchProjectsSuccessAction {
   FetchProjectsSuccessAction(this.payload);
-  final List<Map<String, dynamic>> payload;
+  final List<Project> payload;
 }
 
 class FetchProjectsFailureAction {
