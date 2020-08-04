@@ -44,6 +44,7 @@ void apiMiddleware(
       if (response.statusCode == 200) {
         final responseJson = json.decode(response.body) as List;
         store.dispatch(FetchOrganizationsSuccessAction(responseJson));
+        store.dispatch(FetchProjectsAction(store.state.globalState.selectedOrganization));
       } else {
         store.dispatch(FetchOrganizationsFailureAction());
       }
