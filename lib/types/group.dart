@@ -1,15 +1,4 @@
-class GroupMetadata {
-  GroupMetadata.fromJson(Map<String, dynamic> json)
-      : value = json['value'] as String,
-        message = json['message'] as String,
-        type = json['type'] as String,
-        title = json['title'] as String;
-
-  final String value;
-  final String message;
-  final String type;
-  final String title;
-}
+import './event_metadata.dart';
 
 class Group {
   Group.fromJson(Map<String, dynamic> json)
@@ -21,7 +10,7 @@ class Group {
         count = json['count'] as int,
         title = json['title'] as String,
         metadata =
-            GroupMetadata.fromJson(json['metadata'] as Map<String, dynamic>);
+            EventMetadata.fromJson(json['metadata'] as Map<String, dynamic>);
 
   final String id;
   final String culprit;
@@ -30,5 +19,5 @@ class Group {
   final int userCount;
   final int count;
   final String title;
-  final GroupMetadata metadata;
+  final EventMetadata metadata;
 }

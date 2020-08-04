@@ -71,6 +71,7 @@ class MyApp extends StatelessWidget {
             // Notice that the counter didn't reset back to zero; the application
             // is not restarted.
             primarySwatch: Colors.purple,
+            primaryColorDark: Color(0xff4e3fb4),
             // This makes the visual density adapt to the platform that you run
             // the app on. For desktop platforms, the controls will be smaller and
             // closer together (more dense) than on mobile platforms.
@@ -80,6 +81,26 @@ class MyApp extends StatelessWidget {
                 fontWeight: FontWeight.w700,
                 fontSize: 24,
                 color: Colors.black,
+              ),
+              headline2: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 20,
+                color: Colors.black,
+              ),
+              headline3: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 18,
+                color: Colors.black,
+              ),
+              headline4: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 16,
+                color: Colors.black,
+              ),
+              caption: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 16,
+                color: Colors.black45,
               ),
             )),
         home: StoreProvider<AppState>(
@@ -112,14 +133,13 @@ class MyApp extends StatelessWidget {
                                 text: 'Settings',
                                 iconMargin: EdgeInsets.only(bottom: 4),
                               ),
-
                             ],
                           ),
                         )),
                     body: TabBarView(
                       children: [
                         ReleaseHealth(),
-                        Issues(),
+                        IssuesScreenBuilder(),
                         Settings(),
                       ],
                       physics: NeverScrollableScrollPhysics(),
