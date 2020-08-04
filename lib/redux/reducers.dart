@@ -29,7 +29,7 @@ GlobalState _logoutAction(GlobalState state, LogoutAction action) {
 }
 
 GlobalState _fetchOrganizationsSuccessAction(GlobalState state, FetchOrganizationsSuccessAction action) {
-  final orgs = action.payload.map((dynamic r) => Organization.fromJson(r)).toList();
+  final orgs = action.payload.map((Map<String, dynamic> r) => Organization.fromJson(r)).toList();
   return state.copyWith(organizations: orgs, selectedOrganization: orgs.first);
 }
 
@@ -38,7 +38,7 @@ GlobalState _selectOrganizationAction(GlobalState state, SelectOrganizationActio
 }
 
 GlobalState _fetchProjectSuccessAction(GlobalState state, FetchProjectsSuccessAction action) {
-  final projs = action.payload.map((dynamic r) => Project.fromJson(r)).toList();
+  final projs = action.payload.map((Map<String, dynamic> r) => Project.fromJson(r)).toList();
   return state.copyWith(projects: projs, selectedProject: projs.first);
 }
 

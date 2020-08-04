@@ -6,6 +6,7 @@ import 'package:redux/redux.dart';
 import 'package:sentry_mobile/redux/actions.dart';
 import 'package:sentry_mobile/redux/state/app_state.dart';
 import 'package:sentry_mobile/types/organization.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SentryApi {
   SentryApi(this.session);
@@ -20,8 +21,7 @@ class SentryApi {
   }
 
   Future<Response> me() async {
-    return client.get('$baseUrl/me/',
-        headers: {'Cookie': session.toString()});
+    return client.get('$baseUrl/me/', headers: {'Cookie': session.toString()});
   }
 
   Future<Response> projects(Organization organization) async {
@@ -43,8 +43,10 @@ void apiMiddleware(
       final response = await api.organizations();
       if (response.statusCode == 200) {
         final responseJson = json.decode(response.body) as List;
-        store.dispatch(FetchOrganizationsSuccessAction(responseJson));
-        store.dispatch(FetchProjectsAction(store.state.globalState.selectedOrganization));
+
+        store.dispatch(FetchOrganizationsSuccessAction(List<Map<String, dynamic>>.from(responseJson)));
+        store.dispatch(
+            FetchProjectsAction(store.state.globalState.selectedOrganization));
       } else {
         store.dispatch(FetchOrganizationsFailureAction());
       }
@@ -58,7 +60,7 @@ void apiMiddleware(
       final response = await api.projects(action.payload);
       if (response.statusCode == 200) {
         final responseJson = json.decode(response.body) as List;
-        store.dispatch(FetchProjectsSuccessAction(responseJson));
+        store.dispatch(FetchProjectsSuccessAction(List<Map<String, dynamic>>.from(responseJson)));
       } else {
         store.dispatch(FetchProjectsFailureAction());
       }
@@ -69,4 +71,18 @@ void apiMiddleware(
 
   api.close();
   next(action);
+}
+
+class LocalStorageMiddleware extends MiddlewareClass<AppState> {
+  LocalStorageMiddleware(this.preferences);
+
+  final SharedPreferences preferences;
+
+  @override
+  void call(Store<AppState> store, dynamic action, NextDispatcher next) {
+    if (action is SelectProjectAction) {
+      preferences.setString('project', action.payload.toString());
+    }
+    next(action);
+  }
 }

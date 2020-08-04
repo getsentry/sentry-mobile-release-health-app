@@ -12,9 +12,10 @@ import 'package:sentry_mobile/redux/reducers.dart';
 import 'package:sentry_mobile/redux/state/app_state.dart';
 import 'package:sentry_mobile/release_health.dart';
 import 'package:sentry_mobile/settings.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<Store<AppState>> createStore() async {
-//  var prefs = await SharedPreferences.getInstance();
+  final prefs = await SharedPreferences.getInstance();
   return Store(
     appReducer,
     initialState: AppState.initial(),

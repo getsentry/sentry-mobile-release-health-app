@@ -1,10 +1,16 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'organization.g.dart';
+
+@JsonSerializable()
 class Organization {
-  Organization.fromJson(dynamic json)
-      : id = json['id'] as String,
-        name = json['name'] as String,
-        slug = json['slug'] as String;
+  Organization(this.id, this.name, this.slug);
+
+  factory Organization.fromJson(Map<String, dynamic> json) => _$OrganizationFromJson(json);
 
   final String id;
   final String name;
   final String slug;
+
+  Map<String, dynamic> toJson() => _$OrganizationToJson(this);
 }
