@@ -1,0 +1,16 @@
+targets:
+  $default:
+    sources:
+      - "lib/**"
+      - "node/**"
+      - "test/**"
+    builders:
+      build_node_compilers|entrypoint:
+        options:
+          compiler: dart2js
+        dev_options:
+          dart2js_args:
+           - --no-minify
+        release_options:
+          dart2js_args:
+           - --no-minify
