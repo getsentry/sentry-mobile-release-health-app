@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -166,11 +167,11 @@ class Header extends StatelessWidget with PreferredSizeWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Center(
-                child: Image(image: AssetImage('assets/sentry-logo-light-512.png'), height: 32)),
+            Center(child: LogoWidget()),
             Visibility(
               visible: true,
-              child: Center(child: Text(
+              child: Center(
+                  child: Text(
                 '${viewModel.globalState.selectedOrganization?.name} / ${viewModel.globalState.selectedProject?.name}',
                 style: TextStyle(
                   fontSize: 12.0,
@@ -182,5 +183,27 @@ class Header extends StatelessWidget with PreferredSizeWidget {
       ),
       converter: (store) => store.state,
     );
+  }
+}
+
+class LogoWidget extends StatefulWidget {
+  LogoWidget({Key key}) : super(key: key);
+
+  @override
+  _LogoWidgetState createState() => _LogoWidgetState();
+}
+
+class _LogoWidgetState extends State<LogoWidget> {
+  int _c = 0;
+  String get e => _c > 4 ? 'a' : 'e';
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+        onTap: () => setState(() => _c++),
+        child: Image(
+          image: AssetImage('assets/s${e}ntry-logo-light-512.png'),
+          height: 32,
+        ));
   }
 }
