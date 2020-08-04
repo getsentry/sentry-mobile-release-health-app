@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -7,15 +6,30 @@ import 'package:redux/redux.dart';
 import 'package:sentry_mobile/redux/actions.dart';
 import 'package:sentry_mobile/redux/state/app_state.dart';
 
-void apiMiddleware(Store<AppState> store, dynamic action, NextDispatcher next) async {
-  if (action is FetchOrganizationsAction) {
-    final cookie = store.state.globalState.session.toString();
-    final client = Client();
-    try {
-      final response = await client.get(
-          'https://sentry.io/api/0/organizations/?member=1',
-          headers: {'Cookie': cookie});
+class SentryApi {
+  SentryApi(this.session);
 
+  final Cookie session;
+  final client = Client();
+  final baseUrl = 'https://sentry.io/api/0';
+
+  Future<Response> organizations() async {
+    return client.get('$baseUrl/organizations/?member=1',
+        headers: {'Cookie': session.toString()});
+  }
+
+  void close() {
+    client.close();
+  }
+}
+
+void apiMiddleware(
+    Store<AppState> store, dynamic action, NextDispatcher next) async {
+  final api = SentryApi(store.state.globalState.session);
+
+  if (action is FetchOrganizationsAction) {
+    try {
+      final response = await api.organizations();
       if (response.statusCode == 200) {
         final responseJson = json.decode(response.body) as List;
         store.dispatch(FetchOrganizationsSuccessAction(responseJson));
@@ -24,11 +38,9 @@ void apiMiddleware(Store<AppState> store, dynamic action, NextDispatcher next) a
       }
     } catch (e) {
       store.dispatch(FetchOrganizationsFailureAction());
-    } finally {
-      client.close();
     }
   }
 
-
+  api.close();
   next(action);
 }
