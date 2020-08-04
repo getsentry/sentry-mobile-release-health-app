@@ -28,26 +28,27 @@ class _SettingsState extends State<Settings> {
         child: Column(
           children: [
             Text(
-                'You are already logged in - Expires: ${viewModel.session.expires}'),
+                'You are already logged in - Expires: ${viewModel.session
+                    .expires}'),
             Center(
                 child: DropdownButton<String>(
-              icon: Icon(Icons.arrow_downward),
-              iconSize: 24,
-              elevation: 16,
-              style: TextStyle(color: Colors.deepPurple),
-              underline: Container(
-                height: 2,
-                color: Colors.deepPurpleAccent,
-              ),
-              onChanged: (String newValue) {
+                  value: viewModel.selectedOrganization.id,
+                  icon: Icon(Icons.arrow_downward),
+                  iconSize: 24,
+                  elevation: 16,
+                  style: TextStyle(color: Colors.deepPurple),
+                  underline: Container(
+                    height: 2,
+                    color: Colors.deepPurpleAccent,
+                  ),
+                  onChanged: viewModel.selectOrganization,
+                  items: viewModel.organizations.map((e) =>
+                      DropdownMenuItem<String>(
+                        value: e.id,
+                        child: Text(e.name),
+                      )).toList(),
 
-              },
-              items: viewModel.organizations.map((e) => DropdownMenuItem<String>(
-                value: e.id,
-                child: Text(e.name),
-              )).toList(),
-
-            )),
+                )),
             RaisedButton(
               child: Text('Fetch orgs'),
               onPressed: () => viewModel.fetchOrganizations(),
@@ -123,48 +124,48 @@ class _WebViewState extends State<WebView> {
     // Add a listener to on url changed
     _onUrlChanged =
         flutterWebviewPlugin.onUrlChanged.listen((String url) async {
-      if (!url.contains('https://sentry.io')) {
-        // We return here, it crashes if we fetch cookies from pages like google
-        return;
-      }
-      print('urlChanged: $url');
-
-      final cookies = await cookieManager.getCookies(url);
-
-      final session =
-          cookies.firstWhere((c) => c.name == 'session', orElse: () => null);
-      if (session != null) {
-        // Test out an API call
-        final client = Client();
-        try {
-          // Session is returned even before authenticated so this is called many times
-          final cookie = session.toString();
-          final response = await client.get(
-              'https://sentry.io/api/0/organizations/?member=1',
-              headers: {'Cookie': cookie});
-
-          final orgs = response.body;
-          // Until acutally logged in we hit the API a few times and get 401
-          if (response.statusCode != 200) {
-            print(response.statusCode);
+          if (!url.contains('https://sentry.io')) {
+            // We return here, it crashes if we fetch cookies from pages like google
             return;
           }
+          print('urlChanged: $url');
 
-          flutterWebviewPlugin.close();
-          viewModel.login(session);
-          flutterWebviewPlugin.dispose();
-          Navigator.pop(context);
+          final cookies = await cookieManager.getCookies(url);
 
-          // Eventually works (on Android, iOS crashed on `get`):
-          print(orgs);
-        } catch (e) {
-          print(e);
-        } finally {
-          client.close();
-        }
-      }
-      print('URL changed: $url $session');
-    });
+          final session =
+          cookies.firstWhere((c) => c.name == 'session', orElse: () => null);
+          if (session != null) {
+            // Test out an API call
+            final client = Client();
+            try {
+              // Session is returned even before authenticated so this is called many times
+              final cookie = session.toString();
+              final response = await client.get(
+                  'https://sentry.io/api/0/organizations/?member=1',
+                  headers: {'Cookie': cookie});
+
+              final orgs = response.body;
+              // Until acutally logged in we hit the API a few times and get 401
+              if (response.statusCode != 200) {
+                print(response.statusCode);
+                return;
+              }
+
+              flutterWebviewPlugin.close();
+              viewModel.login(session);
+              flutterWebviewPlugin.dispose();
+              Navigator.pop(context);
+
+              // Eventually works (on Android, iOS crashed on `get`):
+              print(orgs);
+            } catch (e) {
+              print(e);
+            } finally {
+              client.close();
+            }
+          }
+          print('URL changed: $url $session');
+        });
   }
 
   @override
@@ -191,17 +192,27 @@ class _WebViewState extends State<WebView> {
 }
 
 class SettingsViewModel {
-  SettingsViewModel({this.session, this.fetchOrganizations, this.organizations, this.login, this.logout});
+  SettingsViewModel(
+      {this.session, this.fetchOrganizations, this.organizations, this.login, this.logout, this.selectedOrganization, this.selectOrganization});
 
   final Cookie session;
   final List<Organization> organizations;
+  final Organization selectedOrganization;
   final Function() fetchOrganizations;
+  final Function(String id) selectOrganization;
   final Function(Cookie session) login;
   final Function() logout;
 
   static SettingsViewModel fromStore(Store<AppState> store) =>
       SettingsViewModel(
           organizations: store.state.globalState.organizations,
+          selectedOrganization: store.state.globalState.selectedOrganization,
+          selectOrganization: (String id) {
+            final org = store.state.globalState.organizations.firstWhere((o) => o.id == id, orElse: () => null);
+            if (org != null) {
+              store.dispatch(SelectOrganizationsAction(org));
+            }
+          },
           fetchOrganizations: () {
             store.dispatch(FetchOrganizationsAction());
           },

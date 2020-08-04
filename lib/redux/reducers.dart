@@ -13,7 +13,8 @@ AppState appReducer(AppState state, dynamic action) =>
 final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, LoginAction>(_loginAction),
   TypedReducer<GlobalState, LogoutAction>(_logoutAction),
-  TypedReducer<GlobalState, FetchOrganizationsSuccessAction>(_fetchOrganizationsSuccessActionAction),
+  TypedReducer<GlobalState, FetchOrganizationsSuccessAction>(_fetchOrganizationsSuccessAction),
+  TypedReducer<GlobalState, SelectOrganizationsAction>(_selectOrganizationsAction),
 ]);
 
 GlobalState _loginAction(GlobalState state, LoginAction action) {
@@ -24,8 +25,13 @@ GlobalState _logoutAction(GlobalState state, LogoutAction action) {
   return state.copyWith(setSessionNull: true);
 }
 
-GlobalState _fetchOrganizationsSuccessActionAction(GlobalState state, FetchOrganizationsSuccessAction action) {
-  return state.copyWith(organizations: action.payload.map((dynamic r) => Organization.fromJson(r)).toList());
+GlobalState _fetchOrganizationsSuccessAction(GlobalState state, FetchOrganizationsSuccessAction action) {
+  final orgs = action.payload.map((dynamic r) => Organization.fromJson(r)).toList();
+  return state.copyWith(organizations: orgs, selectedOrganization: orgs.first);
+}
+
+GlobalState _selectOrganizationsAction(GlobalState state, SelectOrganizationsAction action) {
+  return state.copyWith(selectedOrganization: action.payload);
 }
 
 // -----------------------------
