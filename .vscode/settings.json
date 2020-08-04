@@ -1,5 +1,5 @@
 {
     "dart.analysisExcludedFolders": [
-        "firebase/**/build"
+        "**/build/**"
     ]
 }
