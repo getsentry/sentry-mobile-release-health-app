@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:sentry_mobile/issues.dart';
 import 'package:sentry_mobile/redux/middlewares.dart';
@@ -70,16 +71,38 @@ class MyApp extends StatelessWidget {
             // Notice that the counter didn't reset back to zero; the application
             // is not restarted.
             primarySwatch: Colors.purple,
+            primaryColorDark: Color(0xff4e3fb4),
             // This makes the visual density adapt to the platform that you run
             // the app on. For desktop platforms, the controls will be smaller and
             // closer together (more dense) than on mobile platforms.
             visualDensity: VisualDensity.adaptivePlatformDensity,
-            textTheme: TextTheme(
-              headline1: TextStyle(
-                fontWeight: FontWeight.w700,
-                fontSize: 24,
-                color: Colors.black,
-              ),
+            textTheme: GoogleFonts.rubikTextTheme(
+              TextTheme(
+                  headline1: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 24,
+                    color: Colors.black,
+                  ),
+                  headline2: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 20,
+                    color: Colors.black,
+                  ),
+                  headline3: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                    color: Colors.black,
+                  ),
+                  headline4: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                    color: Colors.black,
+                  ),
+                  caption: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                    color: Colors.black45,
+                  )),
             )),
         home: StoreProvider<AppState>(
           store: store,
@@ -111,14 +134,13 @@ class MyApp extends StatelessWidget {
                                 text: 'Settings',
                                 iconMargin: EdgeInsets.only(bottom: 4),
                               ),
-
                             ],
                           ),
                         )),
                     body: TabBarView(
                       children: [
                         ReleaseHealth(),
-                        Issues(),
+                        IssuesScreenBuilder(),
                         Settings(),
                       ],
                       physics: NeverScrollableScrollPhysics(),

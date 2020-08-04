@@ -1,7 +1,10 @@
-import 'package:flutter/material.dart';
-import './types/group.dart';
 import 'dart:convert';
+
+import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
+
+import './types/group.dart';
+import 'issue_screen.dart';
 
 const String jsonString = '''
   {
@@ -88,14 +91,41 @@ const String jsonString = '''
   }
 ''';
 
-class Issues extends StatefulWidget {
-  const Issues({Key key}) : super(key: key);
+class IssuesScreenBuilder extends StatelessWidget {
+  const IssuesScreenBuilder({Key key}) : super(key: key);
 
   @override
-  _IssuesState createState() => _IssuesState();
+  Widget build(BuildContext context) {
+    return Navigator(
+      initialRoute: 'Issues',
+      onGenerateRoute: (RouteSettings settings) {
+        switch (settings.name) {
+          case 'Issues':
+            return MaterialPageRoute<dynamic>(
+                builder: (context) => IssuesScreen(), settings: settings);
+            break;
+
+          case 'Event':
+            return MaterialPageRoute<dynamic>(
+                builder: (context) => IssueScreen(), settings: settings);
+            break;
+
+          default:
+            throw Exception("Invalid route");
+        }
+      },
+    );
+  }
 }
 
-class _IssuesState extends State<Issues> {
+class IssuesScreen extends StatefulWidget {
+  const IssuesScreen({Key key}) : super(key: key);
+
+  @override
+  _IssuesScreenState createState() => _IssuesScreenState();
+}
+
+class _IssuesScreenState extends State<IssuesScreen> {
   List<Group> sampleGroups = [];
 
   @override
@@ -119,22 +149,47 @@ class _IssuesState extends State<Issues> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ListView.builder(
-        itemCount: sampleGroups.length,
-        itemBuilder: (context, index) {
-          final group = sampleGroups[index];
+    return Column(
+      children: <Widget>[
+        Container(
+            height: 34,
+            color: Colors.grey[200],
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Container(
+                    width: 48,
+                    alignment: Alignment.centerRight,
+                    child: Text('EVENTS',
+                        style: TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.w500))),
+                Container(
+                    margin: EdgeInsets.only(right: 16.0),
+                    width: 48,
+                    alignment: Alignment.centerRight,
+                    child: Text('USERS',
+                        style: TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.w500)))
+              ],
+            )),
+        Expanded(
+          child: ListView.builder(
+            itemCount: sampleGroups.length,
+            itemBuilder: (context, index) {
+              final group = sampleGroups[index];
 
-          return Issue(
-              title: group.metadata.type,
-              value: group.title,
-              culprit: group.culprit,
-              userCount: group.userCount,
-              count: group.count,
-              lastSeen: group.lastSeen,
-              firstSeen: group.lastSeen);
-        },
-      ),
+              return Issue(
+                  title: group.metadata.type,
+                  value: group.title,
+                  culprit: group.culprit,
+                  userCount: group.userCount,
+                  count: group.count,
+                  lastSeen: group.lastSeen,
+                  firstSeen: group.lastSeen);
+            },
+          ),
+        )
+      ],
     );
   }
 }
@@ -148,6 +203,7 @@ class Issue extends StatelessWidget {
       @required this.count,
       @required this.firstSeen,
       @required this.lastSeen});
+
   final String title;
   final String value;
   final String culprit;
@@ -156,7 +212,14 @@ class Issue extends StatelessWidget {
   final DateTime firstSeen;
   final DateTime lastSeen;
 
-  Widget build(BuildContext context) => Card(
+  Widget build(BuildContext context) => GestureDetector(
+      onTap: () {
+        Navigator.push<dynamic>(
+            context,
+            MaterialPageRoute<dynamic>(
+                builder: (BuildContext context) => IssueScreen()));
+      },
+      child: Card(
         child: Padding(
             padding: EdgeInsets.all(14.0),
             child: Row(children: <Widget>[
@@ -177,17 +240,17 @@ class Issue extends StatelessWidget {
               Row(
                 children: <Widget>[
                   Container(
-                      width: 40,
-                      alignment: Alignment.center,
+                      width: 48,
+                      alignment: Alignment.centerRight,
                       child: Text(count.toString(),
                           style: TextStyle(fontWeight: FontWeight.bold))),
                   Container(
-                      width: 40,
-                      alignment: Alignment.center,
+                      width: 48,
+                      alignment: Alignment.centerRight,
                       child: Text(userCount.toString(),
                           style: TextStyle(fontWeight: FontWeight.bold))),
                 ],
               )
             ])),
-      );
+      ));
 }
