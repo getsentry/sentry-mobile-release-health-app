@@ -3,17 +3,15 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:redux/redux.dart';
 import 'package:sentry_mobile/issues.dart';
-import 'package:sentry_mobile/redux/middlewares.dart';
-import 'package:sentry_mobile/settings.dart';
 import 'package:sentry_mobile/redux/actions.dart';
-import 'package:sentry_mobile/redux/reducers.dart';
 import 'package:sentry_mobile/redux/middlewares.dart';
+import 'package:sentry_mobile/redux/reducers.dart';
 import 'package:sentry_mobile/redux/state/app_state.dart';
 import 'package:sentry_mobile/release_health.dart';
+import 'package:sentry_mobile/settings.dart';
 
 Future<Store<AppState>> createStore() async {
 //  var prefs = await SharedPreferences.getInstance();
@@ -165,7 +163,23 @@ class Header extends StatelessWidget with PreferredSizeWidget {
     return StoreConnector<AppState, AppState>(
       builder: (_, viewModel) => AppBar(
         backgroundColor: Colors.purple[900],
-        title: Text('Sentry'),
+        title: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Center(
+                child: Image(image: AssetImage('assets/sentry-logo-light-512.png'), height: 32)),
+            Visibility(
+              visible: true,
+              child: Center(child: Text(
+                '${viewModel.globalState.selectedOrganization?.name} / ${viewModel.globalState.selectedProject?.name}',
+                style: TextStyle(
+                  fontSize: 12.0,
+                ),
+              )),
+            ),
+          ],
+        ),
       ),
       converter: (store) => store.state,
     );
