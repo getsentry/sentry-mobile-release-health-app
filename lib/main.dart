@@ -111,7 +111,7 @@ class MyApp extends StatelessWidget {
                   child: Scaffold(
                     appBar: Header(),
                     bottomNavigationBar: Material(
-                        color: Colors.purple[900],
+                        color: Color(0xff4e3fb4),
                         child: Container(
                           height: 60.0,
                           child: TabBar(
