@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:sentry_mobile/release_card.dart';
 
 Future<List<Release>> fetchReleases() async {
   final response = await http.get('https://mminar.com/releases.json');
@@ -102,9 +103,7 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
               child: ListView.builder(
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, index) {
-                  return Card(
-                      child:
-                          ListTile(title: Text(snapshot.data[index].version)));
+                  return ReleaseCard(release: snapshot.data[index]);
                 },
               ),
               onRefresh: fetchData,
