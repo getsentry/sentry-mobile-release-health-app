@@ -2,6 +2,7 @@ import 'package:redux/redux.dart';
 
 import 'package:sentry_mobile/redux/state/app_state.dart';
 import 'package:sentry_mobile/redux/actions.dart';
+import 'package:sentry_mobile/types/organization.dart';
 
 AppState appReducer(AppState state, dynamic action) =>
     AppState(
@@ -12,7 +13,7 @@ AppState appReducer(AppState state, dynamic action) =>
 final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, LoginAction>(_loginAction),
   TypedReducer<GlobalState, LogoutAction>(_logoutAction),
-  TypedReducer<GlobalState, TitleAction>(_titleAction),
+  TypedReducer<GlobalState, FetchOrganizationsSuccessAction>(_fetchOrganizationsSuccessActionAction),
 ]);
 
 GlobalState _loginAction(GlobalState state, LoginAction action) {
@@ -23,8 +24,8 @@ GlobalState _logoutAction(GlobalState state, LogoutAction action) {
   return state.copyWith(setSessionNull: true);
 }
 
-GlobalState _titleAction(GlobalState state, TitleAction action) {
-  return state.copyWith(title: action.payload);
+GlobalState _fetchOrganizationsSuccessActionAction(GlobalState state, FetchOrganizationsSuccessAction action) {
+  return state.copyWith(organizations: action.payload.map((dynamic r) => Organization.fromJson(r)).toList());
 }
 
 // -----------------------------

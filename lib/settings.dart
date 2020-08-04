@@ -9,6 +9,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:redux/redux.dart';
 import 'package:sentry_mobile/redux/actions.dart';
 import 'package:sentry_mobile/redux/state/app_state.dart';
+import 'package:sentry_mobile/types/organization.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 
 class Settings extends StatefulWidget {
@@ -30,7 +31,6 @@ class _SettingsState extends State<Settings> {
                 'You are already logged in - Expires: ${viewModel.session.expires}'),
             Center(
                 child: DropdownButton<String>(
-              value: 'One',
               icon: Icon(Icons.arrow_downward),
               iconSize: 24,
               elevation: 16,
@@ -39,16 +39,19 @@ class _SettingsState extends State<Settings> {
                 height: 2,
                 color: Colors.deepPurpleAccent,
               ),
-              onChanged: (String newValue) {},
-              // Get from APIs
-              items: <String>['One', 'Two', 'Free', 'Four']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
+              onChanged: (String newValue) {
+
+              },
+              items: viewModel.organizations.map((e) => DropdownMenuItem<String>(
+                value: e.id,
+                child: Text(e.name),
+              )).toList(),
+
             )),
+            RaisedButton(
+              child: Text('Fetch orgs'),
+              onPressed: () => viewModel.fetchOrganizations(),
+            ),
             RaisedButton(
               child: Text('Logout'),
               onPressed: () => viewModel.logout(),
@@ -188,14 +191,20 @@ class _WebViewState extends State<WebView> {
 }
 
 class SettingsViewModel {
-  SettingsViewModel({this.session, this.login, this.logout});
+  SettingsViewModel({this.session, this.fetchOrganizations, this.organizations, this.login, this.logout});
 
   final Cookie session;
+  final List<Organization> organizations;
+  final Function() fetchOrganizations;
   final Function(Cookie session) login;
   final Function() logout;
 
   static SettingsViewModel fromStore(Store<AppState> store) =>
       SettingsViewModel(
+          organizations: store.state.globalState.organizations,
+          fetchOrganizations: () {
+            store.dispatch(FetchOrganizationsAction());
+          },
           session: store.state.globalState.session,
           login: (Cookie session) {
             store.dispatch(LoginAction(session));

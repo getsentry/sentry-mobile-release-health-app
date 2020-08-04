@@ -6,9 +6,11 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
 import 'package:sentry_mobile/issues.dart';
+import 'package:sentry_mobile/redux/middlewares.dart';
 import 'package:sentry_mobile/settings.dart';
 import 'package:sentry_mobile/redux/actions.dart';
 import 'package:sentry_mobile/redux/reducers.dart';
+import 'package:sentry_mobile/redux/middlewares.dart';
 import 'package:sentry_mobile/redux/state/app_state.dart';
 import 'package:sentry_mobile/release_health.dart';
 
@@ -18,6 +20,7 @@ Future<Store<AppState>> createStore() async {
     appReducer,
     initialState: AppState.initial(),
     middleware: [
+      apiMiddleware
 //      ValidationMiddleware(),
 //      LoggingMiddleware.printer(),
 //      LocalStorageMiddleware(prefs),
@@ -129,9 +132,9 @@ class MyApp extends StatelessWidget {
 }
 
 class Header extends StatelessWidget with PreferredSizeWidget {
-  final Store<AppState> store;
-
   Header({this.store});
+
+  final Store<AppState> store;
 
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
@@ -141,7 +144,7 @@ class Header extends StatelessWidget with PreferredSizeWidget {
     return StoreConnector<AppState, AppState>(
       builder: (_, viewModel) => AppBar(
         backgroundColor: Colors.purple[900],
-        title: Text(viewModel.globalState.title),
+        title: Text('Sentry'),
       ),
       converter: (store) => store.state,
     );
