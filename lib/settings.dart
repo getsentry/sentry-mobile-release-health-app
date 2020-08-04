@@ -22,7 +22,9 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   Widget content(SettingsViewModel viewModel) {
-    print('UPDATE Login ${viewModel.session}');
+    if (viewModel.organizations.isEmpty) {
+      viewModel.fetchOrganizations();
+    }
 
     if (viewModel.session != null) {
       return Container(
@@ -49,10 +51,25 @@ class _SettingsState extends State<Settings> {
                       ))
                   .toList(),
             )),
-            RaisedButton(
-              child: Text('Fetch orgs'),
-              onPressed: () => viewModel.fetchOrganizations(),
-            ),
+            Center(
+                child: DropdownButton<String>(
+                  value: viewModel.selectedProject?.id,
+                  icon: Icon(Icons.arrow_downward),
+                  iconSize: 24,
+                  elevation: 16,
+                  style: TextStyle(color: Colors.deepPurple),
+                  underline: Container(
+                    height: 2,
+                    color: Colors.deepPurpleAccent,
+                  ),
+                  onChanged: viewModel.selectProject,
+                  items: viewModel.projects
+                      .map((e) => DropdownMenuItem<String>(
+                    value: e.id,
+                    child: Text(e.name),
+                  ))
+                      .toList(),
+                )),
             RaisedButton(
               child: Text('Logout'),
               onPressed: () => viewModel.logout(),
@@ -200,7 +217,6 @@ class SettingsViewModel {
     this.organizations,
     this.selectOrganization,
     this.selectedOrganization,
-    this.fetchProjects,
     this.projects,
     this.selectProject,
     this.selectedProject,
@@ -216,7 +232,6 @@ class SettingsViewModel {
   final Function(String id) selectOrganization;
   final Organization selectedOrganization;
 
-  final Function(Organization organization) fetchProjects;
   final List<Project> projects;
   final Function(String id) selectProject;
   final Project selectedProject;
@@ -242,14 +257,23 @@ class SettingsViewModel {
         },
         organizations: store.state.globalState.organizations,
         selectOrganization: (String id) {
-          print(store.state.globalState.organizations);
           final org = store.state.globalState.organizations
               .firstWhere((o) => o.id == id, orElse: () => null);
           if (org != null) {
             store.dispatch(SelectOrganizationAction(org));
+            store.dispatch(FetchProjectsAction(org));
           }
         },
         selectedOrganization: store.state.globalState.selectedOrganization,
         // Projects
+        projects: store.state.globalState.projects,
+        selectProject: (String id) {
+          final proj = store.state.globalState.projects
+              .firstWhere((o) => o.id == id, orElse: () => null);
+          if (proj != null) {
+            store.dispatch(SelectProjectAction(proj));
+          }
+        },
+        selectedProject: store.state.globalState.selectedProject,
       );
 }

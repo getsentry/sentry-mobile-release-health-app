@@ -41,9 +41,8 @@ void main() async {
 
   final String session =
       await store.state.globalState.storage.read(key: 'session');
-  print('trying to fetch data from storage $session');
+
   if (session != null) {
-    print('Calling login');
     store.dispatch(LoginAction(Cookie.fromSetCookieValue(session)));
   }
 

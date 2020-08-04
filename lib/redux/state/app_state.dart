@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:sentry_mobile/types/organization.dart';
+import 'package:sentry_mobile/types/project.dart';
 
 class AppState {
   AppState({this.globalState});
@@ -22,35 +23,50 @@ class AppState {
 }
 
 class GlobalState {
-  GlobalState({this.organizations, this.session, this.storage, this.selectedOrganization});
+  GlobalState(
+      {this.session,
+      this.storage,
+      this.selectedOrganization,
+      this.organizations,
+      this.projects,
+      this.selectedProject});
 
   factory GlobalState.initial() {
     return GlobalState(
-        organizations: [],
-        session: null,
-        selectedOrganization: null,
-        storage: FlutterSecureStorage()
+      session: null,
+      storage: FlutterSecureStorage(),
+      organizations: [],
+      selectedOrganization: null,
+      projects: [],
+      selectedProject: null,
     );
   }
 
-  final List<Organization> organizations;
-  final Organization selectedOrganization;
   final FlutterSecureStorage storage;
   final Cookie session;
 
+  final List<Organization> organizations;
+  final Organization selectedOrganization;
+
+  final List<Project> projects;
+  final Project selectedProject;
+
   GlobalState copyWith({
-    List<Organization> organizations,
-    Organization selectedOrganization,
     Cookie session,
     bool setSessionNull = false,
     FlutterSecureStorage storage,
+    List<Organization> organizations,
+    Organization selectedOrganization,
+    List<Project> projects,
+    Project selectedProject,
   }) {
     return GlobalState(
+      session: setSessionNull ? null : (session ?? this.session),
+      storage: storage ?? this.storage,
       organizations: organizations ?? this.organizations,
       selectedOrganization: selectedOrganization ?? this.selectedOrganization,
-      session: setSessionNull ? null: (session ?? this.session),
-      storage: storage ?? this.storage,
+      projects: projects ?? this.projects,
+      selectedProject: selectedProject ?? this.selectedProject,
     );
   }
-
 }

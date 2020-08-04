@@ -52,6 +52,20 @@ void apiMiddleware(
     }
   }
 
+  if (action is FetchProjectsAction) {
+    try {
+      final response = await api.projects(action.payload);
+      if (response.statusCode == 200) {
+        final responseJson = json.decode(response.body) as List;
+        store.dispatch(FetchProjectsSuccessAction(responseJson));
+      } else {
+        store.dispatch(FetchProjectsFailureAction());
+      }
+    } catch (e) {
+      store.dispatch(FetchProjectsFailureAction());
+    }
+  }
+
   api.close();
   next(action);
 }
