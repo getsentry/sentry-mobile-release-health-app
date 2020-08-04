@@ -221,7 +221,7 @@ class SettingsViewModel {
             store.dispatch(LoginAction(session));
             store.state.globalState.storage
                 .write(key: 'session', value: session.toString());
-            print(session);
+            store.dispatch(FetchOrganizationsAction());
           },
           logout: () {
             print('LOGOUT');
