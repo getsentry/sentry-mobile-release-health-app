@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sentry_mobile/release_health.dart';
+import 'package:sentry_mobile/types/release.dart';
 
 class ReleaseCard extends StatelessWidget {
   ReleaseCard({@required this.release});
