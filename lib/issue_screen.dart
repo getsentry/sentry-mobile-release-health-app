@@ -1,10 +1,15 @@
 import 'dart:convert';
 
+import 'package:redux/redux.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
+import 'redux/state/app_state.dart';
 import 'text_theme_ext.dart';
 import 'types/event.dart';
+import 'types/organization.dart';
 
 class IssueScreen extends StatefulWidget {
   const IssueScreen({Key key}) : super(key: key);
@@ -30,6 +35,14 @@ Future<Event> fetchEvent() async {
   }
 }
 
+class IssueViewModel {
+  IssueViewModel({@required this.selectedOrganization});
+  final Organization selectedOrganization;
+
+  static IssueViewModel fromStore(Store<AppState> store) => IssueViewModel(
+      selectedOrganization: store.state.globalState.selectedOrganization);
+}
+
 class _IssueState extends State<IssueScreen> {
   Future<Event> futureEvent = null;
 
@@ -52,41 +65,10 @@ class _IssueState extends State<IssueScreen> {
           if (snapshot.hasData) {
             final event = snapshot.data;
 
-            return SingleChildScrollView(
-                child: Container(
-                    height: 1000,
-                    padding: EdgeInsets.only(top: 20, left: 16, right: 16),
-                    child: Column(
-                      children: [
-                        Container(
-                            alignment: Alignment.topLeft,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(event.metadata.type,
-                                    style:
-                                        Theme.of(context).textTheme.headline1),
-                                Text(event.culprit,
-                                    style: TextStyle(
-                                        color: Colors.black54,
-                                        fontSize: Theme.of(context)
-                                            .textTheme
-                                            .headline2
-                                            .fontSize)),
-                                Container(
-                                    margin: EdgeInsets.only(top: 12),
-                                    child: Text(event.title,
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: Theme.of(context)
-                                                .textTheme
-                                                .headline4
-                                                .fontSize)))
-                              ],
-                            )),
-                        Tags(tags: event.tags)
-                      ],
-                    )));
+            return StoreConnector<AppState, IssueViewModel>(
+                converter: (store) => IssueViewModel.fromStore(store),
+                builder: (context, viewModel) =>
+                    IssueView(latestEvent: event, viewModel: viewModel));
           } else if (snapshot.hasError) {
             return Text('${snapshot.error}');
           }
@@ -95,6 +77,63 @@ class _IssueState extends State<IssueScreen> {
             child: CircularProgressIndicator(),
           );
         });
+  }
+}
+
+class IssueView extends StatelessWidget {
+  IssueView({@required this.latestEvent, @required this.viewModel});
+  final Event latestEvent;
+  final IssueViewModel viewModel;
+
+  /// Launches the issue in a web browser.
+  Future<void> launchEventUrl() async {
+    final url =
+        'https://sentry.io/organizations/${viewModel.selectedOrganization.slug}/issues/${latestEvent.groupID}';
+
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+        child: Container(
+            height: 1000,
+            padding: EdgeInsets.only(top: 20, left: 16, right: 16),
+            child: Column(
+              children: [
+                Container(
+                    alignment: Alignment.topLeft,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(latestEvent.metadata.type,
+                            style: Theme.of(context).textTheme.headline1),
+                        Text(latestEvent.culprit,
+                            style: TextStyle(
+                                color: Colors.black54,
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .headline2
+                                    .fontSize)),
+                        Container(
+                            margin: EdgeInsets.only(top: 12),
+                            child: Text(latestEvent.title,
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .headline4
+                                        .fontSize)))
+                      ],
+                    )),
+                Tags(tags: latestEvent.tags),
+                RaisedButton(
+                    onPressed: launchEventUrl, child: Text('Open in Browser'))
+              ],
+            )));
   }
 }
 
