@@ -32,7 +32,7 @@ class _SettingsState extends State<Settings> {
                     .expires}'),
             Center(
                 child: DropdownButton<String>(
-                  value: viewModel.selectedOrganization.id,
+                  value: viewModel.selectedOrganization?.id,
                   icon: Icon(Icons.arrow_downward),
                   iconSize: 24,
                   elevation: 16,
@@ -208,6 +208,7 @@ class SettingsViewModel {
           organizations: store.state.globalState.organizations,
           selectedOrganization: store.state.globalState.selectedOrganization,
           selectOrganization: (String id) {
+            print(store.state.globalState.organizations);
             final org = store.state.globalState.organizations.firstWhere((o) => o.id == id, orElse: () => null);
             if (org != null) {
               store.dispatch(SelectOrganizationsAction(org));
