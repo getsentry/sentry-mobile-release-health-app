@@ -38,16 +38,20 @@ class ReleaseCard extends StatelessWidget {
             children: <Widget>[
               Expanded(
                   child: ListTile(
-                title: Text(
-                  release.issues.toString(),
-                ),
+                title: Text(release.issues.toString(),
+                    style: TextStyle(
+                        color:
+                            release.issues > 0 ? Colors.orange : Colors.black)),
                 subtitle: Text(
                   'New Issues',
                 ),
               )),
               Expanded(
                   child: ListTile(
-                title: Text(release.crashes.toString()),
+                title: Text(release.crashes.toString(),
+                    style: TextStyle(
+                        color:
+                            release.crashes > 0 ? Colors.red : Colors.black)),
                 subtitle: Text('Crashes'),
               )),
             ],
@@ -57,7 +61,8 @@ class ReleaseCard extends StatelessWidget {
             children: <Widget>[
               Expanded(
                   child: ListTile(
-                title: Text(release.crashFreeUsers.toString() + '%'),
+                title: Text(release.crashFreeUsers.toString() + '%',
+                    style: TextStyle(color: Colors.green)),
                 subtitle: Text('CF Users'),
               )),
               Expanded(
@@ -77,7 +82,8 @@ class ReleaseCard extends StatelessWidget {
             children: <Widget>[
               Expanded(
                   child: ListTile(
-                title: Text(release.crashFreeUsers.toString() + '%'),
+                title: Text(release.crashFreeUsers.toString() + '%',
+                    style: TextStyle(color: Colors.green)),
                 subtitle: Text('CF Sessions'),
               )),
               Expanded(
