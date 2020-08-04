@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:custom_splash/custom_splash.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -102,50 +103,61 @@ class MyApp extends StatelessWidget {
                     color: Colors.black45,
                   )),
             )),
-        home: StoreProvider<AppState>(
-          store: store,
-          child: StoreConnector<AppState, AppState>(
-              converter: (store) => store.state,
-              builder: (context, state) {
-                return DefaultTabController(
-                  length: 3,
-                  child: Scaffold(
-                    appBar: Header(),
-                    bottomNavigationBar: Material(
-                        color: Color(0xff4e3fb4),
-                        child: Container(
-                          height: 60.0,
-                          child: TabBar(
-                            tabs: [
-                              Tab(
-                                icon: Icon(Icons.healing),
-                                text: 'Health',
-                                iconMargin: EdgeInsets.only(bottom: 4),
-                              ),
-                              Tab(
-                                icon: Icon(Icons.list),
-                                text: 'Issues',
-                                iconMargin: EdgeInsets.only(bottom: 4),
-                              ),
-                              Tab(
-                                icon: Icon(Icons.account_circle),
-                                text: 'Settings',
-                                iconMargin: EdgeInsets.only(bottom: 4),
-                              ),
-                            ],
-                          ),
-                        )),
-                    body: TabBarView(
-                      children: [
-                        ReleaseHealth(),
-                        IssuesScreenBuilder(),
-                        Settings(),
-                      ],
-                      physics: NeverScrollableScrollPhysics(),
+        home: CustomSplash(
+          imagePath: 'assets/splash.png',
+          backGroundColor: Color(0x00564f64),
+          animationEffect: 'fade-in',
+          logoSize: 300,
+          // customFunction: (_) {
+          //   return 1;
+          // },
+          duration: 1500,
+          type: CustomSplashType.StaticDuration,
+          home: StoreProvider<AppState>(
+            store: store,
+            child: StoreConnector<AppState, AppState>(
+                converter: (store) => store.state,
+                builder: (context, state) {
+                  return DefaultTabController(
+                    length: 3,
+                    child: Scaffold(
+                      appBar: Header(),
+                      bottomNavigationBar: Material(
+                          color: Color(0xff4e3fb4),
+                          child: Container(
+                            height: 60.0,
+                            child: TabBar(
+                              tabs: [
+                                Tab(
+                                  icon: Icon(Icons.healing),
+                                  text: 'Health',
+                                  iconMargin: EdgeInsets.only(bottom: 4),
+                                ),
+                                Tab(
+                                  icon: Icon(Icons.list),
+                                  text: 'Issues',
+                                  iconMargin: EdgeInsets.only(bottom: 4),
+                                ),
+                                Tab(
+                                  icon: Icon(Icons.account_circle),
+                                  text: 'Settings',
+                                  iconMargin: EdgeInsets.only(bottom: 4),
+                                ),
+                              ],
+                            ),
+                          )),
+                      body: TabBarView(
+                        children: [
+                          ReleaseHealth(),
+                          IssuesScreenBuilder(),
+                          Settings(),
+                        ],
+                        physics: NeverScrollableScrollPhysics(),
+                      ),
                     ),
-                  ),
-                );
-              }),
+                  );
+                }),
+          ),
         ));
   }
 }
