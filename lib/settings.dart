@@ -242,14 +242,11 @@ class SettingsViewModel {
         session: store.state.globalState.session,
         login: (Cookie session) {
           store.dispatch(LoginAction(session));
-          store.state.globalState.storage
-              .write(key: 'session', value: session.toString());
           store.dispatch(FetchOrganizationsAction());
         },
         logout: () {
           print('LOGOUT');
           store.dispatch(LogoutAction());
-          store.state.globalState.storage.delete(key: 'session');
         },
         // Organizations
         fetchOrganizations: () {

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart';
 import 'package:redux/redux.dart';
 import 'package:sentry_mobile/redux/actions.dart';
@@ -80,14 +81,44 @@ void apiMiddleware(
 }
 
 class LocalStorageMiddleware extends MiddlewareClass<AppState> {
-  LocalStorageMiddleware(this.preferences);
+  LocalStorageMiddleware(this.preferences, this.secureStorage);
 
   final SharedPreferences preferences;
+  final FlutterSecureStorage secureStorage;
 
   @override
-  void call(Store<AppState> store, dynamic action, NextDispatcher next) {
+  void call(Store<AppState> store, dynamic action, NextDispatcher next) async {
+    if (action is RehydrateAction) {
+      final String session = await secureStorage.read(key: 'session');
+      if (session != null) {
+        store.dispatch(LoginAction(Cookie.fromSetCookieValue(session)));
+      }
+
+      final projectJson = preferences.getString('project');
+      if (projectJson != null) {
+        final project = Project.fromJson(json.decode(projectJson) as Map<String, dynamic>);
+        store.dispatch(SelectProjectAction(project));
+      }
+
+      final organizationJson = preferences.getString('organization');
+      if (organizationJson != null) {
+        final organization = Organization.fromJson(
+            json.decode(organizationJson) as Map<String, dynamic>);
+        store.dispatch(SelectOrganizationAction(organization));
+      }
+    }
     if (action is SelectProjectAction) {
-      preferences.setString('project', jsonEncode(action.payload.toJson()));
+      await preferences.setString('project', jsonEncode(action.payload.toJson()));
+    }
+    if (action is SelectOrganizationAction) {
+      await preferences.setString('organization', jsonEncode(action.payload.toJson()));
+    }
+    if (action is LoginAction) {
+      await secureStorage.write(key: 'session', value: action.payload.toString());
+    }
+    if (action is LogoutAction) {
+      await secureStorage.delete(key: 'session');
+      await preferences.clear();
     }
     next(action);
   }

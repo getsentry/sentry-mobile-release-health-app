@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:redux/redux.dart';
 import 'package:sentry_mobile/issues.dart';
@@ -16,12 +17,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 Future<Store<AppState>> createStore() async {
   final prefs = await SharedPreferences.getInstance();
+  final secStorage = FlutterSecureStorage();
   return Store(
     appReducer,
     initialState: AppState.initial(),
     middleware: [
       apiMiddleware,
-      LocalStorageMiddleware(prefs)
+      LocalStorageMiddleware(prefs, secStorage)
 //      ValidationMiddleware(),
 //      LoggingMiddleware.printer(),
 //      LocalStorageMiddleware(prefs),
@@ -40,20 +42,15 @@ void main() async {
 
   final store = await createStore();
 
-  final String session =
-      await store.state.globalState.storage.read(key: 'session');
-
-  if (session != null) {
-    store.dispatch(LoginAction(Cookie.fromSetCookieValue(session)));
-  }
+  store.dispatch(RehydrateAction());
 
   runApp(MyApp(store: store));
 }
 
 class MyApp extends StatelessWidget {
-  final Store<AppState> store;
-
   MyApp({this.store});
+
+  final Store<AppState> store;
 
   // This widget is the root of your application.
   @override

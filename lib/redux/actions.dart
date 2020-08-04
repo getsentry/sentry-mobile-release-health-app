@@ -3,6 +3,10 @@ import 'dart:io';
 import 'package:sentry_mobile/types/organization.dart';
 import 'package:sentry_mobile/types/project.dart';
 
+class RehydrateAction {
+  RehydrateAction();
+}
+
 class LoginAction {
   LoginAction(this.payload);
   final Cookie payload;

@@ -9,6 +9,7 @@ AppState appReducer(AppState state, dynamic action) =>
 
 
 final globalReducer = combineReducers<GlobalState>([
+  TypedReducer<GlobalState, RehydrateAction>(_bootAction),
   TypedReducer<GlobalState, LoginAction>(_loginAction),
   TypedReducer<GlobalState, LogoutAction>(_logoutAction),
   TypedReducer<GlobalState, FetchOrganizationsSuccessAction>(_fetchOrganizationsSuccessAction),
@@ -16,6 +17,10 @@ final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, FetchProjectsSuccessAction>(_fetchProjectSuccessAction),
   TypedReducer<GlobalState, SelectProjectAction>(_selectProjectAction),
 ]);
+
+GlobalState _bootAction(GlobalState state, RehydrateAction action) {
+  return state.copyWith(booted: true);
+}
 
 GlobalState _loginAction(GlobalState state, LoginAction action) {
   return state.copyWith(session: action.payload);
