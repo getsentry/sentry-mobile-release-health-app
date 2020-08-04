@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:sentry_mobile/types/organization.dart';
+import 'package:sentry_mobile/types/project.dart';
 
 class AppState {
   AppState({this.globalState});
@@ -21,31 +23,50 @@ class AppState {
 }
 
 class GlobalState {
-  GlobalState({this.title, this.session, this.storage});
+  GlobalState(
+      {this.session,
+      this.storage,
+      this.selectedOrganization,
+      this.organizations,
+      this.projects,
+      this.selectedProject});
 
   factory GlobalState.initial() {
     return GlobalState(
-        title: 'Sentry',
-        session: null,
-        storage: FlutterSecureStorage()
+      session: null,
+      storage: FlutterSecureStorage(),
+      organizations: [],
+      selectedOrganization: null,
+      projects: [],
+      selectedProject: null,
     );
   }
 
-  final String title;
   final FlutterSecureStorage storage;
   final Cookie session;
 
+  final List<Organization> organizations;
+  final Organization selectedOrganization;
+
+  final List<Project> projects;
+  final Project selectedProject;
+
   GlobalState copyWith({
-    String title,
     Cookie session,
     bool setSessionNull = false,
     FlutterSecureStorage storage,
+    List<Organization> organizations,
+    Organization selectedOrganization,
+    List<Project> projects,
+    Project selectedProject,
   }) {
     return GlobalState(
-      title: title ?? this.title,
-      session: setSessionNull ? null: (session ?? this.session),
+      session: setSessionNull ? null : (session ?? this.session),
       storage: storage ?? this.storage,
+      organizations: organizations ?? this.organizations,
+      selectedOrganization: selectedOrganization ?? this.selectedOrganization,
+      projects: projects ?? this.projects,
+      selectedProject: selectedProject ?? this.selectedProject,
     );
   }
-
 }

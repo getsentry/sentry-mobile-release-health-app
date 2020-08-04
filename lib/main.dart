@@ -3,15 +3,15 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:redux/redux.dart';
-
-import 'issues.dart';
-import 'login.dart';
-import 'project_selector.dart';
-import 'redux/actions.dart';
-import 'redux/reducers.dart';
-import 'redux/state/app_state.dart';
-import 'release_health.dart';
+import 'package:sentry_mobile/issues.dart';
+import 'package:sentry_mobile/redux/actions.dart';
+import 'package:sentry_mobile/redux/middlewares.dart';
+import 'package:sentry_mobile/redux/reducers.dart';
+import 'package:sentry_mobile/redux/state/app_state.dart';
+import 'package:sentry_mobile/release_health.dart';
+import 'package:sentry_mobile/settings.dart';
 
 Future<Store<AppState>> createStore() async {
 //  var prefs = await SharedPreferences.getInstance();
@@ -19,6 +19,7 @@ Future<Store<AppState>> createStore() async {
     appReducer,
     initialState: AppState.initial(),
     middleware: [
+      apiMiddleware
 //      ValidationMiddleware(),
 //      LoggingMiddleware.printer(),
 //      LocalStorageMiddleware(prefs),
@@ -39,9 +40,8 @@ void main() async {
 
   final String session =
       await store.state.globalState.storage.read(key: 'session');
-  print('trying to fetch data from storage $session');
+
   if (session != null) {
-    print('Calling login');
     store.dispatch(LoginAction(Cookie.fromSetCookieValue(session)));
   }
 
@@ -69,16 +69,38 @@ class MyApp extends StatelessWidget {
             // Notice that the counter didn't reset back to zero; the application
             // is not restarted.
             primarySwatch: Colors.purple,
+            primaryColorDark: Color(0xff4e3fb4),
             // This makes the visual density adapt to the platform that you run
             // the app on. For desktop platforms, the controls will be smaller and
             // closer together (more dense) than on mobile platforms.
             visualDensity: VisualDensity.adaptivePlatformDensity,
-            textTheme: TextTheme(
-              headline1: TextStyle(
-                fontWeight: FontWeight.w700,
-                fontSize: 24,
-                color: Colors.black,
-              ),
+            textTheme: GoogleFonts.rubikTextTheme(
+              TextTheme(
+                  headline1: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 24,
+                    color: Colors.black,
+                  ),
+                  headline2: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 20,
+                    color: Colors.black,
+                  ),
+                  headline3: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                    color: Colors.black,
+                  ),
+                  headline4: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                    color: Colors.black,
+                  ),
+                  caption: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                    color: Colors.black45,
+                  )),
             )),
         home: StoreProvider<AppState>(
           store: store,
@@ -86,7 +108,7 @@ class MyApp extends StatelessWidget {
               converter: (store) => store.state,
               builder: (context, state) {
                 return DefaultTabController(
-                  length: 4,
+                  length: 3,
                   child: Scaffold(
                     appBar: Header(),
                     bottomNavigationBar: Material(
@@ -110,20 +132,14 @@ class MyApp extends StatelessWidget {
                                 text: 'Settings',
                                 iconMargin: EdgeInsets.only(bottom: 4),
                               ),
-                              Tab(
-                                icon: Icon(Icons.accessibility),
-                                text: 'Project',
-                                iconMargin: EdgeInsets.only(bottom: 4),
-                              ),
                             ],
                           ),
                         )),
                     body: TabBarView(
                       children: [
                         ReleaseHealth(),
-                        Issues(),
-                        Login(),
-                        ProjectSelector(),
+                        IssuesScreenBuilder(),
+                        Settings(),
                       ],
                       physics: NeverScrollableScrollPhysics(),
                     ),
@@ -135,9 +151,9 @@ class MyApp extends StatelessWidget {
 }
 
 class Header extends StatelessWidget with PreferredSizeWidget {
-  final Store<AppState> store;
-
   Header({this.store});
+
+  final Store<AppState> store;
 
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
@@ -147,7 +163,23 @@ class Header extends StatelessWidget with PreferredSizeWidget {
     return StoreConnector<AppState, AppState>(
       builder: (_, viewModel) => AppBar(
         backgroundColor: Colors.purple[900],
-        title: Text(viewModel.globalState.title),
+        title: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Center(
+                child: Image(image: AssetImage('assets/sentry-logo-light-512.png'), height: 32)),
+            Visibility(
+              visible: true,
+              child: Center(child: Text(
+                '${viewModel.globalState.selectedOrganization?.name} / ${viewModel.globalState.selectedProject?.name}',
+                style: TextStyle(
+                  fontSize: 12.0,
+                ),
+              )),
+            ),
+          ],
+        ),
       ),
       converter: (store) => store.state,
     );

@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:sentry_mobile/types/organization.dart';
+import 'package:sentry_mobile/types/project.dart';
+
 class LoginAction {
   LoginAction(this.payload);
   final Cookie payload;
@@ -12,4 +15,42 @@ class LogoutAction {
 class TitleAction {
   TitleAction(this.payload);
   final String payload;
+}
+
+class FetchOrganizationsAction {
+  FetchOrganizationsAction();
+}
+
+class FetchOrganizationsSuccessAction {
+  FetchOrganizationsSuccessAction(this.payload);
+  final List payload;
+}
+
+class FetchOrganizationsFailureAction {
+  FetchOrganizationsFailureAction();
+}
+
+class SelectOrganizationAction {
+  SelectOrganizationAction(this.payload);
+  final Organization payload;
+}
+
+
+class FetchProjectsAction {
+  FetchProjectsAction(this.payload);
+  final Organization payload;
+}
+
+class FetchProjectsSuccessAction {
+  FetchProjectsSuccessAction(this.payload);
+  final List payload;
+}
+
+class FetchProjectsFailureAction {
+  FetchProjectsFailureAction();
+}
+
+class SelectProjectAction {
+  SelectProjectAction(this.payload);
+  final Project payload;
 }
