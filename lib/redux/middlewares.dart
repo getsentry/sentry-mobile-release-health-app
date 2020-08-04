@@ -5,6 +5,7 @@ import 'package:http/http.dart';
 import 'package:redux/redux.dart';
 import 'package:sentry_mobile/redux/actions.dart';
 import 'package:sentry_mobile/redux/state/app_state.dart';
+import 'package:sentry_mobile/types/organization.dart';
 
 class SentryApi {
   SentryApi(this.session);
@@ -15,6 +16,16 @@ class SentryApi {
 
   Future<Response> organizations() async {
     return client.get('$baseUrl/organizations/?member=1',
+        headers: {'Cookie': session.toString()});
+  }
+
+  Future<Response> me() async {
+    return client.get('$baseUrl/me/',
+        headers: {'Cookie': session.toString()});
+  }
+
+  Future<Response> projects(Organization organization) async {
+    return client.get('$baseUrl/organizations/${organization.slug}/projects/',
         headers: {'Cookie': session.toString()});
   }
 

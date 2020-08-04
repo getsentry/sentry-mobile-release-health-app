@@ -14,7 +14,7 @@ final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, LoginAction>(_loginAction),
   TypedReducer<GlobalState, LogoutAction>(_logoutAction),
   TypedReducer<GlobalState, FetchOrganizationsSuccessAction>(_fetchOrganizationsSuccessAction),
-  TypedReducer<GlobalState, SelectOrganizationsAction>(_selectOrganizationsAction),
+  TypedReducer<GlobalState, SelectOrganizationAction>(_selectOrganizationsAction),
 ]);
 
 GlobalState _loginAction(GlobalState state, LoginAction action) {
@@ -30,7 +30,7 @@ GlobalState _fetchOrganizationsSuccessAction(GlobalState state, FetchOrganizatio
   return state.copyWith(organizations: orgs, selectedOrganization: orgs.first);
 }
 
-GlobalState _selectOrganizationsAction(GlobalState state, SelectOrganizationsAction action) {
+GlobalState _selectOrganizationsAction(GlobalState state, SelectOrganizationAction action) {
   return state.copyWith(selectedOrganization: action.payload);
 }
 

@@ -10,6 +10,7 @@ import 'package:redux/redux.dart';
 import 'package:sentry_mobile/redux/actions.dart';
 import 'package:sentry_mobile/redux/state/app_state.dart';
 import 'package:sentry_mobile/types/organization.dart';
+import 'package:sentry_mobile/types/project.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 
 class Settings extends StatefulWidget {
@@ -28,27 +29,26 @@ class _SettingsState extends State<Settings> {
         child: Column(
           children: [
             Text(
-                'You are already logged in - Expires: ${viewModel.session
-                    .expires}'),
+                'You are already logged in - Expires: ${viewModel.session.expires}'),
             Center(
                 child: DropdownButton<String>(
-                  value: viewModel.selectedOrganization?.id,
-                  icon: Icon(Icons.arrow_downward),
-                  iconSize: 24,
-                  elevation: 16,
-                  style: TextStyle(color: Colors.deepPurple),
-                  underline: Container(
-                    height: 2,
-                    color: Colors.deepPurpleAccent,
-                  ),
-                  onChanged: viewModel.selectOrganization,
-                  items: viewModel.organizations.map((e) =>
-                      DropdownMenuItem<String>(
+              value: viewModel.selectedOrganization?.id,
+              icon: Icon(Icons.arrow_downward),
+              iconSize: 24,
+              elevation: 16,
+              style: TextStyle(color: Colors.deepPurple),
+              underline: Container(
+                height: 2,
+                color: Colors.deepPurpleAccent,
+              ),
+              onChanged: viewModel.selectOrganization,
+              items: viewModel.organizations
+                  .map((e) => DropdownMenuItem<String>(
                         value: e.id,
                         child: Text(e.name),
-                      )).toList(),
-
-                )),
+                      ))
+                  .toList(),
+            )),
             RaisedButton(
               child: Text('Fetch orgs'),
               onPressed: () => viewModel.fetchOrganizations(),
@@ -124,48 +124,48 @@ class _WebViewState extends State<WebView> {
     // Add a listener to on url changed
     _onUrlChanged =
         flutterWebviewPlugin.onUrlChanged.listen((String url) async {
-          if (!url.contains('https://sentry.io')) {
-            // We return here, it crashes if we fetch cookies from pages like google
+      if (!url.contains('https://sentry.io')) {
+        // We return here, it crashes if we fetch cookies from pages like google
+        return;
+      }
+      print('urlChanged: $url');
+
+      final cookies = await cookieManager.getCookies(url);
+
+      final session =
+          cookies.firstWhere((c) => c.name == 'session', orElse: () => null);
+      if (session != null) {
+        // Test out an API call
+        final client = Client();
+        try {
+          // Session is returned even before authenticated so this is called many times
+          final cookie = session.toString();
+          final response = await client.get(
+              'https://sentry.io/api/0/organizations/?member=1',
+              headers: {'Cookie': cookie});
+
+          final orgs = response.body;
+          // Until acutally logged in we hit the API a few times and get 401
+          if (response.statusCode != 200) {
+            print(response.statusCode);
             return;
           }
-          print('urlChanged: $url');
 
-          final cookies = await cookieManager.getCookies(url);
+          flutterWebviewPlugin.close();
+          viewModel.login(session);
+          flutterWebviewPlugin.dispose();
+          Navigator.pop(context);
 
-          final session =
-          cookies.firstWhere((c) => c.name == 'session', orElse: () => null);
-          if (session != null) {
-            // Test out an API call
-            final client = Client();
-            try {
-              // Session is returned even before authenticated so this is called many times
-              final cookie = session.toString();
-              final response = await client.get(
-                  'https://sentry.io/api/0/organizations/?member=1',
-                  headers: {'Cookie': cookie});
-
-              final orgs = response.body;
-              // Until acutally logged in we hit the API a few times and get 401
-              if (response.statusCode != 200) {
-                print(response.statusCode);
-                return;
-              }
-
-              flutterWebviewPlugin.close();
-              viewModel.login(session);
-              flutterWebviewPlugin.dispose();
-              Navigator.pop(context);
-
-              // Eventually works (on Android, iOS crashed on `get`):
-              print(orgs);
-            } catch (e) {
-              print(e);
-            } finally {
-              client.close();
-            }
-          }
-          print('URL changed: $url $session');
-        });
+          // Eventually works (on Android, iOS crashed on `get`):
+          print(orgs);
+        } catch (e) {
+          print(e);
+        } finally {
+          client.close();
+        }
+      }
+      print('URL changed: $url $session');
+    });
   }
 
   @override
@@ -192,41 +192,64 @@ class _WebViewState extends State<WebView> {
 }
 
 class SettingsViewModel {
-  SettingsViewModel(
-      {this.session, this.fetchOrganizations, this.organizations, this.login, this.logout, this.selectedOrganization, this.selectOrganization});
+  SettingsViewModel({
+    this.session,
+    this.login,
+    this.logout,
+    this.fetchOrganizations,
+    this.organizations,
+    this.selectOrganization,
+    this.selectedOrganization,
+    this.fetchProjects,
+    this.projects,
+    this.selectProject,
+    this.selectedProject,
+  });
 
   final Cookie session;
-  final List<Organization> organizations;
-  final Organization selectedOrganization;
-  final Function() fetchOrganizations;
-  final Function(String id) selectOrganization;
+
   final Function(Cookie session) login;
   final Function() logout;
 
+  final Function() fetchOrganizations;
+  final List<Organization> organizations;
+  final Function(String id) selectOrganization;
+  final Organization selectedOrganization;
+
+  final Function(Organization organization) fetchProjects;
+  final List<Project> projects;
+  final Function(String id) selectProject;
+  final Project selectedProject;
+
   static SettingsViewModel fromStore(Store<AppState> store) =>
       SettingsViewModel(
-          organizations: store.state.globalState.organizations,
-          selectedOrganization: store.state.globalState.selectedOrganization,
-          selectOrganization: (String id) {
-            print(store.state.globalState.organizations);
-            final org = store.state.globalState.organizations.firstWhere((o) => o.id == id, orElse: () => null);
-            if (org != null) {
-              store.dispatch(SelectOrganizationsAction(org));
-            }
-          },
-          fetchOrganizations: () {
-            store.dispatch(FetchOrganizationsAction());
-          },
-          session: store.state.globalState.session,
-          login: (Cookie session) {
-            store.dispatch(LoginAction(session));
-            store.state.globalState.storage
-                .write(key: 'session', value: session.toString());
-            store.dispatch(FetchOrganizationsAction());
-          },
-          logout: () {
-            print('LOGOUT');
-            store.dispatch(LogoutAction());
-            store.state.globalState.storage.delete(key: 'session');
-          });
+        // Login / Session
+        session: store.state.globalState.session,
+        login: (Cookie session) {
+          store.dispatch(LoginAction(session));
+          store.state.globalState.storage
+              .write(key: 'session', value: session.toString());
+          store.dispatch(FetchOrganizationsAction());
+        },
+        logout: () {
+          print('LOGOUT');
+          store.dispatch(LogoutAction());
+          store.state.globalState.storage.delete(key: 'session');
+        },
+        // Organizations
+        fetchOrganizations: () {
+          store.dispatch(FetchOrganizationsAction());
+        },
+        organizations: store.state.globalState.organizations,
+        selectOrganization: (String id) {
+          print(store.state.globalState.organizations);
+          final org = store.state.globalState.organizations
+              .firstWhere((o) => o.id == id, orElse: () => null);
+          if (org != null) {
+            store.dispatch(SelectOrganizationAction(org));
+          }
+        },
+        selectedOrganization: store.state.globalState.selectedOrganization,
+        // Projects
+      );
 }
