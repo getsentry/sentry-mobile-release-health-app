@@ -20,6 +20,9 @@ version: 1.0.0+1
 environment:
   sdk: ">=2.8.0 <3.0.0"
 
+dependency_overrides:
+  analyzer: "0.39.14"
+
 dependencies:
   flutter:
     sdk: flutter
