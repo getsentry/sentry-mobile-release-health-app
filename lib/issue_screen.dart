@@ -5,10 +5,12 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 import 'redux/state/app_state.dart';
 import 'text_theme_ext.dart';
 import 'types/event.dart';
+import 'types/group.dart';
 import 'types/organization.dart';
 import 'types/tag.dart';
 
@@ -17,6 +19,23 @@ class IssueScreen extends StatefulWidget {
 
   @override
   _IssueState createState() => _IssueState();
+}
+
+Future<Group> fetchGroup() async {
+  final response =
+      await http.get('https://jennmueng.com/sentry_sample_issue.json');
+
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+    final Map<String, dynamic> responseJson =
+        json.decode(response.body) as Map<String, dynamic>;
+    return Group.fromJson(responseJson);
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to load Release');
+  }
 }
 
 Future<Event> fetchEvent() async {
@@ -45,7 +64,8 @@ class IssueViewModel {
 }
 
 class _IssueState extends State<IssueScreen> {
-  Future<Event> futureEvent = null;
+  Future<Event> futureEvent;
+  Future<Group> futureGroup;
 
   @override
   void initState() {
@@ -56,20 +76,22 @@ class _IssueState extends State<IssueScreen> {
   void getSampleData() {
     setState(() {
       futureEvent = fetchEvent();
+      futureGroup = fetchGroup();
     });
   }
 
   Widget build(BuildContext context) {
-    return FutureBuilder<Event>(
-        future: futureEvent,
+    return FutureBuilder<List<dynamic>>(
+        future: Future.wait<dynamic>([futureEvent, futureGroup]),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            final event = snapshot.data;
+            final event = snapshot.data[0] as Event;
+            final group = snapshot.data[1] as Group;
 
             return StoreConnector<AppState, IssueViewModel>(
                 converter: (store) => IssueViewModel.fromStore(store),
-                builder: (context, viewModel) =>
-                    IssueView(latestEvent: event, viewModel: viewModel));
+                builder: (context, viewModel) => IssueView(
+                    latestEvent: event, group: group, viewModel: viewModel));
           } else if (snapshot.hasError) {
             return Text('${snapshot.error}');
           }
@@ -82,8 +104,12 @@ class _IssueState extends State<IssueScreen> {
 }
 
 class IssueView extends StatelessWidget {
-  IssueView({@required this.latestEvent, @required this.viewModel});
+  IssueView(
+      {@required this.latestEvent,
+      @required this.group,
+      @required this.viewModel});
   final Event latestEvent;
+  final Group group;
   final IssueViewModel viewModel;
 
   /// Launches the issue in a web browser.
@@ -130,7 +156,19 @@ class IssueView extends StatelessWidget {
                                         .fontSize)))
                       ],
                     )),
+                EventCounts(
+                    count: group.count, userCount: group.userCount.toString()),
                 Tags(tags: latestEvent.tags),
+                IssueSeenRelease(
+                    title: 'Last Seen',
+                    version: group.lastRelease.version,
+                    when: timeago.format(group.lastSeen),
+                    time: group.lastSeen.toString()),
+                IssueSeenRelease(
+                    title: 'First Seen',
+                    version: group.firstRelease.version,
+                    when: timeago.format(group.firstSeen),
+                    time: group.firstSeen.toString()),
                 RaisedButton(
                     onPressed: launchEventUrl, child: Text('Open in Browser'))
               ],
@@ -212,5 +250,89 @@ class TagCard extends StatelessWidget {
             ],
           )),
     );
+  }
+}
+
+class EventCounts extends StatelessWidget {
+  EventCounts({this.count, this.userCount});
+
+  final String count;
+  final String userCount;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        margin: EdgeInsets.only(top: 14),
+        decoration: BoxDecoration(
+            color: Colors.grey[100],
+            borderRadius: BorderRadius.all(Radius.circular(3)),
+            border: Border.all(
+              color: Color(0xffc6becf),
+              width: 1,
+            )),
+        padding: EdgeInsets.symmetric(vertical: 14),
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+          EventCount(title: "Events", value: count),
+          EventCount(title: "Users", value: userCount)
+        ]));
+  }
+}
+
+class EventCount extends StatelessWidget {
+  EventCount({this.title, this.value});
+
+  final String title;
+  final String value;
+
+  Widget build(BuildContext context) {
+    return Container(
+        alignment: Alignment.centerLeft,
+        child: Column(
+          children: [
+            Text(title, style: Theme.of(context).textTheme.caption),
+            Text(value,
+                style: TextStyle(
+                    fontSize: 22, color: Theme.of(context).primaryColorDark))
+          ],
+        ));
+  }
+}
+
+class IssueSeenRelease extends StatelessWidget {
+  IssueSeenRelease({this.title, this.version, this.when, this.time});
+  final String title;
+  final String version;
+  final String when;
+  final String time;
+
+  Widget build(BuildContext context) {
+    return Container(
+        padding: EdgeInsets.only(top: 16),
+        alignment: Alignment.topLeft,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+                padding: EdgeInsets.only(bottom: 6),
+                child: Text(title, style: Theme.of(context).textTheme.caption)),
+            Container(
+                padding: EdgeInsets.only(bottom: 4),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("When"),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [Text(when), Text(time)],
+                    )
+                  ],
+                )),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [Text("Release"), Text(version)],
+            )
+          ],
+        ));
   }
 }

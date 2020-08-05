@@ -13,19 +13,24 @@ Group _$GroupFromJson(Map<String, dynamic> json) {
     lastSeen: _dateTimeFromString(json['lastSeen'] as String),
     firstSeen: _dateTimeFromString(json['firstSeen'] as String),
     userCount: json['userCount'] as int,
-    count: json['count'] as int,
+    count: json['count'] as String,
     title: json['title'] as String,
     metadata: metadataFromJson(json['metadata'] as Map<String, dynamic>),
+    firstRelease:
+        _releaseFromJson(json['firstRelease'] as Map<String, dynamic>),
+    lastRelease: _releaseFromJson(json['lastRelease'] as Map<String, dynamic>),
   );
 }
 
 Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
       'id': instance.id,
       'culprit': instance.culprit,
-      'lastSeen': _dateTimeToString(instance.lastSeen),
-      'firstSeen': _dateTimeToString(instance.firstSeen),
       'userCount': instance.userCount,
       'count': instance.count,
       'title': instance.title,
+      'lastSeen': _dateTimeToString(instance.lastSeen),
+      'firstSeen': _dateTimeToString(instance.firstSeen),
+      'firstRelease': _releaseToJson(instance.firstRelease),
+      'lastRelease': _releaseToJson(instance.lastRelease),
       'metadata': metadataToJson(instance.metadata),
     };

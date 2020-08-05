@@ -35,7 +35,7 @@ const String jsonString = '''
         "shortId": "TOUR-MOBILE-3ED",
         "shareId": null,
         "firstSeen": "2020-07-08T20:10:22.111494Z",
-        "count": 5,
+        "count": "5",
         "permalink": "https://sentry.io/organizations/monos-digital/issues/1773677544/",
         "level": "error",
         "isSubscribed": false,
@@ -74,7 +74,7 @@ const String jsonString = '''
         "shortId": "TOUR-MOBILE-3VH",
         "shareId": null,
         "firstSeen": "2020-07-19T08:18:00.302863Z",
-        "count": 23,
+        "count": "23",
         "permalink": "https://sentry.io/organizations/monos-digital/issues/1793417200/",
         "level": "error",
         "isSubscribed": false,
@@ -208,7 +208,7 @@ class Issue extends StatelessWidget {
   final String value;
   final String culprit;
   final int userCount;
-  final int count;
+  final String count;
   final DateTime firstSeen;
   final DateTime lastSeen;
 
@@ -242,7 +242,7 @@ class Issue extends StatelessWidget {
                   Container(
                       width: 48,
                       alignment: Alignment.centerRight,
-                      child: Text(count.toString(),
+                      child: Text(count,
                           style: TextStyle(fontWeight: FontWeight.bold))),
                   Container(
                       width: 48,
