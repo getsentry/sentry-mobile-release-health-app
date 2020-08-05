@@ -10,6 +10,7 @@ import 'redux/state/app_state.dart';
 import 'text_theme_ext.dart';
 import 'types/event.dart';
 import 'types/organization.dart';
+import 'types/tag.dart';
 
 class IssueScreen extends StatefulWidget {
   const IssueScreen({Key key}) : super(key: key);

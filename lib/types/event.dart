@@ -1,13 +1,9 @@
+import 'package:json_annotation/json_annotation.dart';
+
 import './event_metadata.dart';
+import './tag.dart';
 
-class Tag {
-  Tag.fromJson(Map<String, dynamic> json)
-      : key = json['key'] as String,
-        value = json['value'] as String;
-
-  final String value;
-  final String key;
-}
+part 'event.g.dart';
 
 // class Entry {
 //   Entry.fromJson(Map<String, dynamic> json)
@@ -33,31 +29,40 @@ class Tag {
 //   final int colNo;
 //   final List<[int, String]> context;
 // }
-
+@JsonSerializable()
 class Event {
-  Event.fromJson(Map<String, dynamic> json)
-      : id = json['id'] as String,
-        culprit = json['culprit'] as String,
-        userCount = json['userCount'] as int,
-        count = json['count'] as int,
-        title = json['title'] as String,
-        metadata =
-            EventMetadata.fromJson(json['metadata'] as Map<String, dynamic>),
-        tags = (json['tags'] as List<dynamic>)
-            .map((dynamic t) => Tag.fromJson(t as Map<String, dynamic>))
-            .toList(),
-        // entries = (json['tags'] as List<dynamic>)
-        //     .map((dynamic e) => Entry.fromJson(e as Map<String, dynamic>))
-        //     .toList(),
-        groupID = json['groupID'] as String;
+  Event(
+      {this.id,
+      this.culprit,
+      this.userCount,
+      this.count,
+      this.title,
+      this.metadata,
+      this.tags,
+      this.groupID});
+
+  factory Event.fromJson(Map<String, dynamic> json) => _$EventFromJson(json);
 
   final String id;
   final String culprit;
   final int userCount;
   final int count;
   final String title;
+
+  @JsonKey(fromJson: metadataFromJson, toJson: metadataToJson)
   final EventMetadata metadata;
+
+  @JsonKey(fromJson: _tagsFromJson, toJson: _tagsToJson)
   final List<Tag> tags;
+
   // final List<Entry> entries;
   final String groupID;
+
+  Map<String, dynamic> toJson() => _$EventToJson(this);
 }
+
+List<Tag> _tagsFromJson(List<dynamic> jsons) => jsons
+    .map((dynamic json) => Tag.fromJson(json as Map<String, dynamic>))
+    .toList();
+List<Map<String, dynamic>> _tagsToJson(List<Tag> tags) =>
+    tags.map((Tag tag) => tag.toJson()).toList();

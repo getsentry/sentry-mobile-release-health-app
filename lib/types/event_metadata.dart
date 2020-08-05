@@ -1,12 +1,24 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'event_metadata.g.dart';
+
+@JsonSerializable()
 class EventMetadata {
-  EventMetadata.fromJson(Map<String, dynamic> json)
-      : value = json['value'] as String,
-        message = json['message'] as String,
-        type = json['type'] as String,
-        title = json['title'] as String;
+  EventMetadata({this.value, this.message, this.type, this.title});
+
+  factory EventMetadata.fromJson(Map<String, dynamic> json) =>
+      _$EventMetadataFromJson(json);
 
   final String value;
   final String message;
   final String type;
   final String title;
+
+  Map<String, dynamic> toJson() => _$EventMetadataToJson(this);
 }
+
+EventMetadata metadataFromJson(Map<String, dynamic> json) =>
+    EventMetadata.fromJson(json as Map<String, dynamic>);
+
+Map<String, dynamic> metadataToJson(EventMetadata metadata) =>
+    metadata.toJson();
