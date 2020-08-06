@@ -12,6 +12,10 @@
 This is a hackweek project and not a Sentry product.  
 There are no plans of publishing this app to the App Store/Google Play Store.
 
+# Run source generators
+
+`flutter pub run build_runner build`
+
 # Getting started
 
 1. Install Flutter
