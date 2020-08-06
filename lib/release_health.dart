@@ -387,8 +387,8 @@ class ChartRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.only(bottom: 15),
-        margin: EdgeInsets.only(bottom: 15),
+        padding: EdgeInsets.only(bottom: 20),
+        margin: EdgeInsets.only(bottom: 20),
         decoration: BoxDecoration(
           border:
               Border(bottom: BorderSide(width: 1, color: Color(0x44B9C1D9))),
