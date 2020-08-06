@@ -28,6 +28,7 @@ class GlobalState {
         this.selectedOrganization,
       this.organizations,
       this.projects,
+        this.selectedTab,
       this.selectedProject});
 
   factory GlobalState.initial() {
@@ -37,12 +38,14 @@ class GlobalState {
       organizations: [],
       selectedOrganization: null,
       projects: [],
+      selectedTab: 0,
       selectedProject: null,
     );
   }
 
   final Cookie session;
   final bool hydrated;
+  final int selectedTab;
 
   final List<Organization> organizations;
   final Organization selectedOrganization;
@@ -52,7 +55,8 @@ class GlobalState {
 
   GlobalState copyWith({
     Cookie session,
-    bool booted,
+    bool hydrated,
+    int selectedTab,
     bool setSessionNull = false,
     List<Organization> organizations,
     Organization selectedOrganization,
@@ -60,7 +64,8 @@ class GlobalState {
     Project selectedProject,
   }) {
     return GlobalState(
-      hydrated: booted ?? this.hydrated,
+      hydrated: hydrated ?? this.hydrated,
+      selectedTab: selectedTab ?? this.selectedTab,
       session: setSessionNull ? null : (session ?? this.session),
       organizations: organizations ?? this.organizations,
       selectedOrganization: selectedOrganization ?? this.selectedOrganization,

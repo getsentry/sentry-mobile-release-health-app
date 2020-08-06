@@ -7,6 +7,11 @@ class RehydrateAction {
   RehydrateAction();
 }
 
+class SwitchTabAction {
+  SwitchTabAction(this.payload);
+  final int payload;
+}
+
 class LoginAction {
   LoginAction(this.payload);
   final Cookie payload;
