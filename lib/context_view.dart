@@ -89,7 +89,7 @@ class _ContextState extends State<ContextView> {
               ]).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
         },
         blendMode: BlendMode.dstIn,
-        child: AnimatedContainer(
+        child: Container(
           key: _key,
           padding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
           alignment: Alignment.topLeft,
@@ -98,8 +98,7 @@ class _ContextState extends State<ContextView> {
             top: BorderSide(
                 width: 1.0, color: Theme.of(context).primaryColorLight),
           )),
-          height: useHidden && isHidden ? HIDDEN_HEIGHT : height,
-          duration: Duration(milliseconds: 500),
+          height: useHidden && isHidden ? HIDDEN_HEIGHT : null,
           child: Column(children: [
             Container(
                 alignment: Alignment.centerLeft,
