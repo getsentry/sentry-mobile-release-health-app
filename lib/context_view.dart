@@ -4,55 +4,15 @@ import 'text_theme_ext.dart';
 
 const double HIDDEN_HEIGHT = 240;
 
-class ContextView extends StatefulWidget {
-  const ContextView({Key key, this.title, this.value}) : super(key: key);
+class ContextView extends StatelessWidget {
+  const ContextView({@required this.title, @required this.value});
 
   final String title;
   final dynamic value;
 
   @override
-  _ContextState createState() => _ContextState(title: title, value: value);
-}
-
-class _ContextState extends State<ContextView> {
-  _ContextState({@required this.title, @required this.value});
-
-  final String title;
-  final dynamic value;
-  GlobalKey _key = GlobalKey();
-
-  bool isHidden = true;
-  double height;
-
-  @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback(_getSize);
-    super.initState();
-  }
-
-  void _getSize(dynamic _) {
-    if (height == null) {
-      setState(() {
-        final RenderBox renderBox =
-            _key.currentContext.findRenderObject() as RenderBox;
-        final size = renderBox.size;
-
-        height = size.height;
-      });
-    }
-  }
-
-  void toggleHidden() {
-    setState(() {
-      isHidden = !isHidden;
-    });
-  }
-
   Widget build(BuildContext context) {
     final List<Widget> valueWidgets = [];
-    final List<Widget> headerWidgets = [
-      Text(title, style: Theme.of(context).textTheme.caption)
-    ];
 
     if (value is Map) {
       if (title == 'redux.state') {
@@ -66,50 +26,18 @@ class _ContextState extends State<ContextView> {
       valueWidgets.add(ContextRow(name: title, value: value as String));
     }
 
-    bool useHidden = false;
-    if (height != null && height > HIDDEN_HEIGHT) {
-      useHidden = true;
-    }
-
-    if (useHidden) {
-      headerWidgets.add(IconButton(
-        onPressed: toggleHidden,
-        icon: isHidden ? Icon(Icons.expand_more) : Icon(Icons.expand_less),
-      ));
-    }
-
-    return ShaderMask(
-        shaderCallback: (rect) {
-          return LinearGradient(
-              begin: Alignment(0, 0.4),
-              end: Alignment.bottomCenter,
-              colors: [
-                Colors.black,
-                useHidden && isHidden ? Colors.transparent : Colors.black
-              ]).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
-        },
-        blendMode: BlendMode.dstIn,
-        child: Container(
-          key: _key,
-          padding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
-          alignment: Alignment.topLeft,
-          decoration: BoxDecoration(
-              border: Border(
-            top: BorderSide(
-                width: 1.0, color: Theme.of(context).primaryColorLight),
-          )),
-          height: useHidden && isHidden ? HIDDEN_HEIGHT : null,
-          child: Column(children: [
-            Container(
-                alignment: Alignment.centerLeft,
-                margin: EdgeInsets.only(bottom: 12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: headerWidgets,
-                )),
-            ...valueWidgets,
-          ]),
-        ));
+    return Container(
+        child: ExpansionTile(
+      title: Text(title, style: Theme.of(context).textTheme.caption),
+      children: [
+        Container(
+          padding: EdgeInsets.only(right: 16, left: 16, bottom: 12),
+          child: Column(
+            children: valueWidgets,
+          ),
+        )
+      ],
+    ));
   }
 }
 

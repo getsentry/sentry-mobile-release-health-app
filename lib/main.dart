@@ -73,6 +73,7 @@ class MyApp extends StatelessWidget {
             highlightColor: Colors.transparent,
             splashColor: Colors.transparent,
             backgroundColor: Colors.white,
+            dividerColor: Color(0xffE7E1EC),
 
             // This makes the visual density adapt to the platform that you run
             // the app on. For desktop platforms, the controls will be smaller and
