@@ -71,16 +71,24 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                       padding: EdgeInsets.symmetric(horizontal: 16),
                       child: Column(
                         children: [
-                          HealthDivider(onSeeAll: () {}, title: 'Charts'),
-                          ChartLine(
+                          HealthDivider(
+                            onSeeAll: () {},
+                            title: 'Charts',
+                            paddingBottom: 10,
+                          ),
+                          ChartRow(
                               title: 'Issues',
                               total: snapshot.data[_index].issues,
                               change: 3.6), // TODO: api
-                          ChartLine(
+                          ChartRow(
                               title: 'Crashes',
                               total: snapshot.data[_index].crashes,
                               change: -4.2), // TODO: api
-                          HealthDivider(onSeeAll: () {}, title: 'Statistics'),
+                          HealthDivider(
+                            onSeeAll: () {},
+                            title: 'Statistics',
+                            paddingBottom: 0,
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             mainAxisSize: MainAxisSize.max,
@@ -220,14 +228,19 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
 }
 
 class HealthDivider extends StatelessWidget {
-  HealthDivider({@required this.title, @required this.onSeeAll});
+  HealthDivider(
+      {@required this.title,
+      @required this.onSeeAll,
+      @required this.paddingBottom});
 
   final String title;
   final void Function() onSeeAll;
+  final double paddingBottom;
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.only(bottom: paddingBottom),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -323,7 +336,7 @@ class HealthCard extends StatelessWidget {
                 title,
                 style: TextStyle(
                   color: Color(0xFF14223B),
-                  fontSize: 12,
+                  fontSize: 14,
                 ),
               )),
           Padding(
@@ -334,7 +347,7 @@ class HealthCard extends StatelessWidget {
                   getTrendSign() + change.toString() + '%',
                   style: TextStyle(
                     color: Color(0xFFB9C1D9),
-                    fontSize: 12,
+                    fontSize: 13,
                   ),
                 ),
                 Padding(
@@ -348,9 +361,8 @@ class HealthCard extends StatelessWidget {
   }
 }
 
-class ChartLine extends StatelessWidget {
-  ChartLine(
-      {@required this.title, @required this.total, @required this.change});
+class ChartRow extends StatelessWidget {
+  ChartRow({@required this.title, @required this.total, @required this.change});
 
   final String title;
   final int total;
@@ -368,48 +380,60 @@ class ChartLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title,
-              style: TextStyle(
-                color: Color(0xFF18181A),
-                fontWeight: FontWeight.w500,
-                fontSize: 18,
-              )),
-          Text('Last 12 hours',
-              style: TextStyle(
-                color: Color(0xFFB9C1D9),
-                fontSize: 13,
-              ))
-        ],
-      ),
-      Column(
-        children: [],
-      ),
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Text(total.toString(),
-              style: TextStyle(
-                color: Color(0xFF18181A),
-                fontWeight: FontWeight.w500,
-                fontSize: 18,
-              )),
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Text(getTrendSign() + change.toString() + '%',
-                style: TextStyle(
-                  color: Color(0xFFB9C1D9),
-                  fontSize: 13,
-                )),
-            Padding(
-              padding: EdgeInsets.only(left: 7),
-              child: Image.asset(getTrendIcon(), height: 8),
-            )
-          ])
-        ],
-      ),
-    ]);
+    return Container(
+        padding: EdgeInsets.only(bottom: 15),
+        margin: EdgeInsets.only(bottom: 15),
+        decoration: BoxDecoration(
+          border:
+              Border(bottom: BorderSide(width: 1, color: Color(0x44B9C1D9))),
+        ),
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                  padding: EdgeInsets.only(bottom: 5),
+                  child: Text(title,
+                      style: TextStyle(
+                        color: Color(0xFF18181A),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 17,
+                      ))),
+              Text('Last 12 hours',
+                  style: TextStyle(
+                    color: Color(0xFFB9C1D9),
+                    fontSize: 14,
+                  ))
+            ],
+          ),
+          Column(
+            children: [],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Padding(
+                  padding: EdgeInsets.only(bottom: 5),
+                  child: Text(total.toString(),
+                      style: TextStyle(
+                        color: Color(0xFF18181A),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 17,
+                      ))),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Text(getTrendSign() + change.toString() + '%',
+                    style: TextStyle(
+                      color: Color(0xFFB9C1D9),
+                      fontSize: 14,
+                    )),
+                Padding(
+                  padding: EdgeInsets.only(left: 7),
+                  child: Image.asset(getTrendIcon(), height: 8),
+                )
+              ])
+            ],
+          ),
+        ]));
   }
 }
