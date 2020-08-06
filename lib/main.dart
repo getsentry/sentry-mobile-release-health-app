@@ -71,6 +71,8 @@ class MyApp extends StatelessWidget {
             // is not restarted.
             primarySwatch: Colors.purple,
             primaryColorDark: Color(0xff4e3fb4),
+            highlightColor: Colors.transparent,
+            splashColor: Colors.transparent,
             // This makes the visual density adapt to the platform that you run
             // the app on. For desktop platforms, the controls will be smaller and
             // closer together (more dense) than on mobile platforms.
@@ -78,7 +80,7 @@ class MyApp extends StatelessWidget {
             textTheme: GoogleFonts.rubikTextTheme(
               TextTheme(
                   headline1: TextStyle(
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w500,
                     fontSize: 24,
                     color: Colors.black,
                   ),
@@ -123,28 +125,32 @@ class MyApp extends StatelessWidget {
                     child: Scaffold(
                       appBar: Header(),
                       bottomNavigationBar: Material(
-                          color: Color(0xff4e3fb4),
+                          color: Color(0xffffffff),
                           child: Container(
-                            height: 60.0,
-                            child: TabBar(
-                              tabs: [
-                                Tab(
-                                  icon: Icon(Icons.healing),
-                                  text: 'Health',
-                                  iconMargin: EdgeInsets.only(bottom: 4),
-                                ),
-                                Tab(
-                                  icon: Icon(Icons.list),
-                                  text: 'Issues',
-                                  iconMargin: EdgeInsets.only(bottom: 4),
-                                ),
-                                Tab(
-                                  icon: Icon(Icons.account_circle),
-                                  text: 'Settings',
-                                  iconMargin: EdgeInsets.only(bottom: 4),
-                                ),
-                              ],
-                            ),
+                            decoration: BoxDecoration(border: Border(top: BorderSide(color: Color(0xffB9C1D9)))),
+                            height: 84.0,
+                            child: Column(children: [
+                              TabBar(
+                                indicator: CircleTabIndicator(color: Color(0xffB9C1D9), radius: 3),
+                                tabs: [
+                                  Tab(
+                                    icon: Icon(Icons.healing, color: Color(0xffB9C1D9),),
+                                    iconMargin: EdgeInsets.only(bottom: 0),
+                                    text: '',
+                                  ),
+                                  Tab(
+                                    icon: Icon(Icons.list, color: Color(0xffB9C1D9)),
+                                    iconMargin: EdgeInsets.only(bottom: 0),
+                                    text: '',
+                                  ),
+                                  Tab(
+                                    icon: Icon(Icons.account_circle, color: Color(0xffB9C1D9)),
+                                    iconMargin: EdgeInsets.only(bottom: 0),
+                                    text: '',
+                                  ),
+                                ],
+                              )
+                            ],),
                           )),
                       body: TabBarView(
                         children: [
@@ -174,48 +180,44 @@ class Header extends StatelessWidget with PreferredSizeWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AppState>(
       builder: (_, viewModel) => AppBar(
-        backgroundColor: Colors.purple[900],
-        title: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Center(child: LogoWidget()),
-            Visibility(
-              visible: true,
-              child: Center(
-                  child: Text(
-                '${viewModel.globalState.selectedOrganization?.name} / ${viewModel.globalState.selectedProject?.name}',
-                style: TextStyle(
-                  fontSize: 12.0,
-                ),
-              )),
-            ),
-          ],
-        ),
+        backgroundColor: Colors.white,
+        shadowColor: Colors.transparent,
+        centerTitle: false,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.settings),
+          )
+        ],
+        title: Text('Health', style: Theme.of(context).textTheme.headline1,)
       ),
       converter: (store) => store.state,
     );
   }
 }
 
-class LogoWidget extends StatefulWidget {
-  LogoWidget({Key key}) : super(key: key);
+class CircleTabIndicator extends Decoration {
+  CircleTabIndicator({@required Color color, @required double radius})
+      : _painter = _CirclePainter(color, radius);
+
+  final BoxPainter _painter;
 
   @override
-  _LogoWidgetState createState() => _LogoWidgetState();
+  BoxPainter createBoxPainter([onChanged]) => _painter;
 }
 
-class _LogoWidgetState extends State<LogoWidget> {
-  int _c = 0;
-  String get e => _c > 4 ? 'a' : 'e';
+class _CirclePainter extends BoxPainter {
+  _CirclePainter(Color color, this.radius)
+      : _paint = Paint()
+    ..color = color
+    ..isAntiAlias = true;
+
+  final Paint _paint;
+  final double radius;
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: () => setState(() => _c++),
-        child: Image(
-          image: AssetImage('assets/s${e}ntry-logo-light-512.png'),
-          height: 32,
-        ));
+  void paint(Canvas canvas, Offset offset, ImageConfiguration cfg) {
+    final Offset circleOffset =
+        offset + Offset(cfg.size.width / 2, cfg.size.height - radius - 5 - 20);
+    canvas.drawCircle(circleOffset, radius, _paint);
   }
 }
