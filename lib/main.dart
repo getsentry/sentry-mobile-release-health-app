@@ -164,7 +164,7 @@ class MyApp extends StatelessWidget {
                                       text: '',
                                     ),
                                     Tab(
-                                      icon: Icon(Icons.list,
+                                      icon: Icon(Icons.inbox,
                                           color:
                                               state.globalState.selectedTab == 1
                                                   ? Color(0xff81B4FE)
