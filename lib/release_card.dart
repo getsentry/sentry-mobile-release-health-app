@@ -46,7 +46,8 @@ class ReleaseCard extends StatelessWidget {
                   )),
             ],
           ),
-            SizedBox(height: 48),
+            Image.asset('assets/line-flat.png'),
+            
         ]),));
   }
 }

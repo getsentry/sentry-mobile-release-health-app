@@ -52,6 +52,7 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return RefreshIndicator(
+              backgroundColor: Colors.transparent,
               child: SingleChildScrollView(
                 child: Column(
                   children: [
