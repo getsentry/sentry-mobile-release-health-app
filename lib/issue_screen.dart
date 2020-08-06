@@ -127,11 +127,11 @@ class IssueView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
         child: Container(
-            height: 1000,
-            padding: EdgeInsets.only(top: 20, left: 16, right: 16),
+            padding: EdgeInsets.only(top: 20, bottom: 40),
             child: Column(
               children: [
                 Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
                     alignment: Alignment.topLeft,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,18 +159,31 @@ class IssueView extends StatelessWidget {
                 EventCounts(
                     count: group.count, userCount: group.userCount.toString()),
                 Tags(tags: latestEvent.tags),
-                IssueSeenRelease(
-                    title: 'Last Seen',
-                    version: group.lastRelease.version,
-                    when: timeago.format(group.lastSeen),
-                    time: group.lastSeen.toString()),
-                IssueSeenRelease(
-                    title: 'First Seen',
-                    version: group.firstRelease.version,
-                    when: timeago.format(group.firstSeen),
-                    time: group.firstSeen.toString()),
+                Container(
+                    margin: EdgeInsets.only(top: 14),
+                    decoration: BoxDecoration(
+                        border: Border(
+                      top: BorderSide(
+                          width: 1.0,
+                          color: Theme.of(context).primaryColorLight),
+                    )),
+                    child: Column(
+                      children: [
+                        IssueSeenRelease(
+                            title: 'Last Seen',
+                            version: group.lastRelease.version,
+                            when: timeago.format(group.lastSeen),
+                            time: group.lastSeen.toString()),
+                        IssueSeenRelease(
+                            title: 'First Seen',
+                            version: group.firstRelease.version,
+                            when: timeago.format(group.firstSeen),
+                            time: group.firstSeen.toString()),
+                      ],
+                    )),
+                Contexts(eventContext: latestEvent.context),
                 RaisedButton(
-                    onPressed: launchEventUrl, child: Text('Open in Browser'))
+                    onPressed: launchEventUrl, child: Text('Open in Browser')),
               ],
             )));
   }
@@ -182,7 +195,8 @@ class Tags extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(top: 12),
+        padding: EdgeInsets.symmetric(horizontal: 16),
+        margin: EdgeInsets.only(top: 18, bottom: 4),
         alignment: Alignment.topLeft,
         child: Column(
           children: <Widget>[
@@ -262,7 +276,7 @@ class EventCounts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(top: 14),
+        margin: EdgeInsets.only(top: 14, left: 16, right: 16),
         decoration: BoxDecoration(
             color: Colors.grey[100],
             borderRadius: BorderRadius.all(Radius.circular(3)),
@@ -298,6 +312,93 @@ class EventCount extends StatelessWidget {
   }
 }
 
+class Contexts extends StatelessWidget {
+  Contexts({@required this.eventContext});
+
+  final Map<String, dynamic> eventContext;
+
+  Widget build(BuildContext context) {
+    List<Widget> contexts = new List<Widget>();
+
+    eventContext.forEach((title, dynamic value) =>
+        contexts.add(ContextView(title: title, value: value)));
+
+    return Container(
+      child: Column(children: contexts),
+    );
+  }
+}
+
+class ContextView extends StatelessWidget {
+  ContextView({@required this.title, @required this.value});
+  final String title;
+  final dynamic value;
+
+  Widget build(BuildContext context) {
+    List<Widget> valueWidgets = List();
+
+    if (value is Map) {
+      value.forEach((String key, String value) =>
+          valueWidgets.add(ContextRow(name: key, value: value)));
+    } else if (value is String) {
+      valueWidgets.add(ContextRow(name: title, value: value as String));
+    }
+
+    return Container(
+        padding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+        alignment: Alignment.topLeft,
+        decoration: BoxDecoration(
+            border: Border(
+          top: BorderSide(
+              width: 1.0, color: Theme.of(context).primaryColorLight),
+        )),
+        child: Column(children: [
+          Container(
+              alignment: Alignment.centerLeft,
+              margin: EdgeInsets.only(bottom: 12),
+              child: Text(title, style: Theme.of(context).textTheme.caption)),
+          ...valueWidgets
+        ]));
+  }
+}
+
+class ContextRow extends StatelessWidget {
+  ContextRow({@required this.name, @required this.value});
+  final String name;
+  final String value;
+
+  Widget build(BuildContext context) {
+    return Container(
+        margin: EdgeInsets.only(bottom: 6),
+        alignment: Alignment.center,
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                flex: 1,
+                child: Container(
+                    padding: EdgeInsets.only(right: 4),
+                    child: Text(name,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontWeight: FontWeight.w600))),
+              ),
+              Container(
+                  width: MediaQuery.of(context).size.width * 0.68,
+                  padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.all(Radius.circular(3)),
+                  ),
+                  child: Text(value,
+                      style: TextStyle(
+                          fontFamily:
+                              Theme.of(context).textTheme.code.fontFamily,
+                          color: Theme.of(context).primaryColorDark)))
+            ]));
+  }
+}
+
 class IssueSeenRelease extends StatelessWidget {
   IssueSeenRelease({this.title, this.version, this.when, this.time});
   final String title;
@@ -307,7 +408,8 @@ class IssueSeenRelease extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.only(top: 16),
+        margin: EdgeInsets.only(bottom: 14),
+        padding: EdgeInsets.only(top: 16, left: 16, right: 16),
         alignment: Alignment.topLeft,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

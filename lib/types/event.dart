@@ -39,7 +39,8 @@ class Event {
       this.title,
       this.metadata,
       this.tags,
-      this.groupID});
+      this.groupID,
+      this.context});
 
   factory Event.fromJson(Map<String, dynamic> json) => _$EventFromJson(json);
 
@@ -58,6 +59,9 @@ class Event {
   // final List<Entry> entries;
   final String groupID;
 
+  @JsonKey(fromJson: _contextFromJson, toJson: _contextToJson)
+  final Map<String, dynamic> context;
+
   Map<String, dynamic> toJson() => _$EventToJson(this);
 }
 
@@ -66,3 +70,24 @@ List<Tag> _tagsFromJson(List<dynamic> jsons) => jsons
     .toList();
 List<Map<String, dynamic>> _tagsToJson(List<Tag> tags) =>
     tags.map((Tag tag) => tag.toJson()).toList();
+
+Map<String, dynamic> _contextFromJson(Map<String, dynamic> json) {
+  final Map<String, dynamic> newMap = Map<String, dynamic>();
+
+  json.forEach((String key, dynamic value) {
+    if (value is Map) {
+      final Map<String, String> stringMap = Map();
+      value.forEach((dynamic innerKey, dynamic innerValue) {
+        stringMap[innerKey as String] = '$innerValue';
+      });
+
+      newMap[key] = stringMap;
+    } else {
+      newMap[key] = '$value';
+    }
+  });
+
+  return newMap;
+}
+
+Map<String, dynamic> _contextToJson(Map<String, dynamic> context) => context;
