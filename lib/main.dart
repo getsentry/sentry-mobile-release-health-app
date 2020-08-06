@@ -151,7 +151,7 @@ class MyApp extends StatelessWidget {
                                     store.dispatch(SwitchTabAction(index));
                                   },
                                   indicator: CircleTabIndicator(
-                                      color: Color(0x00000000), radius: 3),
+                                      color: Colors.transparent, radius: 3),
                                   tabs: [
                                     Tab(
                                       icon: Icon(Icons.home,

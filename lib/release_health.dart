@@ -53,7 +53,8 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return RefreshIndicator(
-              backgroundColor: Colors.transparent,
+              backgroundColor: Colors.white,
+              color: Color(0xff81B4FE),
               child: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -223,7 +224,10 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
           }
 
           return Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(
+              backgroundColor: Colors.white,
+              valueColor: AlwaysStoppedAnimation(Color(0xff81B4FE)),
+            ),
           );
         });
   }
