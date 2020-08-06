@@ -40,7 +40,8 @@ class Event {
       this.metadata,
       this.tags,
       this.groupID,
-      this.context});
+      this.context,
+      this.entries});
 
   factory Event.fromJson(Map<String, dynamic> json) => _$EventFromJson(json);
 
@@ -55,8 +56,7 @@ class Event {
 
   @JsonKey(fromJson: _tagsFromJson, toJson: _tagsToJson)
   final List<Tag> tags;
-
-  // final List<Entry> entries;
+  final List<Map<String, dynamic>> entries;
   final String groupID;
 
   @JsonKey(fromJson: _contextFromJson, toJson: _contextToJson)

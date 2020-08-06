@@ -17,6 +17,9 @@ Event _$EventFromJson(Map<String, dynamic> json) {
     tags: _tagsFromJson(json['tags'] as List),
     groupID: json['groupID'] as String,
     context: _contextFromJson(json['context'] as Map<String, dynamic>),
+    entries: (json['entries'] as List)
+        ?.map((e) => e as Map<String, dynamic>)
+        ?.toList(),
   );
 }
 
@@ -28,6 +31,7 @@ Map<String, dynamic> _$EventToJson(Event instance) => <String, dynamic>{
       'title': instance.title,
       'metadata': metadataToJson(instance.metadata),
       'tags': _tagsToJson(instance.tags),
+      'entries': instance.entries,
       'groupID': instance.groupID,
       'context': _contextToJson(instance.context),
     };

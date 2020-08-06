@@ -4,9 +4,11 @@ import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:sentry_mobile/types/breadcrumb.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+import 'breadcrumb_viewer.dart';
 import 'context_view.dart';
 import 'redux/state/app_state.dart';
 import 'text_theme_ext.dart';
@@ -126,6 +128,18 @@ class IssueView extends StatelessWidget {
   }
 
   Widget build(BuildContext context) {
+    List<Breadcrumb> breadcrumbs = [];
+
+    latestEvent.entries.forEach((entry) {
+      if (entry['type'] == 'breadcrumbs') {
+        List<dynamic> d = entry['data']['values'] as List<dynamic>;
+
+        breadcrumbs = d
+            .map((dynamic b) => Breadcrumb.fromJson(b as Map<String, dynamic>))
+            .toList();
+      }
+    });
+
     return SingleChildScrollView(
         child: Container(
             padding: EdgeInsets.only(top: 20, bottom: 40),
@@ -160,6 +174,7 @@ class IssueView extends StatelessWidget {
                 EventCounts(
                     count: group.count, userCount: group.userCount.toString()),
                 Tags(tags: latestEvent.tags),
+                BreadcrumbViewer(breadcrumbs: breadcrumbs),
                 Container(
                     margin: EdgeInsets.only(top: 14),
                     decoration: BoxDecoration(

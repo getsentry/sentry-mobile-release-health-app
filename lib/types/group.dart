@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import '../utils/conversion.dart';
 import './event_metadata.dart';
 import './release.dart';
 
@@ -26,9 +27,9 @@ class Group {
   final String count;
   final String title;
 
-  @JsonKey(fromJson: _dateTimeFromString, toJson: _dateTimeToString)
+  @JsonKey(fromJson: dateTimeFromString, toJson: dateTimeToString)
   final DateTime lastSeen;
-  @JsonKey(fromJson: _dateTimeFromString, toJson: _dateTimeToString)
+  @JsonKey(fromJson: dateTimeFromString, toJson: dateTimeToString)
   final DateTime firstSeen;
   @JsonKey(fromJson: _releaseFromJson, toJson: _releaseToJson)
   final Release firstRelease;
@@ -38,10 +39,6 @@ class Group {
   @JsonKey(fromJson: metadataFromJson, toJson: metadataToJson)
   final EventMetadata metadata;
 }
-
-DateTime _dateTimeFromString(String dateString) => DateTime.parse(dateString);
-String _dateTimeToString(DateTime dateTime) => dateTime
-    .toIso8601String(); // probably won't be used, but if it ever is do check if this is the right format.
 
 Release _releaseFromJson(Map<String, dynamic> json) =>
     json == null ? null : Release.fromJson(json);
