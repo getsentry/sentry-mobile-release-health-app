@@ -71,32 +71,7 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                       padding: EdgeInsets.only(left: 16),
                       child: Column(
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Charts',
-                                style: TextStyle(
-                                  color: Color(0xFFB9C1D9),
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              FlatButton(
-                                onPressed: () {
-                                  /*...*/
-                                },
-                                child: Text(
-                                  'See All',
-                                  style: TextStyle(
-                                    color: Color(0xFF81B4FE),
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              )
-                            ],
-                          )
+                          HealthDivider(onSeeAll: () {}, title: 'Charts'),
                         ],
                       ),
                     ),
@@ -293,5 +268,42 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
             child: CircularProgressIndicator(),
           );
         });
+  }
+}
+
+class HealthDivider extends StatelessWidget {
+  HealthDivider({@required this.title, @required this.onSeeAll});
+
+  final String title;
+  final void Function() onSeeAll;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              color: Color(0xFFB9C1D9),
+              fontWeight: FontWeight.w500,
+              fontSize: 16,
+            ),
+          ),
+          FlatButton(
+            onPressed: onSeeAll,
+            child: Text(
+              'See All',
+              style: TextStyle(
+                color: Color(0xFF81B4FE),
+                fontWeight: FontWeight.w500,
+                fontSize: 16,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
   }
 }
