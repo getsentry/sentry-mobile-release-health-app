@@ -85,7 +85,7 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                                   title: 'Crash Free Sessions',
                                   value:
                                       snapshot.data[_index].crashFreeSessions,
-                                  change: 0.01),
+                                  change: -0.01),
                             ],
                           )
                         ],
@@ -351,6 +351,16 @@ class HealthCard extends StatelessWidget {
             : 'assets/status-red.png';
   }
 
+  String getTrendSign() {
+    return change > 0 ? '+' : '';
+  }
+
+  String getTrendIcon() {
+    return change > 0
+        ? 'assets/trend-up-green.png'
+        : 'assets/trend-down-red.png';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -381,20 +391,25 @@ class HealthCard extends StatelessWidget {
                 title,
                 style: TextStyle(
                   color: Color(0xFF14223B),
-                  // fontWeight: FontWeight.w500,
                   fontSize: 12,
                 ),
               )),
           Padding(
               padding: EdgeInsets.only(bottom: 10),
-              child: Text(
-                change.toString() + '%',
-                style: TextStyle(
-                  color: Color(0xFFB9C1D9),
-                  // fontWeight: FontWeight.w500,
-                  fontSize: 12,
+              child:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Text(
+                  getTrendSign() + change.toString() + '%',
+                  style: TextStyle(
+                    color: Color(0xFFB9C1D9),
+                    fontSize: 12,
+                  ),
                 ),
-              )),
+                Padding(
+                  padding: EdgeInsets.only(left: 3),
+                  child: Image.asset(getTrendIcon(), height: 8),
+                )
+              ])),
         ],
       ),
     ));
