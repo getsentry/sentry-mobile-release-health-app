@@ -99,85 +99,9 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                         ],
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        Expanded(
-                            child: ListTile(
-                          title: Text(snapshot.data[_index].issues.toString(),
-                              style: TextStyle(
-                                  color: snapshot.data[_index].issues > 0
-                                      ? Colors.orange
-                                      : Colors.black)),
-                          subtitle: Text(
-                            'New Issues',
-                          ),
-                        )),
-                        Expanded(
-                            child: ListTile(
-                          title: Text(snapshot.data[_index].crashes.toString(),
-                              style: TextStyle(
-                                  color: snapshot.data[_index].crashes > 0
-                                      ? Colors.red
-                                      : Colors.black)),
-                          subtitle: Text('Crashes'),
-                        )),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        Expanded(
-                            child: ListTile(
-                          title: Text(
-                              snapshot.data[_index].crashFreeUsers.toString() +
-                                  '%',
-                              style: TextStyle(color: Colors.green)),
-                          subtitle: Text('CF Users'),
-                        )),
-                        Expanded(
-                            child: ListTile(
-                          title:
-                              Text(snapshot.data[_index].users24h.toString()),
-                          subtitle: Text('24h Users'),
-                        )),
-                        Expanded(
-                            child: ListTile(
-                          title:
-                              Text(snapshot.data[_index].usersTotal.toString()),
-                          subtitle: Text('Users'),
-                        )),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        Expanded(
-                            child: ListTile(
-                          title: Text(
-                              snapshot.data[_index].crashFreeUsers.toString() +
-                                  '%',
-                              style: TextStyle(color: Colors.green)),
-                          subtitle: Text('CF Sessions'),
-                        )),
-                        Expanded(
-                            child: ListTile(
-                          title:
-                              Text(snapshot.data[_index].users24h.toString()),
-                          subtitle: Text('24h Sessions'),
-                        )),
-                        Expanded(
-                            child: ListTile(
-                          title:
-                              Text(snapshot.data[_index].usersTotal.toString()),
-                          subtitle: Text('Sessions'),
-                        )),
-                      ],
-                    ),
                     Row(children: [
                       Expanded(
                           child: Container(
-                        margin: const EdgeInsets.only(left: 15, right: 15),
                         child: Echarts(
                           option: '''
                 {
