@@ -142,7 +142,7 @@ class MyApp extends StatelessWidget {
                           child: Container(
                             decoration: BoxDecoration(
                                 border: Border(
-                                    top: BorderSide(color: Color(0xffB9C1D9)))),
+                                    top: BorderSide(color: Color(0x44B9C1D9)))),
                             height: 84.0,
                             child: Column(
                               children: [
