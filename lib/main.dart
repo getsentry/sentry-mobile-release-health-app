@@ -71,6 +71,7 @@ class MyApp extends StatelessWidget {
             primaryColorDark: Color(0xff4e3fb4),
             highlightColor: Colors.transparent,
             splashColor: Colors.transparent,
+            backgroundColor: Colors.white,
             // This makes the visual density adapt to the platform that you run
             // the app on. For desktop platforms, the controls will be smaller and
             // closer together (more dense) than on mobile platforms.
@@ -96,6 +97,16 @@ class MyApp extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                     fontSize: 16,
                     color: Colors.black,
+                  ),
+                  headline5: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 26,
+                    color: Colors.white,
+                  ),
+                  subtitle1: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 14,
+                    color: Color(0xb3ffffff),
                   ),
                   caption: TextStyle(
                     fontWeight: FontWeight.w500,

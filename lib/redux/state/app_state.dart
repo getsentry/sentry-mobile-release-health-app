@@ -25,10 +25,10 @@ class GlobalState {
   GlobalState(
       {this.session,
       this.hydrated,
-        this.selectedOrganization,
+      this.selectedOrganization,
       this.organizations,
       this.projects,
-        this.selectedTab,
+      this.selectedTab,
       this.selectedProject});
 
   factory GlobalState.initial() {
