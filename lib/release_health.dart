@@ -79,11 +79,12 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                             children: [
                               HealthCard(
                                   title: 'Crash Free Users',
-                                  value: 99.87,
+                                  value: snapshot.data[_index].crashFreeUsers,
                                   change: 0.04),
                               HealthCard(
                                   title: 'Crash Free Sessions',
-                                  value: 99.27,
+                                  value:
+                                      snapshot.data[_index].crashFreeSessions,
                                   change: 0.01),
                             ],
                           )
@@ -333,6 +334,23 @@ class HealthCard extends StatelessWidget {
   final double value;
   final double change;
 
+  final warningThreshold = 99.5;
+  final dangerThreshold = 98;
+
+  Color getColor() {
+    return value > warningThreshold
+        ? Color(0xFF23B480)
+        : value > dangerThreshold ? Color(0xFFFFC227) : Color(0xFFEE6855);
+  }
+
+  String getIcon() {
+    return value > warningThreshold
+        ? 'assets/status-green.png'
+        : value > dangerThreshold
+            ? 'assets/status-orange.png'
+            : 'assets/status-red.png';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -347,12 +365,12 @@ class HealthCard extends StatelessWidget {
         children: [
           Padding(
             padding: EdgeInsets.only(top: 10, bottom: 10),
-            child: Image.asset('assets/status-green.png', height: 50),
+            child: Image.asset(getIcon(), height: 50),
           ),
           Text(
             value.toString() + '%',
             style: TextStyle(
-              color: Color(0xFF23B480),
+              color: getColor(),
               fontWeight: FontWeight.w500,
               fontSize: 17,
             ),
