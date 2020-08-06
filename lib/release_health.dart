@@ -68,10 +68,25 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                           },
                         )),
                     Container(
-                      padding: EdgeInsets.only(left: 16),
+                      padding: EdgeInsets.symmetric(horizontal: 16),
                       child: Column(
                         children: [
                           HealthDivider(onSeeAll: () {}, title: 'Charts'),
+                          HealthDivider(onSeeAll: () {}, title: 'Statistics'),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              HealthCard(
+                                  title: 'Crash Free Users',
+                                  value: 99.87,
+                                  change: 0.04),
+                              HealthCard(
+                                  title: 'Crash Free Sessions',
+                                  value: 99.27,
+                                  change: 0.01),
+                            ],
+                          )
                         ],
                       ),
                     ),
@@ -291,7 +306,9 @@ class HealthDivider extends StatelessWidget {
               fontSize: 16,
             ),
           ),
-          FlatButton(
+          MaterialButton(
+            minWidth: 0,
+            padding: EdgeInsets.zero,
             onPressed: onSeeAll,
             child: Text(
               'See All',
@@ -305,5 +322,63 @@ class HealthDivider extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class HealthCard extends StatelessWidget {
+  HealthCard(
+      {@required this.title, @required this.value, @required this.change});
+
+  final String title;
+  final double value;
+  final double change;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+        child: Card(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(15))),
+      elevation: 3,
+      shadowColor: Color(0x99FFFFFF),
+      margin: EdgeInsets.symmetric(horizontal: 7, vertical: 10),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(top: 10, bottom: 10),
+            child: Image.asset('assets/status-green.png', height: 50),
+          ),
+          Text(
+            value.toString() + '%',
+            style: TextStyle(
+              color: Color(0xFF23B480),
+              fontWeight: FontWeight.w500,
+              fontSize: 17,
+            ),
+          ),
+          Padding(
+              padding: EdgeInsets.only(top: 5, bottom: 10),
+              child: Text(
+                title,
+                style: TextStyle(
+                  color: Color(0xFF14223B),
+                  // fontWeight: FontWeight.w500,
+                  fontSize: 12,
+                ),
+              )),
+          Padding(
+              padding: EdgeInsets.only(bottom: 10),
+              child: Text(
+                change.toString() + '%',
+                style: TextStyle(
+                  color: Color(0xFFB9C1D9),
+                  // fontWeight: FontWeight.w500,
+                  fontSize: 12,
+                ),
+              )),
+        ],
+      ),
+    ));
   }
 }
