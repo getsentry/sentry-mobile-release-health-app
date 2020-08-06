@@ -59,14 +59,15 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                 child: Column(
                   children: [
                     SizedBox(
-                        height: 200,
+                        height: 180,
                         child: PageView.builder(
                           itemCount: snapshot.data.length,
                           controller: PageController(viewportFraction: 0.8),
                           onPageChanged: (int index) =>
                               setState(() => _index = index),
                           itemBuilder: (context, index) {
-                            return ReleaseCard(release: snapshot.data[index]);
+                            return ReleaseCard(
+                                release: snapshot.data[index], index: index);
                           },
                         )),
                     Container(
@@ -320,7 +321,7 @@ class HealthCard extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(15))),
       elevation: 3,
       shadowColor: Color(0x99FFFFFF),
-      margin: EdgeInsets.symmetric(horizontal: 7, vertical: 10),
+      margin: EdgeInsets.only(left: 7, right: 7, top: 1, bottom: 10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -387,11 +388,11 @@ class ChartRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.only(bottom: 20),
-        margin: EdgeInsets.only(bottom: 20),
+        padding: EdgeInsets.only(bottom: 22),
+        margin: EdgeInsets.only(bottom: 22),
         decoration: BoxDecoration(
           border:
-              Border(bottom: BorderSide(width: 1, color: Color(0x44B9C1D9))),
+              Border(bottom: BorderSide(width: 1, color: Color(0x33B9C1D9))),
         ),
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
