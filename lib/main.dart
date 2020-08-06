@@ -155,7 +155,7 @@ class MyApp extends StatelessWidget {
                                   tabs: [
                                     Tab(
                                       icon: Icon(
-                                        Icons.healing,
+                                        Icons.home,
                                         color: Color(0xffB9C1D9),
                                       ),
                                       iconMargin: EdgeInsets.only(bottom: 0),
