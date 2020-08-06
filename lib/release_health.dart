@@ -72,6 +72,14 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                       child: Column(
                         children: [
                           HealthDivider(onSeeAll: () {}, title: 'Charts'),
+                          ChartLine(
+                              title: 'Issues',
+                              total: snapshot.data[_index].issues,
+                              change: 3.6), // TODO: api
+                          ChartLine(
+                              title: 'Crashes',
+                              total: snapshot.data[_index].crashes,
+                              change: -4.2), // TODO: api
                           HealthDivider(onSeeAll: () {}, title: 'Statistics'),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -80,12 +88,12 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                               HealthCard(
                                   title: 'Crash Free Users',
                                   value: snapshot.data[_index].crashFreeUsers,
-                                  change: 0.04),
+                                  change: 0.04), // TODO: api
                               HealthCard(
                                   title: 'Crash Free Sessions',
                                   value:
                                       snapshot.data[_index].crashFreeSessions,
-                                  change: -0.01),
+                                  change: -0.01), // TODO: api
                             ],
                           )
                         ],
@@ -413,5 +421,71 @@ class HealthCard extends StatelessWidget {
         ],
       ),
     ));
+  }
+}
+
+class ChartLine extends StatelessWidget {
+  ChartLine(
+      {@required this.title, @required this.total, @required this.change});
+
+  final String title;
+  final int total;
+  final double change;
+
+  String getTrendSign() {
+    return change > 0 ? '+' : '';
+  }
+
+  String getTrendIcon() {
+    return change > 0
+        ? 'assets/trend-up-red.png'
+        : 'assets/trend-down-green.png';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title,
+              style: TextStyle(
+                color: Color(0xFF18181A),
+                fontWeight: FontWeight.w500,
+                fontSize: 18,
+              )),
+          Text('Last 12 hours',
+              style: TextStyle(
+                color: Color(0xFFB9C1D9),
+                fontSize: 13,
+              ))
+        ],
+      ),
+      Column(
+        children: [],
+      ),
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text(total.toString(),
+              style: TextStyle(
+                color: Color(0xFF18181A),
+                fontWeight: FontWeight.w500,
+                fontSize: 18,
+              )),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Text(getTrendSign() + change.toString() + '%',
+                style: TextStyle(
+                  color: Color(0xFFB9C1D9),
+                  fontSize: 13,
+                )),
+            Padding(
+              padding: EdgeInsets.only(left: 7),
+              child: Image.asset(getTrendIcon(), height: 8),
+            )
+          ])
+        ],
+      ),
+    ]);
   }
 }
