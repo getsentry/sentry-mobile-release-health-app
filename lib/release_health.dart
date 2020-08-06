@@ -67,31 +67,62 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                             return ReleaseCard(release: snapshot.data[index]);
                           },
                         )),
+                    Container(
+                      padding: EdgeInsets.only(left: 16),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Charts',
+                                style: TextStyle(
+                                  color: Color(0xFFB9C1D9),
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              FlatButton(
+                                onPressed: () {
+                                  /*...*/
+                                },
+                                child: Text(
+                                  'See All',
+                                  style: TextStyle(
+                                    color: Color(0xFF81B4FE),
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         Expanded(
                             child: ListTile(
-                              title: Text(
-                                  snapshot.data[_index].issues.toString(),
-                                  style: TextStyle(
-                                      color: snapshot.data[_index].issues > 0
-                                          ? Colors.orange
-                                          : Colors.black)),
-                              subtitle: Text(
-                                'New Issues',
-                              ),
-                            )),
+                          title: Text(snapshot.data[_index].issues.toString(),
+                              style: TextStyle(
+                                  color: snapshot.data[_index].issues > 0
+                                      ? Colors.orange
+                                      : Colors.black)),
+                          subtitle: Text(
+                            'New Issues',
+                          ),
+                        )),
                         Expanded(
                             child: ListTile(
-                              title: Text(
-                                  snapshot.data[_index].crashes.toString(),
-                                  style: TextStyle(
-                                      color: snapshot.data[_index].crashes > 0
-                                          ? Colors.red
-                                          : Colors.black)),
-                              subtitle: Text('Crashes'),
-                            )),
+                          title: Text(snapshot.data[_index].crashes.toString(),
+                              style: TextStyle(
+                                  color: snapshot.data[_index].crashes > 0
+                                      ? Colors.red
+                                      : Colors.black)),
+                          subtitle: Text('Crashes'),
+                        )),
                       ],
                     ),
                     Row(
@@ -99,25 +130,24 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                       children: <Widget>[
                         Expanded(
                             child: ListTile(
-                              title: Text(
-                                  snapshot.data[_index].crashFreeUsers
-                                      .toString() +
-                                      '%',
-                                  style: TextStyle(color: Colors.green)),
-                              subtitle: Text('CF Users'),
-                            )),
+                          title: Text(
+                              snapshot.data[_index].crashFreeUsers.toString() +
+                                  '%',
+                              style: TextStyle(color: Colors.green)),
+                          subtitle: Text('CF Users'),
+                        )),
                         Expanded(
                             child: ListTile(
-                              title: Text(
-                                  snapshot.data[_index].users24h.toString()),
-                              subtitle: Text('24h Users'),
-                            )),
+                          title:
+                              Text(snapshot.data[_index].users24h.toString()),
+                          subtitle: Text('24h Users'),
+                        )),
                         Expanded(
                             child: ListTile(
-                              title: Text(
-                                  snapshot.data[_index].usersTotal.toString()),
-                              subtitle: Text('Users'),
-                            )),
+                          title:
+                              Text(snapshot.data[_index].usersTotal.toString()),
+                          subtitle: Text('Users'),
+                        )),
                       ],
                     ),
                     Row(
