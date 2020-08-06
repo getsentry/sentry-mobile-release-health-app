@@ -151,25 +151,33 @@ class MyApp extends StatelessWidget {
                                     store.dispatch(SwitchTabAction(index));
                                   },
                                   indicator: CircleTabIndicator(
-                                      color: Color(0xffB9C1D9), radius: 3),
+                                      color: Color(0x00000000), radius: 3),
                                   tabs: [
                                     Tab(
-                                      icon: Icon(
-                                        Icons.home,
-                                        color: Color(0xffB9C1D9),
-                                      ),
+                                      icon: Icon(Icons.home,
+                                          color:
+                                              // hacky, but don't want to fight with built in tabs
+                                              state.globalState.selectedTab == 0
+                                                  ? Color(0xff81B4FE)
+                                                  : Color(0xffB9C1D9)),
                                       iconMargin: EdgeInsets.only(bottom: 0),
                                       text: '',
                                     ),
                                     Tab(
                                       icon: Icon(Icons.list,
-                                          color: Color(0xffB9C1D9)),
+                                          color:
+                                              state.globalState.selectedTab == 1
+                                                  ? Color(0xff81B4FE)
+                                                  : Color(0xffB9C1D9)),
                                       iconMargin: EdgeInsets.only(bottom: 0),
                                       text: '',
                                     ),
                                     Tab(
                                       icon: Icon(Icons.account_circle,
-                                          color: Color(0xffB9C1D9)),
+                                          color:
+                                              state.globalState.selectedTab == 2
+                                                  ? Color(0xff81B4FE)
+                                                  : Color(0xffB9C1D9)),
                                       iconMargin: EdgeInsets.only(bottom: 0),
                                       text: '',
                                     ),
