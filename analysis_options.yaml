@@ -24,7 +24,7 @@
 analyzer:
   strong-mode:
     implicit-casts: false
-    implicit-dynamic: false
+    implicit-dynamic: true # Jenn: Added because the generated .g.dart files are implicit dynamic
   errors:
     # treat missing required parameters as a warning (not a hint)
     missing_required_param: warning
