@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart';
+
 import 'package:redux/redux.dart';
 import 'package:sentry_mobile/redux/actions.dart';
 import 'package:sentry_mobile/redux/state/app_state.dart';
@@ -10,31 +10,7 @@ import 'package:sentry_mobile/types/organization.dart';
 import 'package:sentry_mobile/types/project.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SentryApi {
-  SentryApi(this.session);
-
-  final Cookie session;
-  final client = Client();
-  final baseUrl = 'https://sentry.io/api/0';
-
-  Future<Response> organizations() async {
-    return client.get('$baseUrl/organizations/?member=1',
-        headers: {'Cookie': session.toString()});
-  }
-
-  Future<Response> me() async {
-    return client.get('$baseUrl/me/', headers: {'Cookie': session.toString()});
-  }
-
-  Future<Response> projects(Organization organization) async {
-    return client.get('$baseUrl/organizations/${organization.slug}/projects/',
-        headers: {'Cookie': session.toString()});
-  }
-
-  void close() {
-    client.close();
-  }
-}
+import 'package:sentry_mobile/api/sentry_api.dart';
 
 void apiMiddleware(
     Store<AppState> store, dynamic action, NextDispatcher next) async {
