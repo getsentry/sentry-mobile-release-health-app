@@ -1,4 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+
+import 'package:sentry_mobile/redux/state/app_state.dart';
+import 'package:sentry_mobile/screens/login/login_view_model.dart';
+import 'package:sentry_mobile/screens/login/login_web_view.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -11,16 +18,18 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return StoreConnector<AppState, LoginViewModel>(
+      builder: (_, viewModel) => _content(viewModel),
+      converter: (store) => LoginViewModel.fromStore(store),
+    );
+  }
+
+  Widget _content(LoginViewModel viewModel) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Login'),
       ),
-      body: _content(),
-    );
-  }
-
-  Widget _content() {
-    return Container(
+      body: Container(
         margin: EdgeInsets.all(22.0),
         child: Center(
             child: Column(
@@ -37,7 +46,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     color: Color(0xff4e3fb4),
                     onPressed: () {
                       setState(() {
-                        _loading = !_loading;
+                        final sessionFuture = _navigateAndWaitForSession();
+                        sessionFuture.then((session) => viewModel.onLogin(session));
                       });
                     },
                   )
@@ -48,6 +58,18 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             )
         )
+    )
     );
+  }
+
+  Future<Cookie> _navigateAndWaitForSession() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (context) => LoginWebView()
+      ),
+    );
+    return result as Cookie;
   }
 }

@@ -12,7 +12,7 @@ import 'package:sentry_mobile/redux/middlewares.dart';
 import 'package:sentry_mobile/redux/reducers.dart';
 import 'package:sentry_mobile/redux/state/app_state.dart';
 import 'package:sentry_mobile/release_health.dart';
-import 'package:sentry_mobile/screens/login_screen.dart';
+import 'package:sentry_mobile/screens/login/login_screen.dart';
 import 'package:sentry_mobile/settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -117,7 +117,15 @@ class SentryMobile extends StatelessWidget {
                     color: Colors.black45,
                   )),
             )),
-        home: LoginScreen()
+        home: StoreProvider(
+          store: store,
+          child: StoreConnector<AppState, AppState>(
+            builder: (_, state) {
+              return LoginScreen();
+            },
+            converter: (store) => store.state,
+          ),
+        )
     );
   }
 }
