@@ -8,6 +8,7 @@ import 'package:sentry_mobile/redux/actions.dart';
 import 'package:sentry_mobile/redux/state/app_state.dart';
 import 'package:sentry_mobile/types/organization.dart';
 import 'package:sentry_mobile/types/project.dart';
+import 'package:sentry_mobile/types/release.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:sentry_mobile/api/sentry_api.dart';
@@ -49,6 +50,22 @@ void apiMiddleware(
       }
     } catch (e) {
       store.dispatch(FetchProjectsFailureAction());
+    }
+  }
+
+  if (action is FetchReleasesAction) {
+    try {
+      final response = await api.releases(action.projectId);
+      if (response.statusCode == 200) {
+        final responseJson = json.decode(response.body) as List;
+        final releaseList = List<Map<String, dynamic>>.from(responseJson);
+        final releases = releaseList.map((Map<String, dynamic> r) => Release.fromJson(r)).toList();
+        store.dispatch(FetchReleasesSuccessAction(releases));
+      } else {
+        store.dispatch(FetchReleasesFailureAction());
+      }
+    } catch (e) {
+      store.dispatch(FetchReleasesFailureAction());
     }
   }
 

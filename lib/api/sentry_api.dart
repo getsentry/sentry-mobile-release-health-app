@@ -27,7 +27,7 @@ class SentryApi {
       'flatten': '$flatten',
       'summaryStatsPeriod': summaryStatsPeriod,
     };
-    return client.get(Uri.https(baseUrl, '/releases/$projectId', queryParameters),
+    return client.get(Uri.https('sentry.io', '/api/0/organizations/$projectId/releases/', queryParameters),
         headers: {'Cookie': session.toString()}
     );
   }
