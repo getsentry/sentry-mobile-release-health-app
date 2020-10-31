@@ -6,17 +6,19 @@ class SentryApi {
 
   final Cookie session;
   final client = Client();
-  final baseUrl = 'https://sentry.io/api/0';
+  final baseUrlScheme = 'https://';
+  final baseUrlName = 'sentry.io';
+  final baseUrlPath = '/api/0';
 
   Future<Response> organizations() async {
-    return client.get('$baseUrl/organizations/?member=1',
-        headers: {'Cookie': session.toString()}
+    return client.get('${_baseUrl()}/organizations/?member=1',
+        headers: _defaultHeader()
     );
   }
 
   Future<Response> projects(String slug) async {
-    return client.get('$baseUrl/organizations/$slug/projects/',
-        headers: {'Cookie': session.toString()}
+    return client.get('${_baseUrl()}/organizations/$slug/projects/',
+        headers: _defaultHeader()
     );
   }
 
@@ -27,12 +29,22 @@ class SentryApi {
       'flatten': '$flatten',
       'summaryStatsPeriod': summaryStatsPeriod,
     };
-    return client.get(Uri.https('sentry.io', '/api/0/organizations/$projectId/releases/', queryParameters),
-        headers: {'Cookie': session.toString()}
+    return client.get(Uri.https(baseUrlName, '$baseUrlPath/organizations/$projectId/releases/', queryParameters),
+        headers: _defaultHeader()
     );
   }
 
   void close() {
     client.close();
+  }
+
+  // Helper
+
+  String _baseUrl() {
+    return '$baseUrlScheme$baseUrlName$baseUrlPath';
+  }
+
+  Map<String, String> _defaultHeader() {
+    return {'Cookie': session.toString()};
   }
 }
