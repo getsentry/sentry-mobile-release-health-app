@@ -69,6 +69,21 @@ void apiMiddleware(
     }
   }
 
+  if (action is FetchReleaseAction) {
+    try {
+      final response = await api.release(action.projectId, action.releaseId);
+      if (response.statusCode == 200) {
+        final responseJson = json.decode(response.body) as Map<String, dynamic>;
+        final release = Release.fromJson(responseJson);
+        store.dispatch(FetchReleaseSuccessAction(release));
+      } else {
+        store.dispatch(FetchReleaseFailureAction());
+      }
+    } catch (e) {
+      store.dispatch(FetchReleaseFailureAction());
+    }
+  }
+
   api.close();
   next(action);
 }

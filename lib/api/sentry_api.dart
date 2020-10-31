@@ -34,6 +34,16 @@ class SentryApi {
     );
   }
 
+  Future<Response> release(String projectId, String releaseId, {int health = 1, String summaryStatsPeriod = '24h'}) async {
+    final queryParameters = {
+      'health': '$health',
+      'summaryStatsPeriod': summaryStatsPeriod,
+    };
+    return client.get(Uri.https(baseUrlName, '$baseUrlPath/organizations/$projectId/releases/$releaseId/', queryParameters),
+        headers: _defaultHeader()
+    );
+  }
+
   void close() {
     client.close();
   }

@@ -77,3 +77,18 @@ class FetchReleasesSuccessAction {
 class FetchReleasesFailureAction {
   FetchReleasesFailureAction();
 }
+
+class FetchReleaseAction {
+  FetchReleaseAction(this.projectId, this.releaseId);
+  final String projectId;
+  final String releaseId;
+}
+
+class FetchReleaseSuccessAction {
+  FetchReleaseSuccessAction(this.payload);
+  final Release payload;
+}
+
+class FetchReleaseFailureAction {
+  FetchReleaseFailureAction();
+}
