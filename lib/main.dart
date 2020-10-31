@@ -12,6 +12,7 @@ import 'package:sentry_mobile/redux/middlewares.dart';
 import 'package:sentry_mobile/redux/reducers.dart';
 import 'package:sentry_mobile/redux/state/app_state.dart';
 import 'package:sentry_mobile/release_health.dart';
+import 'package:sentry_mobile/screens/login_screen.dart';
 import 'package:sentry_mobile/settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -44,7 +45,81 @@ void main() async {
 
   store.dispatch(RehydrateAction());
 
-  runApp(MyApp(store: store));
+  runApp(SentryMobile(store: store));
+}
+
+class SentryMobile extends StatelessWidget {
+  SentryMobile({this.store});
+
+  final Store<AppState> store;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        title: 'Sentry',
+        theme: ThemeData(
+          // This is the theme of your application.
+          //
+          // Try running your application with "flutter run". You'll see the
+          // application has a blue toolbar. Then, without quitting the app, try
+          // changing the primarySwatch below to Colors.green and then invoke
+          // "hot reload" (press "r" in the console where you ran "flutter run",
+          // or simply save your changes to "hot reload" in a Flutter IDE).
+          // Notice that the counter didn't reset back to zero; the application
+          // is not restarted.
+            primarySwatch: Colors.purple,
+            primaryColorDark: Color(0xff4e3fb4),
+            primaryColorLight: Color(0xffE7E1EC),
+            highlightColor: Colors.transparent,
+            splashColor: Colors.transparent,
+            backgroundColor: Colors.white,
+            dividerColor: Color(0xffE7E1EC),
+
+            // This makes the visual density adapt to the platform that you run
+            // the app on. For desktop platforms, the controls will be smaller and
+            // closer together (more dense) than on mobile platforms.
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+            textTheme: GoogleFonts.rubikTextTheme(
+              TextTheme(
+                  headline1: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 24,
+                    color: Colors.black,
+                  ),
+                  headline2: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 20,
+                    color: Colors.black,
+                  ),
+                  headline3: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                    color: Colors.black,
+                  ),
+                  headline4: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                    color: Colors.black,
+                  ),
+                  headline5: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 26,
+                    color: Colors.white,
+                  ),
+                  subtitle1: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 14,
+                    color: Color(0xb3ffffff),
+                  ),
+                  caption: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                    color: Colors.black45,
+                  )),
+            )),
+        home: LoginScreen()
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
