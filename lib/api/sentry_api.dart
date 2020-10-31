@@ -1,8 +1,6 @@
 import 'dart:io';
 import 'package:http/http.dart';
 
-import 'package:sentry_mobile/types/organization.dart';
-
 class SentryApi {
   SentryApi(this.session);
 
