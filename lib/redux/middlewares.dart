@@ -37,7 +37,7 @@ void apiMiddleware(
 
   if (action is FetchProjectsAction) {
     try {
-      final response = await api.projects(action.payload);
+      final response = await api.projects(action.payload.slug);
       if (response.statusCode == 200) {
         final responseJson = json.decode(response.body) as List;
         final projList = List<Map<String, dynamic>>.from(responseJson);

@@ -12,12 +12,26 @@ class SentryApi {
 
   Future<Response> organizations() async {
     return client.get('$baseUrl/organizations/?member=1',
-        headers: {'Cookie': session.toString()});
+        headers: {'Cookie': session.toString()}
+    );
   }
 
-  Future<Response> projects(Organization organization) async {
-    return client.get('$baseUrl/organizations/${organization.slug}/projects/',
-        headers: {'Cookie': session.toString()});
+  Future<Response> projects(String slug) async {
+    return client.get('$baseUrl/organizations/$slug/projects/',
+        headers: {'Cookie': session.toString()}
+    );
+  }
+
+  Future<Response> releases(String projectId, {int perPage = 25, int health = 1, int flatten = 0, String summaryStatsPeriod = '24h'}) async {
+    final queryParameters = {
+      'perPage': '$perPage',
+      'health': '$health',
+      'flatten': '$flatten',
+      'summaryStatsPeriod': summaryStatsPeriod,
+    };
+    return client.get(Uri.https(baseUrl, '/releases/$projectId', queryParameters),
+        headers: {'Cookie': session.toString()}
+    );
   }
 
   void close() {
