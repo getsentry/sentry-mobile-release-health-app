@@ -121,167 +121,79 @@ class SentryMobile extends StatelessWidget {
           store: store,
           child: StoreConnector<AppState, AppState>(
             builder: (_, state) {
-              return LoginScreen();
+              if (state.globalState.session == null) {
+                return LoginScreen();
+              } else {
+                return DefaultTabController(
+                  length: 3,
+                  child: Scaffold(
+                    backgroundColor: Colors.white,
+                    appBar: Header(),
+                    bottomNavigationBar: Material(
+                        color: Color(0xffffffff),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border(
+                                  top: BorderSide(color: Color(0x44B9C1D9)))),
+                          height: 84.0,
+                          child: Column(
+                            children: [
+                              TabBar(
+                                onTap: (int index) {
+                                  store.dispatch(SwitchTabAction(index));
+                                },
+                                indicator: CircleTabIndicator(
+                                    color: Colors.transparent, radius: 3),
+                                tabs: [
+                                  Tab(
+                                    icon: Icon(Icons.home,
+                                        color:
+                                        // hacky, but don't want to fight with built in tabs
+                                        state.globalState.selectedTab == 0
+                                            ? Color(0xff81B4FE)
+                                            : Color(0xffB9C1D9)),
+                                    iconMargin: EdgeInsets.only(bottom: 0),
+                                    text: '',
+                                  ),
+                                  Tab(
+                                    icon: Icon(Icons.inbox,
+                                        color:
+                                        state.globalState.selectedTab == 1
+                                            ? Color(0xff81B4FE)
+                                            : Color(0xffB9C1D9)),
+                                    iconMargin: EdgeInsets.only(bottom: 0),
+                                    text: '',
+                                  ),
+                                  Tab(
+                                    icon: Icon(Icons.account_circle,
+                                        color:
+                                        state.globalState.selectedTab == 2
+                                            ? Color(0xff81B4FE)
+                                            : Color(0xffB9C1D9)),
+                                    iconMargin: EdgeInsets.only(bottom: 0),
+                                    text: '',
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        )),
+                    body: TabBarView(
+                      children: [
+                        ReleaseHealth(),
+                        IssuesScreenBuilder(),
+                        Settings(),
+                      ],
+                      physics: NeverScrollableScrollPhysics(),
+                    ),
+                  ),
+                );
+              }
             },
             converter: (store) => store.state,
           ),
         )
     );
-  }
-}
-
-class MyApp extends StatelessWidget {
-  MyApp({this.store});
-
-  final Store<AppState> store;
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Sentry',
-        theme: ThemeData(
-            // This is the theme of your application.
-            //
-            // Try running your application with "flutter run". You'll see the
-            // application has a blue toolbar. Then, without quitting the app, try
-            // changing the primarySwatch below to Colors.green and then invoke
-            // "hot reload" (press "r" in the console where you ran "flutter run",
-            // or simply save your changes to "hot reload" in a Flutter IDE).
-            // Notice that the counter didn't reset back to zero; the application
-            // is not restarted.
-            primarySwatch: Colors.purple,
-            primaryColorDark: Color(0xff4e3fb4),
-            primaryColorLight: Color(0xffE7E1EC),
-            highlightColor: Colors.transparent,
-            splashColor: Colors.transparent,
-            backgroundColor: Colors.white,
-            dividerColor: Color(0xffE7E1EC),
-
-            // This makes the visual density adapt to the platform that you run
-            // the app on. For desktop platforms, the controls will be smaller and
-            // closer together (more dense) than on mobile platforms.
-            visualDensity: VisualDensity.adaptivePlatformDensity,
-            textTheme: GoogleFonts.rubikTextTheme(
-              TextTheme(
-                  headline1: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 24,
-                    color: Colors.black,
-                  ),
-                  headline2: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 20,
-                    color: Colors.black,
-                  ),
-                  headline3: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 18,
-                    color: Colors.black,
-                  ),
-                  headline4: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
-                    color: Colors.black,
-                  ),
-                  headline5: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 26,
-                    color: Colors.white,
-                  ),
-                  subtitle1: TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontSize: 14,
-                    color: Color(0xb3ffffff),
-                  ),
-                  caption: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
-                    color: Colors.black45,
-                  )),
-            )),
-        home: CustomSplash(
-          imagePath: 'assets/splash.png',
-          backGroundColor: Color(0x00564f64),
-          animationEffect: 'fade-in',
-          logoSize: 300,
-          // customFunction: (_) {
-          //   return 1;
-          // },
-          duration: 1500,
-          type: CustomSplashType.StaticDuration,
-          home: StoreProvider<AppState>(
-            store: store,
-            child: StoreConnector<AppState, AppState>(
-                converter: (store) => store.state,
-                builder: (context, state) {
-                  return DefaultTabController(
-                    length: 3,
-                    child: Scaffold(
-                      backgroundColor: Colors.white,
-                      appBar: Header(),
-                      bottomNavigationBar: Material(
-                          color: Color(0xffffffff),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                border: Border(
-                                    top: BorderSide(color: Color(0x44B9C1D9)))),
-                            height: 84.0,
-                            child: Column(
-                              children: [
-                                TabBar(
-                                  onTap: (int index) {
-                                    store.dispatch(SwitchTabAction(index));
-                                  },
-                                  indicator: CircleTabIndicator(
-                                      color: Colors.transparent, radius: 3),
-                                  tabs: [
-                                    Tab(
-                                      icon: Icon(Icons.home,
-                                          color:
-                                              // hacky, but don't want to fight with built in tabs
-                                              state.globalState.selectedTab == 0
-                                                  ? Color(0xff81B4FE)
-                                                  : Color(0xffB9C1D9)),
-                                      iconMargin: EdgeInsets.only(bottom: 0),
-                                      text: '',
-                                    ),
-                                    Tab(
-                                      icon: Icon(Icons.inbox,
-                                          color:
-                                              state.globalState.selectedTab == 1
-                                                  ? Color(0xff81B4FE)
-                                                  : Color(0xffB9C1D9)),
-                                      iconMargin: EdgeInsets.only(bottom: 0),
-                                      text: '',
-                                    ),
-                                    Tab(
-                                      icon: Icon(Icons.account_circle,
-                                          color:
-                                              state.globalState.selectedTab == 2
-                                                  ? Color(0xff81B4FE)
-                                                  : Color(0xffB9C1D9)),
-                                      iconMargin: EdgeInsets.only(bottom: 0),
-                                      text: '',
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                          )),
-                      body: TabBarView(
-                        children: [
-                          ReleaseHealth(),
-                          IssuesScreenBuilder(),
-                          Settings(),
-                        ],
-                        physics: NeverScrollableScrollPhysics(),
-                      ),
-                    ),
-                  );
-                }),
-          ),
-        ));
   }
 }
 
