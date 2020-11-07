@@ -60,7 +60,6 @@ class _LoginWebViewState extends State<LoginWebView> {
 
   void _asyncInit() async {
     await cookieManager.clearCookies();
-    //await flutterWebviewPlugin.getCookies();
 
     // Add a listener to on url changed
     _onUrlChanged =
