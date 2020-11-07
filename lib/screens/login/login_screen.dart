@@ -64,12 +64,13 @@ class _LoginScreenState extends State<LoginScreen> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Error'),
+          title: Text(
+              'Error',
+              style: Theme.of(context).textTheme.headline1
+          ),
           content: Text(
               'Oops, there is a problem. Please try again later.',
-              style: TextStyle(
-                  color: Color(0xff000000)
-              )
+              style: Theme.of(context).textTheme.bodyText1
           ),
           actions: [
             FlatButton(
