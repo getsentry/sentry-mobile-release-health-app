@@ -19,68 +19,40 @@ void apiMiddleware(
 
   if (action is FetchOrganizationsAction) {
     try {
-      final response = await api.organizations();
-      if (response.statusCode == 200) {
-        final responseJson = json.decode(response.body) as List;
-        final orgList = List<Map<String, dynamic>>.from(responseJson);
-        final orgs = orgList.map((Map<String, dynamic> r) => Organization.fromJson(r)).toList();
-        store.dispatch(FetchOrganizationsSuccessAction(orgs));
-        store.dispatch(SelectOrganizationAction(orgs.first));
-        store.dispatch(
-            FetchProjectsAction(store.state.globalState.selectedOrganization));
-      } else {
-        store.dispatch(FetchOrganizationsFailureAction());
-      }
+      final organizations = await api.organizations();
+        store.dispatch(FetchOrganizationsSuccessAction(organizations));
+        store.dispatch(SelectOrganizationAction(organizations.first));
+        store.dispatch(FetchProjectsAction(organizations.first));
     } catch (e) {
-      store.dispatch(FetchOrganizationsFailureAction());
+      store.dispatch(FetchOrganizationsFailureAction(e as Error));
     }
   }
 
   if (action is FetchProjectsAction) {
     try {
-      final response = await api.projects(action.payload.slug);
-      if (response.statusCode == 200) {
-        final responseJson = json.decode(response.body) as List;
-        final projList = List<Map<String, dynamic>>.from(responseJson);
-        final projs = projList.map((Map<String, dynamic> r) => Project.fromJson(r)).toList();
-        store.dispatch(FetchProjectsSuccessAction(projs));
-        store.dispatch(SelectProjectAction(projs.first));
-      } else {
-        store.dispatch(FetchProjectsFailureAction());
-      }
+      final projects = await api.projects(action.payload.slug);
+      store.dispatch(FetchProjectsSuccessAction(projects));
+      store.dispatch(SelectProjectAction(projects.first));
     } catch (e) {
-      store.dispatch(FetchProjectsFailureAction());
+      store.dispatch(FetchProjectsFailureAction(e as Error));
     }
   }
 
   if (action is FetchReleasesAction) {
     try {
-      final response = await api.releases(action.projectId);
-      if (response.statusCode == 200) {
-        final responseJson = json.decode(response.body) as List;
-        final releaseList = List<Map<String, dynamic>>.from(responseJson);
-        final releases = releaseList.map((Map<String, dynamic> r) => Release.fromJson(r)).toList();
-        store.dispatch(FetchReleasesSuccessAction(releases));
-      } else {
-        store.dispatch(FetchReleasesFailureAction());
-      }
+      final releases = await api.releases(action.projectId);
+      store.dispatch(FetchReleasesSuccessAction(releases));
     } catch (e) {
-      store.dispatch(FetchReleasesFailureAction());
+      store.dispatch(FetchReleasesFailureAction(e as Error));
     }
   }
 
   if (action is FetchReleaseAction) {
     try {
-      final response = await api.release(action.projectId, action.releaseId);
-      if (response.statusCode == 200) {
-        final responseJson = json.decode(response.body) as Map<String, dynamic>;
-        final release = Release.fromJson(responseJson);
-        store.dispatch(FetchReleaseSuccessAction(release));
-      } else {
-        store.dispatch(FetchReleaseFailureAction());
-      }
+      final release = await api.release(action.projectId, action.releaseId);
+      store.dispatch(FetchReleaseSuccessAction(release));
     } catch (e) {
-      store.dispatch(FetchReleaseFailureAction());
+      store.dispatch(FetchReleaseFailureAction(e as Error));
     }
   }
 

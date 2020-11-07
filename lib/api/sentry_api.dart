@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:http/http.dart';
 import 'package:async/async.dart';
-import 'package:json_annotation/json_annotation.dart';
 
 import 'package:sentry_mobile/types/organization.dart';
 import 'package:sentry_mobile/types/project.dart';
