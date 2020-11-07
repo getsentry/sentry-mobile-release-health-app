@@ -91,6 +91,11 @@ class _LoginScreenState extends State<LoginScreen> {
         builder: (context) => LoginWebView()
       ),
     ) as Result<Cookie>;
-    return result.asFuture;
+
+    if (result != null) {
+      return result.asFuture;
+    } else {
+      return null;
+    }
   }
 }
