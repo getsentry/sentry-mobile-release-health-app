@@ -63,9 +63,6 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/sentry-logo-light-512.png
-    - assets/santry-logo-light-512.png
-    - assets/splash.png
     - assets/line-flat.png
     - assets/status-green.png
     - assets/status-orange.png
