@@ -5,7 +5,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
 import 'package:http/http.dart' as http;
-import 'package:sentry_mobile/release_card.dart';
+import 'package:sentry_mobile/screens/release_health/release_card.dart';
 import 'package:sentry_mobile/types/release.dart';
 
 Future<List<Release>> fetchReleases() async {

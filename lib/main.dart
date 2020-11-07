@@ -11,7 +11,7 @@ import 'package:sentry_mobile/redux/actions.dart';
 import 'package:sentry_mobile/redux/middlewares.dart';
 import 'package:sentry_mobile/redux/reducers.dart';
 import 'package:sentry_mobile/redux/state/app_state.dart';
-import 'package:sentry_mobile/release_health.dart';
+import 'package:sentry_mobile/screens/release_health/release_health.dart';
 import 'package:sentry_mobile/settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
