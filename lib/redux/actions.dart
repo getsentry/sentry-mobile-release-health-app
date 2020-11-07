@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:sentry_mobile/types/organization.dart';
 import 'package:sentry_mobile/types/project.dart';
+import 'package:sentry_mobile/types/release.dart';
 
 class RehydrateAction {
   RehydrateAction();
@@ -61,4 +62,33 @@ class FetchProjectsFailureAction {
 class SelectProjectAction {
   SelectProjectAction(this.payload);
   final Project payload;
+}
+
+class FetchReleasesAction {
+  FetchReleasesAction(this.projectId);
+  final String projectId;
+}
+
+class FetchReleasesSuccessAction {
+  FetchReleasesSuccessAction(this.payload);
+  final List<Release> payload;
+}
+
+class FetchReleasesFailureAction {
+  FetchReleasesFailureAction();
+}
+
+class FetchReleaseAction {
+  FetchReleaseAction(this.projectId, this.releaseId);
+  final String projectId;
+  final String releaseId;
+}
+
+class FetchReleaseSuccessAction {
+  FetchReleaseSuccessAction(this.payload);
+  final Release payload;
+}
+
+class FetchReleaseFailureAction {
+  FetchReleaseFailureAction();
 }
