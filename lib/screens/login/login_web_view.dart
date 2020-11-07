@@ -30,7 +30,9 @@ class _LoginWebViewState extends State<LoginWebView> {
 
   @override
   void dispose() {
-    _onUrlChanged.cancel();
+    if (_onUrlChanged != null) {
+      _onUrlChanged.cancel();
+    }
     flutterWebviewPlugin.dispose();
     flutterWebviewPlugin.close();
     super.dispose();
@@ -58,7 +60,7 @@ class _LoginWebViewState extends State<LoginWebView> {
 
   void _asyncInit() async {
     await cookieManager.clearCookies();
-    await flutterWebviewPlugin.getCookies();
+    //await flutterWebviewPlugin.getCookies();
 
     // Add a listener to on url changed
     _onUrlChanged =
