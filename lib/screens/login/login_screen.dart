@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:sentry_mobile/redux/state/app_state.dart';
 import 'package:sentry_mobile/screens/login/login_view_model.dart';
 import 'package:sentry_mobile/screens/login/login_web_view.dart';
+import 'package:async/async.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -13,8 +15,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
-  var _loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -39,26 +39,46 @@ class _LoginScreenState extends State<LoginScreen> {
                     'Working Code, Happy Customers',
                     style: Theme.of(context).textTheme.headline1
                 ),
-                if (!_loading)
-                  RaisedButton(
-                    child: Text('SignIn'),
-                    textColor: Colors.white,
-                    color: Color(0xff4e3fb4),
-                    onPressed: () {
-                      setState(() {
-                        final sessionFuture = _navigateAndWaitForSession();
-                        sessionFuture.then((session) => viewModel.onLogin(session));
-                      });
-                    },
-                  )
-                else
-                  CircularProgressIndicator(
-                    backgroundColor: Color(0xff4e3fb4),
-                  )
+                RaisedButton(
+                  child: Text('SignIn'),
+                  textColor: Colors.white,
+                  color: Color(0xff4e3fb4),
+                  onPressed: () {
+                    setState(() {
+                      _navigateAndWaitForSession()
+                          .then(viewModel.onLogin)
+                          .catchError(_handleLoginFailure);
+                    });
+                  },
+                )
               ],
             )
         )
     )
+    );
+  }
+
+  void _handleLoginFailure(Object error) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: Text(
+              'Oops, there is a problem. Please try again later.',
+              style: TextStyle(
+                  color: Color(0xff000000)
+              )
+          ),
+          actions: [
+            FlatButton(
+                key: Key('ok'),
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text('Ok')),
+          ],
+        );
+      }
     );
   }
 
@@ -69,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
         fullscreenDialog: true,
         builder: (context) => LoginWebView()
       ),
-    );
-    return result as Cookie;
+    ) as Result<Cookie>;
+    return result.asFuture;
   }
 }

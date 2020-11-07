@@ -3,8 +3,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
-import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 import 'package:sentry_mobile/api/sentry_api.dart';
+import 'package:webview_cookie_manager/webview_cookie_manager.dart';
+import 'package:async/async.dart';
 
 class LoginWebView extends StatefulWidget {
   LoginWebView();
@@ -62,7 +63,7 @@ class _LoginWebViewState extends State<LoginWebView> {
     // Add a listener to on url changed
     _onUrlChanged =
         flutterWebviewPlugin.onUrlChanged.listen((String url) async {
-          if (!url.contains('https://sentry.io')) {
+          if (!url.contains('https://sentry.io') || !mounted) {
             // We return here, it crashes if we fetch cookies from pages like google
             return;
           }
@@ -79,11 +80,18 @@ class _LoginWebViewState extends State<LoginWebView> {
 
               // Until actually logged in we hit the API a few times and get 401
               if (response.statusCode == 200) {
-                client.close();
-                Navigator.pop(context, session);
+                if (mounted) {
+                  Navigator.pop(context, Result<Cookie>.value(session));
+                }
+              } else {
+                return; // Stay in callback loop
               }
-            } catch (e) {
-              print(e);
+            } catch (error) {
+              if (mounted) {
+                Navigator.pop(context, Result<Cookie>.error(error));
+              }
+            } finally {
+              client.close();
             }
           }
         });
