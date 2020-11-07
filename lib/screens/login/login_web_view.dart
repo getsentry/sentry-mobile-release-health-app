@@ -2,18 +2,9 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
-import 'package:http/http.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:redux/redux.dart';
-import 'package:sentry_mobile/redux/actions.dart';
-import 'package:sentry_mobile/redux/middlewares.dart';
-import 'package:sentry_mobile/redux/state/app_state.dart';
-import 'package:sentry_mobile/types/organization.dart';
-import 'package:sentry_mobile/types/project.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
-
+import 'package:sentry_mobile/api/sentry_api.dart';
 
 class LoginWebView extends StatefulWidget {
   LoginWebView();
@@ -33,17 +24,14 @@ class _LoginWebViewState extends State<LoginWebView> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _asyncInit();
-    });
-    flutterWebviewPlugin.close();
+    _asyncInit();
   }
 
   @override
   void dispose() {
     _onUrlChanged.cancel();
-    flutterWebviewPlugin.close();
     flutterWebviewPlugin.dispose();
+    flutterWebviewPlugin.close();
     super.dispose();
   }
 
@@ -59,6 +47,8 @@ class _LoginWebViewState extends State<LoginWebView> {
       url: loginUrl,
       userAgent: userAgent,
       clearCookies: true,
+      withZoom: false,
+      hidden: true,
       appBar: AppBar(
         title: Text('SignIn'),
       ),
@@ -88,20 +78,14 @@ class _LoginWebViewState extends State<LoginWebView> {
               final response = await client.organizations();
 
               // Until actually logged in we hit the API a few times and get 401
-              if (response.statusCode != 200) {
-                return;
+              if (response.statusCode == 200) {
+                client.close();
+                Navigator.pop(context, session);
               }
-
-              Navigator.pop(context, session);
-
             } catch (e) {
               print(e);
-            } finally {
-              client.close();
             }
           }
         });
   }
-
-
 }
