@@ -67,7 +67,8 @@ class SelectProjectAction {
 }
 
 class FetchReleasesAction {
-  FetchReleasesAction(this.projectId);
+  FetchReleasesAction(this.organizationSlug, this.projectId);
+  final String organizationSlug;
   final String projectId;
 }
 

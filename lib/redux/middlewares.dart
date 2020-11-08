@@ -32,15 +32,24 @@ void apiMiddleware(
     try {
       final projects = await api.projects(action.payload.slug);
       store.dispatch(FetchProjectsSuccessAction(projects));
-      store.dispatch(SelectProjectAction(projects.first));
     } catch (e) {
       store.dispatch(FetchProjectsFailureAction(e as Error));
     }
   }
 
+  if (action is FetchProjectsSuccessAction) {
+    store.dispatch(SelectProjectAction(action.payload.first));
+  }
+
+  if (action is SelectProjectAction) {
+    final slug = store.state.globalState.selectedOrganization.slug;
+    final projectId = action.payload.id;
+    store.dispatch(FetchReleasesAction(slug, projectId));
+  }
+
   if (action is FetchReleasesAction) {
     try {
-      final releases = await api.releases(action.projectId);
+      final releases = await api.releases(action.organizationSlug, action.projectId);
       store.dispatch(FetchReleasesSuccessAction(releases));
     } catch (e) {
       store.dispatch(FetchReleasesFailureAction(e as Error));
