@@ -8,7 +8,6 @@ import 'package:sentry_mobile/redux/actions.dart';
 import 'package:sentry_mobile/redux/state/app_state.dart';
 import 'package:sentry_mobile/types/organization.dart';
 import 'package:sentry_mobile/types/project.dart';
-import 'package:sentry_mobile/types/release.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:sentry_mobile/api/sentry_api.dart';
