@@ -4,24 +4,12 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:http/http.dart' as http;
+import 'package:sentry_mobile/redux/state/app_state.dart';
 import 'package:sentry_mobile/screens/release_health/release_card.dart';
+import 'package:sentry_mobile/screens/release_health/release_health_view_model.dart';
 import 'package:sentry_mobile/types/release.dart';
-
-Future<List<Release>> fetchReleases() async {
-  final response = await http.get('https://mminar.com/releases.json');
-
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    final responseJson = json.decode(response.body) as List;
-    return responseJson.map((dynamic r) => Release.fromJson(r)).toList();
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load Release');
-  }
-}
 
 class ReleaseHealth extends StatefulWidget {
   const ReleaseHealth({Key key}) : super(key: key);
@@ -31,90 +19,89 @@ class ReleaseHealth extends StatefulWidget {
 }
 
 class _ReleaseHealthState extends State<ReleaseHealth> {
-  Future<List<Release>> futureReleases;
   int _index = 0;
 
   @override
-  void initState() {
-    super.initState();
-    fetchData();
-  }
-
-  Future<void> fetchData() async {
-    setState(() {
-      futureReleases = fetchReleases();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Release>>(
-        future: futureReleases,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return RefreshIndicator(
-              backgroundColor: Colors.white,
-              color: Color(0xff81B4FE),
-              child: SingleChildScrollView(
+    return StoreConnector<AppState, ReleaseHealthViewModel>(
+      builder: (_, viewModel) => _content(viewModel),
+      converter: (store) => ReleaseHealthViewModel.fromStore(store),
+    );
+  }
+
+  Widget _content(ReleaseHealthViewModel viewModel) {
+    if (viewModel.loading || viewModel.releases.isEmpty) {
+      return Center(
+        child: CircularProgressIndicator(
+          backgroundColor: Colors.white,
+          valueColor: AlwaysStoppedAnimation(Color(0xff81B4FE)),
+        ),
+      );
+    } else {
+      return RefreshIndicator(
+        backgroundColor: Colors.white,
+        color: Color(0xff81B4FE),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                  height: 180,
+                  child: PageView.builder(
+                    itemCount: viewModel.releases.length,
+                    controller: PageController(viewportFraction: 0.8),
+                    onPageChanged: (int index) =>
+                        setState(() => _index = index),
+                    itemBuilder: (context, index) {
+                      return ReleaseCard(
+                          release: viewModel.releases[index],
+                          index: index
+                      );
+                    },
+                  )),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   children: [
-                    SizedBox(
-                        height: 180,
-                        child: PageView.builder(
-                          itemCount: snapshot.data.length,
-                          controller: PageController(viewportFraction: 0.8),
-                          onPageChanged: (int index) =>
-                              setState(() => _index = index),
-                          itemBuilder: (context, index) {
-                            return ReleaseCard(
-                                release: snapshot.data[index], index: index);
-                          },
-                        )),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      child: Column(
-                        children: [
-                          HealthDivider(
-                            onSeeAll: () {},
-                            title: 'Charts',
-                            paddingBottom: 10,
-                          ),
-                          ChartRow(
-                              title: 'Issues',
-                              total: snapshot.data[_index].issues,
-                              change: 3.6), // TODO: api
-                          ChartRow(
-                              title: 'Crashes',
-                              total: snapshot.data[_index].crashes,
-                              change: -4.2), // TODO: api
-                          HealthDivider(
-                            onSeeAll: () {},
-                            title: 'Statistics',
-                            paddingBottom: 0,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              HealthCard(
-                                  title: 'Crash Free Users',
-                                  value: snapshot.data[_index].crashFreeUsers,
-                                  change: 0.04), // TODO: api
-                              HealthCard(
-                                  title: 'Crash Free Sessions',
-                                  value:
-                                      snapshot.data[_index].crashFreeSessions,
-                                  change: -0.01), // TODO: api
-                            ],
-                          )
-                        ],
-                      ),
+                    HealthDivider(
+                      onSeeAll: () {},
+                      title: 'Charts',
+                      paddingBottom: 10,
                     ),
-                    Row(children: [
-                      Expanded(
-                          child: Container(
-                        child: Echarts(
-                          option: '''
+                    ChartRow(
+                        title: 'Issues',
+                        total: viewModel.releases[_index].issues,
+                        change: 3.6), // TODO: api
+                    ChartRow(
+                        title: 'Crashes',
+                        total: viewModel.releases[_index].crashes,
+                        change: -4.2), // TODO: api
+                    HealthDivider(
+                      onSeeAll: () {},
+                      title: 'Statistics',
+                      paddingBottom: 0,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        HealthCard(
+                            title: 'Crash Free Users',
+                            value: viewModel.releases[_index].crashFreeUsers,
+                            change: 0.04), // TODO: api
+                        HealthCard(
+                            title: 'Crash Free Sessions',
+                            value: viewModel.releases[_index].crashFreeSessions,
+                            change: -0.01), // TODO: api
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              Row(children: [
+                Expanded(
+                    child: Container(
+                      child: Echarts(
+                        option: '''
                 {
                   isGroupedByDate: true,
                   showTimeInTooltip: true,
@@ -211,26 +198,20 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                   }]
                 }
               ''',
-                        ),
-                        height: 120,
-                      ))
-                    ])
-                  ],
-                ),
-              ),
-              onRefresh: fetchData,
-            );
-          } else if (snapshot.hasError) {
-            return Text('${snapshot.error}');
-          }
+                      ),
+                      height: 120,
+                    ))
+              ])
+            ],
+          ),
+        ),
+        onRefresh: _onRefresh,
+      );
+    }
+  }
 
-          return Center(
-            child: CircularProgressIndicator(
-              backgroundColor: Colors.white,
-              valueColor: AlwaysStoppedAnimation(Color(0xff81B4FE)),
-            ),
-          );
-        });
+  Future<void> _onRefresh() async {
+    // TODO Combine future and redux concept
   }
 }
 
