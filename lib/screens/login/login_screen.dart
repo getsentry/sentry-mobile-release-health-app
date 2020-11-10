@@ -91,10 +91,6 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     ) as Result<Cookie>;
 
-    if (result != null) {
-      return result.asFuture;
-    } else {
-      return null;
-    }
+    return result != null ? result.asFuture : null;
   }
 }
