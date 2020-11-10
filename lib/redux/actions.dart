@@ -38,7 +38,7 @@ class FetchOrganizationsSuccessAction {
 
 class FetchOrganizationsFailureAction {
   FetchOrganizationsFailureAction(this.error);
-  final Error error;
+  final dynamic error;
 }
 
 class SelectOrganizationAction {
@@ -58,7 +58,7 @@ class FetchProjectsSuccessAction {
 
 class FetchProjectsFailureAction {
   FetchProjectsFailureAction(this.error);
-  final Error error;
+  final dynamic error;
 }
 
 class SelectProjectAction {
@@ -78,7 +78,7 @@ class FetchReleasesSuccessAction {
 
 class FetchReleasesFailureAction {
   FetchReleasesFailureAction(this.error);
-  final Error error;
+  final dynamic error;
 }
 
 class FetchReleaseAction {
@@ -94,5 +94,5 @@ class FetchReleaseSuccessAction {
 
 class FetchReleaseFailureAction {
   FetchReleaseFailureAction(this.error);
-  final Error error;
+  final dynamic error;
 }
