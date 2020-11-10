@@ -17,8 +17,8 @@ class LoginWebView extends StatefulWidget {
 class _LoginWebViewState extends State<LoginWebView> {
   _LoginWebViewState();
 
-  final flutterWebviewPlugin = FlutterWebviewPlugin();
-  final cookieManager = WebviewCookieManager();
+  final _flutterWebviewPlugin = FlutterWebviewPlugin();
+  final _cookieManager = WebviewCookieManager();
 
   StreamSubscription<String> _onUrlChanged;
 
@@ -33,8 +33,8 @@ class _LoginWebViewState extends State<LoginWebView> {
     if (_onUrlChanged != null) {
       _onUrlChanged.cancel();
     }
-    flutterWebviewPlugin.dispose();
-    flutterWebviewPlugin.close();
+    _flutterWebviewPlugin.dispose();
+    _flutterWebviewPlugin.close();
     super.dispose();
   }
 
@@ -59,17 +59,17 @@ class _LoginWebViewState extends State<LoginWebView> {
   }
 
   void _asyncInit() async {
-    await cookieManager.clearCookies();
+    await _cookieManager.clearCookies();
 
     // Add a listener to on url changed
     _onUrlChanged =
-        flutterWebviewPlugin.onUrlChanged.listen((String url) async {
+        _flutterWebviewPlugin.onUrlChanged.listen((String url) async {
           if (!url.contains('https://sentry.io') || !mounted) {
             // We return here, it crashes if we fetch cookies from pages like google
             return;
           }
 
-          final cookies = await cookieManager.getCookies(url);
+          final cookies = await _cookieManager.getCookies(url);
           final session = cookies.firstWhere((c) => c.name == 'session', orElse: () => null);
 
           if (session != null) {
