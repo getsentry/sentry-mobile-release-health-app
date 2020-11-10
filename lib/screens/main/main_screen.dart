@@ -94,7 +94,7 @@ class _MainScreenState extends State<MainScreen> {
 }
 
 class Header extends StatelessWidget with PreferredSizeWidget {
-  Header(this.store);
+  Header({this.store});
 
   final Store<AppState> store;
 
