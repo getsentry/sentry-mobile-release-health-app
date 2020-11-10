@@ -7,10 +7,11 @@ import 'package:sentry_mobile/redux/state/app_state.dart';
 
 class LoginViewModel {
   LoginViewModel(this.store);
-  Store<AppState> store;
+  factory LoginViewModel.fromStore(Store<AppState> store) {
+    return LoginViewModel(store);
+  }
 
-  static LoginViewModel fromStore(Store<AppState> store) =>
-      LoginViewModel(store);
+  Store<AppState> store;
 
   void onLogin(Cookie session) {
     store.dispatch(LoginAction(session));
