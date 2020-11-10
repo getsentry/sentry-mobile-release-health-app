@@ -6,10 +6,9 @@ class ApiError extends Error {
 
   @override
   String toString() {
-    if (statusCode != null) {
-      return 'api error statusCode: $statusCode message: ${Error.safeToString(message)}';
-    }
-    return 'Unknown json error';
+    return statusCode != null
+        ? 'api error statusCode: $statusCode message: ${Error.safeToString(message)}'
+        : 'Unknown json error';
   }
 }
 
@@ -20,9 +19,8 @@ class JsonError extends Error {
 
   @override
   String toString() {
-    if (message != null) {
-      return 'json error: ${Error.safeToString(message)}';
-    }
-    return 'Unknown json error';
+    return message != null
+      ? 'json error: ${Error.safeToString(message)}'
+      : 'Unknown json error';
   }
 }
