@@ -13,7 +13,7 @@ class ApiError extends Error {
 }
 
 class JsonError extends Error {
-  JsonError([this.message]);
+  JsonError(this.message);
 
   final Object message;
 
