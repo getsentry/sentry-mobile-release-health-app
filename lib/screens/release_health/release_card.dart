@@ -1,28 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:sentry_mobile/screens/shared/bordered_circular_avatar.dart';
 import 'package:sentry_mobile/types/project.dart';
 import 'package:sentry_mobile/types/release.dart';
 
 class ReleaseCard extends StatelessWidget {
-  ReleaseCard({@required this.project, @required this.release, @required this.index});
+  ReleaseCard({@required this.project, @required this.release});
 
   final Project project;
   final Release release;
-  final int index; // TODO: hardcoded for demo purposes
 
   @override
   Widget build(BuildContext context) {
     return Card(
-        margin: const EdgeInsets.only(top: 8, bottom: 8, left: 0, right: 20),
+        margin: const EdgeInsets.only(top: 8, bottom: 8, left: 0, right: 16),
         elevation: 4,
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(15))),
+            borderRadius: BorderRadius.all(Radius.circular(16))),
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
+              borderRadius: BorderRadius.all(Radius.circular(16)),
               gradient: LinearGradient(
-                colors: index == 0
-                    ? [Color(0xf723B480), Color(0x7a23B480)]
-                    : [Color(0xffD74177), Color(0xffF3B584)],
+                colors: [Color(0xf723B480), Color(0x7a23B480)],
                 begin: Alignment.bottomLeft,
                 end: Alignment.topRight,
               )),
@@ -33,21 +31,14 @@ class ReleaseCard extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   release.version,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 26,
-                    fontWeight: FontWeight.bold
-                  ),
+                  style: Theme.of(context).textTheme.headline5,
                 ),
               ),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   release.project,
-                  style: TextStyle(
-                    color: Color(0xB3ffffff),
-                    fontSize: 14
-                  ),
+                  style: Theme.of(context).textTheme.subtitle1,
                 ),
               ),
               Spacer(),

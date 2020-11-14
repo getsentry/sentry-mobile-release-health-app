@@ -55,7 +55,6 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                       return ReleaseCard(
                           project: viewModel.project,
                           release: viewModel.releases[index],
-                          index: index
                       );
                     },
                   )),
