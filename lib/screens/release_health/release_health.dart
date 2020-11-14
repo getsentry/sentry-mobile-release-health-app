@@ -48,7 +48,7 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                   height: 180,
                   child: PageView.builder(
                     itemCount: viewModel.releases.length,
-                    controller: PageController(viewportFraction: 0.8),
+                    controller: PageController(viewportFraction: 0.85),
                     onPageChanged: (int index) =>
                         setState(() => _index = index),
                     itemBuilder: (context, index) {

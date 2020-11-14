@@ -11,8 +11,8 @@ class ReleaseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-        margin: const EdgeInsets.only(top: 10, bottom: 20, left: 0, right: 32),
-        elevation: 12,
+        margin: const EdgeInsets.only(top: 8, bottom: 8, left: 0, right: 20),
+        elevation: 4,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(15))),
         child: Container(
@@ -25,25 +25,63 @@ class ReleaseCard extends StatelessWidget {
                 begin: Alignment.bottomLeft,
                 end: Alignment.topRight,
               )),
-          child: Column(children: <Widget>[
-            SizedBox(height: 12),
-            Row(
-              children: <Widget>[
-                Expanded(
-                    child: ListTile(
-                  title: Text(
-                    release.version,
-                    style: Theme.of(context).textTheme.headline5,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 16, top: 20, right: 16, bottom: 16),
+            child: Column(children: <Widget>[
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  release.version,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold
                   ),
-                  subtitle: Text(
-                    release.project,
-                    style: Theme.of(context).textTheme.subtitle1,
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  release.project,
+                  style: TextStyle(
+                    color: Color(0xB3ffffff),
+                    fontSize: 14
                   ),
-                )),
-              ],
-            ),
-            Image.asset('assets/line-flat.png'),
-          ]),
+                ),
+              ),
+              Spacer(),
+              _platforms(context, ["iOS", "Android", "Web"])
+            ]),
+          ),
         ));
+  }
+
+  Widget _platforms(BuildContext context, List<String> platforms) {
+    final platformWidgets = platforms.map((item) => _platform(context, item)).toList();
+    final List<Widget> all = [];
+    for (final platformWidget in platformWidgets) {
+      all.add(platformWidget);
+      if (platformWidget != platformWidgets.last) {
+        all.add(SizedBox(width: 8));
+      }
+    }
+    return Row(children: all);
+  }
+
+  Widget _platform(BuildContext context, String platform) {
+    return Container(
+      decoration: BoxDecoration(
+          color: Color(0x33ffffff),
+          borderRadius: BorderRadius.all(Radius.circular(4.0))
+      ),
+      padding: EdgeInsets.only(left: 8, top: 4, right: 8, bottom: 4),
+      child: Text(
+          platform,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 12
+          )
+          )
+      );
   }
 }
