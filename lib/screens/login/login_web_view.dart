@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:sentry_mobile/api/api_errors.dart';
 import 'package:sentry_mobile/api/sentry_api.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 import 'package:async/async.dart';
@@ -77,19 +78,17 @@ class _LoginWebViewState extends State<LoginWebView> {
             final client = SentryApi(session);
             try {
               // Session is returned even before authenticated so this is called many times
-              final response = await client.organizations();
-
-              // Until actually logged in we hit the API a few times and get 401
-              if (response.statusCode == 200) {
-                if (mounted) {
-                  Navigator.pop(context, Result<Cookie>.value(session));
-                }
-              } else {
-                return; // Stay in callback loop
+              await client.organizations();
+              if (mounted) {
+                Navigator.pop(context, Result<Cookie>.value(session));
               }
             } catch (error) {
-              if (mounted) {
-                Navigator.pop(context, Result<Cookie>.error(error));
+              if (error is ApiError) {
+                return; // Stay in callback loop
+              } else {
+                if (mounted) {
+                  Navigator.pop(context, Result<Cookie>.error(error));
+                }
               }
             } finally {
               client.close();
