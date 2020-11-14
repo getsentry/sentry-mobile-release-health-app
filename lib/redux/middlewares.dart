@@ -23,7 +23,7 @@ void apiMiddleware(
         store.dispatch(SelectOrganizationAction(organizations.first));
         store.dispatch(FetchProjectsAction(organizations.first));
     } catch (e) {
-      store.dispatch(FetchOrganizationsFailureAction(e as Error));
+      store.dispatch(FetchOrganizationsFailureAction(e));
     }
   }
 
@@ -32,7 +32,7 @@ void apiMiddleware(
       final projects = await api.projects(action.payload.slug);
       store.dispatch(FetchProjectsSuccessAction(projects));
     } catch (e) {
-      store.dispatch(FetchProjectsFailureAction(e as Error));
+      store.dispatch(FetchProjectsFailureAction(e));
     }
   }
 
@@ -51,7 +51,7 @@ void apiMiddleware(
       final releases = await api.releases(action.organizationSlug, action.projectId);
       store.dispatch(FetchReleasesSuccessAction(releases));
     } catch (e) {
-      store.dispatch(FetchReleasesFailureAction(e as Error));
+      store.dispatch(FetchReleasesFailureAction(e));
     }
   }
 
@@ -60,7 +60,7 @@ void apiMiddleware(
       final release = await api.release(action.projectId, action.releaseId);
       store.dispatch(FetchReleaseSuccessAction(release));
     } catch (e) {
-      store.dispatch(FetchReleaseFailureAction(e as Error));
+      store.dispatch(FetchReleaseFailureAction(e));
     }
   }
 

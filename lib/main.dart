@@ -1,18 +1,17 @@
-import 'package:custom_splash/custom_splash.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:redux/redux.dart';
-import 'package:sentry_mobile/issues.dart';
 import 'package:sentry_mobile/redux/actions.dart';
 import 'package:sentry_mobile/redux/middlewares.dart';
 import 'package:sentry_mobile/redux/reducers.dart';
 import 'package:sentry_mobile/redux/state/app_state.dart';
 import 'package:sentry_mobile/screens/release_health/release_health.dart';
 import 'package:sentry_mobile/settings.dart';
+import 'package:sentry_mobile/screens/login/login_screen.dart';
+import 'package:sentry_mobile/screens/main/main_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<Store<AppState>> createStore() async {
@@ -44,29 +43,28 @@ void main() async {
 
   store.dispatch(RehydrateAction());
 
-  runApp(MyApp(store: store));
+  runApp(SentryMobile(store: store));
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({this.store});
+class SentryMobile extends StatelessWidget {
+  SentryMobile({this.store});
 
   final Store<AppState> store;
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Sentry',
         theme: ThemeData(
-            // This is the theme of your application.
-            //
-            // Try running your application with "flutter run". You'll see the
-            // application has a blue toolbar. Then, without quitting the app, try
-            // changing the primarySwatch below to Colors.green and then invoke
-            // "hot reload" (press "r" in the console where you ran "flutter run",
-            // or simply save your changes to "hot reload" in a Flutter IDE).
-            // Notice that the counter didn't reset back to zero; the application
-            // is not restarted.
+          // This is the theme of your application.
+          //
+          // Try running your application with "flutter run". You'll see the
+          // application has a blue toolbar. Then, without quitting the app, try
+          // changing the primarySwatch below to Colors.green and then invoke
+          // "hot reload" (press "r" in the console where you ran "flutter run",
+          // or simply save your changes to "hot reload" in a Flutter IDE).
+          // Notice that the counter didn't reset back to zero; the application
+          // is not restarted.
             primarySwatch: Colors.purple,
             primaryColorDark: Color(0xff4e3fb4),
             primaryColorLight: Color(0xffE7E1EC),
@@ -117,158 +115,19 @@ class MyApp extends StatelessWidget {
                     color: Colors.black45,
                   )),
             )),
-        home: CustomSplash(
-          imagePath: 'assets/splash.png',
-          backGroundColor: Color(0x00564f64),
-          animationEffect: 'fade-in',
-          logoSize: 300,
-          // customFunction: (_) {
-          //   return 1;
-          // },
-          duration: 1500,
-          type: CustomSplashType.StaticDuration,
-          home: StoreProvider<AppState>(
-            store: store,
-            child: StoreConnector<AppState, AppState>(
-                converter: (store) => store.state,
-                builder: (context, state) {
-                  return DefaultTabController(
-                    length: 3,
-                    child: Scaffold(
-                      backgroundColor: Colors.white,
-                      appBar: Header(),
-                      bottomNavigationBar: Material(
-                          color: Color(0xffffffff),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                border: Border(
-                                    top: BorderSide(color: Color(0x44B9C1D9)))),
-                            height: 84.0,
-                            child: Column(
-                              children: [
-                                TabBar(
-                                  onTap: (int index) {
-                                    store.dispatch(SwitchTabAction(index));
-                                  },
-                                  indicator: CircleTabIndicator(
-                                      color: Colors.transparent, radius: 3),
-                                  tabs: [
-                                    Tab(
-                                      icon: Icon(Icons.home,
-                                          color:
-                                              // hacky, but don't want to fight with built in tabs
-                                              state.globalState.selectedTab == 0
-                                                  ? Color(0xff81B4FE)
-                                                  : Color(0xffB9C1D9)),
-                                      iconMargin: EdgeInsets.only(bottom: 0),
-                                      text: '',
-                                    ),
-                                    Tab(
-                                      icon: Icon(Icons.inbox,
-                                          color:
-                                              state.globalState.selectedTab == 1
-                                                  ? Color(0xff81B4FE)
-                                                  : Color(0xffB9C1D9)),
-                                      iconMargin: EdgeInsets.only(bottom: 0),
-                                      text: '',
-                                    ),
-                                    Tab(
-                                      icon: Icon(Icons.account_circle,
-                                          color:
-                                              state.globalState.selectedTab == 2
-                                                  ? Color(0xff81B4FE)
-                                                  : Color(0xffB9C1D9)),
-                                      iconMargin: EdgeInsets.only(bottom: 0),
-                                      text: '',
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                          )),
-                      body: TabBarView(
-                        children: [
-                          ReleaseHealth(),
-                          IssuesScreenBuilder(),
-                          Settings(),
-                        ],
-                        physics: NeverScrollableScrollPhysics(),
-                      ),
-                    ),
-                  );
-                }),
+        home: StoreProvider(
+          store: store,
+          child: StoreConnector<AppState, AppState>(
+            builder: (_, state) {
+              if (state.globalState.session == null) {
+                return LoginScreen();
+              } else {
+                return MainScreen();
+              }
+            },
+            converter: (store) => store.state,
           ),
-        ));
-  }
-}
-
-class Header extends StatelessWidget with PreferredSizeWidget {
-  Header({this.store});
-
-  final Store<AppState> store;
-
-  @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
-
-  @override
-  Widget build(BuildContext context) {
-    return StoreConnector<AppState, AppState>(
-      builder: (_, state) {
-        var title = 'Health';
-        switch (state.globalState.selectedTab) {
-          case 1:
-            title = 'Top Issues';
-            break;
-          case 2:
-            title = 'Settings';
-            break;
-          default:
-            title = 'Health';
-            break;
-        }
-
-        return AppBar(
-            backgroundColor: Colors.white,
-            shadowColor: Colors.transparent,
-            centerTitle: false,
-            actions: [
-              IconButton(
-                icon: Icon(Icons.settings),
-              )
-            ],
-            title: Text(
-              title,
-              style: Theme.of(context).textTheme.headline1,
-            ));
-      },
-      converter: (store) => store.state,
+        )
     );
-  }
-}
-
-class CircleTabIndicator extends Decoration {
-  CircleTabIndicator({@required Color color, @required double radius})
-      : _painter = _CirclePainter(color, radius);
-
-  final BoxPainter _painter;
-
-  @override
-  BoxPainter createBoxPainter([onChanged]) => _painter;
-}
-
-class _CirclePainter extends BoxPainter {
-  _CirclePainter(Color color, this.radius)
-      : _paint = Paint()
-          ..color = color
-          ..isAntiAlias = true;
-
-  final Paint _paint;
-  final double radius;
-
-  @override
-  void paint(Canvas canvas, Offset offset, ImageConfiguration cfg) {
-    final Offset circleOffset =
-        offset + Offset(cfg.size.width / 2, cfg.size.height - radius - 5 - 20);
-    canvas.drawCircle(circleOffset, radius, _paint);
   }
 }
