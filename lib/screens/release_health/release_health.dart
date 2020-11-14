@@ -261,7 +261,7 @@ class HealthDivider extends StatelessWidget {
 
 class HealthCard extends StatelessWidget {
   HealthCard(
-      {@required this.title, @required this.value, @required this.change});
+      {@required this.title, this.value, @required this.change});
 
   final String title;
   final double value;
@@ -271,13 +271,17 @@ class HealthCard extends StatelessWidget {
   final dangerThreshold = 98;
 
   Color getColor() {
-    return value > warningThreshold
-        ? Color(0xFF23B480)
-        : value > dangerThreshold ? Color(0xFFFFC227) : Color(0xFFEE6855);
+    return value == null
+        ? Color(0xFFB9C1D9)
+        : value > warningThreshold
+          ? Color(0xFF23B480)
+          : value > dangerThreshold ? Color(0xFFFFC227) : Color(0xFFEE6855);
   }
 
   String getIcon() {
-    return value > warningThreshold
+    return value == null
+      ? null
+      : value > warningThreshold
         ? 'assets/status-green.png'
         : value > dangerThreshold
             ? 'assets/status-orange.png'
@@ -289,9 +293,11 @@ class HealthCard extends StatelessWidget {
   }
 
   String getTrendIcon() {
-    return change > 0
-        ? 'assets/trend-up-green.png'
-        : 'assets/trend-down-red.png';
+    return change == 0
+        ? null
+        : change > 0
+            ? 'assets/trend-up-green.png'
+            : 'assets/trend-down-red.png';
   }
 
   @override
@@ -308,10 +314,10 @@ class HealthCard extends StatelessWidget {
         children: [
           Padding(
             padding: EdgeInsets.only(top: 10, bottom: 10),
-            child: Image.asset(getIcon(), height: 50),
+            child: getIcon() != null ? Image.asset(getIcon(), height: 50) : SizedBox(height: 50),
           ),
           Text(
-            value.toString() + '%',
+            value != null ? value.toString() + '%' : '--',
             style: TextStyle(
               color: getColor(),
               fontWeight: FontWeight.w500,
@@ -332,7 +338,7 @@ class HealthCard extends StatelessWidget {
               child:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Text(
-                  getTrendSign() + change.toString() + '%',
+                  change != null ? getTrendSign() + change.toString() + '%' : '--',
                   style: TextStyle(
                     color: Color(0xFFB9C1D9),
                     fontSize: 13,
@@ -340,7 +346,7 @@ class HealthCard extends StatelessWidget {
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: 5),
-                  child: Image.asset(getTrendIcon(), height: 8),
+                  child: getTrendIcon() != null ? Image.asset(getTrendIcon(), height: 8) : Spacer(),
                 )
               ])),
         ],

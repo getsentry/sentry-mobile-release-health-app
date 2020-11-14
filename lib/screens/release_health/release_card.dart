@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sentry_mobile/screens/shared/bordered_circular_avatar.dart';
 import 'package:sentry_mobile/types/project.dart';
 import 'package:sentry_mobile/types/release.dart';
 
