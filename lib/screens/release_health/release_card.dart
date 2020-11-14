@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-
+import 'package:sentry_mobile/types/project.dart';
 import 'package:sentry_mobile/types/release.dart';
 
 class ReleaseCard extends StatelessWidget {
-  ReleaseCard({@required this.release, @required this.index});
+  ReleaseCard({@required this.project, @required this.release, @required this.index});
 
+  final Project project;
   final Release release;
   final int index; // TODO: hardcoded for demo purposes
 
@@ -50,7 +51,7 @@ class ReleaseCard extends StatelessWidget {
                 ),
               ),
               Spacer(),
-              _platforms(context, ["iOS", "Android", "Web"])
+              _platforms(context, project.platforms)
             ]),
           ),
         ));

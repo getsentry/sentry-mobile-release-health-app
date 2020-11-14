@@ -6,11 +6,11 @@ import 'package:sentry_mobile/types/project.dart';
 import 'package:sentry_mobile/types/release.dart';
 
 class ReleaseHealthViewModel {
-  ReleaseHealthViewModel(this._store, this._organization, this._project, this.releases, this.loading);
+  ReleaseHealthViewModel(this._store, this._organization, this.project, this.releases, this.loading);
   final Store<AppState> _store;
   final Organization _organization;
-  final Project _project;
 
+  final Project project;
   List<Release> releases;
   bool loading;
 
@@ -24,6 +24,6 @@ class ReleaseHealthViewModel {
       );
 
   void fetchReleases() {
-    _store.dispatch(FetchReleasesAction(_organization.slug, _project.id));
+    _store.dispatch(FetchReleasesAction(_organization.slug, project.id));
   }
 }
