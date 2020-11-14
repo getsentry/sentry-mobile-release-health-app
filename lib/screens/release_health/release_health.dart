@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:http/http.dart' as http;
@@ -21,6 +22,8 @@ class ReleaseHealth extends StatefulWidget {
 class _ReleaseHealthState extends State<ReleaseHealth> {
   int _index = 0;
 
+  var refreshKey = GlobalKey<RefreshIndicatorState>();
+
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ReleaseHealthViewModel>(
@@ -38,7 +41,17 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
         ),
       );
     } else {
+
+      WidgetsBinding.instance.addPostFrameCallback( ( Duration duration ) {
+        if (viewModel.loading) {
+          refreshKey.currentState.show();
+        } else {
+          refreshKey.currentState.deactivate();
+        }
+      });
+
       return RefreshIndicator(
+        key: refreshKey,
         backgroundColor: Colors.white,
         color: Color(0xff81B4FE),
         child: SingleChildScrollView(
@@ -205,13 +218,12 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
             ],
           ),
         ),
-        onRefresh: _onRefresh,
+        onRefresh: () => Future.delayed(
+          Duration(microseconds: 100),
+          () { viewModel.fetchReleases(); }
+        ),
       );
     }
-  }
-
-  Future<void> _onRefresh() async {
-    // TODO Combine future and redux concept
   }
 }
 
