@@ -45,7 +45,7 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
           child: Column(
             children: [
               SizedBox(
-                  height: 180,
+                  height: 200,
                   child: PageView.builder(
                     itemCount: viewModel.releases.length,
                     controller: PageController(viewportFraction: 0.85),
@@ -394,7 +394,7 @@ class ChartRow extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                         fontSize: 17,
                       ))),
-              Text('Last 12 hours',
+              Text('Last 24 hours',
                   style: TextStyle(
                     color: Color(0xFFB9C1D9),
                     fontSize: 14,
