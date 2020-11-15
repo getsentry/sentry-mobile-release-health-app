@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:sentry_mobile/redux/state/app_state.dart';
+import 'package:sentry_mobile/screens/settings/settings_header.dart';
 import 'package:sentry_mobile/screens/settings/settings_view_model.dart';
 
 class Settings extends StatefulWidget {
@@ -26,8 +27,10 @@ class _SettingsState extends State<Settings> {
     }
 
     return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
+          SettingsHeader('Projects'),
           Center(
               child: DropdownButton<String>(
                 value: viewModel.selectedOrganization?.id,
