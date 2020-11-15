@@ -8,7 +8,7 @@ import 'package:sentry_mobile/redux/state/app_state.dart';
 
 import 'package:sentry_mobile/issues.dart';
 import 'package:sentry_mobile/screens/release_health/release_health.dart';
-import 'package:sentry_mobile/settings.dart';
+import 'package:sentry_mobile/screens/settings/settings.dart';
 
 class MainScreen extends StatefulWidget {
   @override
