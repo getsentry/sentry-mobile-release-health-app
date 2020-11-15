@@ -3,6 +3,8 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:sentry_mobile/redux/state/app_state.dart';
 import 'package:sentry_mobile/screens/settings/settings_header.dart';
 import 'package:sentry_mobile/screens/settings/settings_view_model.dart';
+import 'package:sentry_mobile/types/organization.dart';
+import 'package:sentry_mobile/types/project.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key key}) : super(key: key);
@@ -26,54 +28,48 @@ class _SettingsState extends State<Settings> {
       viewModel.fetchOrganizations();
     }
 
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        children: [
-          SettingsHeader('Projects'),
-          Center(
-              child: DropdownButton<String>(
-                value: viewModel.selectedOrganization?.id,
-                icon: Icon(Icons.arrow_downward),
-                iconSize: 24,
-                elevation: 16,
-                style: TextStyle(color: Colors.deepPurple),
-                underline: Container(
-                  height: 2,
-                  color: Colors.deepPurpleAccent,
-                ),
-                onChanged: viewModel.selectOrganization,
-                items: viewModel.organizations
-                    .map((e) => DropdownMenuItem<String>(
-                  value: e.id,
-                  child: Text(e.name),
-                ))
-                    .toList(),
-              )),
-          Center(
-              child: DropdownButton<String>(
-                value: viewModel.selectedProject?.id,
-                icon: Icon(Icons.arrow_downward),
-                iconSize: 24,
-                elevation: 16,
-                style: TextStyle(color: Colors.deepPurple),
-                underline: Container(
-                  height: 2,
-                  color: Colors.deepPurpleAccent,
-                ),
-                onChanged: viewModel.selectProject,
-                items: viewModel.projects
-                    .map((e) => DropdownMenuItem<String>(
-                  value: e.id,
-                  child: Text(e.name),
-                ))
-                    .toList(),
-              )),
-          RaisedButton(
-            child: Text('Logout'),
-            onPressed: () => viewModel.logout(),
-          ),
-        ],
+    final List<Widget> children = [];
+    children.add(
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: SettingsHeader('Projects'),
+      )
+    );
+    children.addAll(_buildProjects(viewModel));
+    children.add(
+        RaisedButton(
+          child: Text('Logout'),
+          onPressed: () => viewModel.logout(),
+        )
+    );
+
+    return SingleChildScrollView(
+      child: Container(
+        child: Column(
+          children: children,
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _buildProjects(SettingsViewModel viewModel) {
+    return viewModel.projects.map((project) => _buildProjectRow(project, viewModel.selectedOrganization)).toList();
+  }
+
+  Widget _buildProjectRow(Project project, Organization organization) {
+    return ListTile(
+      contentPadding: EdgeInsets.only(right: 16, top: 0, left: 16, bottom: 0),
+      title: Text(
+        project.name,
+        style: Theme.of(context).textTheme.bodyText1.apply(
+            color: Colors.black
+        ),
+      ),
+      subtitle: Text(
+        organization.name,
+        style: Theme.of(context).textTheme.subtitle2.apply(
+          color: Colors.black26
+        ),
       ),
     );
   }
