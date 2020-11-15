@@ -18,6 +18,7 @@ class SettingsViewModel {
     this.projects,
     this.selectProject,
     this.selectedProject,
+    this.selectedProjects
   });
 
   final Cookie session;
@@ -33,6 +34,8 @@ class SettingsViewModel {
   final List<Project> projects;
   final Function(String id) selectProject;
   final Project selectedProject;
+
+  final List<Project> selectedProjects;
 
   static SettingsViewModel fromStore(Store<AppState> store) =>
       SettingsViewModel(
@@ -70,5 +73,6 @@ class SettingsViewModel {
           }
         },
         selectedProject: store.state.globalState.selectedProject,
+        selectedProjects: store.state.globalState.selectedProjects ?? [],
       );
 }

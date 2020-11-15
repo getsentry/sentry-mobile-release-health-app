@@ -31,6 +31,7 @@ class GlobalState {
       this.projects,
       this.selectedTab,
       this.selectedProject,
+      this.selectedProjects,
       this.releases,
       this.releasesLoading});
 
@@ -57,6 +58,7 @@ class GlobalState {
 
   final List<Project> projects;
   final Project selectedProject;
+  final List<Project> selectedProjects;
 
   final List<Release> releases;
   final bool releasesLoading;
@@ -70,6 +72,7 @@ class GlobalState {
     Organization selectedOrganization,
     List<Project> projects,
     Project selectedProject,
+    List<Project> selectedProjects,
     List<Release> releases,
     bool releasesLoading
   }) {
@@ -81,8 +84,9 @@ class GlobalState {
       selectedOrganization: selectedOrganization ?? this.selectedOrganization,
       projects: projects ?? this.projects,
       selectedProject: selectedProject ?? this.selectedProject,
+      selectedProjects: selectedProjects ?? this.selectedProjects,
       releases: releases ?? this.releases,
-      releasesLoading: releasesLoading ?? this.releasesLoading
+      releasesLoading: releasesLoading ?? this.releasesLoading,
     );
   }
 }

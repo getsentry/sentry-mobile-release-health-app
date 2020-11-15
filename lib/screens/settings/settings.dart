@@ -35,7 +35,25 @@ class _SettingsState extends State<Settings> {
         child: SettingsHeader('Projects'),
       )
     );
-    children.addAll(_buildProjects(viewModel));
+    if (viewModel.selectedProjects.isNotEmpty) {
+      children.addAll(_buildProjects(viewModel));
+    } else {
+      children.add(
+        Text(
+          "No projects selected.",
+          style: Theme.of(context).textTheme.bodyText1.apply(
+              color: Colors.grey,
+          )
+        )
+      );
+    }
+
+    children.add(
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: SettingsHeader('User'),
+        )
+    );
     children.add(
         RaisedButton(
           child: Text('Logout'),
@@ -53,7 +71,7 @@ class _SettingsState extends State<Settings> {
   }
 
   List<Widget> _buildProjects(SettingsViewModel viewModel) {
-    return viewModel.projects.map((project) => _buildProjectRow(project, viewModel.selectedOrganization)).toList();
+    return viewModel.selectedProjects.map((project) => _buildProjectRow(project, viewModel.selectedOrganization)).toList();
   }
 
   Widget _buildProjectRow(Project project, Organization organization) {
