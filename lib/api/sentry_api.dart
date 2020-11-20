@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:async/async.dart';
 
-import 'package:sentry_mobile/types/organization.dart';
-import 'package:sentry_mobile/types/project.dart';
-import 'package:sentry_mobile/types/release.dart';
-import 'package:sentry_mobile/api/api_errors.dart';
+import '../api/api_errors.dart';
+import '../types/organization.dart';
+import '../types/project.dart';
+import '../types/release.dart';
 
 class SentryApi {
   SentryApi(this.session);

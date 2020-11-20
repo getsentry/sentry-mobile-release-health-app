@@ -1,17 +1,17 @@
 import 'dart:convert';
 
-import 'package:redux/redux.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:http/http.dart' as http;
-import 'package:sentry_mobile/types/breadcrumb.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:redux/redux.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:url_launcher/url_launcher.dart';
 
 import 'breadcrumb_viewer.dart';
 import 'context_view.dart';
 import 'redux/state/app_state.dart';
 import 'text_theme_ext.dart';
+import 'types/breadcrumb.dart';
 import 'types/event.dart';
 import 'types/group.dart';
 import 'types/organization.dart';

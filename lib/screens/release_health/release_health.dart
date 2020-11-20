@@ -1,16 +1,13 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:http/http.dart' as http;
-import 'package:sentry_mobile/redux/state/app_state.dart';
-import 'package:sentry_mobile/screens/release_health/release_card.dart';
-import 'package:sentry_mobile/screens/release_health/release_health_view_model.dart';
-import 'package:sentry_mobile/types/release.dart';
+
+import '../../redux/state/app_state.dart';
+import 'release_card.dart';
+import 'release_health_view_model.dart';
 
 class ReleaseHealth extends StatefulWidget {
   const ReleaseHealth({Key key}) : super(key: key);

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
-import 'package:sentry_mobile/types/project.dart';
-import 'package:sentry_mobile/types/release.dart';
+
+import '../../types/project.dart';
+import '../../types/release.dart';
 
 class ReleaseCard extends StatelessWidget {
   ReleaseCard({@required this.project, @required this.release});

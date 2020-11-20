@@ -1,9 +1,10 @@
 import 'package:redux/redux.dart';
-import 'package:sentry_mobile/redux/actions.dart';
-import 'package:sentry_mobile/redux/state/app_state.dart';
-import 'package:sentry_mobile/types/organization.dart';
-import 'package:sentry_mobile/types/project.dart';
-import 'package:sentry_mobile/types/release.dart';
+
+import '../../redux/actions.dart';
+import '../../redux/state/app_state.dart';
+import '../../types/organization.dart';
+import '../../types/project.dart';
+import '../../types/release.dart';
 
 class ReleaseHealthViewModel {
   ReleaseHealthViewModel(this._store, this._organization, this.project, this.releases, this.loading);

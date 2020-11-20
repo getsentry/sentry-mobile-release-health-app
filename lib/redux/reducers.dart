@@ -1,6 +1,7 @@
 import 'package:redux/redux.dart';
-import 'package:sentry_mobile/redux/actions.dart';
-import 'package:sentry_mobile/redux/state/app_state.dart';
+
+import 'actions.dart';
+import 'state/app_state.dart';
 
 AppState appReducer(AppState state, dynamic action) =>
     AppState(

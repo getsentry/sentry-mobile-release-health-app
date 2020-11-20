@@ -1,9 +1,8 @@
-
 import 'dart:io';
 
 import 'package:redux/redux.dart';
-import 'package:sentry_mobile/redux/actions.dart';
-import 'package:sentry_mobile/redux/state/app_state.dart';
+import '../../redux/actions.dart';
+import '../../redux/state/app_state.dart';
 
 class LoginViewModel {
   LoginViewModel(this.store);

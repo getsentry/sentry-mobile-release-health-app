@@ -7,11 +7,12 @@ import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:http/http.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:redux/redux.dart';
-import 'package:sentry_mobile/redux/actions.dart';
-import 'package:sentry_mobile/redux/state/app_state.dart';
-import 'package:sentry_mobile/types/organization.dart';
-import 'package:sentry_mobile/types/project.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
+
+import 'redux/actions.dart';
+import 'redux/state/app_state.dart';
+import 'types/organization.dart';
+import 'types/project.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key key}) : super(key: key);

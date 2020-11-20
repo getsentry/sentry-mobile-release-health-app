@@ -2,15 +2,14 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
 import 'package:redux/redux.dart';
-import 'package:sentry_mobile/redux/actions.dart';
-import 'package:sentry_mobile/redux/state/app_state.dart';
-import 'package:sentry_mobile/types/organization.dart';
-import 'package:sentry_mobile/types/project.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:sentry_mobile/api/sentry_api.dart';
+import '../api/sentry_api.dart';
+import '../types/organization.dart';
+import '../types/project.dart';
+import 'actions.dart';
+import 'state/app_state.dart';
 
 void apiMiddleware(
     Store<AppState> store, dynamic action, NextDispatcher next) async {

@@ -1,12 +1,12 @@
 import 'dart:io';
 
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
-import 'package:sentry_mobile/redux/state/app_state.dart';
-import 'package:sentry_mobile/screens/login/login_view_model.dart';
-import 'package:sentry_mobile/screens/login/login_web_view.dart';
-import 'package:async/async.dart';
+import '../../redux/state/app_state.dart';
+import 'login_view_model.dart';
+import 'login_web_view.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
