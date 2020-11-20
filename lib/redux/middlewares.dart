@@ -48,7 +48,7 @@ void apiMiddleware(
 
   if (action is FetchReleasesAction) {
     try {
-      final releases = await api.releases(action.organizationSlug, action.projectId);
+      final releases = await api.releases(organizationSlug: action.organizationSlug, projectId: action.projectId);
       store.dispatch(FetchReleasesSuccessAction(releases));
     } catch (e) {
       store.dispatch(FetchReleasesFailureAction(e));
@@ -57,7 +57,7 @@ void apiMiddleware(
 
   if (action is FetchReleaseAction) {
     try {
-      final release = await api.release(action.projectId, action.releaseId);
+      final release = await api.release(projectId: action.projectId, releaseId: action.releaseId);
       store.dispatch(FetchReleaseSuccessAction(release));
     } catch (e) {
       store.dispatch(FetchReleaseFailureAction(e));
