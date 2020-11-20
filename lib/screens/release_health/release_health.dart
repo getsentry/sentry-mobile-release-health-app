@@ -63,8 +63,8 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                         setState(() => _index = index),
                     itemBuilder: (context, index) {
                       return ReleaseCard(
-                          project: viewModel.project,
-                          release: viewModel.releases[index],
+                          viewModel.project,
+                          viewModel.releases[index],
                       );
                     },
                   )),

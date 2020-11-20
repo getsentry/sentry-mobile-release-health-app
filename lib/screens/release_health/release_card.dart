@@ -5,7 +5,7 @@ import '../../types/project.dart';
 import '../../types/release.dart';
 
 class ReleaseCard extends StatelessWidget {
-  ReleaseCard({@required this.project, @required this.release});
+  ReleaseCard(this.project , this.release);
 
   final Project project;
   final Release release;
