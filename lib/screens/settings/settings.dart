@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:sentry_mobile/redux/state/app_state.dart';
+import 'package:sentry_mobile/screens/project_picker/project_picker.dart';
 import 'package:sentry_mobile/screens/settings/settings_header.dart';
 import 'package:sentry_mobile/screens/settings/settings_view_model.dart';
 import 'package:sentry_mobile/types/organization.dart';
@@ -47,7 +48,17 @@ class _SettingsState extends State<Settings> {
         )
       );
     }
-
+    children.add(
+        RaisedButton(
+          child: Text('Add projects'),
+          onPressed: () =>
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                  builder: (BuildContext context) => ProjectPicker()
+              ),
+            )
+        )
+    );
     children.add(
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),

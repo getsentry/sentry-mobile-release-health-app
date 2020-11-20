@@ -17,7 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 Future<Store<AppState>> createStore() async {
   final prefs = await SharedPreferences.getInstance();
   final secStorage = FlutterSecureStorage();
-  return Store(
+  return Store<AppState>(
     appReducer,
     initialState: AppState.initial(),
     middleware: [
@@ -43,13 +43,16 @@ void main() async {
 
   store.dispatch(RehydrateAction());
 
-  runApp(SentryMobile(store: store));
+  runApp(
+      StoreProvider<AppState>(
+        store: store,
+        child: SentryMobile()
+      )
+  );
 }
 
 class SentryMobile extends StatelessWidget {
-  SentryMobile({this.store});
-
-  final Store<AppState> store;
+  SentryMobile();
 
   @override
   Widget build(BuildContext context) {
@@ -115,18 +118,15 @@ class SentryMobile extends StatelessWidget {
                     color: Colors.black45,
                   )),
             )),
-        home: StoreProvider(
-          store: store,
-          child: StoreConnector<AppState, AppState>(
-            builder: (_, state) {
-              if (state.globalState.session == null) {
-                return LoginScreen();
-              } else {
-                return MainScreen();
-              }
-            },
-            converter: (store) => store.state,
-          ),
+        home: StoreConnector<AppState, AppState>(
+          converter: (store) => store.state,
+          builder: (_, state) {
+            if (state.globalState.session == null) {
+              return LoginScreen();
+            } else {
+              return MainScreen();
+            }
+          },
         )
     );
   }
