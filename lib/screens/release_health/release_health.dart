@@ -19,7 +19,7 @@ class ReleaseHealth extends StatefulWidget {
 class _ReleaseHealthState extends State<ReleaseHealth> {
   int _index = 0;
 
-  var _refreshKey = GlobalKey<RefreshIndicatorState>();
+  final _refreshKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   Widget build(BuildContext context) {

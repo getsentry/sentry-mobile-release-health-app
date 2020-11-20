@@ -7,22 +7,19 @@ import '../../types/project.dart';
 import '../../types/release.dart';
 
 class ReleaseHealthViewModel {
-  ReleaseHealthViewModel(this._store, this._organization, this.project, this.releases, this.loading);
+  ReleaseHealthViewModel.fromStore(Store<AppState> store)
+      : _store = store,
+        _organization = store.state.globalState.selectedOrganization,
+        project = store.state.globalState.selectedProject,
+        releases = store.state.globalState.releases,
+        loading = store.state.globalState.releasesLoading && store.state.globalState.releases.isEmpty;
+
   final Store<AppState> _store;
   final Organization _organization;
 
   final Project project;
-  List<Release> releases;
-  bool loading;
-
-  static ReleaseHealthViewModel fromStore(Store<AppState> store) =>
-      ReleaseHealthViewModel(
-          store,
-          store.state.globalState.selectedOrganization,
-          store.state.globalState.selectedProject,
-          store.state.globalState.releases,
-          store.state.globalState.releasesLoading && store.state.globalState.releases.isEmpty
-      );
+  final List<Release> releases;
+  final bool loading;
 
   void fetchReleases() {
     _store.dispatch(FetchReleasesAction(_organization.slug, project.id));
