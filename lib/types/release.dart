@@ -35,9 +35,9 @@ class Release {
 }
 
 class Stat {
-  Stat.fromJson(dynamic json)
-    : timestamp = ((json as List).map((e) => e as int)?.toList())?.first ?? 0,
-      value = ((json as List).map((e) => e as int)?.toList())?.last ?? 0;
+  Stat.fromJson(List json)
+    : timestamp = json.map((e) => e as int)?.first ?? 0,
+      value = json.map((e) => e as int)?.last ?? 0;
 
   int timestamp;
   int value;
