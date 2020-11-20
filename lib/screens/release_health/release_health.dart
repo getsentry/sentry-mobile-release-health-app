@@ -19,7 +19,7 @@ class ReleaseHealth extends StatefulWidget {
 class _ReleaseHealthState extends State<ReleaseHealth> {
   int _index = 0;
 
-  var refreshKey = GlobalKey<RefreshIndicatorState>();
+  var _refreshKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   Widget build(BuildContext context) {
@@ -41,14 +41,14 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
 
       WidgetsBinding.instance.addPostFrameCallback( ( Duration duration ) {
         if (viewModel.loading) {
-          refreshKey.currentState.show();
+          _refreshKey.currentState.show();
         } else {
-          refreshKey.currentState.deactivate();
+          _refreshKey.currentState.deactivate();
         }
       });
 
       return RefreshIndicator(
-        key: refreshKey,
+        key: _refreshKey,
         backgroundColor: Colors.white,
         color: Color(0xff81B4FE),
         child: SingleChildScrollView(
