@@ -33,23 +33,39 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
       ),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _createListTile(_TypeToThrow.EXCEPTION),
-            _createListTile(_TypeToThrow.ERROR),
-            _createListTile(_TypeToThrow.STRING)
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
+              child: Text("Non-Fatal", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            ),
+            _createListTile('Sentry.captureException', _TypeToThrow.EXCEPTION),
+            _createListTile('Sentry.captureException', _TypeToThrow.ERROR),
+            _createListTile('Sentry.captureException', _TypeToThrow.STRING),
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
+              child: Text("Fatal", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            ),
+            _createListTile('Fatal Exception', _TypeToThrow.EXCEPTION, fatal: true),
+            _createListTile('Fatal Exception', _TypeToThrow.ERROR, fatal: true),
+            _createListTile('Fatal Exception', _TypeToThrow.STRING, fatal: true),
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
+              child: Text("Native", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            ),
           ],
         ),
       )
     );
   }
 
-  Widget _createListTile(_TypeToThrow typeToThrow) {
+  Widget _createListTile(String title, _TypeToThrow typeToThrow, {bool fatal = false}) {
     return ListTile(
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-              'Sentry.captureException',
+              title,
               style: TextStyle(color: Colors.black)
           ),
           Text(
@@ -62,47 +78,60 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
           _successResults[typeToThrow]
               ? 'Success'
               : _failureResults[typeToThrow] != null
-              ? 'Failure: ${_failureResults[typeToThrow]}'
-              : '--'
+                ? 'Failure: ${_failureResults[typeToThrow]}'
+                : '--'
       ),
       trailing: RaisedButton(
-        child: _loading ? Text('Loading...') : Text('Send'),
-        onPressed: _loading ? null : () => _captureException(typeToThrow),
+        child: _loading ? Text('Loading...') : fatal ? Text('Crash!') : Text('Send'),
+        onPressed: _loading ? null : () => _captureException(typeToThrow, fatal),
       ),
     );
   }
 
-  void _captureException(_TypeToThrow typeToThrow) {
+  void _captureException(_TypeToThrow typeToThrow, bool fatal) {
     setState(() {
-      _loading = true;
+      _loading = !fatal;
     });
-    try {
-      switch(typeToThrow) {
-        case _TypeToThrow.EXCEPTION:
-          throw Exception('Sentry.captureException - ${typeToThrow.name()} Instance - operatingSystem: ${Platform.operatingSystem}');
-          break;
-        case _TypeToThrow.ERROR:
-          throw _SampleError('Sentry.captureException - ${typeToThrow.name()} Instance - operatingSystem: ${Platform.operatingSystem}');
-          break;
-        case _TypeToThrow.STRING:
-          throw 'Sentry.captureException - ${typeToThrow.name()} Instance - operatingSystem: ${Platform.operatingSystem}';
-          break;
-      }
-      
-    } catch (exception, stackTrace) {
-      Sentry.captureException(exception, stackTrace: stackTrace)
-          .then((value) => {
-            setState(() {
-              _loading = false;
-              _successResults[typeToThrow] = true;
-            })
+
+    final title = fatal ? 'Fatal Exception' : 'Sentry.captureException';
+
+    dynamic exceptionObject;
+
+    switch(typeToThrow) {
+      case _TypeToThrow.EXCEPTION:
+        exceptionObject = Exception('$title - ${typeToThrow.name()} Instance - operatingSystem: ${Platform.operatingSystem}');
+        break;
+      case _TypeToThrow.ERROR:
+        exceptionObject = _SampleError('$title - ${typeToThrow.name()} Instance - operatingSystem: ${Platform.operatingSystem}');
+        break;
+      case _TypeToThrow.STRING:
+        exceptionObject = '$title - ${typeToThrow.name()} Instance - operatingSystem: ${Platform.operatingSystem}';
+        break;
+    }
+
+    if (fatal) {
+      setState(() {
+        _successResults[typeToThrow] = true;
+      });
+      throw exceptionObject;
+    } else {
+      try {
+        throw exceptionObject;
+      } catch (exception, stackTrace) {
+        Sentry.captureException(exception, stackTrace: stackTrace)
+            .then((value) => {
+          setState(() {
+            _loading = false;
+            _successResults[typeToThrow] = true;
           })
-          .catchError((error) => {
-            setState(() {
-              _loading = false;
-              _failureResults[typeToThrow] = Error.safeToString(error);
-            })
-          });
+        })
+            .catchError((error) => {
+          setState(() {
+            _loading = false;
+            _failureResults[typeToThrow] = Error.safeToString(error);
+          })
+        });
+      }
     }
   }
 }
@@ -135,8 +164,8 @@ class _SampleError extends Error {
   @override
   String toString() {
     return message != null
-        ? 'json error: ${Error.safeToString(message)}'
-        : 'Unknown json error';
+        ? 'Sample error: ${Error.safeToString(message)}'
+        : 'Unknown error';
   }
 }
 
