@@ -47,15 +47,25 @@ Future<void> main() async {
         options.dsn = 'https://cb0fad6f5d4e42ebb9c956cb0463edc9@o447951.ingest.sentry.io/5428562';
       },
       () {
-        runApp(SentryMobile(store: store));
+        runApp(StoreProvider(
+          store: store,
+          child: SentryMobile(),
+        ));
       }
   );
+
+  try {
+    throw Exception("throw Exception instance");
+  } catch (exception, stackTrace) {
+    await Sentry.captureException(
+      exception,
+      stackTrace: stackTrace,
+    );
+  }
 }
 
 class SentryMobile extends StatelessWidget {
-  SentryMobile({this.store});
-
-  final Store<AppState> store;
+  SentryMobile();
 
   @override
   Widget build(BuildContext context) {
@@ -121,18 +131,15 @@ class SentryMobile extends StatelessWidget {
                     color: Colors.black45,
                   )),
             )),
-        home: StoreProvider(
-          store: store,
-          child: StoreConnector<AppState, AppState>(
-            builder: (_, state) {
-              if (state.globalState.session == null) {
-                return LoginScreen();
-              } else {
-                return MainScreen();
-              }
-            },
-            converter: (store) => store.state,
-          ),
+        home: StoreConnector<AppState, AppState>(
+          builder: (_, state) {
+            if (state.globalState.session == null) {
+              return LoginScreen();
+            } else {
+              return MainScreen();
+            }
+          },
+          converter: (store) => store.state,
         )
     );
   }
