@@ -53,15 +53,6 @@ Future<void> main() async {
         ));
       }
   );
-
-  try {
-    throw Exception("throw Exception instance");
-  } catch (exception, stackTrace) {
-    await Sentry.captureException(
-      exception,
-      stackTrace: stackTrace,
-    );
-  }
 }
 
 class SentryMobile extends StatelessWidget {

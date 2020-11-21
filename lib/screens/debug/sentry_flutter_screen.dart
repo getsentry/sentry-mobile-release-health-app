@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 class SentryFlutterScreen extends StatefulWidget {
@@ -10,7 +11,7 @@ class SentryFlutterScreen extends StatefulWidget {
 }
 
 class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
-
+  static const platform = MethodChannel('sentry-mobile.sentry.io/nativeCrash');
   bool _loading = false;
 
   final _successResults = {
@@ -53,6 +54,10 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
               padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
               child: Text("Native", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
             ),
+            _createNativeListTile(_NativePlatform.Android, true),
+            _createNativeListTile(_NativePlatform.Android, false),
+            _createNativeListTile(_NativePlatform.iOS, true),
+            _createNativeListTile(_NativePlatform.iOS, false)
           ],
         ),
       )
@@ -84,6 +89,25 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
       trailing: RaisedButton(
         child: _loading ? Text('Loading...') : fatal ? Text('Crash!') : Text('Send'),
         onPressed: _loading ? null : () => _captureException(typeToThrow, fatal),
+      ),
+    );
+  }
+
+  Widget _createNativeListTile(_NativePlatform nativePlatform, bool primaryLanguage) {
+    return ListTile(
+      title: Text(
+          nativePlatform == _NativePlatform.Android ? 'Android' : 'iOS',
+          style: TextStyle(color: Colors.black)
+      ),
+      subtitle: Text(
+          nativePlatform == _NativePlatform.Android
+            ? primaryLanguage ? 'Kotlin' : 'Java'
+            : primaryLanguage ? 'Swift' : 'Objective C',
+          style: TextStyle(color: Colors.deepPurpleAccent)
+      ),
+      trailing: RaisedButton(
+        child: Text('Crash!'),
+        onPressed: () => _callCrashNative(nativePlatform, primaryLanguage),
       ),
     );
   }
@@ -134,10 +158,32 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
       }
     }
   }
+
+  Future<void> _callCrashNative(_NativePlatform nativePlatform, bool primaryLanguage) async {
+    switch(nativePlatform) {
+      case _NativePlatform.iOS:
+        if (primaryLanguage) {
+          await platform.invokeMethod('crashSwift');
+        } else {
+          await platform.invokeMethod('crashObjectiveC');
+        }
+        break;
+      case _NativePlatform.Android:
+        if (primaryLanguage) {
+          await platform.invokeMethod('crashKotlin');
+        } else {
+          await platform.invokeMethod('crashJava');
+        }
+        break;
+    }
+  }
 }
 
 enum _TypeToThrow {
   EXCEPTION, ERROR, STRING
+}
+enum _NativePlatform {
+  iOS, Android
 }
 
 extension _TypeToThrowPrint on _TypeToThrow {
