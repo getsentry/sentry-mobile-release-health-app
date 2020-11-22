@@ -19,7 +19,7 @@ import Flutter
                 if call.method == "crashSwift" {
                     self?.crashSwift()
                 } else if call.method == "crashObjectiveC" {
-                    NativeCrashObjectiveC.crashingMethod()
+                    NativeCrashObjectiveC.crashingFunction()
                 }
             }
         }

@@ -9,15 +9,15 @@
 
 @interface NativeCrashObjectiveC : NSObject
 
-+ (void)crashingMethod;
++ (void)crashingFunction;
 
 @end
 
 @implementation NativeCrashObjectiveC
 
 + (void)crashingFunction {
-    NSString *string = nil;
-    [string length];
+    int* p = (int*)1;
+    *p = 0; // EXC_BAD_ACCESS
 }
 
 @end

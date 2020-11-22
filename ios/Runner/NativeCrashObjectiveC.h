@@ -10,7 +10,7 @@
 
 @interface NativeCrashObjectiveC : NSObject
 
-+ (void)crashingMethod;
++ (void)crashingFunction;
 
 @end
 
