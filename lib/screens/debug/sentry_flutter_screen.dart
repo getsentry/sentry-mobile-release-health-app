@@ -14,13 +14,19 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
   static const platform = MethodChannel('sentry-mobile.sentry.io/nativeCrash');
   bool _loading = false;
 
-  final _successResults = {
+  final _successResultsHandled = {
     _TypeToThrow.EXCEPTION: false,
     _TypeToThrow.ERROR: false,
     _TypeToThrow.STRING: false,
   };
 
-  final Map<_TypeToThrow, String> _failureResults = {
+  final _successResultsUnhandled = {
+    _TypeToThrow.EXCEPTION: false,
+    _TypeToThrow.ERROR: false,
+    _TypeToThrow.STRING: false,
+  };
+
+  final Map<_TypeToThrow, String> _failureResultsHandled = {
     _TypeToThrow.EXCEPTION: null,
     _TypeToThrow.ERROR: null,
     _TypeToThrow.STRING: null,
@@ -65,6 +71,19 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
   }
 
   Widget _createListTile(String title, _TypeToThrow typeToThrow, {bool fatal = false}) {
+    var subtitle = '';
+    if (!fatal) {
+      subtitle = _successResultsHandled[typeToThrow]
+          ? 'Success'
+          : _failureResultsHandled[typeToThrow] != null
+            ? 'Failure: ${_failureResultsHandled[typeToThrow]}'
+            : '--';
+    } {
+      subtitle = _successResultsUnhandled[typeToThrow]
+          ? 'Success'
+          : '--';
+    }
+
     return ListTile(
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,11 +99,7 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
         ],
       ),
       subtitle: Text(
-          _successResults[typeToThrow]
-              ? 'Success'
-              : _failureResults[typeToThrow] != null
-                ? 'Failure: ${_failureResults[typeToThrow]}'
-                : '--'
+          subtitle
       ),
       trailing: RaisedButton(
         child: _loading ? Text('Loading...') : fatal ? Text('Throw') : Text('Send'),
@@ -135,7 +150,7 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
 
     if (fatal) {
       setState(() {
-        _successResults[typeToThrow] = true;
+        _successResultsHandled[typeToThrow] = true;
       });
       throw exceptionObject;
     } else {
@@ -146,13 +161,13 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
             .then((value) => {
           setState(() {
             _loading = false;
-            _successResults[typeToThrow] = true;
+            _successResultsHandled[typeToThrow] = true;
           })
         })
             .catchError((error) => {
           setState(() {
             _loading = false;
-            _failureResults[typeToThrow] = Error.safeToString(error);
+            _failureResultsHandled[typeToThrow] = Error.safeToString(error);
           })
         });
       }
