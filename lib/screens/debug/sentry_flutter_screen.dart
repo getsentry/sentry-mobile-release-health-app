@@ -78,7 +78,7 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
           : _failureResultsHandled[typeToThrow] != null
             ? 'Failure: ${_failureResultsHandled[typeToThrow]}'
             : '--';
-    } {
+    } else {
       subtitle = _successResultsUnhandled[typeToThrow]
           ? 'Success'
           : '--';
@@ -132,7 +132,7 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
       _loading = !fatal;
     });
 
-    final title = fatal ? 'Fatal Exception' : 'Sentry.captureException';
+    final title = fatal ? 'Unhandled Exception' : 'Sentry.captureException';
 
     dynamic exceptionObject;
 
@@ -150,7 +150,7 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
 
     if (fatal) {
       setState(() {
-        _successResultsHandled[typeToThrow] = true;
+        _successResultsUnhandled[typeToThrow] = true;
       });
       throw exceptionObject;
     } else {
