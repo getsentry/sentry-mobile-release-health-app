@@ -288,9 +288,10 @@ class HealthCard extends StatelessWidget {
   }
 
   String getIcon() {
-    return value == null
-      ? null
-      : value > warningThreshold
+    if (value == null) {
+      return null;
+    }
+    return value > warningThreshold
         ? 'assets/status-green.png'
         : value > dangerThreshold
             ? 'assets/status-orange.png'
@@ -302,11 +303,12 @@ class HealthCard extends StatelessWidget {
   }
 
   String getTrendIcon() {
-    return change == 0
-        ? null
-        : change > 0
-            ? 'assets/trend-up-green.png'
-            : 'assets/trend-down-red.png';
+    if (change == 0) {
+      return null;
+    }
+    return change > 0
+      ? 'assets/trend-up-green.png'
+      : 'assets/trend-down-red.png';
   }
 
   @override
