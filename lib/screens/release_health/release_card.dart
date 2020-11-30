@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
-import 'package:sentry_mobile/types/project.dart';
-import 'package:sentry_mobile/types/release.dart';
+import '../../types/project.dart';
+import '../../types/release.dart';
 
 class ReleaseCard extends StatelessWidget {
-  ReleaseCard({@required this.project, @required this.release});
+  ReleaseCard(this.project , this.release);
 
   final Project project;
   final Release release;
@@ -105,7 +105,7 @@ class ReleaseCard extends StatelessWidget {
   }
 
   Widget _platforms(BuildContext context, List<String> platforms) {
-    final platformWidgets = platforms.map((item) => _platform(context, item)).toList();
+    final platformWidgets = platforms.take(3).map((item) => _platform(context, item)).toList();
     final List<Widget> all = [];
     for (final platformWidget in platformWidgets) {
       all.add(platformWidget);

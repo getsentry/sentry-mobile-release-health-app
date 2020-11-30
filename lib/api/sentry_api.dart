@@ -1,13 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:http/http.dart';
 import 'package:async/async.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
-import 'package:sentry_mobile/types/organization.dart';
-import 'package:sentry_mobile/types/project.dart';
-import 'package:sentry_mobile/types/release.dart';
-import 'package:sentry_mobile/api/api_errors.dart';
+import '../api/api_errors.dart';
+import '../types/organization.dart';
+import '../types/project.dart';
+import '../types/release.dart';
 
 class SentryApi {
   SentryApi(this.session);
@@ -32,7 +33,7 @@ class SentryApi {
     return _parseResponseList(response, (jsonMap) => Project.fromJson(jsonMap)).asFuture;
   }
 
-  Future<List<Release>> releases(String organizationSlug, String projectId, {int perPage = 25, int health = 1, int flatten = 0, String summaryStatsPeriod = '24h'}) async {
+  Future<List<Release>> releases({@required String organizationSlug, @required String projectId, int perPage = 25, int health = 1, int flatten = 0, String summaryStatsPeriod = '24h'}) async {
     final queryParameters = {
       'project': projectId,
       'perPage': '$perPage',
@@ -46,7 +47,7 @@ class SentryApi {
     return _parseResponseList(response, (jsonMap) => Release.fromJson(jsonMap)).asFuture;
   }
 
-  Future<Release> release(String projectId, String releaseId, {int health = 1, String summaryStatsPeriod = '24h'}) async {
+  Future<Release> release({@required String projectId, @required String releaseId, int health = 1, String summaryStatsPeriod = '24h'}) async {
     final queryParameters = {
       'health': '$health',
       'summaryStatsPeriod': summaryStatsPeriod,

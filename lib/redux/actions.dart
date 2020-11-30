@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:sentry_mobile/types/organization.dart';
-import 'package:sentry_mobile/types/project.dart';
-import 'package:sentry_mobile/types/release.dart';
+import '../types/organization.dart';
+import '../types/project.dart';
+import '../types/release.dart';
 
 class RehydrateAction {
   RehydrateAction();

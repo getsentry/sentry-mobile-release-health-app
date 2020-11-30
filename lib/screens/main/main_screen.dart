@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
-import 'package:sentry_mobile/redux/actions.dart';
-import 'package:sentry_mobile/redux/state/app_state.dart';
-
-import 'package:sentry_mobile/issues.dart';
-import 'package:sentry_mobile/screens/release_health/release_health.dart';
-import 'package:sentry_mobile/screens/settings/settings.dart';
+import '../../issues.dart';
+import '../../redux/actions.dart';
+import '../../redux/state/app_state.dart';
+import '../release_health/release_health.dart';
+import '../settings/settings.dart';
 
 class MainScreen extends StatefulWidget {
   @override

@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:sentry_mobile/types/organization.dart';
-import 'package:sentry_mobile/types/project.dart';
-import 'package:sentry_mobile/types/release.dart';
+import '../../types/organization.dart';
+import '../../types/project.dart';
+import '../../types/release.dart';
 
 class AppState {
   AppState({this.globalState});
@@ -44,6 +44,7 @@ class GlobalState {
       projects: [],
       selectedTab: 0,
       selectedProject: null,
+      selectedProjects: [],
       releases: [],
       releasesLoading: false
     );
@@ -86,7 +87,7 @@ class GlobalState {
       selectedProject: selectedProject ?? this.selectedProject,
       selectedProjects: selectedProjects ?? this.selectedProjects,
       releases: releases ?? this.releases,
-      releasesLoading: releasesLoading ?? this.releasesLoading,
+      releasesLoading: releasesLoading ?? this.releasesLoading
     );
   }
 }

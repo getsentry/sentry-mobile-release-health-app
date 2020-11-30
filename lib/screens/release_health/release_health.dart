@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -7,10 +6,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:http/http.dart' as http;
-import 'package:sentry_mobile/redux/state/app_state.dart';
-import 'package:sentry_mobile/screens/release_health/release_card.dart';
-import 'package:sentry_mobile/screens/release_health/release_health_view_model.dart';
-import 'package:sentry_mobile/types/release.dart';
+
+import '../../redux/state/app_state.dart';
+import 'release_card.dart';
+import 'release_health_view_model.dart';
 
 class ReleaseHealth extends StatefulWidget {
   const ReleaseHealth({Key key}) : super(key: key);
@@ -22,7 +21,8 @@ class ReleaseHealth extends StatefulWidget {
 class _ReleaseHealthState extends State<ReleaseHealth> {
   int _index = 0;
 
-  var refreshKey = GlobalKey<RefreshIndicatorState>();
+
+  final _refreshKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   Widget build(BuildContext context) {
@@ -44,14 +44,14 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
 
       WidgetsBinding.instance.addPostFrameCallback( ( Duration duration ) {
         if (viewModel.loading) {
-          refreshKey.currentState.show();
+          _refreshKey.currentState.show();
         } else {
-          refreshKey.currentState.deactivate();
+          _refreshKey.currentState.deactivate();
         }
       });
 
       return RefreshIndicator(
-        key: refreshKey,
+        key: _refreshKey,
         backgroundColor: Colors.white,
         color: Color(0xff81B4FE),
         child: SingleChildScrollView(
@@ -66,8 +66,8 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                         setState(() => _index = index),
                     itemBuilder: (context, index) {
                       return ReleaseCard(
-                          project: viewModel.project,
-                          release: viewModel.releases[index],
+                          viewModel.project,
+                          viewModel.releases[index],
                       );
                     },
                   )),
@@ -291,9 +291,10 @@ class HealthCard extends StatelessWidget {
   }
 
   String getIcon() {
-    return value == null
-      ? null
-      : value > warningThreshold
+    if (value == null) {
+      return null;
+    }
+    return value > warningThreshold
         ? 'assets/status-green.png'
         : value > dangerThreshold
             ? 'assets/status-orange.png'
@@ -305,11 +306,12 @@ class HealthCard extends StatelessWidget {
   }
 
   String getTrendIcon() {
-    return change == 0
-        ? null
-        : change > 0
-            ? 'assets/trend-up-green.png'
-            : 'assets/trend-down-red.png';
+    if (change == 0) {
+      return null;
+    }
+    return change > 0
+      ? 'assets/trend-up-green.png'
+      : 'assets/trend-down-red.png';
   }
 
   @override

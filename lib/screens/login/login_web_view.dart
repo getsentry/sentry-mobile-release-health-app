@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
-import 'package:sentry_mobile/api/api_errors.dart';
-import 'package:sentry_mobile/api/sentry_api.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
-import 'package:async/async.dart';
+
+import '../../api/api_errors.dart';
+import '../../api/sentry_api.dart';
 
 class LoginWebView extends StatefulWidget {
   LoginWebView();
