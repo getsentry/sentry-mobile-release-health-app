@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:sentry_mobile/types/organization.dart';
-import 'package:sentry_mobile/types/project.dart';
-import 'package:sentry_mobile/types/release.dart';
+import '../types/organization.dart';
+import '../types/project.dart';
+import '../types/release.dart';
 
 class RehydrateAction {
   RehydrateAction();
@@ -67,7 +67,8 @@ class SelectProjectAction {
 }
 
 class FetchReleasesAction {
-  FetchReleasesAction(this.projectId);
+  FetchReleasesAction(this.organizationSlug, this.projectId);
+  final String organizationSlug;
   final String projectId;
 }
 

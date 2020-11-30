@@ -1,6 +1,7 @@
 import 'package:redux/redux.dart';
-import 'package:sentry_mobile/redux/actions.dart';
-import 'package:sentry_mobile/redux/state/app_state.dart';
+
+import 'actions.dart';
+import 'state/app_state.dart';
 
 AppState appReducer(AppState state, dynamic action) =>
     AppState(
@@ -17,6 +18,9 @@ final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, SelectOrganizationAction>(_selectOrganizationAction),
   TypedReducer<GlobalState, FetchProjectsSuccessAction>(_fetchProjectSuccessAction),
   TypedReducer<GlobalState, SelectProjectAction>(_selectProjectAction),
+  TypedReducer<GlobalState, FetchReleasesAction>(_fetchReleasesAction),
+  TypedReducer<GlobalState, FetchReleasesSuccessAction>(_fetchReleasesSuccessAction),
+  TypedReducer<GlobalState, FetchReleasesFailureAction>(_fetchReleasesFailureAction),
 ]);
 
 GlobalState _switchTabAction(GlobalState state, SwitchTabAction action) {
@@ -49,6 +53,18 @@ GlobalState _fetchProjectSuccessAction(GlobalState state, FetchProjectsSuccessAc
 
 GlobalState _selectProjectAction(GlobalState state, SelectProjectAction action) {
   return state.copyWith(selectedProject: action.payload);
+}
+
+GlobalState _fetchReleasesAction(GlobalState state, FetchReleasesAction action) {
+  return state.copyWith(releasesLoading: true);
+}
+
+GlobalState _fetchReleasesSuccessAction(GlobalState state, FetchReleasesSuccessAction action) {
+  return state.copyWith(releases: action.payload, releasesLoading: false);
+}
+
+GlobalState _fetchReleasesFailureAction(GlobalState state, FetchReleasesFailureAction action) {
+  return state.copyWith(releasesLoading: false);
 }
 
 // -----------------------------

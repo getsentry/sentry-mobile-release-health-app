@@ -1,27 +1,13 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
-import 'package:http/http.dart' as http;
-import 'package:sentry_mobile/release_card.dart';
-import 'package:sentry_mobile/types/release.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 
-Future<List<Release>> fetchReleases() async {
-  final response = await http.get('https://mminar.com/releases.json');
-
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    final responseJson = json.decode(response.body) as List;
-    return responseJson.map((dynamic r) => Release.fromJson(r)).toList();
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load Release');
-  }
-}
+import '../../redux/state/app_state.dart';
+import 'release_card.dart';
+import 'release_health_view_model.dart';
 
 class ReleaseHealth extends StatefulWidget {
   const ReleaseHealth({Key key}) : super(key: key);
@@ -31,90 +17,101 @@ class ReleaseHealth extends StatefulWidget {
 }
 
 class _ReleaseHealthState extends State<ReleaseHealth> {
-  Future<List<Release>> futureReleases;
   int _index = 0;
 
-  @override
-  void initState() {
-    super.initState();
-    fetchData();
-  }
-
-  Future<void> fetchData() async {
-    setState(() {
-      futureReleases = fetchReleases();
-    });
-  }
+  final _refreshKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Release>>(
-        future: futureReleases,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return RefreshIndicator(
-              backgroundColor: Colors.white,
-              color: Color(0xff81B4FE),
-              child: SingleChildScrollView(
+    return StoreConnector<AppState, ReleaseHealthViewModel>(
+      builder: (_, viewModel) => _content(viewModel),
+      converter: (store) => ReleaseHealthViewModel.fromStore(store),
+    );
+  }
+
+  Widget _content(ReleaseHealthViewModel viewModel) {
+    if (viewModel.loading || viewModel.releases.isEmpty) {
+      return Center(
+        child: CircularProgressIndicator(
+          backgroundColor: Colors.white,
+          valueColor: AlwaysStoppedAnimation(Color(0xff81B4FE)),
+        ),
+      );
+    } else {
+
+      WidgetsBinding.instance.addPostFrameCallback( ( Duration duration ) {
+        if (viewModel.loading) {
+          _refreshKey.currentState.show();
+        } else {
+          _refreshKey.currentState.deactivate();
+        }
+      });
+
+      return RefreshIndicator(
+        key: _refreshKey,
+        backgroundColor: Colors.white,
+        color: Color(0xff81B4FE),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                  height: 200,
+                  child: PageView.builder(
+                    itemCount: viewModel.releases.length,
+                    controller: PageController(viewportFraction: 0.85),
+                    onPageChanged: (int index) =>
+                        setState(() => _index = index),
+                    itemBuilder: (context, index) {
+                      return ReleaseCard(
+                          viewModel.project,
+                          viewModel.releases[index],
+                      );
+                    },
+                  )),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   children: [
-                    SizedBox(
-                        height: 180,
-                        child: PageView.builder(
-                          itemCount: snapshot.data.length,
-                          controller: PageController(viewportFraction: 0.8),
-                          onPageChanged: (int index) =>
-                              setState(() => _index = index),
-                          itemBuilder: (context, index) {
-                            return ReleaseCard(
-                                release: snapshot.data[index], index: index);
-                          },
-                        )),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      child: Column(
-                        children: [
-                          HealthDivider(
-                            onSeeAll: () {},
-                            title: 'Charts',
-                            paddingBottom: 10,
-                          ),
-                          ChartRow(
-                              title: 'Issues',
-                              total: snapshot.data[_index].issues,
-                              change: 3.6), // TODO: api
-                          ChartRow(
-                              title: 'Crashes',
-                              total: snapshot.data[_index].crashes,
-                              change: -4.2), // TODO: api
-                          HealthDivider(
-                            onSeeAll: () {},
-                            title: 'Statistics',
-                            paddingBottom: 0,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              HealthCard(
-                                  title: 'Crash Free Users',
-                                  value: snapshot.data[_index].crashFreeUsers,
-                                  change: 0.04), // TODO: api
-                              HealthCard(
-                                  title: 'Crash Free Sessions',
-                                  value:
-                                      snapshot.data[_index].crashFreeSessions,
-                                  change: -0.01), // TODO: api
-                            ],
-                          )
-                        ],
-                      ),
+                    HealthDivider(
+                      onSeeAll: () {},
+                      title: 'Charts',
+                      paddingBottom: 10,
                     ),
-                    Row(children: [
-                      Expanded(
-                          child: Container(
-                        child: Echarts(
-                          option: '''
+                    ChartRow(
+                        title: 'Issues',
+                        total: viewModel.releases[_index].issues,
+                        change: 3.6), // TODO: api
+                    ChartRow(
+                        title: 'Crashes',
+                        total: viewModel.releases[_index].crashes,
+                        change: -4.2), // TODO: api
+                    HealthDivider(
+                      onSeeAll: () {},
+                      title: 'Statistics',
+                      paddingBottom: 0,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        HealthCard(
+                            title: 'Crash Free Users',
+                            value: viewModel.releases[_index].crashFreeUsers,
+                            change: 0.04), // TODO: api
+                        HealthCard(
+                            title: 'Crash Free Sessions',
+                            value: viewModel.releases[_index].crashFreeSessions,
+                            change: -0.01), // TODO: api
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              Row(children: [
+                Expanded(
+                    child: Container(
+                      child: Echarts(
+                        option: '''
                 {
                   isGroupedByDate: true,
                   showTimeInTooltip: true,
@@ -211,26 +208,19 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                   }]
                 }
               ''',
-                        ),
-                        height: 120,
-                      ))
-                    ])
-                  ],
-                ),
-              ),
-              onRefresh: fetchData,
-            );
-          } else if (snapshot.hasError) {
-            return Text('${snapshot.error}');
-          }
-
-          return Center(
-            child: CircularProgressIndicator(
-              backgroundColor: Colors.white,
-              valueColor: AlwaysStoppedAnimation(Color(0xff81B4FE)),
-            ),
-          );
-        });
+                      ),
+                      height: 120,
+                    ))
+              ])
+            ],
+          ),
+        ),
+        onRefresh: () => Future.delayed(
+          Duration(microseconds: 100),
+          () { viewModel.fetchReleases(); }
+        ),
+      );
+    }
   }
 }
 
@@ -280,7 +270,7 @@ class HealthDivider extends StatelessWidget {
 
 class HealthCard extends StatelessWidget {
   HealthCard(
-      {@required this.title, @required this.value, @required this.change});
+      {@required this.title, this.value, @required this.change});
 
   final String title;
   final double value;
@@ -290,12 +280,17 @@ class HealthCard extends StatelessWidget {
   final dangerThreshold = 98;
 
   Color getColor() {
-    return value > warningThreshold
-        ? Color(0xFF23B480)
-        : value > dangerThreshold ? Color(0xFFFFC227) : Color(0xFFEE6855);
+    return value == null
+        ? Color(0xFFB9C1D9)
+        : value > warningThreshold
+          ? Color(0xFF23B480)
+          : value > dangerThreshold ? Color(0xFFFFC227) : Color(0xFFEE6855);
   }
 
   String getIcon() {
+    if (value == null) {
+      return null;
+    }
     return value > warningThreshold
         ? 'assets/status-green.png'
         : value > dangerThreshold
@@ -308,9 +303,12 @@ class HealthCard extends StatelessWidget {
   }
 
   String getTrendIcon() {
+    if (change == 0) {
+      return null;
+    }
     return change > 0
-        ? 'assets/trend-up-green.png'
-        : 'assets/trend-down-red.png';
+      ? 'assets/trend-up-green.png'
+      : 'assets/trend-down-red.png';
   }
 
   @override
@@ -327,10 +325,10 @@ class HealthCard extends StatelessWidget {
         children: [
           Padding(
             padding: EdgeInsets.only(top: 10, bottom: 10),
-            child: Image.asset(getIcon(), height: 50),
+            child: getIcon() != null ? Image.asset(getIcon(), height: 50) : SizedBox(height: 50),
           ),
           Text(
-            value.toString() + '%',
+            value != null ? value.toString() + '%' : '--',
             style: TextStyle(
               color: getColor(),
               fontWeight: FontWeight.w500,
@@ -351,7 +349,7 @@ class HealthCard extends StatelessWidget {
               child:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Text(
-                  getTrendSign() + change.toString() + '%',
+                  change != null ? getTrendSign() + change.toString() + '%' : '--',
                   style: TextStyle(
                     color: Color(0xFFB9C1D9),
                     fontSize: 13,
@@ -359,7 +357,7 @@ class HealthCard extends StatelessWidget {
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: 5),
-                  child: Image.asset(getTrendIcon(), height: 8),
+                  child: getTrendIcon() != null ? Image.asset(getTrendIcon(), height: 8) : Spacer(),
                 )
               ])),
         ],
@@ -407,7 +405,7 @@ class ChartRow extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                         fontSize: 17,
                       ))),
-              Text('Last 12 hours',
+              Text('Last 24 hours',
                   style: TextStyle(
                     color: Color(0xFFB9C1D9),
                     fontSize: 14,

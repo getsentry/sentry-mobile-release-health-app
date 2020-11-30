@@ -9,6 +9,7 @@ class Release {
             json['projects'][0]['healthData']['crashFreeUsers'] as double,
         crashFreeSessions =
             json['projects'][0]['healthData']['crashFreeSessions'] as double,
+        stats24h = (json['projects'][0]['healthData']['stats']['24h'] as List).map((e) => Stat.fromJson(e))?.toList(),
         users24h = json['projects'][0]['healthData']['totalUsers24h'] as int,
         usersTotal = json['projects'][0]['healthData']['totalUsers'] as int,
         sessions24h =
@@ -25,9 +26,19 @@ class Release {
   final int crashes;
   final double crashFreeUsers;
   final double crashFreeSessions;
+  final List<Stat> stats24h;
   final int users24h;
   final int usersTotal;
   final int sessions24h;
   final int sessionsTotal;
   final double durationP90;
+}
+
+class Stat {
+  Stat.fromJson(List json)
+    : timestamp = json.map((e) => e as int)?.first ?? 0,
+      value = json.map((e) => e as int)?.last ?? 0;
+
+  int timestamp;
+  int value;
 }

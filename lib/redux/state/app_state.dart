@@ -1,7 +1,8 @@
 import 'dart:io';
 
-import 'package:sentry_mobile/types/organization.dart';
-import 'package:sentry_mobile/types/project.dart';
+import '../../types/organization.dart';
+import '../../types/project.dart';
+import '../../types/release.dart';
 
 class AppState {
   AppState({this.globalState});
@@ -29,7 +30,9 @@ class GlobalState {
       this.organizations,
       this.projects,
       this.selectedTab,
-      this.selectedProject});
+      this.selectedProject,
+      this.releases,
+      this.releasesLoading});
 
   factory GlobalState.initial() {
     return GlobalState(
@@ -40,6 +43,8 @@ class GlobalState {
       projects: [],
       selectedTab: 0,
       selectedProject: null,
+      releases: [],
+      releasesLoading: false
     );
   }
 
@@ -53,6 +58,9 @@ class GlobalState {
   final List<Project> projects;
   final Project selectedProject;
 
+  final List<Release> releases;
+  final bool releasesLoading;
+
   GlobalState copyWith({
     Cookie session,
     bool hydrated,
@@ -62,6 +70,8 @@ class GlobalState {
     Organization selectedOrganization,
     List<Project> projects,
     Project selectedProject,
+    List<Release> releases,
+    bool releasesLoading
   }) {
     return GlobalState(
       hydrated: hydrated ?? this.hydrated,
@@ -71,6 +81,8 @@ class GlobalState {
       selectedOrganization: selectedOrganization ?? this.selectedOrganization,
       projects: projects ?? this.projects,
       selectedProject: selectedProject ?? this.selectedProject,
+      releases: releases ?? this.releases,
+      releasesLoading: releasesLoading ?? this.releasesLoading
     );
   }
 }

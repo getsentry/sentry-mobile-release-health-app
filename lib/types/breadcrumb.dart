@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:sentry_mobile/utils/conversion.dart';
+import '../utils/conversion.dart';
 
 part 'breadcrumb.g.dart';
 

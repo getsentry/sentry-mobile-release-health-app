@@ -20,9 +20,6 @@ version: 1.0.0+1
 environment:
   sdk: ">=2.8.0 <3.0.0"
 
-dependency_overrides:
-  analyzer: "0.39.14"
-
 dependencies:
   flutter:
     sdk: flutter
@@ -50,6 +47,7 @@ dependencies:
 dev_dependencies:
   build_runner: ^1.0.0
   json_serializable: ^3.2.0
+  test: ^1.15.4
   flutter_test:
     sdk: flutter
 

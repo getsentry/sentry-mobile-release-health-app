@@ -2,16 +2,14 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
 import 'package:redux/redux.dart';
-import 'package:sentry_mobile/redux/actions.dart';
-import 'package:sentry_mobile/redux/state/app_state.dart';
-import 'package:sentry_mobile/types/organization.dart';
-import 'package:sentry_mobile/types/project.dart';
-import 'package:sentry_mobile/types/release.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:sentry_mobile/api/sentry_api.dart';
+import '../api/sentry_api.dart';
+import '../types/organization.dart';
+import '../types/project.dart';
+import 'actions.dart';
+import 'state/app_state.dart';
 
 void apiMiddleware(
     Store<AppState> store, dynamic action, NextDispatcher next) async {
@@ -32,15 +30,24 @@ void apiMiddleware(
     try {
       final projects = await api.projects(action.payload.slug);
       store.dispatch(FetchProjectsSuccessAction(projects));
-      store.dispatch(SelectProjectAction(projects.first));
     } catch (e) {
       store.dispatch(FetchProjectsFailureAction(e));
     }
   }
 
+  if (action is FetchProjectsSuccessAction) {
+    store.dispatch(SelectProjectAction(action.payload.first));
+  }
+
+  if (action is SelectProjectAction) {
+    final slug = store.state.globalState.selectedOrganization.slug;
+    final projectId = action.payload.id;
+    store.dispatch(FetchReleasesAction(slug, projectId));
+  }
+
   if (action is FetchReleasesAction) {
     try {
-      final releases = await api.releases(action.projectId);
+      final releases = await api.releases(organizationSlug: action.organizationSlug, projectId: action.projectId);
       store.dispatch(FetchReleasesSuccessAction(releases));
     } catch (e) {
       store.dispatch(FetchReleasesFailureAction(e));
@@ -49,7 +56,7 @@ void apiMiddleware(
 
   if (action is FetchReleaseAction) {
     try {
-      final release = await api.release(action.projectId, action.releaseId);
+      final release = await api.release(projectId: action.projectId, releaseId: action.releaseId);
       store.dispatch(FetchReleaseSuccessAction(release));
     } catch (e) {
       store.dispatch(FetchReleaseFailureAction(e));
