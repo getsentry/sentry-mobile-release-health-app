@@ -5,6 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:redux/redux.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'redux/actions.dart';
 import 'redux/middlewares.dart';
@@ -30,7 +31,7 @@ Future<Store<AppState>> createStore() async {
   );
 }
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   SystemChrome.setPreferredOrientations([
@@ -42,13 +43,21 @@ void main() async {
 
   store.dispatch(RehydrateAction());
 
-  runApp(SentryMobile(store: store));
+  await SentryFlutter.init(
+      (options) {
+        options.dsn = 'https://cb0fad6f5d4e42ebb9c956cb0463edc9@o447951.ingest.sentry.io/5428562';
+      },
+      () {
+        runApp(StoreProvider(
+          store: store,
+          child: SentryMobile(),
+        ));
+      }
+  );
 }
 
 class SentryMobile extends StatelessWidget {
-  SentryMobile({this.store});
-
-  final Store<AppState> store;
+  SentryMobile();
 
   @override
   Widget build(BuildContext context) {
@@ -114,18 +123,15 @@ class SentryMobile extends StatelessWidget {
                     color: Colors.black45,
                   )),
             )),
-        home: StoreProvider(
-          store: store,
-          child: StoreConnector<AppState, AppState>(
-            builder: (_, state) {
-              if (state.globalState.session == null) {
-                return LoginScreen();
-              } else {
-                return MainScreen();
-              }
-            },
-            converter: (store) => store.state,
-          ),
+        home: StoreConnector<AppState, AppState>(
+          builder: (_, state) {
+            if (state.globalState.session == null) {
+              return LoginScreen();
+            } else {
+              return MainScreen();
+            }
+          },
+          converter: (store) => store.state,
         )
     );
   }
