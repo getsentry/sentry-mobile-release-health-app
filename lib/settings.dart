@@ -9,6 +9,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:redux/redux.dart';
 import 'package:sentry_mobile/redux/actions.dart';
 import 'package:sentry_mobile/redux/state/app_state.dart';
+import 'package:sentry_mobile/screens/debug/sentry_flutter_screen.dart';
 import 'package:sentry_mobile/types/organization.dart';
 import 'package:sentry_mobile/types/project.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
@@ -30,10 +31,12 @@ class _SettingsState extends State<Settings> {
       return Container(
         child: Column(
           children: [
-            Text(
-                'You are already logged in - Expires: ${viewModel.session.expires}'),
+            GestureDetector(
+              onLongPress: _presentSentryFlutterScreen,
+              child: Text('You are already logged in - Expires: ${viewModel.session.expires}')
+            ),
             Center(
-                child: DropdownButton<String>(
+              child: DropdownButton<String>(
               value: viewModel.selectedOrganization?.id,
               icon: Icon(Icons.arrow_downward),
               iconSize: 24,
@@ -97,6 +100,13 @@ class _SettingsState extends State<Settings> {
           ),
         ],
       ),
+    );
+  }
+
+  void _presentSentryFlutterScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SentryFlutterScreen()),
     );
   }
 
