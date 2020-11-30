@@ -11,7 +11,7 @@ class SentryFlutterScreen extends StatefulWidget {
 }
 
 class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
-  static const platform = MethodChannel('sentry-mobile.sentry.io/nativeCrash');
+  static const platform = MethodChannel('app.sentrymobile.io/nativeCrash');
   bool _loading = false;
 
   final _successResultsHandled = {
