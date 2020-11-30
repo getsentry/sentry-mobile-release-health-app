@@ -106,7 +106,7 @@ class ReleaseCard extends StatelessWidget {
   }
 
   Widget _platforms(BuildContext context, List<String> platforms) {
-    final platformWidgets = platforms.map((item) => _platform(context, item)).toList();
+    final platformWidgets = platforms.take(3).map((item) => _platform(context, item)).toList();
     final List<Widget> all = [];
     for (final platformWidget in platformWidgets) {
       all.add(platformWidget);
