@@ -64,14 +64,14 @@ class SettingsViewModel {
         },
         selectedOrganization: store.state.globalState.selectedOrganization,
         // Projects
-        projects: store.state.globalState.projects,
-        selectProject: (String id) {
-          final proj = store.state.globalState.projects
-              .firstWhere((o) => o.id == id, orElse: () => null);
-          if (proj != null) {
-            store.dispatch(SelectProjectAction(proj));
-          }
-        },
+        // projects: store.state.globalState.projects,
+        // selectProject: (String id) {
+        //   final proj = store.state.globalState.projects
+        //       .firstWhere((o) => o.id == id, orElse: () => null);
+        //   if (proj != null) {
+        //     store.dispatch(SelectProjectAction(proj));
+        //   }
+        // },
         selectedProject: store.state.globalState.selectedProject,
         selectedProjects: store.state.globalState.selectedProjects ?? [],
       );

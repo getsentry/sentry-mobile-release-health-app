@@ -26,10 +26,10 @@ class GlobalState {
   GlobalState(
       {this.session,
       this.hydrated,
-      this.selectedOrganization,
-      this.organizations,
-      this.projects,
       this.selectedTab,
+      this.organizations,
+      this.projectsByOrganizationId,
+      this.selectedOrganization,
       this.selectedProject,
       this.selectedProjects,
       this.releases,
@@ -37,12 +37,12 @@ class GlobalState {
 
   factory GlobalState.initial() {
     return GlobalState(
-      hydrated: false,
       session: null,
-      organizations: [],
-      selectedOrganization: null,
-      projects: [],
+      hydrated: false,
       selectedTab: 0,
+      organizations: [],
+      projectsByOrganizationId: {},
+      selectedOrganization: null,
       selectedProject: null,
       selectedProjects: [],
       releases: [],
@@ -55,9 +55,9 @@ class GlobalState {
   final int selectedTab;
 
   final List<Organization> organizations;
-  final Organization selectedOrganization;
+  final Map<String, List<Project>> projectsByOrganizationId;
 
-  final List<Project> projects;
+  final Organization selectedOrganization;
   final Project selectedProject;
   final List<Project> selectedProjects;
 
@@ -70,20 +70,20 @@ class GlobalState {
     int selectedTab,
     bool setSessionNull = false,
     List<Organization> organizations,
+    final Map<String, List<Project>> projectsByOrganizationId,
     Organization selectedOrganization,
-    List<Project> projects,
     Project selectedProject,
     List<Project> selectedProjects,
     List<Release> releases,
     bool releasesLoading
   }) {
     return GlobalState(
+      session: setSessionNull ? null : (session ?? this.session),
       hydrated: hydrated ?? this.hydrated,
       selectedTab: selectedTab ?? this.selectedTab,
-      session: setSessionNull ? null : (session ?? this.session),
       organizations: organizations ?? this.organizations,
+      projectsByOrganizationId: projectsByOrganizationId ?? this.projectsByOrganizationId,
       selectedOrganization: selectedOrganization ?? this.selectedOrganization,
-      projects: projects ?? this.projects,
       selectedProject: selectedProject ?? this.selectedProject,
       selectedProjects: selectedProjects ?? this.selectedProjects,
       releases: releases ?? this.releases,

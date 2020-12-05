@@ -19,8 +19,9 @@ void apiMiddleware(
     try {
       final organizations = await api.organizations();
         store.dispatch(FetchOrganizationsSuccessAction(organizations));
-        store.dispatch(SelectOrganizationAction(organizations.first));
-        store.dispatch(FetchProjectsAction(organizations.first));
+        for (final organization in organizations) {
+          store.dispatch(FetchProjectsAction(organization));
+        }
     } catch (e) {
       store.dispatch(FetchOrganizationsFailureAction(e));
     }
@@ -28,15 +29,15 @@ void apiMiddleware(
 
   if (action is FetchProjectsAction) {
     try {
-      final projects = await api.projects(action.payload.slug);
-      store.dispatch(FetchProjectsSuccessAction(projects));
+      final projects = await api.projects(action.organization.slug);
+      store.dispatch(FetchProjectsSuccessAction(action.organization.id, projects));
     } catch (e) {
       store.dispatch(FetchProjectsFailureAction(e));
     }
   }
 
   if (action is FetchProjectsSuccessAction) {
-    store.dispatch(SelectProjectAction(action.payload.first));
+    store.dispatch(SelectProjectAction(action.projects.first));
   }
 
   if (action is SelectProjectAction) {
@@ -98,7 +99,7 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
       await preferences.setString('project', jsonEncode(action.payload.toJson()));
     }
     if (action is SelectOrganizationAction) {
-      await preferences.setString('organization', jsonEncode(action.payload.toJson()));
+      await preferences.setString('organization', jsonEncode(action.organziation.toJson()));
     }
     if (action is LoginAction) {
       await secureStorage.write(key: 'session', value: action.payload.toString());

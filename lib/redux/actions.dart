@@ -42,18 +42,19 @@ class FetchOrganizationsFailureAction {
 }
 
 class SelectOrganizationAction {
-  SelectOrganizationAction(this.payload);
-  final Organization payload;
+  SelectOrganizationAction(this.organziation);
+  final Organization organziation;
 }
 
 class FetchProjectsAction {
-  FetchProjectsAction(this.payload);
-  final Organization payload;
+  FetchProjectsAction(this.organization);
+  final Organization organization;
 }
 
 class FetchProjectsSuccessAction {
-  FetchProjectsSuccessAction(this.payload);
-  final List<Project> payload;
+  FetchProjectsSuccessAction(this.organizationId, this.projects);
+  final String organizationId;
+  final List<Project> projects;
 }
 
 class FetchProjectsFailureAction {

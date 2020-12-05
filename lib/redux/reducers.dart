@@ -8,7 +8,6 @@ AppState appReducer(AppState state, dynamic action) =>
       globalState: globalReducer(state.globalState, action),
     );
 
-
 final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, SwitchTabAction>(_switchTabAction),
   TypedReducer<GlobalState, RehydrateAction>(_bootAction),
@@ -44,11 +43,13 @@ GlobalState _fetchOrganizationsSuccessAction(GlobalState state, FetchOrganizatio
 }
 
 GlobalState _selectOrganizationAction(GlobalState state, SelectOrganizationAction action) {
-  return state.copyWith(selectedOrganization: action.payload);
+  return state.copyWith(selectedOrganization: action.organziation);
 }
 
 GlobalState _fetchProjectSuccessAction(GlobalState state, FetchProjectsSuccessAction action) {
-  return state.copyWith(projects: action.payload);
+  final projectsByOrganizationId = state.projectsByOrganizationId;
+  projectsByOrganizationId[action.organizationId] = action.projects;
+  return state.copyWith(projectsByOrganizationId: projectsByOrganizationId);
 }
 
 GlobalState _selectProjectAction(GlobalState state, SelectProjectAction action) {
