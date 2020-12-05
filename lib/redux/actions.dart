@@ -67,6 +67,11 @@ class SelectProjectAction {
   final String projectId;
 }
 
+class SelectProjectsAction {
+  SelectProjectsAction(this.projectIds);
+  final List<String> projectIds;
+}
+
 class FetchReleasesAction {
   FetchReleasesAction(this.organizationSlug, this.projectId);
   final String organizationSlug;

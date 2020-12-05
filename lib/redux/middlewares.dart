@@ -72,25 +72,13 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
         store.dispatch(LoginAction(Cookie.fromSetCookieValue(session)));
       }
 
-      // final projectJson = preferences.getString('project');
-      // if (projectJson != null) {
-      //   final project = Project.fromJson(json.decode(projectJson) as Map<String, dynamic>);
-      //   store.dispatch(SelectProjectAction(project.id));
-      // }
-
-      final organizationJson = preferences.getString('organization');
-      if (organizationJson != null) {
-        final organization = Organization.fromJson(
-            json.decode(organizationJson) as Map<String, dynamic>);
-        store.dispatch(SelectOrganizationAction(organization));
+      final selectedProjectIds = preferences.getStringList('selectedProjectIds');
+      if (selectedProjectIds != null) {
+        store.dispatch(SelectProjectsAction(selectedProjectIds));
       }
     }
-    // TODO @denis
-    // if (action is SelectProjectAction) {
-    //   await preferences.setString('project', jsonEncode(action.projectId.toJson()));
-    // }
-    if (action is SelectOrganizationAction) {
-      await preferences.setString('organization', jsonEncode(action.organziation.toJson()));
+    if (action is SelectProjectAction) {
+      await preferences.setStringList('selectedProjectIds', store.state.globalState.selectedProjectIds.toList());
     }
     if (action is LoginAction) {
       await secureStorage.write(key: 'session', value: action.payload.toString());
