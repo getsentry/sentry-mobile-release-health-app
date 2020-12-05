@@ -2,6 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'latest_release.g.dart';
 
+// TODO(denis): Remove once `Release` implements JsonSerializable.
 @JsonSerializable()
 class LatestRelease {
   LatestRelease(this.version);

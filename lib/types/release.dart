@@ -1,3 +1,5 @@
+
+// TODO(denis): Change to JsonSerializable and generate Json code,
 class Release {
   Release.fromJson(dynamic json)
       : version = json['versionInfo']['description'] as String,
