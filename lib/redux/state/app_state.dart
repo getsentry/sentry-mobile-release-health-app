@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:sentry_mobile/types/project_with_latest_release.dart';
+
 import '../../types/organization.dart';
+import '../../types/organization_slug_with_project_id.dart';
 import '../../types/project.dart';
-import '../../types/release.dart';
 
 class AppState {
   AppState({this.globalState});
@@ -31,8 +33,8 @@ class GlobalState {
       this.projectsByOrganizationId,
       this.selectedOrganization,
       this.selectedProject,
-      this.selectedProjectIds,
-      this.releases,
+      this.selectedOrganizationSlugsWithProjectId,
+      this.latestReleases,
       this.releasesLoading});
 
   factory GlobalState.initial() {
@@ -44,8 +46,8 @@ class GlobalState {
       projectsByOrganizationId: {},
       selectedOrganization: null,
       selectedProject: null,
-      selectedProjectIds: <String>{},
-      releases: [],
+      selectedOrganizationSlugsWithProjectId: <OrganizationSlugWithProjectId>{},
+      latestReleases: [],
       releasesLoading: false
     );
   }
@@ -59,9 +61,9 @@ class GlobalState {
 
   final Organization selectedOrganization;
   final Project selectedProject;
-  final Set<String> selectedProjectIds;
+  final Set<OrganizationSlugWithProjectId> selectedOrganizationSlugsWithProjectId;
 
-  final List<Release> releases;
+  final List<ProjectWithLatestRelease> latestReleases;
   final bool releasesLoading;
 
   GlobalState copyWith({
@@ -73,8 +75,8 @@ class GlobalState {
     final Map<String, List<Project>> projectsByOrganizationId,
     Organization selectedOrganization,
     Project selectedProject,
-    Set<String> selectedProjectIds,
-    List<Release> releases,
+    Set<OrganizationSlugWithProjectId> selectedOrganizationSlugsWithProjectId,
+    List<ProjectWithLatestRelease> latestReleases,
     bool releasesLoading
   }) {
     return GlobalState(
@@ -85,8 +87,8 @@ class GlobalState {
       projectsByOrganizationId: projectsByOrganizationId ?? this.projectsByOrganizationId,
       selectedOrganization: selectedOrganization ?? this.selectedOrganization,
       selectedProject: selectedProject ?? this.selectedProject,
-        selectedProjectIds: selectedProjectIds ?? this.selectedProjectIds,
-      releases: releases ?? this.releases,
+      selectedOrganizationSlugsWithProjectId: selectedOrganizationSlugsWithProjectId ?? this.selectedOrganizationSlugsWithProjectId,
+      latestReleases: latestReleases ?? this.latestReleases,
       releasesLoading: releasesLoading ?? this.releasesLoading
     );
   }
@@ -94,7 +96,10 @@ class GlobalState {
   List<Project> selectedProjects() {
     return projectsByOrganizationId.values
         .expand((element) => element)
-        .where((element) => selectedProjectIds.contains(element.id))
+        .where((element) => selectedOrganizationSlugsWithProjectId.map((e) => e.projectId).contains(element.id))
         .toList();
   }
+  
+  
 }
+

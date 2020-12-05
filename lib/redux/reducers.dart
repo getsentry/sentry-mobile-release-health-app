@@ -1,4 +1,5 @@
 import 'package:redux/redux.dart';
+import 'package:sentry_mobile/types/project_with_latest_release.dart';
 
 import 'actions.dart';
 import 'state/app_state.dart';
@@ -18,7 +19,7 @@ final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, FetchProjectsSuccessAction>(_fetchProjectSuccessAction),
   TypedReducer<GlobalState, SelectProjectAction>(_selectProjectAction),
   TypedReducer<GlobalState, SelectProjectsAction>(_selectProjectsAction),
-  TypedReducer<GlobalState, FetchReleasesAction>(_fetchReleasesAction),
+  TypedReducer<GlobalState, FetchLatestReleasesAction>(_fetchReleasesAction),
   TypedReducer<GlobalState, FetchReleasesSuccessAction>(_fetchReleasesSuccessAction),
   TypedReducer<GlobalState, FetchReleasesFailureAction>(_fetchReleasesFailureAction),
 ]);
@@ -54,25 +55,34 @@ GlobalState _fetchProjectSuccessAction(GlobalState state, FetchProjectsSuccessAc
 }
 
 GlobalState _selectProjectAction(GlobalState state, SelectProjectAction action) {
-  final selectedProjectIds = state.selectedProjectIds;
-  if (!selectedProjectIds.contains(action.projectId)) {
-    selectedProjectIds.add(action.projectId);
+  final selected = state.selectedOrganizationSlugsWithProjectId;
+  if (!selected.contains(action.organizationSlugWithProjectId)) {
+    selected.add(action.organizationSlugWithProjectId);
   } else {
-    selectedProjectIds.remove(action.projectId);
+    selected.remove(action.organizationSlugWithProjectId);
   }
-  return state.copyWith(selectedProjectIds: selectedProjectIds);
+  return state.copyWith(selectedOrganizationSlugsWithProjectId: selected);
 }
 
 GlobalState _selectProjectsAction(GlobalState state, SelectProjectsAction action) {
-  return state.copyWith(selectedProjectIds: action.projectIds.toSet());
+  return state.copyWith(selectedOrganizationSlugsWithProjectId: action.organizationSlugsWithProjectId.toSet());
 }
 
-GlobalState _fetchReleasesAction(GlobalState state, FetchReleasesAction action) {
+GlobalState _fetchReleasesAction(GlobalState state, FetchLatestReleasesAction action) {
   return state.copyWith(releasesLoading: true);
 }
 
 GlobalState _fetchReleasesSuccessAction(GlobalState state, FetchReleasesSuccessAction action) {
-  return state.copyWith(releases: action.payload, releasesLoading: false);
+  final latestReleases = state.latestReleases;
+  final index = state.latestReleases.indexWhere((element) => element.project.id == action.project.id);
+  if (index > -1) {
+    latestReleases.removeAt(index);
+  }
+  final latestRelease = action.releases.first;
+  if (latestRelease != null) {
+    latestReleases.add(ProjectWithLatestRelease(action.project, latestRelease));
+  }
+  return state.copyWith(latestReleases: latestReleases);
 }
 
 GlobalState _fetchReleasesFailureAction(GlobalState state, FetchReleasesFailureAction action) {

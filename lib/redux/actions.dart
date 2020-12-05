@@ -1,6 +1,9 @@
 import 'dart:io';
 
+import 'package:sentry_mobile/types/project_with_latest_release.dart';
+
 import '../types/organization.dart';
+import '../types/organization_slug_with_project_id.dart';
 import '../types/project.dart';
 import '../types/release.dart';
 
@@ -63,24 +66,24 @@ class FetchProjectsFailureAction {
 }
 
 class SelectProjectAction {
-  SelectProjectAction(this.projectId);
-  final String projectId;
+  SelectProjectAction(this.organizationSlugWithProjectId);
+  final OrganizationSlugWithProjectId organizationSlugWithProjectId;
 }
 
 class SelectProjectsAction {
-  SelectProjectsAction(this.projectIds);
-  final List<String> projectIds;
+  SelectProjectsAction(this.organizationSlugsWithProjectId);
+  final List<OrganizationSlugWithProjectId> organizationSlugsWithProjectId;
 }
 
-class FetchReleasesAction {
-  FetchReleasesAction(this.organizationSlug, this.projectId);
-  final String organizationSlug;
-  final String projectId;
+class FetchLatestReleasesAction {
+  FetchLatestReleasesAction(this.organizationSlugsWithProjectId);
+  final List<OrganizationSlugWithProjectId> organizationSlugsWithProjectId;
 }
 
 class FetchReleasesSuccessAction {
-  FetchReleasesSuccessAction(this.payload);
-  final List<Release> payload;
+  FetchReleasesSuccessAction(this.project, this.releases);
+  final Project project;
+  final List<Release> releases;
 }
 
 class FetchReleasesFailureAction {

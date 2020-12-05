@@ -33,6 +33,10 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
   }
 
   Widget _content(ReleaseHealthViewModel viewModel) {
+    if (viewModel.releases.isEmpty) {
+      viewModel.fetchReleases();
+    }
+
     if (viewModel.loading || viewModel.releases.isEmpty) {
       return Center(
         child: CircularProgressIndicator(
@@ -66,8 +70,8 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                         setState(() => _index = index),
                     itemBuilder: (context, index) {
                       return ReleaseCard(
-                          viewModel.project,
-                          viewModel.releases[index],
+                          viewModel.releases[index].project,
+                          viewModel.releases[index].release,
                       );
                     },
                   )),
@@ -82,11 +86,11 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                     ),
                     ChartRow(
                         title: 'Issues',
-                        total: viewModel.releases[_index].issues,
+                        total: viewModel.releases[_index].release.issues,
                         change: 3.6), // TODO: api
                     ChartRow(
                         title: 'Crashes',
-                        total: viewModel.releases[_index].crashes,
+                        total: viewModel.releases[_index].release.crashes,
                         change: -4.2), // TODO: api
                     HealthDivider(
                       onSeeAll: () {},
@@ -99,11 +103,11 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                       children: [
                         HealthCard(
                             title: 'Crash Free Users',
-                            value: viewModel.releases[_index].crashFreeUsers,
+                            value: viewModel.releases[_index].release.crashFreeUsers,
                             change: 0.04), // TODO: api
                         HealthCard(
                             title: 'Crash Free Sessions',
-                            value: viewModel.releases[_index].crashFreeSessions,
+                            value: viewModel.releases[_index].release.crashFreeSessions,
                             change: -0.01), // TODO: api
                       ],
                     )

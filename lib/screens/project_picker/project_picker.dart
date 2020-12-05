@@ -54,7 +54,7 @@ class _ProjectPickerState extends State<ProjectPicker> {
                   ),
                 onTap: () {
                   final store = StoreProvider.of<AppState>(context);
-                  store.dispatch(SelectProjectAction(item.id));
+                  store.dispatch(SelectProjectAction(item.organizationSlugWithProjectId));
                 },
               );
             } else {

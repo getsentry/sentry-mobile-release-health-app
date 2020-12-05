@@ -1,21 +1,19 @@
 
+import 'package:sentry_mobile/types/organization_slug_with_project_id.dart';
+
 class ProjectPickerItem {
-  String id;
 }
 
 class ProjectPickerOrganizationItem extends ProjectPickerItem {
-  ProjectPickerOrganizationItem(this.id, this.title);
+  ProjectPickerOrganizationItem(this.title);
 
-  @override
-  String id;
   String title;
 }
 
 class ProjectPickerProjectItem extends ProjectPickerItem {
-  ProjectPickerProjectItem(this.id, this.title, this.selected);
+  ProjectPickerProjectItem(this.organizationSlugWithProjectId, this.title, this.selected);
 
-  @override
-  String id;
+  OrganizationSlugWithProjectId organizationSlugWithProjectId;
   String title;
   bool selected;
 }

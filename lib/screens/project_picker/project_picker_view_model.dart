@@ -1,4 +1,5 @@
 import 'package:redux/redux.dart';
+import 'package:sentry_mobile/types/organization_slug_with_project_id.dart';
 
 import '../../redux/state/app_state.dart';
 import '../../types/organization.dart';
@@ -14,25 +15,23 @@ class ProjectPickerViewModel {
         if (organizationProjects.isNotEmpty) {
           items.add(
               ProjectPickerOrganizationItem(
-                  organization.id,
                   organization.name
               )
           );
           for (final Project organizationProject in organizationProjects) {
+            final organizationSlugWithProjectId = OrganizationSlugWithProjectId(organization.slug, organizationProject.id, organizationProject.slug);
             items.add(
-                ProjectPickerProjectItem(
-                    organizationProject.id,
-                    organizationProject.name,
-                    store.state.globalState.selectedProjectIds.contains(organizationProject.id)
-                )
+              ProjectPickerProjectItem(
+                organizationSlugWithProjectId,
+                organizationProject.name,
+                store.state.globalState.selectedOrganizationSlugsWithProjectId.contains(organizationSlugWithProjectId)
+              )
             );
           }
         }
     }
     this.items = items;
   }
-
   List<ProjectPickerItem> items = [];
-
 }
 

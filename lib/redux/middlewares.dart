@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:redux/redux.dart';
+import 'package:sentry_mobile/types/organization_slug_with_project_id.dart';
+import 'package:sentry_mobile/types/project_with_latest_release.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../api/sentry_api.dart';
@@ -36,12 +38,21 @@ void apiMiddleware(
     }
   }
 
-  if (action is FetchReleasesAction) {
-    try {
-      final releases = await api.releases(organizationSlug: action.organizationSlug, projectId: action.projectId);
-      store.dispatch(FetchReleasesSuccessAction(releases));
-    } catch (e) {
-      store.dispatch(FetchReleasesFailureAction(e));
+  if (action is FetchLatestReleasesAction) {
+    for (final slugWithId in action.organizationSlugsWithProjectId) {
+      try {
+        final project = await api.project(
+            slugWithId.organizationSlug, slugWithId.projectSlug
+        );
+        final releases = await api.releases(
+            organizationSlug: slugWithId.organizationSlug,
+            projectId: slugWithId.projectId,
+            perPage: 1
+        );
+        store.dispatch(FetchReleasesSuccessAction(project, releases));
+      } catch (e) {
+        store.dispatch(FetchReleasesFailureAction(e));
+      }
     }
   }
 
@@ -74,11 +85,17 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
 
       final selectedProjectIds = preferences.getStringList('selectedProjectIds');
       if (selectedProjectIds != null) {
-        store.dispatch(SelectProjectsAction(selectedProjectIds));
+        final deserialized = selectedProjectIds
+            .map((e) => OrganizationSlugWithProjectId(e.split(';')[0], e.split(';')[1], e.split(';')[2]))
+            .toList();
+        store.dispatch(SelectProjectsAction(deserialized));
       }
     }
     if (action is SelectProjectAction) {
-      await preferences.setStringList('selectedProjectIds', store.state.globalState.selectedProjectIds.toList());
+      final serialized = store.state.globalState.selectedOrganizationSlugsWithProjectId
+          .map((e) => '${e.organizationSlug};${e.projectId};${e.projectSlug}')
+          .toList();
+      await preferences.setStringList('selectedProjectIds', serialized);
     }
     if (action is LoginAction) {
       await secureStorage.write(key: 'session', value: action.payload.toString());
