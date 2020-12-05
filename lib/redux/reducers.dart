@@ -78,10 +78,7 @@ GlobalState _fetchReleasesSuccessAction(GlobalState state, FetchReleasesSuccessA
   if (index > -1) {
     latestReleases.removeAt(index);
   }
-  final latestRelease = action.releases.first;
-  if (latestRelease != null) {
-    latestReleases.add(ProjectWithLatestRelease(action.project, latestRelease));
-  }
+  latestReleases.add(ProjectWithLatestRelease(action.project, action.release));
   return state.copyWith(latestReleases: latestReleases);
 }
 

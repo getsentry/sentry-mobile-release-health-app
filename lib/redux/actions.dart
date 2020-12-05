@@ -81,9 +81,9 @@ class FetchLatestReleasesAction {
 }
 
 class FetchReleasesSuccessAction {
-  FetchReleasesSuccessAction(this.project, this.releases);
+  FetchReleasesSuccessAction(this.project, this.release);
   final Project project;
-  final List<Release> releases;
+  final Release release;
 }
 
 class FetchReleasesFailureAction {

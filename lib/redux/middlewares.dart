@@ -44,12 +44,12 @@ void apiMiddleware(
         final project = await api.project(
             slugWithId.organizationSlug, slugWithId.projectSlug
         );
-        final releases = await api.releases(
+        final release = await api.release(
             organizationSlug: slugWithId.organizationSlug,
-            projectId: slugWithId.projectId,
-            perPage: 1
+            projectId: project.id,
+            releaseId: project.latestRelease.version
         );
-        store.dispatch(FetchReleasesSuccessAction(project, releases));
+        store.dispatch(FetchReleasesSuccessAction(project, release));
       } catch (e) {
         store.dispatch(FetchReleasesFailureAction(e));
       }
