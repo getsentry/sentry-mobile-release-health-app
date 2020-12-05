@@ -63,8 +63,8 @@ class FetchProjectsFailureAction {
 }
 
 class SelectProjectAction {
-  SelectProjectAction(this.payload);
-  final Project payload;
+  SelectProjectAction(this.projectId);
+  final String projectId;
 }
 
 class FetchReleasesAction {

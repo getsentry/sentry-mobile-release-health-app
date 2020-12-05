@@ -82,22 +82,16 @@ class _SettingsState extends State<Settings> {
   }
 
   List<Widget> _buildProjects(SettingsViewModel viewModel) {
-    return viewModel.selectedProjects.map((project) => _buildProjectRow(project, viewModel.selectedOrganization)).toList();
+    return viewModel.selectedProjects.map((project) => _buildProjectRow(project)).toList();
   }
 
-  Widget _buildProjectRow(Project project, Organization organization) {
+  Widget _buildProjectRow(Project project) {
     return ListTile(
       contentPadding: EdgeInsets.only(right: 16, top: 0, left: 16, bottom: 0),
       title: Text(
         project.name,
         style: Theme.of(context).textTheme.bodyText1.apply(
             color: Colors.black
-        ),
-      ),
-      subtitle: Text(
-        organization.name,
-        style: Theme.of(context).textTheme.subtitle2.apply(
-          color: Colors.black26
         ),
       ),
     );

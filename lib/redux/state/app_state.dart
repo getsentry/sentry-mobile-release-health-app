@@ -31,7 +31,7 @@ class GlobalState {
       this.projectsByOrganizationId,
       this.selectedOrganization,
       this.selectedProject,
-      this.selectedProjects,
+      this.selectedProjectIds,
       this.releases,
       this.releasesLoading});
 
@@ -44,7 +44,7 @@ class GlobalState {
       projectsByOrganizationId: {},
       selectedOrganization: null,
       selectedProject: null,
-      selectedProjects: [],
+      selectedProjectIds: <String>{},
       releases: [],
       releasesLoading: false
     );
@@ -59,7 +59,7 @@ class GlobalState {
 
   final Organization selectedOrganization;
   final Project selectedProject;
-  final List<Project> selectedProjects;
+  final Set<String> selectedProjectIds;
 
   final List<Release> releases;
   final bool releasesLoading;
@@ -73,7 +73,7 @@ class GlobalState {
     final Map<String, List<Project>> projectsByOrganizationId,
     Organization selectedOrganization,
     Project selectedProject,
-    List<Project> selectedProjects,
+    Set<String> selectedProjectIds,
     List<Release> releases,
     bool releasesLoading
   }) {
@@ -85,9 +85,16 @@ class GlobalState {
       projectsByOrganizationId: projectsByOrganizationId ?? this.projectsByOrganizationId,
       selectedOrganization: selectedOrganization ?? this.selectedOrganization,
       selectedProject: selectedProject ?? this.selectedProject,
-      selectedProjects: selectedProjects ?? this.selectedProjects,
+        selectedProjectIds: selectedProjectIds ?? this.selectedProjectIds,
       releases: releases ?? this.releases,
       releasesLoading: releasesLoading ?? this.releasesLoading
     );
+  }
+  
+  List<Project> selectedProjects() {
+    return projectsByOrganizationId.values
+        .expand((element) => element)
+        .where((element) => selectedProjectIds.contains(element.id))
+        .toList();
   }
 }

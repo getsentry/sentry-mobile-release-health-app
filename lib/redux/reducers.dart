@@ -53,7 +53,13 @@ GlobalState _fetchProjectSuccessAction(GlobalState state, FetchProjectsSuccessAc
 }
 
 GlobalState _selectProjectAction(GlobalState state, SelectProjectAction action) {
-  return state.copyWith(selectedProject: action.payload);
+  final selectedProjectIds = state.selectedProjectIds;
+  if (!selectedProjectIds.contains(action.projectId)) {
+    selectedProjectIds.add(action.projectId);
+  } else {
+    selectedProjectIds.remove(action.projectId);
+  }
+  return state.copyWith(selectedProjectIds: selectedProjectIds);
 }
 
 GlobalState _fetchReleasesAction(GlobalState state, FetchReleasesAction action) {

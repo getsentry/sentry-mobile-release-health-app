@@ -1,35 +1,21 @@
-import 'package:flutter/material.dart';
 
-import '../settings/settings_header.dart';
-
-abstract class ProjectPickerItem {
-  Widget build(BuildContext context);
+class ProjectPickerItem {
+  String id;
 }
 
 class ProjectPickerOrganizationItem extends ProjectPickerItem {
-  ProjectPickerOrganizationItem(this.title);
-  String title;
+  ProjectPickerOrganizationItem(this.id, this.title);
 
   @override
-  Widget build(BuildContext context) {
-    return SettingsHeader(title);
-  }
+  String id;
+  String title;
 }
 
 class ProjectPickerProjectItem extends ProjectPickerItem {
-  ProjectPickerProjectItem(this.title);
-  String title;
+  ProjectPickerProjectItem(this.id, this.title, this.selected);
 
   @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: EdgeInsets.only(right: 16, top: 0, left: 16, bottom: 0),
-      title: Text(
-        title,
-        style: Theme.of(context).textTheme.bodyText1.apply(
-            color: Colors.black
-        ),
-      )
-    );
-  }
+  String id;
+  String title;
+  bool selected;
 }

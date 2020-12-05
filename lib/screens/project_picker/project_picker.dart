@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:sentry_mobile/redux/actions.dart';
 
 import 'package:sentry_mobile/redux/state/app_state.dart';
 import 'package:sentry_mobile/screens/project_picker/project_picker_item.dart';
@@ -46,7 +47,15 @@ class _ProjectPickerState extends State<ProjectPicker> {
                     style: Theme.of(context).textTheme.bodyText1.apply(
                         color: Colors.black
                     ),
-                  )
+                  ),
+                  trailing: Icon(
+                    item.selected ? Icons.check_box : Icons.check_box_outline_blank,
+                    color: item.selected ? Colors.green : Colors.grey,
+                  ),
+                onTap: () {
+                  final store = StoreProvider.of<AppState>(context);
+                  store.dispatch(SelectProjectAction(item.id));
+                },
               );
             } else {
               throw Exception('Unknown list item type.');

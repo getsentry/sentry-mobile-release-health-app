@@ -12,9 +12,20 @@ class ProjectPickerViewModel {
     for (final Organization organization in store.state.globalState.organizations) {
         final organizationProjects = store.state.globalState.projectsByOrganizationId[organization.id] ?? [];
         if (organizationProjects.isNotEmpty) {
-          items.add(ProjectPickerOrganizationItem(organization.name));
-          for (final Project organizationProjects in organizationProjects) {
-            items.add(ProjectPickerProjectItem(organizationProjects.name));
+          items.add(
+              ProjectPickerOrganizationItem(
+                  organization.id,
+                  organization.name
+              )
+          );
+          for (final Project organizationProject in organizationProjects) {
+            items.add(
+                ProjectPickerProjectItem(
+                    organizationProject.id,
+                    organizationProject.name,
+                    store.state.globalState.selectedProjectIds.contains(organizationProject.id)
+                )
+            );
           }
         }
     }

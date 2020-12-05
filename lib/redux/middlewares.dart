@@ -36,16 +36,6 @@ void apiMiddleware(
     }
   }
 
-  if (action is FetchProjectsSuccessAction) {
-    store.dispatch(SelectProjectAction(action.projects.first));
-  }
-
-  if (action is SelectProjectAction) {
-    final slug = store.state.globalState.selectedOrganization.slug;
-    final projectId = action.payload.id;
-    store.dispatch(FetchReleasesAction(slug, projectId));
-  }
-
   if (action is FetchReleasesAction) {
     try {
       final releases = await api.releases(organizationSlug: action.organizationSlug, projectId: action.projectId);
@@ -82,11 +72,11 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
         store.dispatch(LoginAction(Cookie.fromSetCookieValue(session)));
       }
 
-      final projectJson = preferences.getString('project');
-      if (projectJson != null) {
-        final project = Project.fromJson(json.decode(projectJson) as Map<String, dynamic>);
-        store.dispatch(SelectProjectAction(project));
-      }
+      // final projectJson = preferences.getString('project');
+      // if (projectJson != null) {
+      //   final project = Project.fromJson(json.decode(projectJson) as Map<String, dynamic>);
+      //   store.dispatch(SelectProjectAction(project.id));
+      // }
 
       final organizationJson = preferences.getString('organization');
       if (organizationJson != null) {
@@ -95,9 +85,10 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
         store.dispatch(SelectOrganizationAction(organization));
       }
     }
-    if (action is SelectProjectAction) {
-      await preferences.setString('project', jsonEncode(action.payload.toJson()));
-    }
+    // TODO @denis
+    // if (action is SelectProjectAction) {
+    //   await preferences.setString('project', jsonEncode(action.projectId.toJson()));
+    // }
     if (action is SelectOrganizationAction) {
       await preferences.setString('organization', jsonEncode(action.organziation.toJson()));
     }
