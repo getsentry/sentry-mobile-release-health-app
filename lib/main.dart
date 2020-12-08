@@ -49,7 +49,6 @@ Future<void> main() async {
 
   store.dispatch(RehydrateAction());
 
-
   await SentryFlutter.init(
       (options) {
         options.dsn = 'https://cb0fad6f5d4e42ebb9c956cb0463edc9@o447951.ingest.sentry.io/5428562';

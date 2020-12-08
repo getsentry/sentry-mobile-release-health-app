@@ -1,9 +1,8 @@
 import 'dart:io';
 
-import 'package:sentry_mobile/types/project_with_latest_release.dart';
-
 import '../../types/organization.dart';
 import '../../types/project.dart';
+import '../../types/project_with_latest_release.dart';
 
 class AppState {
   AppState({this.globalState});
@@ -113,9 +112,4 @@ class GlobalState {
     }
     return bookmarkedProjectsByOrganizationSlug;
   }
-
-  List<Project> selectedProjects() {
-    return [];
-  }
 }
-

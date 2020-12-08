@@ -1,11 +1,8 @@
 import 'package:redux/redux.dart';
-import 'package:sentry_mobile/types/project_with_latest_release.dart';
 
 import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
-import '../../types/organization.dart';
-import '../../types/project.dart';
-import '../../types/release.dart';
+import '../../types/project_with_latest_release.dart';
 
 class ReleaseHealthViewModel {
   ReleaseHealthViewModel.fromStore(Store<AppState> store)

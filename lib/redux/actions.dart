@@ -1,42 +1,37 @@
 import 'dart:io';
 
-import 'package:sentry_mobile/types/project_with_latest_release.dart';
-
 import '../types/organization.dart';
 import '../types/project.dart';
-import '../types/release.dart';
+import '../types/project_with_latest_release.dart';
 
 class RehydrateAction {
   RehydrateAction();
 }
 
 class SwitchTabAction {
-  SwitchTabAction(this.payload);
-  final int payload;
+  SwitchTabAction(this.selectedTab);
+  final int selectedTab;
 }
 
 class LoginAction {
-  LoginAction(this.payload);
-  final Cookie payload;
+  LoginAction(this.cookie);
+  final Cookie cookie;
 }
 
 class LogoutAction {
   LogoutAction();
 }
 
-class TitleAction {
-  TitleAction(this.payload);
-  final String payload;
-}
+// FetchOrganizationsAndProjects
 
 class FetchOrganizationsAndProjectsAction {
   FetchOrganizationsAndProjectsAction();
 }
 
 class FetchOrganizationsAndProjectsSuccessAction {
-  FetchOrganizationsAndProjectsSuccessAction(this.organizations, this.projectsByOrganizationId);
+  FetchOrganizationsAndProjectsSuccessAction(this.organizations, this.projectsByOrganizationSlug);
   final List<Organization> organizations;
-  final Map<String, List<Project>> projectsByOrganizationId;
+  final Map<String, List<Project>> projectsByOrganizationSlug;
 }
 
 class FetchOrganizationsAndProjectsFailureAction {
@@ -44,37 +39,7 @@ class FetchOrganizationsAndProjectsFailureAction {
   final dynamic error;
 }
 
-class SelectOrganizationAction {
-  SelectOrganizationAction(this.organziation);
-  final Organization organziation;
-}
-
-// FetchProjectsAction
-
-class FetchProjectsAction {
-  FetchProjectsAction(this.organization);
-  final Organization organization;
-}
-
-class FetchProjectsSuccessAction {
-  FetchProjectsSuccessAction(this.organizationSlug, this.projects);
-  final String organizationSlug;
-  final List<Project> projects;
-}
-
-class FetchProjectsFailureAction {
-  FetchProjectsFailureAction(this.error);
-  final dynamic error;
-}
-
-// SelectProjectAction
-
-class SelectProjectAction {
-  SelectProjectAction(this.project);
-  final Project project;
-}
-
-// FetchLatestReleasesAction
+// FetchLatestReleases
 
 class FetchLatestReleasesAction {
   FetchLatestReleasesAction(this.projectsByOrganizationSlug);
@@ -91,20 +56,16 @@ class FetchLatestReleasesFailureAction {
   final dynamic error;
 }
 
-// FetchReleaseAction
+// SelectOrganization
 
-class FetchReleaseAction {
-  FetchReleaseAction(this.projectId, this.releaseId);
-  final String projectId;
-  final String releaseId;
+class SelectOrganizationAction {
+  SelectOrganizationAction(this.organization);
+  final Organization organization;
 }
 
-class FetchReleaseSuccessAction {
-  FetchReleaseSuccessAction(this.payload);
-  final Release payload;
-}
+// SelectProject
 
-class FetchReleaseFailureAction {
-  FetchReleaseFailureAction(this.error);
-  final dynamic error;
+class SelectProjectAction {
+  SelectProjectAction(this.project);
+  final Project project;
 }

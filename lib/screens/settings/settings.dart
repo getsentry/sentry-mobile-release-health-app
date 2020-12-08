@@ -19,7 +19,7 @@ class _SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, SettingsViewModel>(
       builder: (_, viewModel) => _content(viewModel),
-      converter: (store) => SettingsViewModel.from(store),
+      converter: (store) => SettingsViewModel.fromStore(store),
     );
   }
 

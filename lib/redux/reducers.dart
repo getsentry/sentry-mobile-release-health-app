@@ -16,16 +16,15 @@ final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, FetchOrganizationsAndProjectsAction>(_fetchOrganizationsAndProjectsAction),
   TypedReducer<GlobalState, FetchOrganizationsAndProjectsSuccessAction>(_fetchOrganizationsAndProjectsSuccessAction),
   TypedReducer<GlobalState, FetchOrganizationsAndProjectsFailureAction>(_fetchOrganizationsAndProjectsFailureAction),
-  TypedReducer<GlobalState, SelectOrganizationAction>(_selectOrganizationAction),
-  TypedReducer<GlobalState, FetchProjectsSuccessAction>(_fetchProjectSuccessAction),
-  TypedReducer<GlobalState, SelectProjectAction>(_selectProjectAction),
   TypedReducer<GlobalState, FetchLatestReleasesAction>(_fetchReleasesAction),
   TypedReducer<GlobalState, FetchLatestReleasesSuccessAction>(_fetchLatestReleasesSuccessAction),
   TypedReducer<GlobalState, FetchLatestReleasesFailureAction>(_fetchLatestReleasesFailureAction),
+  TypedReducer<GlobalState, SelectOrganizationAction>(_selectOrganizationAction),
+  TypedReducer<GlobalState, SelectProjectAction>(_selectProjectAction),
 ]);
 
 GlobalState _switchTabAction(GlobalState state, SwitchTabAction action) {
-  return state.copyWith(selectedTab: action.payload);
+  return state.copyWith(selectedTab: action.selectedTab);
 }
 
 GlobalState _bootAction(GlobalState state, RehydrateAction action) {
@@ -33,7 +32,7 @@ GlobalState _bootAction(GlobalState state, RehydrateAction action) {
 }
 
 GlobalState _loginAction(GlobalState state, LoginAction action) {
-  return state.copyWith(session: action.payload);
+  return state.copyWith(session: action.cookie);
 }
 
 GlobalState _logoutAction(GlobalState state, LogoutAction action) {
@@ -47,7 +46,7 @@ GlobalState _fetchOrganizationsAndProjectsAction(GlobalState state, FetchOrganiz
 GlobalState _fetchOrganizationsAndProjectsSuccessAction(GlobalState state, FetchOrganizationsAndProjectsSuccessAction action) {
   return state.copyWith(
       organizations: action.organizations,
-      projectsByOrganizationSlug: action.projectsByOrganizationId,
+      projectsByOrganizationSlug: action.projectsByOrganizationSlug,
       projectsFetchedOnce: true,
       projectsLoading: false
   );
@@ -58,13 +57,7 @@ GlobalState _fetchOrganizationsAndProjectsFailureAction(GlobalState state, Fetch
 }
 
 GlobalState _selectOrganizationAction(GlobalState state, SelectOrganizationAction action) {
-  return state.copyWith(selectedOrganization: action.organziation);
-}
-
-GlobalState _fetchProjectSuccessAction(GlobalState state, FetchProjectsSuccessAction action) {
-  final projectsByOrganizationId = state.projectsByOrganizationSlug;
-  projectsByOrganizationId[action.organizationSlug] = action.projects;
-  return state.copyWith(projectsByOrganizationSlug: projectsByOrganizationId);
+  return state.copyWith(selectedOrganization: action.organization);
 }
 
 GlobalState _selectProjectAction(GlobalState state, SelectProjectAction action) {
