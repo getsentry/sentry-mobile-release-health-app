@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:sentry_mobile/types/project_with_latest_release.dart';
 
 import '../../types/organization.dart';
-import '../../types/organization_slug_with_project_id.dart';
 import '../../types/project.dart';
 
 class AppState {
@@ -31,11 +30,11 @@ class GlobalState {
       this.selectedTab,
       this.organizations,
       this.projectsByOrganizationId,
+      this.projectsLoading,
+      this.projectsWithLatestReleases,
+      this.releasesLoading,
       this.selectedOrganization,
-      this.selectedProject,
-      this.selectedOrganizationSlugsWithProjectId,
-      this.latestReleases,
-      this.releasesLoading});
+      this.selectedProject});
 
   factory GlobalState.initial() {
     return GlobalState(
@@ -44,11 +43,11 @@ class GlobalState {
       selectedTab: 0,
       organizations: [],
       projectsByOrganizationId: {},
+      projectsLoading: false,
+      projectsWithLatestReleases: [],
+      releasesLoading: false,
       selectedOrganization: null,
       selectedProject: null,
-      selectedOrganizationSlugsWithProjectId: <OrganizationSlugWithProjectId>{},
-      latestReleases: [],
-      releasesLoading: false
     );
   }
 
@@ -58,13 +57,13 @@ class GlobalState {
 
   final List<Organization> organizations;
   final Map<String, List<Project>> projectsByOrganizationId;
+  final bool projectsLoading;
+
+  final List<ProjectWithLatestRelease> projectsWithLatestReleases;
+  final bool releasesLoading;
 
   final Organization selectedOrganization;
   final Project selectedProject;
-  final Set<OrganizationSlugWithProjectId> selectedOrganizationSlugsWithProjectId;
-
-  final List<ProjectWithLatestRelease> latestReleases;
-  final bool releasesLoading;
 
   GlobalState copyWith({
     Cookie session,
@@ -73,11 +72,11 @@ class GlobalState {
     bool setSessionNull = false,
     List<Organization> organizations,
     final Map<String, List<Project>> projectsByOrganizationId,
+    bool projectsLoading,
+    List<ProjectWithLatestRelease> projectsWithLatestReleases,
+    bool releasesLoading,
     Organization selectedOrganization,
     Project selectedProject,
-    Set<OrganizationSlugWithProjectId> selectedOrganizationSlugsWithProjectId,
-    List<ProjectWithLatestRelease> latestReleases,
-    bool releasesLoading
   }) {
     return GlobalState(
       session: setSessionNull ? null : (session ?? this.session),
@@ -85,21 +84,28 @@ class GlobalState {
       selectedTab: selectedTab ?? this.selectedTab,
       organizations: organizations ?? this.organizations,
       projectsByOrganizationId: projectsByOrganizationId ?? this.projectsByOrganizationId,
+      projectsLoading: projectsLoading ?? this.projectsLoading,
+      projectsWithLatestReleases: projectsWithLatestReleases ?? this.projectsWithLatestReleases,
+      releasesLoading: releasesLoading ?? this.releasesLoading,
       selectedOrganization: selectedOrganization ?? this.selectedOrganization,
-      selectedProject: selectedProject ?? this.selectedProject,
-      selectedOrganizationSlugsWithProjectId: selectedOrganizationSlugsWithProjectId ?? this.selectedOrganizationSlugsWithProjectId,
-      latestReleases: latestReleases ?? this.latestReleases,
-      releasesLoading: releasesLoading ?? this.releasesLoading
+      selectedProject: selectedProject ?? this.selectedProject
     );
   }
-  
-  List<Project> selectedProjects() {
-    return projectsByOrganizationId.values
-        .expand((element) => element)
-        .where((element) => selectedOrganizationSlugsWithProjectId.map((e) => e.projectId).contains(element.id))
-        .toList();
+
+  Map<String, List<Project>> bookmarkedProjectsByOrganizationSlug() {
+    final Map<String, List<Project>> bookmarkedProjectsByOrganizationSlug = {};
+
+    for (final organization in organizations) {
+      final bookmarkedProjects = (projectsByOrganizationId[organization.id] ?? []).where((element) => element.isBookmarked);
+      if (bookmarkedProjects.isNotEmpty && organization.slug != null) {
+        bookmarkedProjectsByOrganizationSlug[organization.slug] = bookmarkedProjects.toList();
+      }
+    }
+    return bookmarkedProjectsByOrganizationSlug;
   }
-  
-  
+
+  List<Project> selectedProjects() {
+    return [];
+  }
 }
 

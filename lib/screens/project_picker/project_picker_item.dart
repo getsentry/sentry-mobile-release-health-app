@@ -11,9 +11,9 @@ class ProjectPickerOrganizationItem extends ProjectPickerItem {
 }
 
 class ProjectPickerProjectItem extends ProjectPickerItem {
-  ProjectPickerProjectItem(this.organizationSlugWithProjectId, this.title, this.selected);
+  ProjectPickerProjectItem(this.organizationSlugWithProjectId, this.title, this.isBookmarked);
 
   OrganizationSlugWithProjectId organizationSlugWithProjectId;
   String title;
-  bool selected;
+  bool isBookmarked;
 }

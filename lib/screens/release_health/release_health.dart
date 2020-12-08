@@ -21,8 +21,9 @@ class ReleaseHealth extends StatefulWidget {
 class _ReleaseHealthState extends State<ReleaseHealth> {
   int _index = 0;
 
-
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
+  var _fetchedOrganizationsInitially = false;
+  var _fetchedReleasesInitially = false;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +34,12 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
   }
 
   Widget _content(ReleaseHealthViewModel viewModel) {
-    if (viewModel.releases.isEmpty) {
+    if (!_fetchedOrganizationsInitially && viewModel.fetchOrganizationsNeeded()) {
+      _fetchedOrganizationsInitially = true;
+      viewModel.fetchOrganizations();
+    }
+    if (!_fetchedReleasesInitially && viewModel.fetchReleasesNeeded()) {
+      _fetchedReleasesInitially = true;
       viewModel.fetchReleases();
     }
 

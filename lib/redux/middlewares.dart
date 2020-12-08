@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:redux/redux.dart';
-import 'package:sentry_mobile/types/organization_slug_with_project_id.dart';
 import 'package:sentry_mobile/types/project_with_latest_release.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,61 +11,56 @@ import '../types/project.dart';
 import 'actions.dart';
 import 'state/app_state.dart';
 
-void apiMiddleware(
-    Store<AppState> store, dynamic action, NextDispatcher next) async {
-  final api = SentryApi(store.state.globalState.session);
+void apiMiddleware(Store<AppState> store, dynamic action, NextDispatcher next) async {
 
   if (action is FetchOrganizationsAndProjectsAction) {
-    try {
-      final organizations = await api.organizations();
+    final thunkAction = (Store<AppState> store) async {
+      final api = SentryApi(store.state.globalState.session);
+      try {
+        final organizations = await api.organizations();
         final Map<String, List<Project>> projectsByOrganizationId = {};
         for (final organization in organizations) {
           final projects = await api.projects(organization.slug);
           projectsByOrganizationId[organization.id] = projects;
         }
         store.dispatch(FetchOrganizationsAndProjectsSuccessAction(organizations, projectsByOrganizationId));
-    } catch (e) {
-      store.dispatch(FetchOrganizationsAndProjectsFailureAction(e));
-    }
-  }
-
-  if (action is FetchProjectsAction) {
-    try {
-      final projects = await api.projects(action.organization.slug);
-      store.dispatch(FetchProjectsSuccessAction(action.organization.id, projects));
-    } catch (e) {
-      store.dispatch(FetchProjectsFailureAction(e));
-    }
+      } catch (e) {
+        store.dispatch(FetchOrganizationsAndProjectsFailureAction(e));
+      }
+      api.close();
+    };
+    store.dispatch(thunkAction);
   }
 
   if (action is FetchLatestReleasesAction) {
-    for (final slugWithId in action.organizationSlugsWithProjectId) {
+    final thunkAction = (Store<AppState> store) async {
+      final api = SentryApi(store.state.globalState.session);
       try {
-        final project = await api.project(
-            slugWithId.organizationSlug, slugWithId.projectSlug
-        );
-        final release = await api.release(
-            organizationSlug: slugWithId.organizationSlug,
-            projectId: project.id,
-            releaseId: project.latestRelease.version
-        );
-        store.dispatch(FetchReleasesSuccessAction(project, release));
+        final List<ProjectWithLatestRelease> projectsWithLatestRelease = [];
+
+        for (final organizationSlug in action.projectsByOrganizationSlug.keys) {
+          final projectsToFetch = action.projectsByOrganizationSlug[organizationSlug] ?? [];
+          for (final projectToFetch in projectsToFetch) {
+            final project = await api.project(
+                organizationSlug, projectToFetch.slug
+            );
+            final latestRelease = await api.release(
+                organizationSlug: organizationSlug,
+                projectId: project.id,
+                releaseId: project.latestRelease.version
+            );
+            projectsWithLatestRelease.add(ProjectWithLatestRelease(project, latestRelease));
+          }
+        }
+        store.dispatch(FetchLatestReleasesSuccessAction(projectsWithLatestRelease));
       } catch (e) {
-        store.dispatch(FetchReleasesFailureAction(e));
+        store.dispatch(FetchLatestReleasesFailureAction(e));
       }
-    }
+      api.close();
+    };
+    store.dispatch(thunkAction);
   }
 
-  if (action is FetchReleaseAction) {
-    try {
-      final release = await api.release(projectId: action.projectId, releaseId: action.releaseId);
-      store.dispatch(FetchReleaseSuccessAction(release));
-    } catch (e) {
-      store.dispatch(FetchReleaseFailureAction(e));
-    }
-  }
-
-  api.close();
   next(action);
 }
 
@@ -82,22 +76,7 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
       final String session = await secureStorage.read(key: 'session');
       if (session != null) {
         store.dispatch(LoginAction(Cookie.fromSetCookieValue(session)));
-        store.dispatch(FetchOrganizationsAndProjectsAction());
       }
-
-      final selectedProjectIds = preferences.getStringList('selectedProjectIds');
-      if (selectedProjectIds != null) {
-        final deserialized = selectedProjectIds
-            .map((e) => OrganizationSlugWithProjectId(e.split(';')[0], e.split(';')[1], e.split(';')[2]))
-            .toList();
-        store.dispatch(SelectProjectsAction(deserialized));
-      }
-    }
-    if (action is SelectProjectAction) {
-      final serialized = store.state.globalState.selectedOrganizationSlugsWithProjectId
-          .map((e) => '${e.organizationSlug};${e.projectId};${e.projectSlug}')
-          .toList();
-      await preferences.setStringList('selectedProjectIds', serialized);
     }
     if (action is LoginAction) {
       await secureStorage.write(key: 'session', value: action.payload.toString());

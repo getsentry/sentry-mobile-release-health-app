@@ -10,15 +10,27 @@ import '../../types/release.dart';
 class ReleaseHealthViewModel {
   ReleaseHealthViewModel.fromStore(Store<AppState> store)
       : _store = store,
-        releases = store.state.globalState.latestReleases,
-        loading = store.state.globalState.releasesLoading && store.state.globalState.latestReleases.isEmpty;
+        releases = store.state.globalState.projectsWithLatestReleases,
+        loading = store.state.globalState.projectsLoading || store.state.globalState.releasesLoading;
 
   final Store<AppState> _store;
 
   final List<ProjectWithLatestRelease> releases;
   final bool loading;
 
+  bool fetchOrganizationsNeeded() {
+    return _store.state.globalState.organizations.isEmpty && !_store.state.globalState.projectsLoading;
+  }
+
+  void fetchOrganizations() {
+    _store.dispatch(FetchOrganizationsAndProjectsAction());
+  }
+
+  bool fetchReleasesNeeded() {
+    return _store.state.globalState.bookmarkedProjectsByOrganizationSlug().isNotEmpty && !_store.state.globalState.releasesLoading;
+  }
+
   void fetchReleases() {
-    _store.dispatch(FetchLatestReleasesAction(_store.state.globalState.selectedOrganizationSlugsWithProjectId.toList()));
+    _store.dispatch(FetchLatestReleasesAction(_store.state.globalState.bookmarkedProjectsByOrganizationSlug()));
   }
 }

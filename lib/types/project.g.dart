@@ -15,6 +15,7 @@ Project _$ProjectFromJson(Map<String, dynamic> json) {
     json['latestRelease'] == null
         ? null
         : LatestRelease.fromJson(json['latestRelease'] as Map<String, dynamic>),
+    json['isBookmarked'] as bool,
   );
 }
 
@@ -24,4 +25,5 @@ Map<String, dynamic> _$ProjectToJson(Project instance) => <String, dynamic>{
       'slug': instance.slug,
       'platforms': instance.platforms,
       'latestRelease': instance.latestRelease,
+      'isBookmarked': instance.isBookmarked,
     };

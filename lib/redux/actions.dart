@@ -50,6 +50,8 @@ class SelectOrganizationAction {
   final Organization organziation;
 }
 
+// FetchProjectsAction
+
 class FetchProjectsAction {
   FetchProjectsAction(this.organization);
   final Organization organization;
@@ -66,31 +68,31 @@ class FetchProjectsFailureAction {
   final dynamic error;
 }
 
+// SelectProjectAction
+
 class SelectProjectAction {
-  SelectProjectAction(this.organizationSlugWithProjectId);
-  final OrganizationSlugWithProjectId organizationSlugWithProjectId;
+  SelectProjectAction(this.project);
+  final Project project;
 }
 
-class SelectProjectsAction {
-  SelectProjectsAction(this.organizationSlugsWithProjectId);
-  final List<OrganizationSlugWithProjectId> organizationSlugsWithProjectId;
-}
+// FetchLatestReleasesAction
 
 class FetchLatestReleasesAction {
-  FetchLatestReleasesAction(this.organizationSlugsWithProjectId);
-  final List<OrganizationSlugWithProjectId> organizationSlugsWithProjectId;
+  FetchLatestReleasesAction(this.projectsByOrganizationSlug);
+  final Map<String, List<Project>> projectsByOrganizationSlug;
 }
 
-class FetchReleasesSuccessAction {
-  FetchReleasesSuccessAction(this.project, this.release);
-  final Project project;
-  final Release release;
+class FetchLatestReleasesSuccessAction {
+  FetchLatestReleasesSuccessAction(this.projectsWithLatestReleases);
+  final List<ProjectWithLatestRelease> projectsWithLatestReleases;
 }
 
-class FetchReleasesFailureAction {
-  FetchReleasesFailureAction(this.error);
+class FetchLatestReleasesFailureAction {
+  FetchLatestReleasesFailureAction(this.error);
   final dynamic error;
 }
+
+// FetchReleaseAction
 
 class FetchReleaseAction {
   FetchReleaseAction(this.projectId, this.releaseId);

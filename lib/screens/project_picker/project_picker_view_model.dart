@@ -24,7 +24,7 @@ class ProjectPickerViewModel {
               ProjectPickerProjectItem(
                 organizationSlugWithProjectId,
                 organizationProject.name,
-                store.state.globalState.selectedOrganizationSlugsWithProjectId.contains(organizationSlugWithProjectId)
+                organizationProject.isBookmarked
               )
             );
           }

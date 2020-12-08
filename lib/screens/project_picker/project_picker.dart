@@ -58,12 +58,11 @@ class _ProjectPickerState extends State<ProjectPicker> {
                     ),
                   ),
                   trailing: Icon(
-                    item.selected ? Icons.star : Icons.star_border,
-                    color: item.selected ? Colors.orangeAccent : Colors.grey,
+                    item.isBookmarked ? Icons.star : Icons.star_border,
+                    color: item.isBookmarked ? Colors.orangeAccent : Colors.grey,
                   ),
                 onTap: () {
-                  final store = StoreProvider.of<AppState>(context);
-                  store.dispatch(SelectProjectAction(item.organizationSlugWithProjectId));
+                  // TODO(denis) Bookmark/Un-Bookmark project
                 },
               );
             } else {

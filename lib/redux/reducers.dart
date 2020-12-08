@@ -1,5 +1,4 @@
 import 'package:redux/redux.dart';
-import 'package:sentry_mobile/types/project_with_latest_release.dart';
 
 import 'actions.dart';
 import 'state/app_state.dart';
@@ -14,14 +13,15 @@ final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, RehydrateAction>(_bootAction),
   TypedReducer<GlobalState, LoginAction>(_loginAction),
   TypedReducer<GlobalState, LogoutAction>(_logoutAction),
+  TypedReducer<GlobalState, FetchOrganizationsAndProjectsAction>(_fetchOrganizationsAndProjectsAction),
   TypedReducer<GlobalState, FetchOrganizationsAndProjectsSuccessAction>(_fetchOrganizationsAndProjectsSuccessAction),
+  TypedReducer<GlobalState, FetchOrganizationsAndProjectsFailureAction>(_fetchOrganizationsAndProjectsFailureAction),
   TypedReducer<GlobalState, SelectOrganizationAction>(_selectOrganizationAction),
   TypedReducer<GlobalState, FetchProjectsSuccessAction>(_fetchProjectSuccessAction),
   TypedReducer<GlobalState, SelectProjectAction>(_selectProjectAction),
-  TypedReducer<GlobalState, SelectProjectsAction>(_selectProjectsAction),
   TypedReducer<GlobalState, FetchLatestReleasesAction>(_fetchReleasesAction),
-  TypedReducer<GlobalState, FetchReleasesSuccessAction>(_fetchReleasesSuccessAction),
-  TypedReducer<GlobalState, FetchReleasesFailureAction>(_fetchReleasesFailureAction),
+  TypedReducer<GlobalState, FetchLatestReleasesSuccessAction>(_fetchLatestReleasesSuccessAction),
+  TypedReducer<GlobalState, FetchLatestReleasesFailureAction>(_fetchLatestReleasesFailureAction),
 ]);
 
 GlobalState _switchTabAction(GlobalState state, SwitchTabAction action) {
@@ -40,8 +40,16 @@ GlobalState _logoutAction(GlobalState state, LogoutAction action) {
   return state.copyWith(setSessionNull: true);
 }
 
+GlobalState _fetchOrganizationsAndProjectsAction(GlobalState state, FetchOrganizationsAndProjectsAction action) {
+  return state.copyWith(projectsLoading: true);
+}
+
 GlobalState _fetchOrganizationsAndProjectsSuccessAction(GlobalState state, FetchOrganizationsAndProjectsSuccessAction action) {
-  return state.copyWith(organizations: action.organizations, projectsByOrganizationId: action.projectsByOrganizationId);
+  return state.copyWith(organizations: action.organizations, projectsByOrganizationId: action.projectsByOrganizationId, projectsLoading: false);
+}
+
+GlobalState _fetchOrganizationsAndProjectsFailureAction(GlobalState state, FetchOrganizationsAndProjectsFailureAction action) {
+  return state.copyWith(projectsLoading: false);
 }
 
 GlobalState _selectOrganizationAction(GlobalState state, SelectOrganizationAction action) {
@@ -55,34 +63,18 @@ GlobalState _fetchProjectSuccessAction(GlobalState state, FetchProjectsSuccessAc
 }
 
 GlobalState _selectProjectAction(GlobalState state, SelectProjectAction action) {
-  final selected = state.selectedOrganizationSlugsWithProjectId;
-  if (!selected.contains(action.organizationSlugWithProjectId)) {
-    selected.add(action.organizationSlugWithProjectId);
-  } else {
-    selected.remove(action.organizationSlugWithProjectId);
-  }
-  return state.copyWith(selectedOrganizationSlugsWithProjectId: selected);
-}
-
-GlobalState _selectProjectsAction(GlobalState state, SelectProjectsAction action) {
-  return state.copyWith(selectedOrganizationSlugsWithProjectId: action.organizationSlugsWithProjectId.toSet());
+  return state.copyWith(selectedProject: action.project);
 }
 
 GlobalState _fetchReleasesAction(GlobalState state, FetchLatestReleasesAction action) {
   return state.copyWith(releasesLoading: true);
 }
 
-GlobalState _fetchReleasesSuccessAction(GlobalState state, FetchReleasesSuccessAction action) {
-  final latestReleases = state.latestReleases;
-  final index = state.latestReleases.indexWhere((element) => element.project.id == action.project.id);
-  if (index > -1) {
-    latestReleases.removeAt(index);
-  }
-  latestReleases.add(ProjectWithLatestRelease(action.project, action.release));
-  return state.copyWith(latestReleases: latestReleases);
+GlobalState _fetchLatestReleasesSuccessAction(GlobalState state, FetchLatestReleasesSuccessAction action) {
+  return state.copyWith(releasesLoading: false, projectsWithLatestReleases: action.projectsWithLatestReleases);
 }
 
-GlobalState _fetchReleasesFailureAction(GlobalState state, FetchReleasesFailureAction action) {
+GlobalState _fetchLatestReleasesFailureAction(GlobalState state, FetchLatestReleasesFailureAction action) {
   return state.copyWith(releasesLoading: false);
 }
 
