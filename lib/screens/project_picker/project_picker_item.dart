@@ -1,6 +1,4 @@
 
-import 'package:sentry_mobile/types/organization_slug_with_project_id.dart';
-
 class ProjectPickerItem {
 }
 
@@ -11,9 +9,11 @@ class ProjectPickerOrganizationItem extends ProjectPickerItem {
 }
 
 class ProjectPickerProjectItem extends ProjectPickerItem {
-  ProjectPickerProjectItem(this.organizationSlugWithProjectId, this.title, this.isBookmarked);
+  ProjectPickerProjectItem(this.organizationSlug, this.projectSlug, this.title, this.isBookmarked);
 
-  OrganizationSlugWithProjectId organizationSlugWithProjectId;
+  final String organizationSlug;
+  final String projectSlug;
+
   String title;
   bool isBookmarked;
 }

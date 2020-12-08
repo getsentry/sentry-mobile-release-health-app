@@ -29,7 +29,7 @@ class GlobalState {
       this.hydrated,
       this.selectedTab,
       this.organizations,
-      this.projectsByOrganizationId,
+      this.projectsByOrganizationSlug,
       this.projectsLoading,
       this.projectsWithLatestReleases,
       this.releasesLoading,
@@ -42,7 +42,7 @@ class GlobalState {
       hydrated: false,
       selectedTab: 0,
       organizations: [],
-      projectsByOrganizationId: {},
+      projectsByOrganizationSlug: {},
       projectsLoading: false,
       projectsWithLatestReleases: [],
       releasesLoading: false,
@@ -56,7 +56,7 @@ class GlobalState {
   final int selectedTab;
 
   final List<Organization> organizations;
-  final Map<String, List<Project>> projectsByOrganizationId;
+  final Map<String, List<Project>> projectsByOrganizationSlug;
   final bool projectsLoading;
 
   final List<ProjectWithLatestRelease> projectsWithLatestReleases;
@@ -71,7 +71,7 @@ class GlobalState {
     int selectedTab,
     bool setSessionNull = false,
     List<Organization> organizations,
-    final Map<String, List<Project>> projectsByOrganizationId,
+    final Map<String, List<Project>> projectsByOrganizationSlug,
     bool projectsLoading,
     List<ProjectWithLatestRelease> projectsWithLatestReleases,
     bool releasesLoading,
@@ -83,7 +83,7 @@ class GlobalState {
       hydrated: hydrated ?? this.hydrated,
       selectedTab: selectedTab ?? this.selectedTab,
       organizations: organizations ?? this.organizations,
-      projectsByOrganizationId: projectsByOrganizationId ?? this.projectsByOrganizationId,
+      projectsByOrganizationSlug: projectsByOrganizationSlug ?? this.projectsByOrganizationSlug,
       projectsLoading: projectsLoading ?? this.projectsLoading,
       projectsWithLatestReleases: projectsWithLatestReleases ?? this.projectsWithLatestReleases,
       releasesLoading: releasesLoading ?? this.releasesLoading,
@@ -96,7 +96,7 @@ class GlobalState {
     final Map<String, List<Project>> bookmarkedProjectsByOrganizationSlug = {};
 
     for (final organization in organizations) {
-      final bookmarkedProjects = (projectsByOrganizationId[organization.id] ?? []).where((element) => element.isBookmarked);
+      final bookmarkedProjects = (projectsByOrganizationSlug[organization.slug] ?? []).where((element) => element.isBookmarked);
       if (bookmarkedProjects.isNotEmpty && organization.slug != null) {
         bookmarkedProjectsByOrganizationSlug[organization.slug] = bookmarkedProjects.toList();
       }

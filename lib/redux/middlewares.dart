@@ -21,7 +21,7 @@ void apiMiddleware(Store<AppState> store, dynamic action, NextDispatcher next) a
         final Map<String, List<Project>> projectsByOrganizationId = {};
         for (final organization in organizations) {
           final projects = await api.projects(organization.slug);
-          projectsByOrganizationId[organization.id] = projects;
+          projectsByOrganizationId[organization.slug] = projects;
         }
         store.dispatch(FetchOrganizationsAndProjectsSuccessAction(organizations, projectsByOrganizationId));
       } catch (e) {

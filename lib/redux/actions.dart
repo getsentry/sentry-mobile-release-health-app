@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:sentry_mobile/types/project_with_latest_release.dart';
 
 import '../types/organization.dart';
-import '../types/organization_slug_with_project_id.dart';
 import '../types/project.dart';
 import '../types/release.dart';
 
@@ -58,8 +57,8 @@ class FetchProjectsAction {
 }
 
 class FetchProjectsSuccessAction {
-  FetchProjectsSuccessAction(this.organizationId, this.projects);
-  final String organizationId;
+  FetchProjectsSuccessAction(this.organizationSlug, this.projects);
+  final String organizationSlug;
   final List<Project> projects;
 }
 

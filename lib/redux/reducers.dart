@@ -45,7 +45,7 @@ GlobalState _fetchOrganizationsAndProjectsAction(GlobalState state, FetchOrganiz
 }
 
 GlobalState _fetchOrganizationsAndProjectsSuccessAction(GlobalState state, FetchOrganizationsAndProjectsSuccessAction action) {
-  return state.copyWith(organizations: action.organizations, projectsByOrganizationId: action.projectsByOrganizationId, projectsLoading: false);
+  return state.copyWith(organizations: action.organizations, projectsByOrganizationSlug: action.projectsByOrganizationId, projectsLoading: false);
 }
 
 GlobalState _fetchOrganizationsAndProjectsFailureAction(GlobalState state, FetchOrganizationsAndProjectsFailureAction action) {
@@ -57,9 +57,9 @@ GlobalState _selectOrganizationAction(GlobalState state, SelectOrganizationActio
 }
 
 GlobalState _fetchProjectSuccessAction(GlobalState state, FetchProjectsSuccessAction action) {
-  final projectsByOrganizationId = state.projectsByOrganizationId;
-  projectsByOrganizationId[action.organizationId] = action.projects;
-  return state.copyWith(projectsByOrganizationId: projectsByOrganizationId);
+  final projectsByOrganizationId = state.projectsByOrganizationSlug;
+  projectsByOrganizationId[action.organizationSlug] = action.projects;
+  return state.copyWith(projectsByOrganizationSlug: projectsByOrganizationId);
 }
 
 GlobalState _selectProjectAction(GlobalState state, SelectProjectAction action) {
