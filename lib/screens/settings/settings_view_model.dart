@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:redux/redux.dart';
 import 'package:sentry_mobile/redux/actions.dart';
 import 'package:sentry_mobile/redux/state/app_state.dart';
@@ -7,33 +8,20 @@ import 'package:sentry_mobile/types/organization.dart';
 import 'package:sentry_mobile/types/project.dart';
 
 class SettingsViewModel {
-  SettingsViewModel({
-    this.session,
-    this.logout,
-    this.organizations,
-    this.fetchOrganizations,
-    this.selectedProjects
-  });
+  SettingsViewModel.from(Store<AppState> store) {
+    session = store.state.globalState.session;
+    final projects = store.state.globalState
+        .bookmarkedProjectsByOrganizationSlug()
+        .values.expand((element) => element).map((e) => e.name)
+        .join(', ');
+    bookmarkedProjects = projects.isNotEmpty ? projects : '--';
+    logout = () {
+      store.dispatch(LogoutAction());
+    };
+  }
 
-  final Cookie session;
+  Cookie session;
+  String bookmarkedProjects;
+  Function() logout;
 
-  final Function() logout;
-
-  final List<Organization> organizations;
-  final Function() fetchOrganizations;
-
-  final List<Project> selectedProjects;
-
-  static SettingsViewModel fromStore(Store<AppState> store) =>
-      SettingsViewModel(
-        session: store.state.globalState.session,
-        logout: () {
-          store.dispatch(LogoutAction());
-        },
-        organizations: store.state.globalState.organizations,
-        fetchOrganizations: () {
-          store.dispatch(FetchOrganizationsAndProjectsAction());
-        },
-        selectedProjects: store.state.globalState.selectedProjects(),
-      );
 }

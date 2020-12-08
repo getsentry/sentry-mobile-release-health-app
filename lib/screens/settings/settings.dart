@@ -4,8 +4,6 @@ import 'package:sentry_mobile/redux/state/app_state.dart';
 import 'package:sentry_mobile/screens/project_picker/project_picker.dart';
 import 'package:sentry_mobile/screens/settings/settings_header.dart';
 import 'package:sentry_mobile/screens/settings/settings_view_model.dart';
-import 'package:sentry_mobile/types/organization.dart';
-import 'package:sentry_mobile/types/project.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key key}) : super(key: key);
@@ -20,78 +18,61 @@ class _SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, SettingsViewModel>(
       builder: (_, viewModel) => _content(viewModel),
-      converter: (store) => SettingsViewModel.fromStore(store),
+      converter: (store) => SettingsViewModel.from(store),
     );
   }
 
   Widget _content(SettingsViewModel viewModel) {
-    if (viewModel.organizations.isEmpty) {
-      viewModel.fetchOrganizations();
-    }
-
-    final List<Widget> children = [];
-    children.add(
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: SettingsHeader('Projects'),
-      )
-    );
-    if (viewModel.selectedProjects.isNotEmpty) {
-      children.addAll(_buildProjects(viewModel));
-    } else {
-      children.add(
-        Text(
-          "No projects selected.",
-          style: Theme.of(context).textTheme.bodyText1.apply(
-              color: Colors.grey,
-          )
-        )
-      );
-    }
-    children.add(
-        RaisedButton(
-          child: Text('Add projects'),
-          onPressed: () =>
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                  builder: (BuildContext context) => ProjectPicker()
-              ),
-            )
-        )
-    );
-    children.add(
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: SettingsHeader('User'),
-        )
-    );
-    children.add(
-        RaisedButton(
-          child: Text('Logout'),
-          onPressed: () => viewModel.logout(),
-        )
-    );
-
     return SingleChildScrollView(
       child: Container(
         child: Column(
-          children: children,
-        ),
-      ),
-    );
-  }
-
-  List<Widget> _buildProjects(SettingsViewModel viewModel) {
-    return viewModel.selectedProjects.map((project) => _buildProjectRow(project)).toList();
-  }
-
-  Widget _buildProjectRow(Project project) {
-    return ListTile(
-      contentPadding: EdgeInsets.only(right: 16, top: 0, left: 16, bottom: 0),
-      title: Text(
-        project.name,
-        style: Theme.of(context).textTheme.bodyText1.apply(
-            color: Colors.black
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: SettingsHeader('Projects'),
+            ),
+            ListTile(
+              title: Text(
+                "Bookmarked Projects",
+                style: Theme.of(context).textTheme.bodyText1.apply(
+                  color: Color(0xFF18181A)
+                ),
+              ),
+              subtitle: Text(
+                  viewModel.bookmarkedProjects,
+                  style: Theme.of(context).textTheme.subtitle1.apply(
+                      color: Color(0xFFB9C1D9)
+                  )
+              ),
+              leading: Icon(
+                Icons.star,
+                color: Colors.orangeAccent,
+              ),
+              onTap: () =>
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => ProjectPicker()
+                    ),
+                  ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: SettingsHeader('Account'),
+            ),
+            ListTile(
+              title: Text(
+                "Sign Out",
+                style: Theme.of(context).textTheme.bodyText1.apply(
+                    color: Color(0xFF18181A)
+                ),
+              ),
+              leading: Icon(
+                Icons.exit_to_app,
+                color: Colors.blueAccent,
+              ),
+              onTap: () => viewModel.logout(),
+            )
+          ],
         ),
       ),
     );
