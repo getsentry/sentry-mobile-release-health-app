@@ -45,7 +45,12 @@ GlobalState _fetchOrganizationsAndProjectsAction(GlobalState state, FetchOrganiz
 }
 
 GlobalState _fetchOrganizationsAndProjectsSuccessAction(GlobalState state, FetchOrganizationsAndProjectsSuccessAction action) {
-  return state.copyWith(organizations: action.organizations, projectsByOrganizationSlug: action.projectsByOrganizationId, projectsLoading: false);
+  return state.copyWith(
+      organizations: action.organizations,
+      projectsByOrganizationSlug: action.projectsByOrganizationId,
+      projectsFetchedOnce: true,
+      projectsLoading: false
+  );
 }
 
 GlobalState _fetchOrganizationsAndProjectsFailureAction(GlobalState state, FetchOrganizationsAndProjectsFailureAction action) {
@@ -71,7 +76,11 @@ GlobalState _fetchReleasesAction(GlobalState state, FetchLatestReleasesAction ac
 }
 
 GlobalState _fetchLatestReleasesSuccessAction(GlobalState state, FetchLatestReleasesSuccessAction action) {
-  return state.copyWith(releasesLoading: false, projectsWithLatestReleases: action.projectsWithLatestReleases);
+  return state.copyWith(
+    projectsWithLatestReleases: action.projectsWithLatestReleases,
+    releasesFetchedOnce: true,
+    releasesLoading: false
+  );
 }
 
 GlobalState _fetchLatestReleasesFailureAction(GlobalState state, FetchLatestReleasesFailureAction action) {

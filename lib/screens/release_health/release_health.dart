@@ -2,10 +2,8 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:http/http.dart' as http;
 
 import '../../redux/state/app_state.dart';
 import 'release_card.dart';
@@ -22,8 +20,6 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
   int _index = 0;
 
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
-  var _fetchedOrganizationsInitially = false;
-  var _fetchedReleasesInitially = false;
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +30,8 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
   }
 
   Widget _content(ReleaseHealthViewModel viewModel) {
-    if (!_fetchedOrganizationsInitially && viewModel.fetchOrganizationsNeeded()) {
-      _fetchedOrganizationsInitially = true;
-      viewModel.fetchOrganizations();
-    }
-    if (!_fetchedReleasesInitially && viewModel.fetchReleasesNeeded()) {
-      _fetchedReleasesInitially = true;
-      viewModel.fetchReleases();
-    }
+    viewModel.fetchReleasesIfNeeded();
+    viewModel.fetchProjectsIfNeeded();
 
     if (viewModel.loading || viewModel.releases.isEmpty) {
       return Center(

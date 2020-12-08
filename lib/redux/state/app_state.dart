@@ -30,8 +30,10 @@ class GlobalState {
       this.selectedTab,
       this.organizations,
       this.projectsByOrganizationSlug,
+      this.projectsFetchedOnce,
       this.projectsLoading,
       this.projectsWithLatestReleases,
+      this.releasesFetchedOnce,
       this.releasesLoading,
       this.selectedOrganization,
       this.selectedProject});
@@ -43,8 +45,10 @@ class GlobalState {
       selectedTab: 0,
       organizations: [],
       projectsByOrganizationSlug: {},
+      projectsFetchedOnce: false,
       projectsLoading: false,
       projectsWithLatestReleases: [],
+      releasesFetchedOnce: false,
       releasesLoading: false,
       selectedOrganization: null,
       selectedProject: null,
@@ -57,9 +61,11 @@ class GlobalState {
 
   final List<Organization> organizations;
   final Map<String, List<Project>> projectsByOrganizationSlug;
+  final bool projectsFetchedOnce;
   final bool projectsLoading;
 
   final List<ProjectWithLatestRelease> projectsWithLatestReleases;
+  final bool releasesFetchedOnce;
   final bool releasesLoading;
 
   final Organization selectedOrganization;
@@ -72,8 +78,10 @@ class GlobalState {
     bool setSessionNull = false,
     List<Organization> organizations,
     final Map<String, List<Project>> projectsByOrganizationSlug,
+    bool projectsFetchedOnce,
     bool projectsLoading,
     List<ProjectWithLatestRelease> projectsWithLatestReleases,
+    bool releasesFetchedOnce,
     bool releasesLoading,
     Organization selectedOrganization,
     Project selectedProject,
@@ -84,8 +92,10 @@ class GlobalState {
       selectedTab: selectedTab ?? this.selectedTab,
       organizations: organizations ?? this.organizations,
       projectsByOrganizationSlug: projectsByOrganizationSlug ?? this.projectsByOrganizationSlug,
+      projectsFetchedOnce: projectsFetchedOnce ?? this.projectsFetchedOnce,
       projectsLoading: projectsLoading ?? this.projectsLoading,
       projectsWithLatestReleases: projectsWithLatestReleases ?? this.projectsWithLatestReleases,
+      releasesFetchedOnce: releasesFetchedOnce ?? this.releasesFetchedOnce,
       releasesLoading: releasesLoading ?? this.releasesLoading,
       selectedOrganization: selectedOrganization ?? this.selectedOrganization,
       selectedProject: selectedProject ?? this.selectedProject

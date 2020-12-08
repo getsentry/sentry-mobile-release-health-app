@@ -9,25 +9,34 @@ import '../../types/release.dart';
 
 class ReleaseHealthViewModel {
   ReleaseHealthViewModel.fromStore(Store<AppState> store)
-      : _store = store,
-        releases = store.state.globalState.projectsWithLatestReleases,
-        loading = store.state.globalState.projectsLoading || store.state.globalState.releasesLoading;
+    : _store = store,
+      releases = store.state.globalState.projectsWithLatestReleases,
+      _fetchProjectsNeeded = !store.state.globalState.projectsFetchedOnce &&
+        !store.state.globalState.projectsLoading,
+      _fetchReleasesNeeded = store.state.globalState.projectsFetchedOnce &&
+        !store.state.globalState.projectsLoading &&
+        !store.state.globalState.releasesFetchedOnce &&
+        !store.state.globalState.releasesLoading,
+      loading = store.state.globalState.projectsLoading ||
+          store.state.globalState.releasesLoading;
 
   final Store<AppState> _store;
 
   final List<ProjectWithLatestRelease> releases;
+  final bool _fetchProjectsNeeded;
+  final bool _fetchReleasesNeeded;
   final bool loading;
 
-  bool fetchOrganizationsNeeded() {
-    return _store.state.globalState.organizations.isEmpty && !_store.state.globalState.projectsLoading;
+  void fetchProjectsIfNeeded() {
+    if (_fetchProjectsNeeded) {
+      _store.dispatch(FetchOrganizationsAndProjectsAction());
+    }
   }
 
-  void fetchOrganizations() {
-    _store.dispatch(FetchOrganizationsAndProjectsAction());
-  }
-
-  bool fetchReleasesNeeded() {
-    return _store.state.globalState.bookmarkedProjectsByOrganizationSlug().isNotEmpty && !_store.state.globalState.releasesLoading;
+  void fetchReleasesIfNeeded() {
+    if (_fetchReleasesNeeded) {
+      fetchReleases();
+    }
   }
 
   void fetchReleases() {

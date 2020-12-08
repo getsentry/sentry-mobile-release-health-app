@@ -14,6 +14,7 @@ class SettingsViewModel {
         .bookmarkedProjectsByOrganizationSlug()
         .values.expand((element) => element).map((e) => e.name)
         .join(', ');
+
     bookmarkedProjects = projects.isNotEmpty ? projects : '--';
     logout = () {
       store.dispatch(LogoutAction());
