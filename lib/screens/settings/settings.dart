@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:sentry_mobile/redux/state/app_state.dart';
-import 'package:sentry_mobile/screens/project_picker/project_picker.dart';
-import 'package:sentry_mobile/screens/settings/settings_header.dart';
-import 'package:sentry_mobile/screens/settings/settings_view_model.dart';
+
+import '../../redux/state/app_state.dart';
+import '../../screens/project_picker/project_picker.dart';
+import 'settings_header.dart';
+import 'settings_view_model.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key key}) : super(key: key);

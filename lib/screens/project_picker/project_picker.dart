@@ -37,7 +37,7 @@ class _ProjectPickerState extends State<ProjectPicker> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Projects')
+        title: Text('Bookmarked Projects')
       ),
       body: ListView.builder(
           itemCount: viewModel.items.length,
