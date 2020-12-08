@@ -15,9 +15,6 @@ import 'redux/state/app_state.dart';
 import 'screens/login/login_screen.dart';
 import 'screens/main/main_screen.dart';
 
-import 'package:redux_thunk/redux_thunk.dart';
-
-
 Future<Store<AppState>> createStore() async {
   final prefs = await SharedPreferences.getInstance();
   final secStorage = FlutterSecureStorage();
