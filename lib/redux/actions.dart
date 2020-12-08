@@ -30,17 +30,18 @@ class TitleAction {
   final String payload;
 }
 
-class FetchOrganizationsAction {
-  FetchOrganizationsAction();
+class FetchOrganizationsAndProjectsAction {
+  FetchOrganizationsAndProjectsAction();
 }
 
-class FetchOrganizationsSuccessAction {
-  FetchOrganizationsSuccessAction(this.payload);
-  final List<Organization> payload;
+class FetchOrganizationsAndProjectsSuccessAction {
+  FetchOrganizationsAndProjectsSuccessAction(this.organizations, this.projectsByOrganizationId);
+  final List<Organization> organizations;
+  final Map<String, List<Project>> projectsByOrganizationId;
 }
 
-class FetchOrganizationsFailureAction {
-  FetchOrganizationsFailureAction(this.error);
+class FetchOrganizationsAndProjectsFailureAction {
+  FetchOrganizationsAndProjectsFailureAction(this.error);
   final dynamic error;
 }
 

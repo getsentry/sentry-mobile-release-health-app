@@ -14,6 +14,8 @@ class ProjectPicker extends StatefulWidget {
 
 class _ProjectPickerState extends State<ProjectPicker> {
 
+  var _fetchedOrganizationsAndProjects = false;
+
   @override
   Widget build(BuildContext context) {
      return StoreProvider<AppState>(
@@ -26,6 +28,13 @@ class _ProjectPickerState extends State<ProjectPicker> {
   }
 
   Widget _content(ProjectPickerViewModel viewModel) {
+
+    if (!_fetchedOrganizationsAndProjects) {
+      _fetchedOrganizationsAndProjects = true;
+      final store = StoreProvider.of<AppState>(context);
+      store.dispatch(FetchOrganizationsAndProjectsAction());
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Projects')
@@ -49,8 +58,8 @@ class _ProjectPickerState extends State<ProjectPicker> {
                     ),
                   ),
                   trailing: Icon(
-                    item.selected ? Icons.check_box : Icons.check_box_outline_blank,
-                    color: item.selected ? Colors.green : Colors.grey,
+                    item.selected ? Icons.star : Icons.star_border,
+                    color: item.selected ? Colors.orangeAccent : Colors.grey,
                   ),
                 onTap: () {
                   final store = StoreProvider.of<AppState>(context);

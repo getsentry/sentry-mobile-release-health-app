@@ -14,7 +14,7 @@ final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, RehydrateAction>(_bootAction),
   TypedReducer<GlobalState, LoginAction>(_loginAction),
   TypedReducer<GlobalState, LogoutAction>(_logoutAction),
-  TypedReducer<GlobalState, FetchOrganizationsSuccessAction>(_fetchOrganizationsSuccessAction),
+  TypedReducer<GlobalState, FetchOrganizationsAndProjectsSuccessAction>(_fetchOrganizationsAndProjectsSuccessAction),
   TypedReducer<GlobalState, SelectOrganizationAction>(_selectOrganizationAction),
   TypedReducer<GlobalState, FetchProjectsSuccessAction>(_fetchProjectSuccessAction),
   TypedReducer<GlobalState, SelectProjectAction>(_selectProjectAction),
@@ -40,8 +40,8 @@ GlobalState _logoutAction(GlobalState state, LogoutAction action) {
   return state.copyWith(setSessionNull: true);
 }
 
-GlobalState _fetchOrganizationsSuccessAction(GlobalState state, FetchOrganizationsSuccessAction action) {
-  return state.copyWith(organizations: action.payload);
+GlobalState _fetchOrganizationsAndProjectsSuccessAction(GlobalState state, FetchOrganizationsAndProjectsSuccessAction action) {
+  return state.copyWith(organizations: action.organizations, projectsByOrganizationId: action.projectsByOrganizationId);
 }
 
 GlobalState _selectOrganizationAction(GlobalState state, SelectOrganizationAction action) {

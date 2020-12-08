@@ -8,7 +8,6 @@ import 'package:sentry_mobile/types/project_with_latest_release.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../api/sentry_api.dart';
-import '../types/organization.dart';
 import '../types/project.dart';
 import 'actions.dart';
 import 'state/app_state.dart';
@@ -17,15 +16,17 @@ void apiMiddleware(
     Store<AppState> store, dynamic action, NextDispatcher next) async {
   final api = SentryApi(store.state.globalState.session);
 
-  if (action is FetchOrganizationsAction) {
+  if (action is FetchOrganizationsAndProjectsAction) {
     try {
       final organizations = await api.organizations();
-        store.dispatch(FetchOrganizationsSuccessAction(organizations));
+        final Map<String, List<Project>> projectsByOrganizationId = {};
         for (final organization in organizations) {
-          store.dispatch(FetchProjectsAction(organization));
+          final projects = await api.projects(organization.slug);
+          projectsByOrganizationId[organization.id] = projects;
         }
+        store.dispatch(FetchOrganizationsAndProjectsSuccessAction(organizations, projectsByOrganizationId));
     } catch (e) {
-      store.dispatch(FetchOrganizationsFailureAction(e));
+      store.dispatch(FetchOrganizationsAndProjectsFailureAction(e));
     }
   }
 
@@ -81,6 +82,7 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
       final String session = await secureStorage.read(key: 'session');
       if (session != null) {
         store.dispatch(LoginAction(Cookie.fromSetCookieValue(session)));
+        store.dispatch(FetchOrganizationsAndProjectsAction());
       }
 
       final selectedProjectIds = preferences.getStringList('selectedProjectIds');
