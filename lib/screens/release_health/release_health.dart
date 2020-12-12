@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:sentry_mobile/screens/empty/empty_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../redux/state/app_state.dart';
@@ -36,55 +37,27 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
     viewModel.fetchReleasesIfNeeded();
 
     if (viewModel.showProjectEmptyScreen) {
-      return Container(
-        margin: EdgeInsets.all(32.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text('Remain Clam', style: Theme.of(context).textTheme.headline1, textAlign: TextAlign.center),
-            SizedBox(height: 8),
-            Text('You need at least one project to use this view.', textAlign: TextAlign.center),
-            SizedBox(height: 22),
-            RaisedButton(
-              child: Text('Create project'),
-              textColor: Colors.white,
-              color: Color(0xff4e3fb4),
-              onPressed: () async {
-                const url = 'https://sentry.io';
-                if (await canLaunch(url)) {
-                  await launch(url);
-                }
-              },
-            )
-          ]
-        ),
+      return EmptyScreen(
+        'Remain Calm',
+        'You need at least one project to use this view.',
+        () async {
+          const url = 'https://sentry.io';
+          if (await canLaunch(url)) {
+            await launch(url);
+          }
+        }
       );
     } else if (viewModel.showReleaseEmptyScreen) {
-      return Container(
-        margin: EdgeInsets.all(32.0),
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text('Remain Clam', style: Theme.of(context).textTheme.headline1, textAlign: TextAlign.center,),
-              SizedBox(height: 8),
-              Text('You need at least one bookmarked project to use this view.', textAlign: TextAlign.center),
-              SizedBox(height: 22),
-              RaisedButton(
-                child: Text('Bookmark project'),
-                textColor: Colors.white,
-                color: Color(0xff4e3fb4),
-                onPressed: () async {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => ProjectPicker()
-                    ),
-                  );
-                },
-              )
-            ]
-        ),
+      return EmptyScreen(
+        'Remain Calm',
+        'You need at least one bookmarked project to use this view.',
+        () => {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (BuildContext context) => ProjectPicker()
+            ),
+          )
+        }
       );
     } else if (viewModel.showLoadingScreen || viewModel.releases.isEmpty) {
       return Center(
