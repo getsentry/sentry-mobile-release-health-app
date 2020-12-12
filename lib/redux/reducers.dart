@@ -36,7 +36,17 @@ GlobalState _loginAction(GlobalState state, LoginAction action) {
 }
 
 GlobalState _logoutAction(GlobalState state, LogoutAction action) {
-  return state.copyWith(setSessionNull: true);
+  return state.copyWith(
+    setSessionNull: true,
+    selectedTab: 0,
+    organizations: [],
+    projectsByOrganizationSlug: {},
+    projectsFetchedOnce: false,
+    projectsLoading: false,
+    projectsWithLatestReleases: [],
+    releasesFetchedOnce: false,
+    releasesLoading: false,
+  );
 }
 
 GlobalState _fetchOrganizationsAndProjectsAction(GlobalState state, FetchOrganizationsAndProjectsAction action) {
