@@ -20,7 +20,9 @@ void apiMiddleware(Store<AppState> store, dynamic action, NextDispatcher next) a
         final Map<String, List<Project>> projectsByOrganizationId = {};
         for (final organization in organizations) {
           final projects = await api.projects(organization.slug);
-          projectsByOrganizationId[organization.slug] = projects;
+          if (projects.isNotEmpty) {
+            projectsByOrganizationId[organization.slug] = projects;
+          }
         }
         store.dispatch(FetchOrganizationsAndProjectsSuccessAction(organizations, projectsByOrganizationId));
       } catch (e) {
@@ -28,10 +30,10 @@ void apiMiddleware(Store<AppState> store, dynamic action, NextDispatcher next) a
       }
       api.close();
     };
+    next(action);
     store.dispatch(thunkAction);
   }
-
-  if (action is FetchLatestReleasesAction) {
+  else if (action is FetchLatestReleasesAction) {
     final thunkAction = (Store<AppState> store) async {
       final api = SentryApi(store.state.globalState.session);
       try {
@@ -57,10 +59,11 @@ void apiMiddleware(Store<AppState> store, dynamic action, NextDispatcher next) a
       }
       api.close();
     };
+    next(action);
     store.dispatch(thunkAction);
+  } else {
+    next(action);
   }
-
-  next(action);
 }
 
 class LocalStorageMiddleware extends MiddlewareClass<AppState> {

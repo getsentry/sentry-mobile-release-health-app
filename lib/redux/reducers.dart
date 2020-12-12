@@ -16,7 +16,7 @@ final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, FetchOrganizationsAndProjectsAction>(_fetchOrganizationsAndProjectsAction),
   TypedReducer<GlobalState, FetchOrganizationsAndProjectsSuccessAction>(_fetchOrganizationsAndProjectsSuccessAction),
   TypedReducer<GlobalState, FetchOrganizationsAndProjectsFailureAction>(_fetchOrganizationsAndProjectsFailureAction),
-  TypedReducer<GlobalState, FetchLatestReleasesAction>(_fetchReleasesAction),
+  TypedReducer<GlobalState, FetchLatestReleasesAction>(_fetchLatestReleasesAction),
   TypedReducer<GlobalState, FetchLatestReleasesSuccessAction>(_fetchLatestReleasesSuccessAction),
   TypedReducer<GlobalState, FetchLatestReleasesFailureAction>(_fetchLatestReleasesFailureAction),
   TypedReducer<GlobalState, SelectOrganizationAction>(_selectOrganizationAction),
@@ -74,7 +74,7 @@ GlobalState _selectProjectAction(GlobalState state, SelectProjectAction action) 
   return state.copyWith(selectedProject: action.project);
 }
 
-GlobalState _fetchReleasesAction(GlobalState state, FetchLatestReleasesAction action) {
+GlobalState _fetchLatestReleasesAction(GlobalState state, FetchLatestReleasesAction action) {
   return state.copyWith(releasesLoading: true);
 }
 
