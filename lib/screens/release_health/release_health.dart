@@ -4,8 +4,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../redux/state/app_state.dart';
+import '../../screens/project_picker/project_picker.dart';
 import 'release_card.dart';
 import 'release_health_view_model.dart';
 
@@ -30,10 +32,61 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
   }
 
   Widget _content(ReleaseHealthViewModel viewModel) {
-    viewModel.fetchReleasesIfNeeded();
     viewModel.fetchProjectsIfNeeded();
+    viewModel.fetchReleasesIfNeeded();
 
-    if (viewModel.loading || viewModel.releases.isEmpty) {
+    if (viewModel.showProjectEmptyScreen) {
+      return Container(
+        margin: EdgeInsets.all(32.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text('Remain Clam', style: Theme.of(context).textTheme.headline1, textAlign: TextAlign.center),
+            SizedBox(height: 8),
+            Text('You need at least one project to use this view.', textAlign: TextAlign.center),
+            SizedBox(height: 22),
+            RaisedButton(
+              child: Text('Create project'),
+              textColor: Colors.white,
+              color: Color(0xff4e3fb4),
+              onPressed: () async {
+                const url = 'https://sentry.io';
+                if (await canLaunch(url)) {
+                  await launch(url);
+                }
+              },
+            )
+          ]
+        ),
+      );
+    } else if (viewModel.showReleaseEmptyScreen) {
+      return Container(
+        margin: EdgeInsets.all(32.0),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text('Remain Clam', style: Theme.of(context).textTheme.headline1, textAlign: TextAlign.center,),
+              SizedBox(height: 8),
+              Text('You need at least one bookmarked project to use this view.', textAlign: TextAlign.center),
+              SizedBox(height: 22),
+              RaisedButton(
+                child: Text('Bookmark project'),
+                textColor: Colors.white,
+                color: Color(0xff4e3fb4),
+                onPressed: () async {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => ProjectPicker()
+                    ),
+                  );
+                },
+              )
+            ]
+        ),
+      );
+    } else if (viewModel.showLoadingScreen || viewModel.releases.isEmpty) {
       return Center(
         child: CircularProgressIndicator(
           backgroundColor: Colors.white,
@@ -43,7 +96,7 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
     } else {
 
       WidgetsBinding.instance.addPostFrameCallback( ( Duration duration ) {
-        if (viewModel.loading) {
+        if (viewModel.showLoadingScreen) {
           _refreshKey.currentState.show();
         } else {
           _refreshKey.currentState.deactivate();

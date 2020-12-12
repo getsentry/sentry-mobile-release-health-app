@@ -14,15 +14,24 @@ class ReleaseHealthViewModel {
         !store.state.globalState.projectsLoading &&
         !store.state.globalState.releasesFetchedOnce &&
         !store.state.globalState.releasesLoading,
-      loading = store.state.globalState.projectsLoading ||
-          store.state.globalState.releasesLoading;
+      showProjectEmptyScreen = !store.state.globalState.projectsLoading &&
+          store.state.globalState.projectsFetchedOnce &&
+          store.state.globalState.projectsByOrganizationSlug.keys.isEmpty,
+      showReleaseEmptyScreen = !store.state.globalState.releasesLoading &&
+          store.state.globalState.releasesFetchedOnce &&
+          store.state.globalState.projectsWithLatestReleases.isEmpty,
+      showLoadingScreen = store.state.globalState.projectsLoading || store.state.globalState.releasesLoading;
 
   final Store<AppState> _store;
 
   final List<ProjectWithLatestRelease> releases;
+
   final bool _fetchProjectsNeeded;
   final bool _fetchReleasesNeeded;
-  final bool loading;
+
+  final bool showProjectEmptyScreen;
+  final bool showReleaseEmptyScreen;
+  final bool showLoadingScreen;
 
   void fetchProjectsIfNeeded() {
     if (_fetchProjectsNeeded) {
