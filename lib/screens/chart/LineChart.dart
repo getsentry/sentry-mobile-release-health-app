@@ -22,7 +22,8 @@ class LineChart extends StatelessWidget {
 }
 
 class LineChartPainter extends CustomPainter {
-  LineChartPainter.create(this.points, double lineWidth, Color lineColor, this.gradientStart, this.gradientEnd) {
+  LineChartPainter.create(List<Point> points, double lineWidth, Color lineColor, this.gradientStart, this.gradientEnd) {
+    data = prepareData(points);
     linePaint = Paint()
       ..isAntiAlias = true
       ..style = PaintingStyle.stroke
@@ -32,7 +33,7 @@ class LineChartPainter extends CustomPainter {
     paddingBottom = lineWidth / 2.0;
   }
 
-  List<Point> points;
+  Data data;
   Paint linePaint;
   double paddingBottom;
   double paddingTop;
@@ -54,42 +55,21 @@ class LineChartPainter extends CustomPainter {
     final linePath = Path();
     linePath.moveTo(0, size.height);
 
-    var minX = double.maxFinite;
-    var maxX = 0.0;
-    var minY = double.maxFinite;
-    var maxY = 0.0;
-
-    for (final point in points)  {
-      if (point.x < minX) {
-        minX = point.x;
-      }
-      if (point.x > maxX) {
-        maxX = point.x;
-      }
-      if (point.y < minY) {
-        minY = point.y;
-      }
-      if (point.y > maxY) {
-        maxY = point.y;
-      }
-    }
-
-
-    final pointsWithoutFirst = points.map((point) => Point(point.x, point.y)).toList();
+    final pointsWithoutFirst = data.points.map((point) => Point(point.x, point.y)).toList();
 
     final flippedY = (double y) {
       return flipped(y, size.height, paddingBottom);
     };
 
     final firstPoint = pointsWithoutFirst.removeAt(0);
-    var previous = Point(0, firstPoint.y);
-    linePath.moveTo(previous.x, flippedY(previous.y));
+    var previous = Point(firstPoint.x, firstPoint.y);
+    linePath.moveTo(previous.x, flippedY(normalized(previous.y, data.minY, data.maxY) * (size.height - paddingBottom - paddingTop)));
     final cubicTo = (int index, Point point) {
       final x1 = previous.x;
       final y1 = previous.y;
 
-      final x2 = normalized((index + 1).toDouble(), 0, points.length.toDouble() - 1) * size.width;
-      final y2 = normalized(point.y, minY, maxY) * (size.height - paddingBottom - paddingTop);
+      final x2 = normalized(point.x, data.minX, data.maxX) * size.width;
+      final y2 = normalized(point.y, data.minY, data.maxY) * (size.height - paddingBottom - paddingTop);
 
       final cx1 = (x1 + x2) / 2;
       final cy1 = y1;
@@ -122,6 +102,36 @@ class LineChartPainter extends CustomPainter {
     canvas.drawPath(linePath, linePaint);
   }
 
+  Data prepareData(List<Point> points) {
+    var minX = double.maxFinite;
+    var maxX = 0.0;
+    var minY = double.maxFinite;
+    var maxY = 0.0;
+
+    for (final point in points)  {
+      if (point.x < minX) {
+        minX = point.x;
+      }
+      if (point.x > maxX) {
+        maxX = point.x;
+      }
+      if (point.y < minY) {
+        minY = point.y;
+      }
+      if (point.y > maxY) {
+        maxY = point.y;
+      }
+    }
+
+    return Data(
+      points.map((point) => Point(point.x - minX, point.y - minY)).toList(),
+      0,
+      maxX - minX,
+      0,
+      maxY - minY
+    );
+  }
+
   double normalized(double point, double min, double max) {
     if ((max - min) == 0) {
       return 0;
@@ -143,4 +153,13 @@ class Point {
   Point(this.x, this.y);
   final double x;
   final double y;
+}
+
+class Data {
+  Data(this.points, this.minX, this.maxX, this.minY, this.maxY);
+  List<Point> points;
+  double minX;
+  double maxX;
+  double minY;
+  double maxY;
 }
