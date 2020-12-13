@@ -29,14 +29,12 @@ class LineChartPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = lineWidth
       ..color = lineColor;
-    paddingTop = lineWidth / 2.0;
-    paddingBottom = lineWidth / 2.0;
+    linePadding = lineWidth / 2.0;
   }
 
   Data data;
   Paint linePaint;
-  double paddingBottom;
-  double paddingTop;
+  double linePadding;
   Color gradientStart;
   Color gradientEnd;
 
@@ -52,24 +50,37 @@ class LineChartPainter extends CustomPainter {
       )
       ..style = PaintingStyle.fill;
 
-    final linePath = Path();
-    linePath.moveTo(0, size.height);
+    final screenSize = Size(size.width, size.height - linePadding * 2);
 
-    final pointsWithoutFirst = data.points.map((point) => Point(point.x, point.y)).toList();
-
-    final flippedY = (double y) {
-      return flipped(y, size.height, paddingBottom);
+    final screenCoordinateX = (double x) {
+      return normalized(x, data.minX, data.maxX) * screenSize.width;
     };
 
+    final screenCoordinateY = (double y) {
+      return normalized(y, data.minY, data.maxY) * screenSize.height;
+    };
+
+    final flipY = (double y) {
+      return (size.height - linePadding) - y;
+    };
+
+    final pointsWithoutFirst = data.points.map((point) => Point(point.x, point.y)).toList();
     final firstPoint = pointsWithoutFirst.removeAt(0);
-    var previous = Point(firstPoint.x, firstPoint.y);
-    linePath.moveTo(previous.x, flippedY(normalized(previous.y, data.minY, data.maxY) * (size.height - paddingBottom - paddingTop)));
+    var previous = Point(
+        screenCoordinateX(firstPoint.x), screenCoordinateY(firstPoint.y)
+    );
+
+    final linePath = Path();
+    linePath.moveTo(
+        previous.x, flipY(previous.y)
+    );
+
     final cubicTo = (int index, Point point) {
       final x1 = previous.x;
       final y1 = previous.y;
 
-      final x2 = normalized(point.x, data.minX, data.maxX) * size.width;
-      final y2 = normalized(point.y, data.minY, data.maxY) * (size.height - paddingBottom - paddingTop);
+      final x2 = screenCoordinateX(point.x);
+      final y2 = screenCoordinateY(point.y);
 
       final cx1 = (x1 + x2) / 2;
       final cy1 = y1;
@@ -78,16 +89,9 @@ class LineChartPainter extends CustomPainter {
       final cy2 = y2;
 
       if (y1 == y2) {
-        linePath.lineTo(x2, flippedY(y2));
+        linePath.lineTo(x2, flipY(y2));
       } else {
-        linePath.cubicTo(
-            cx1,
-            flippedY(cy1),
-            cx2,
-            flippedY(cy2),
-            x2,
-            flippedY(y2)
-        );
+        linePath.cubicTo(cx1, flipY(cy1), cx2, flipY(cy2), x2, flipY(y2));
       }
       previous = Point(x2 , y2);
     };
@@ -102,6 +106,7 @@ class LineChartPainter extends CustomPainter {
     canvas.drawPath(linePath, linePaint);
   }
 
+  /// Normalize data points so they all start at zero. Return min/max values.
   Data prepareData(List<Point> points) {
     var minX = double.maxFinite;
     var maxX = 0.0;
@@ -122,7 +127,6 @@ class LineChartPainter extends CustomPainter {
         maxY = point.y;
       }
     }
-
     return Data(
       points.map((point) => Point(point.x - minX, point.y - minY)).toList(),
       0,
@@ -137,10 +141,6 @@ class LineChartPainter extends CustomPainter {
       return 0;
     }
     return (point - min) / (max - min);
-  }
-
-  double flipped(double coordinate, double height, double padding) {
-    return height - padding - coordinate;
   }
 
   @override
