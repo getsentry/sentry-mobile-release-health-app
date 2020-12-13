@@ -216,13 +216,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_echarts:
-    dependency: "direct main"
-    description:
-      name: flutter_echarts
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.4.0"
   flutter_redux:
     dependency: "direct main"
     description:
@@ -798,13 +791,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.3"
-  webview_flutter:
-    dependency: transitive
-    description:
-      name: webview_flutter
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.6"
   win32:
     dependency: transitive
     description:

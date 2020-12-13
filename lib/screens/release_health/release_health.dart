@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_echarts/flutter_echarts.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:sentry_mobile/screens/chart/LineChart.dart';
 import 'package:sentry_mobile/screens/empty/empty_screen.dart';

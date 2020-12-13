@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_echarts/flutter_echarts.dart';
 import 'package:sentry_mobile/screens/chart/LineChart.dart';
 import '../../types/project.dart';
 import '../../types/release.dart';
