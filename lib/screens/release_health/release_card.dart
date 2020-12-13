@@ -13,37 +13,10 @@ class ReleaseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    var _data = release
+    final _data = release
         .stats24h
         .map((stat) => Point(stat.timestamp.toDouble(), stat.value.toDouble()))
         .toList();
-
-    // var _data = [
-    //   Point(1607698800,0),
-    //   Point(1607702400,0),
-    //   Point(1607706000,0),
-    //   Point(1607709600,0),
-    //   Point(1607713200,0),
-    //   Point(1607716800,0),
-    //   Point(1607720400,0),
-    //   Point(1607724000,0),
-    //   Point(1607727600,0),
-    //   Point(1607731200,0),
-    //   Point(1607734800,0),
-    //   Point(1607738400,0),
-    //   Point(1607742000,0),
-    //   Point(1607745600,0),
-    //   Point(1607749200,0),
-    //   Point(1607752800,0),
-    //   Point(1607756400,0),
-    //   Point(1607760000,0),
-    //   Point(1607763600,0),
-    //   Point(1607767200,0),
-    //   Point(1607770800,0),
-    //   Point(1607774400,0),
-    //   Point(1607778000,0),
-    //   Point(1607781600,0)
-    // ];
 
     return Card(
         margin: const EdgeInsets.only(top: 8, bottom: 8, left: 0, right: 16),
@@ -80,7 +53,7 @@ class ReleaseCard extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: LineChart(_data, 5.0, Colors.white, Colors.transparent)
+              child: LineChart(_data, 5.0, Colors.white, Colors.transparent, Colors.transparent)
             ),
             Padding(
               padding: const EdgeInsets.only(left: 16, top: 4, right: 16, bottom: 16),

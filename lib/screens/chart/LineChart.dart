@@ -4,34 +4,40 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
 class LineChart extends StatelessWidget {
-  LineChart(this.points, this.lineWidth, this.lineColor, this.gradientColor);
+  LineChart(this.points, this.lineWidth, this.lineColor, this.gradientStart, this.gradientEnd);
 
   final List<Point> points;
   final double lineWidth;
   final Color lineColor;
-  final Color gradientColor;
+  final Color gradientStart;
+  final Color gradientEnd;
 
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      painter: LineChartPainter.create(points, lineWidth, lineColor, gradientColor),
+      painter: LineChartPainter.create(points, lineWidth, lineColor, gradientStart, gradientEnd),
       child: Center(),
     );
   }
 }
 
 class LineChartPainter extends CustomPainter {
-  LineChartPainter.create(this.points, double lineWidth, Color lineColor, this.gradientColor) {
+  LineChartPainter.create(this.points, double lineWidth, Color lineColor, this.gradientStart, this.gradientEnd) {
     linePaint = Paint()
       ..isAntiAlias = true
       ..style = PaintingStyle.stroke
       ..strokeWidth = lineWidth
       ..color = lineColor;
+    paddingTop = lineWidth / 2.0;
+    paddingBottom = lineWidth / 2.0;
   }
 
   List<Point> points;
   Paint linePaint;
-  Color gradientColor;
+  double paddingBottom;
+  double paddingTop;
+  Color gradientStart;
+  Color gradientEnd;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -41,7 +47,7 @@ class LineChartPainter extends CustomPainter {
       ..shader = ui.Gradient.linear(
         Offset(size.width / 2, 0),
         Offset(size.width / 2, size.height),
-        [gradientColor, Colors.transparent],
+        [gradientStart, gradientEnd],
       )
       ..style = PaintingStyle.fill;
 
@@ -68,8 +74,7 @@ class LineChartPainter extends CustomPainter {
       }
     }
 
-    final paddingBottom = 4.0;
-    final paddingTop = 4.0;
+
     final pointsWithoutFirst = points.map((point) => Point(point.x, point.y)).toList();
 
     final flippedY = (double y) {
