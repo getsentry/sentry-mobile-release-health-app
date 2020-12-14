@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:sentry_mobile/screens/chart/LineChart.dart';
+
 import '../../types/project.dart';
 import '../../types/release.dart';
+import '../chart/line_chart.dart';
+import '../chart/line_chart_point.dart';
 
 class ReleaseCard extends StatelessWidget {
   ReleaseCard(this.project , this.release);
@@ -14,7 +16,7 @@ class ReleaseCard extends StatelessWidget {
 
     final _data = release
         .stats24h
-        .map((stat) => Point(stat.timestamp.toDouble(), stat.value.toDouble()))
+        .map((stat) => LineChartPoint(stat.timestamp.toDouble(), stat.value.toDouble()))
         .toList();
 
     return Card(
