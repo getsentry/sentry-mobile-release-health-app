@@ -7,7 +7,7 @@ import 'line_chart_data.dart';
 import 'line_chart_point.dart';
 
 class LineChart extends StatelessWidget {
-  LineChart(this.points, this.lineWidth, this.lineColor, this.gradientStart, this.gradientEnd);
+  LineChart({@required this.points, @required this.lineWidth, @required this.lineColor, @required this.gradientStart, @required this.gradientEnd});
 
   final List<LineChartPoint> points;
   final double lineWidth;
@@ -18,14 +18,14 @@ class LineChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      painter: LineChartPainter.create(points, lineWidth, lineColor, gradientStart, gradientEnd),
+      painter: _LineChartPainter.create(points, lineWidth, lineColor, gradientStart, gradientEnd),
       child: Center(),
     );
   }
 }
 
-class LineChartPainter extends CustomPainter {
-  LineChartPainter.create(List<LineChartPoint> points, double lineWidth, Color lineColor, this.gradientStart, this.gradientEnd) {
+class _LineChartPainter extends CustomPainter {
+  _LineChartPainter.create(List<LineChartPoint> points, double lineWidth, Color lineColor, this.gradientStart, this.gradientEnd) {
     data = _prepareData(points);
     linePaint = Paint()
       ..isAntiAlias = true
