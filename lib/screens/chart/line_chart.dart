@@ -92,7 +92,6 @@ class _LineChartPainter extends CustomPainter {
       previous = LineChartPoint(x2 , y2);
     };
     pointsWithoutFirst.asMap().forEach(updateLinePath);
-    canvas.drawPath(linePath, linePaint);
 
     // Gradient
 
