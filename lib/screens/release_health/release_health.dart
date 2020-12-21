@@ -144,50 +144,42 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                   children: [
                     Container(
                       height: 120,
-                      child: Expanded(
-                          child: LineChart(
-                              points: ReleaseHealthData.palceholderHealthy,
-                              lineWidth: 1.0,
-                              lineColor: Color(0xffffc227),
-                              gradientStart: Color(0xffffc227),
-                              gradientEnd: Color(0xe1ffc227)
-                          )
+                      child: LineChart(
+                          points: ReleaseHealthData.palceholderHealthy,
+                          lineWidth: 1.0,
+                          lineColor: Color(0xffffc227),
+                          gradientStart: Color(0xffffc227),
+                          gradientEnd: Color(0xe1ffc227)
                       ),
                     ),
                     Container(
                       height: 120,
-                      child: Expanded(
-                          child: LineChart(
-                              points: ReleaseHealthData.placeholderError,
-                              lineWidth: 1.0,
-                              lineColor: Color(0xffef7061),
-                              gradientStart: Color(0xffef7061),
-                              gradientEnd: Color(0xe1ef7061)
-                          )
+                      child: LineChart(
+                          points: ReleaseHealthData.placeholderError,
+                          lineWidth: 1.0,
+                          lineColor: Color(0xffef7061),
+                          gradientStart: Color(0xffef7061),
+                          gradientEnd: Color(0xe1ef7061)
                       ),
                     ),
                     Container(
                       height: 120,
-                      child: Expanded(
-                          child: LineChart(
-                              points: ReleaseHealthData.placeholderAbnormal,
-                              lineWidth: 1.0,
-                              lineColor: Color(0xffa35488),
-                              gradientStart: Color(0xffa35488),
-                              gradientEnd: Color(0xe1a35488)
-                          )
+                      child: LineChart(
+                          points: ReleaseHealthData.placeholderAbnormal,
+                          lineWidth: 1.0,
+                          lineColor: Color(0xffa35488),
+                          gradientStart: Color(0xffa35488),
+                          gradientEnd: Color(0xe1a35488)
                       ),
                     ),
                     Container(
                       height: 120,
-                      child: Expanded(
-                          child: LineChart(
-                              points: ReleaseHealthData.placeholderCrashes,
-                              lineWidth: 1.0,
-                              lineColor: Color(0xff444674),
-                              gradientStart: Color(0xff444674),
-                              gradientEnd: Color(0xe1444674)
-                          )
+                      child: LineChart(
+                          points: ReleaseHealthData.placeholderCrashes,
+                          lineWidth: 1.0,
+                          lineColor: Color(0xff444674),
+                          gradientStart: Color(0xff444674),
+                          gradientEnd: Color(0xe1444674)
                       ),
                     ),
                   ],

@@ -32,7 +32,7 @@ class ReleaseCard extends StatelessWidget {
                 begin: Alignment.bottomLeft,
                 end: Alignment.topRight,
               )),
-          child: Column(children: <Widget>[
+          child: Column(children: [
             Padding(
               padding: const EdgeInsets.only(left: 16, top: 20, right: 16, bottom: 0),
               child: Align(
@@ -53,6 +53,7 @@ class ReleaseCard extends StatelessWidget {
                 ),
               ),
             ),
+            SizedBox(height: 8.0),
             Expanded(
               child: LineChart(
                 points: _data,
@@ -60,8 +61,9 @@ class ReleaseCard extends StatelessWidget {
                 lineColor: Colors.white,
                 gradientStart: Colors.transparent,
                 gradientEnd: Colors.transparent
-            )
+              )
             ),
+            SizedBox(height: 8.0),
             Padding(
               padding: const EdgeInsets.only(left: 16, top: 4, right: 16, bottom: 16),
               child: _platforms(context, project.platforms)
