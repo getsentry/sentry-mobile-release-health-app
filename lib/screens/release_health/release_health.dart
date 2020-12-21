@@ -6,6 +6,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:sentry_mobile/screens/chart/line_chart.dart';
 import 'package:sentry_mobile/screens/empty/empty_screen.dart';
 import 'package:sentry_mobile/screens/release_health/release_health_data.dart';
+import 'package:sentry_mobile/screens/empty/empty_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../redux/state/app_state.dart';
