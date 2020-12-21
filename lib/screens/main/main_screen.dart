@@ -27,7 +27,7 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget _content(Store<AppState> store) {
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: Header(),
@@ -66,15 +66,15 @@ class _MainScreenState extends State<MainScreen> {
                         iconMargin: EdgeInsets.only(bottom: 0),
                         text: '',
                       ),
-                      Tab(
-                        icon: Icon(SentryIcons.user,
-                            color:
-                            store.state.globalState.selectedTab == 2
-                                ? Color(0xff81B4FE)
-                                : Color(0xffB9C1D9)),
-                        iconMargin: EdgeInsets.only(bottom: 0),
-                        text: '',
-                      ),
+                      // Tab(
+                      //   icon: Icon(SentryIcons.user,
+                      //       color:
+                      //       store.state.globalState.selectedTab == 2
+                      //           ? Color(0xff81B4FE)
+                      //           : Color(0xffB9C1D9)),
+                      //   iconMargin: EdgeInsets.only(bottom: 0),
+                      //   text: '',
+                      // ),
                     ],
                   )
                 ],
@@ -84,7 +84,7 @@ class _MainScreenState extends State<MainScreen> {
           children: [
             ReleaseHealth(),
             IssuesScreenBuilder(),
-            Settings(),
+            //Settings(),
           ],
           physics: NeverScrollableScrollPhysics(),
         ),
