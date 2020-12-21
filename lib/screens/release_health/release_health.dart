@@ -277,13 +277,15 @@ class HealthCard extends StatelessWidget {
     return change > 0 ? '+' : '';
   }
 
-  String getTrendIcon() {
+  Icon getTrendIcon() {
     if (change == 0) {
       return null;
     }
-    return change > 0
-      ? 'assets/trend-up-green.png'
-      : 'assets/trend-down-red.png';
+    return change == 0
+      ? Icon(SentryIcons.trend_same, color: Color(0xffB9C1D9), size: 8.0)
+      :  change > 0
+        ? Icon(SentryIcons.trend_up, color: Color(0xff23B480), size: 8.0)
+        : Icon(SentryIcons.trend_down, color: Color(0xffEE6855), size: 8.0);
   }
 
   @override
@@ -335,7 +337,7 @@ class HealthCard extends StatelessWidget {
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: 5),
-                  child: getTrendIcon() != null ? Image.asset(getTrendIcon(), height: 8) : Spacer(),
+                  child: getTrendIcon() ?? Spacer(),
                 )
               ])),
         ],
@@ -355,10 +357,15 @@ class ChartRow extends StatelessWidget {
     return change > 0 ? '+' : '';
   }
 
-  String getTrendIcon() {
-    return change > 0
-        ? 'assets/trend-up-red.png'
-        : 'assets/trend-down-green.png';
+  Icon getTrendIcon() {
+    if (change == 0) {
+      return null;
+    }
+    return change == 0
+        ? Icon(SentryIcons.trend_same, color: Color(0xffB9C1D9), size: 8.0)
+        :  change > 0
+        ? Icon(SentryIcons.trend_up, color: Color(0xff23B480), size: 8.0)
+        : Icon(SentryIcons.trend_down, color: Color(0xffEE6855), size: 8.0);
   }
 
   @override
@@ -421,7 +428,7 @@ class ChartRow extends StatelessWidget {
                     )),
                 Padding(
                   padding: EdgeInsets.only(left: 7),
-                  child: Image.asset(getTrendIcon(), height: 8),
+                  child: getTrendIcon(),
                 )
               ])
             ],

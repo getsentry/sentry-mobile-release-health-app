@@ -65,15 +65,6 @@ flutter:
      fonts:
        - asset: assets/fonts/SentryIcons.ttf
 
-  assets:
-    - assets/line-flat.png
-    - assets/status-green.png
-    - assets/status-orange.png
-    - assets/status-red.png
-    - assets/trend-up-green.png
-    - assets/trend-down-green.png
-    - assets/trend-up-red.png
-    - assets/trend-down-red.png
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
