@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
+import '../../utils/sentry_icons.dart';
 import '../../issues.dart';
 import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
@@ -47,7 +48,7 @@ class _MainScreenState extends State<MainScreen> {
                         color: Colors.transparent, radius: 3),
                     tabs: [
                       Tab(
-                        icon: Icon(Icons.home,
+                        icon: Icon(SentryIcons.home,
                             color:
                             // hacky, but don't want to fight with built in tabs
                             store.state.globalState.selectedTab == 0
@@ -57,7 +58,7 @@ class _MainScreenState extends State<MainScreen> {
                         text: '',
                       ),
                       Tab(
-                        icon: Icon(Icons.inbox,
+                        icon: Icon(SentryIcons.issues,
                             color:
                             store.state.globalState.selectedTab == 1
                                 ? Color(0xff81B4FE)
@@ -66,7 +67,7 @@ class _MainScreenState extends State<MainScreen> {
                         text: '',
                       ),
                       Tab(
-                        icon: Icon(Icons.account_circle,
+                        icon: Icon(SentryIcons.user,
                             color:
                             store.state.globalState.selectedTab == 2
                                 ? Color(0xff81B4FE)
@@ -123,7 +124,14 @@ class Header extends StatelessWidget with PreferredSizeWidget {
             centerTitle: false,
             actions: [
               IconButton(
-                icon: Icon(Icons.settings),
+                icon: Icon(SentryIcons.settings),
+                color: Color(0xffb9c1d9),
+                onPressed: () =>
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => Settings()
+                    ),
+                  ),
               )
             ],
             title: Text(

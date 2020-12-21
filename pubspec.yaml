@@ -60,6 +60,11 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  fonts:
+   - family: SentryIcons
+     fonts:
+       - asset: assets/fonts/SentryIcons.ttf
+
   assets:
     - assets/line-flat.png
     - assets/status-green.png
