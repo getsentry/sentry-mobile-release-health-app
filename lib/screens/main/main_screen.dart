@@ -6,8 +6,8 @@ import 'package:redux/redux.dart';
 import '../../issues.dart';
 import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
-import '../../settings.dart';
 import '../release_health/release_health.dart';
+import '../settings/settings.dart';
 
 class MainScreen extends StatefulWidget {
   @override

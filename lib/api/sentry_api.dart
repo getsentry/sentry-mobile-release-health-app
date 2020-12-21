@@ -34,6 +34,13 @@ class SentryApi {
     return _parseResponseList(response, (jsonMap) => Project.fromJson(jsonMap)).asFuture;
   }
 
+  Future<Project> project(String organizationSlug, String projectSlug) async {
+    final response = await client.get('${_baseUrl()}/projects/$organizationSlug/$projectSlug/',
+        headers: _defaultHeader()
+    );
+    return _parseResponse(response, (jsonMap) => Project.fromJson(jsonMap)).asFuture;
+  }
+
   Future<List<Release>> releases({@required String organizationSlug, @required String projectId, int perPage = 25, int health = 1, int flatten = 0, String summaryStatsPeriod = '24h'}) async {
     final queryParameters = {
       'project': projectId,
@@ -48,12 +55,13 @@ class SentryApi {
     return _parseResponseList(response, (jsonMap) => Release.fromJson(jsonMap)).asFuture;
   }
 
-  Future<Release> release({@required String projectId, @required String releaseId, int health = 1, String summaryStatsPeriod = '24h'}) async {
+  Future<Release> release({@required String organizationSlug, @required String projectId, @required String releaseId, int health = 1, String summaryStatsPeriod = '24h'}) async {
     final queryParameters = {
+      'project': projectId,
       'health': '$health',
       'summaryStatsPeriod': summaryStatsPeriod,
     };
-    final response = await client.get(Uri.https(baseUrlName, '$baseUrlPath/organizations/$projectId/releases/$releaseId/', queryParameters),
+    final response = await client.get(Uri.https(baseUrlName, '$baseUrlPath/organizations/$organizationSlug/releases/$releaseId/', queryParameters),
         headers: _defaultHeader()
     );
     return _parseResponse(response, (jsonMap) => Release.fromJson(jsonMap)).asFuture;

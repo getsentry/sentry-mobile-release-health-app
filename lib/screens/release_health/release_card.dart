@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
-
 import '../../types/project.dart';
 import '../../types/release.dart';
 

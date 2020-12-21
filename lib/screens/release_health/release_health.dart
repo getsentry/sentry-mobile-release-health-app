@@ -4,8 +4,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:sentry_mobile/screens/empty/empty_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../redux/state/app_state.dart';
+import '../../screens/project_picker/project_picker.dart';
 import 'release_card.dart';
 import 'release_health_view_model.dart';
 
@@ -30,7 +33,33 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
   }
 
   Widget _content(ReleaseHealthViewModel viewModel) {
-    if (viewModel.loading || viewModel.releases.isEmpty) {
+    viewModel.fetchProjectsIfNeeded();
+    viewModel.fetchReleasesIfNeeded();
+
+    if (viewModel.showProjectEmptyScreen) {
+      return EmptyScreen(
+        'Remain Calm',
+        'You need at least one project to use this view.',
+        () async {
+          const url = 'https://sentry.io';
+          if (await canLaunch(url)) {
+            await launch(url);
+          }
+        }
+      );
+    } else if (viewModel.showReleaseEmptyScreen) {
+      return EmptyScreen(
+        'Remain Calm',
+        'You need at least one bookmarked project to use this view.',
+        () => {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (BuildContext context) => ProjectPicker()
+            ),
+          )
+        }
+      );
+    } else if (viewModel.showLoadingScreen || viewModel.releases.isEmpty) {
       return Center(
         child: CircularProgressIndicator(
           backgroundColor: Colors.white,
@@ -40,7 +69,7 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
     } else {
 
       WidgetsBinding.instance.addPostFrameCallback( ( Duration duration ) {
-        if (viewModel.loading) {
+        if (viewModel.showLoadingScreen) {
           _refreshKey.currentState.show();
         } else {
           _refreshKey.currentState.deactivate();
@@ -63,8 +92,8 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                         setState(() => _index = index),
                     itemBuilder: (context, index) {
                       return ReleaseCard(
-                          viewModel.project,
-                          viewModel.releases[index],
+                          viewModel.releases[index].project,
+                          viewModel.releases[index].release,
                       );
                     },
                   )),
@@ -79,11 +108,11 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                     ),
                     ChartRow(
                         title: 'Issues',
-                        total: viewModel.releases[_index].issues,
+                        total: viewModel.releases[_index].release.issues,
                         change: 3.6), // TODO: api
                     ChartRow(
                         title: 'Crashes',
-                        total: viewModel.releases[_index].crashes,
+                        total: viewModel.releases[_index].release.crashes,
                         change: -4.2), // TODO: api
                     HealthDivider(
                       onSeeAll: () {},
@@ -96,11 +125,11 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                       children: [
                         HealthCard(
                             title: 'Crash Free Users',
-                            value: viewModel.releases[_index].crashFreeUsers,
+                            value: viewModel.releases[_index].release.crashFreeUsers,
                             change: 0.04), // TODO: api
                         HealthCard(
                             title: 'Crash Free Sessions',
-                            value: viewModel.releases[_index].crashFreeSessions,
+                            value: viewModel.releases[_index].release.crashFreeSessions,
                             change: -0.01), // TODO: api
                       ],
                     )

@@ -8,23 +8,23 @@ AppState appReducer(AppState state, dynamic action) =>
       globalState: globalReducer(state.globalState, action),
     );
 
-
 final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, SwitchTabAction>(_switchTabAction),
   TypedReducer<GlobalState, RehydrateAction>(_bootAction),
   TypedReducer<GlobalState, LoginAction>(_loginAction),
   TypedReducer<GlobalState, LogoutAction>(_logoutAction),
-  TypedReducer<GlobalState, FetchOrganizationsSuccessAction>(_fetchOrganizationsSuccessAction),
+  TypedReducer<GlobalState, FetchOrganizationsAndProjectsAction>(_fetchOrganizationsAndProjectsAction),
+  TypedReducer<GlobalState, FetchOrganizationsAndProjectsSuccessAction>(_fetchOrganizationsAndProjectsSuccessAction),
+  TypedReducer<GlobalState, FetchOrganizationsAndProjectsFailureAction>(_fetchOrganizationsAndProjectsFailureAction),
+  TypedReducer<GlobalState, FetchLatestReleasesAction>(_fetchLatestReleasesAction),
+  TypedReducer<GlobalState, FetchLatestReleasesSuccessAction>(_fetchLatestReleasesSuccessAction),
+  TypedReducer<GlobalState, FetchLatestReleasesFailureAction>(_fetchLatestReleasesFailureAction),
   TypedReducer<GlobalState, SelectOrganizationAction>(_selectOrganizationAction),
-  TypedReducer<GlobalState, FetchProjectsSuccessAction>(_fetchProjectSuccessAction),
   TypedReducer<GlobalState, SelectProjectAction>(_selectProjectAction),
-  TypedReducer<GlobalState, FetchReleasesAction>(_fetchReleasesAction),
-  TypedReducer<GlobalState, FetchReleasesSuccessAction>(_fetchReleasesSuccessAction),
-  TypedReducer<GlobalState, FetchReleasesFailureAction>(_fetchReleasesFailureAction),
 ]);
 
 GlobalState _switchTabAction(GlobalState state, SwitchTabAction action) {
-  return state.copyWith(selectedTab: action.payload);
+  return state.copyWith(selectedTab: action.selectedTab);
 }
 
 GlobalState _bootAction(GlobalState state, RehydrateAction action) {
@@ -32,38 +32,61 @@ GlobalState _bootAction(GlobalState state, RehydrateAction action) {
 }
 
 GlobalState _loginAction(GlobalState state, LoginAction action) {
-  return state.copyWith(session: action.payload);
+  return state.copyWith(session: action.cookie);
 }
 
 GlobalState _logoutAction(GlobalState state, LogoutAction action) {
-  return state.copyWith(setSessionNull: true);
+  return state.copyWith(
+    setSessionNull: true,
+    selectedTab: 0,
+    organizations: [],
+    projectsByOrganizationSlug: {},
+    projectsFetchedOnce: false,
+    projectsLoading: false,
+    projectsWithLatestReleases: [],
+    releasesFetchedOnce: false,
+    releasesLoading: false,
+  );
 }
 
-GlobalState _fetchOrganizationsSuccessAction(GlobalState state, FetchOrganizationsSuccessAction action) {
-  return state.copyWith(organizations: action.payload);
+GlobalState _fetchOrganizationsAndProjectsAction(GlobalState state, FetchOrganizationsAndProjectsAction action) {
+  return state.copyWith(projectsLoading: true);
+}
+
+GlobalState _fetchOrganizationsAndProjectsSuccessAction(GlobalState state, FetchOrganizationsAndProjectsSuccessAction action) {
+  return state.copyWith(
+      organizations: action.organizations,
+      projectsByOrganizationSlug: action.projectsByOrganizationSlug,
+      projectsFetchedOnce: true,
+      projectsLoading: false
+  );
+}
+
+GlobalState _fetchOrganizationsAndProjectsFailureAction(GlobalState state, FetchOrganizationsAndProjectsFailureAction action) {
+  return state.copyWith(projectsLoading: false);
 }
 
 GlobalState _selectOrganizationAction(GlobalState state, SelectOrganizationAction action) {
-  return state.copyWith(selectedOrganization: action.payload);
-}
-
-GlobalState _fetchProjectSuccessAction(GlobalState state, FetchProjectsSuccessAction action) {
-  return state.copyWith(projects: action.payload);
+  return state.copyWith(selectedOrganization: action.organization);
 }
 
 GlobalState _selectProjectAction(GlobalState state, SelectProjectAction action) {
-  return state.copyWith(selectedProject: action.payload);
+  return state.copyWith(selectedProject: action.project);
 }
 
-GlobalState _fetchReleasesAction(GlobalState state, FetchReleasesAction action) {
+GlobalState _fetchLatestReleasesAction(GlobalState state, FetchLatestReleasesAction action) {
   return state.copyWith(releasesLoading: true);
 }
 
-GlobalState _fetchReleasesSuccessAction(GlobalState state, FetchReleasesSuccessAction action) {
-  return state.copyWith(releases: action.payload, releasesLoading: false);
+GlobalState _fetchLatestReleasesSuccessAction(GlobalState state, FetchLatestReleasesSuccessAction action) {
+  return state.copyWith(
+    projectsWithLatestReleases: action.projectsWithLatestReleases,
+    releasesFetchedOnce: true,
+    releasesLoading: false
+  );
 }
 
-GlobalState _fetchReleasesFailureAction(GlobalState state, FetchReleasesFailureAction action) {
+GlobalState _fetchLatestReleasesFailureAction(GlobalState state, FetchLatestReleasesFailureAction action) {
   return state.copyWith(releasesLoading: false);
 }
 

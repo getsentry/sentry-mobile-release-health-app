@@ -4,6 +4,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:redux/redux.dart';
+import 'package:redux_thunk/redux_thunk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -17,16 +18,18 @@ import 'screens/main/main_screen.dart';
 Future<Store<AppState>> createStore() async {
   final prefs = await SharedPreferences.getInstance();
   final secStorage = FlutterSecureStorage();
-  return Store(
+
+  return Store<AppState>(
     appReducer,
     initialState: AppState.initial(),
     middleware: [
       apiMiddleware,
-      LocalStorageMiddleware(prefs, secStorage)
+      LocalStorageMiddleware(prefs, secStorage),
 //      ValidationMiddleware(),
 //      LoggingMiddleware.printer(),
 //      LocalStorageMiddleware(prefs),
 //      NavigationMiddleware()
+      thunkMiddleware,
     ],
   );
 }
@@ -122,6 +125,7 @@ class SentryMobile extends StatelessWidget {
                   )),
             )),
         home: StoreConnector<AppState, AppState>(
+          converter: (store) => store.state,
           builder: (_, state) {
             if (state.globalState.session == null) {
               return LoginScreen();
@@ -129,7 +133,6 @@ class SentryMobile extends StatelessWidget {
               return MainScreen();
             }
           },
-          converter: (store) => store.state,
         ),
         navigatorObservers: [
           SentryNavigatorObserver()
