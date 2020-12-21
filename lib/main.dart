@@ -130,7 +130,10 @@ class SentryMobile extends StatelessWidget {
             }
           },
           converter: (store) => store.state,
-        )
+        ),
+        navigatorObservers: [
+          SentryNavigatorObserver()
+        ],
     );
   }
 }
