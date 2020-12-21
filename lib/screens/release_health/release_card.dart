@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_echarts/flutter_echarts.dart';
+
 import '../../types/project.dart';
 import '../../types/release.dart';
+import '../chart/line_chart.dart';
+import '../chart/line_chart_point.dart';
 
 class ReleaseCard extends StatelessWidget {
   ReleaseCard(this.project , this.release);
@@ -12,11 +14,10 @@ class ReleaseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    var data = '[';
-    data += release.stats24h
-        .map((stat) => '[${stat.timestamp*1000},${stat.value}]')
-        .join(',');
-    data += ']';
+    final _data = release
+        .stats24h
+        .map((stat) => LineChartPoint(stat.timestamp.toDouble(), stat.value.toDouble()))
+        .toList();
 
     return Card(
         margin: const EdgeInsets.only(top: 8, bottom: 8, left: 0, right: 16),
@@ -31,7 +32,7 @@ class ReleaseCard extends StatelessWidget {
                 begin: Alignment.bottomLeft,
                 end: Alignment.topRight,
               )),
-          child: Column(children: <Widget>[
+          child: Column(children: [
             Padding(
               padding: const EdgeInsets.only(left: 16, top: 20, right: 16, bottom: 0),
               child: Align(
@@ -52,50 +53,17 @@ class ReleaseCard extends StatelessWidget {
                 ),
               ),
             ),
+            SizedBox(height: 8.0),
             Expanded(
-              child: Echarts(
-                option: '''
-                {
-                  backgroundColor: '#23B480',
-                  isGroupedByDate: true,
-                  xAxis: [{
-                    type: 'time',
-                    show: false
-                  }],
-                  yAxis: [{
-                    type: 'value',
-                    show: false
-                  }],
-                  grid: {
-                    left: -3,
-                    right: -3,
-                    bottom: 17,
-                    top: 3
-                  },
-                  series: [
-                  {
-                    name: 'Stat',
-                    showSymbol: false,
-                    data: ''' + data + ''',
-                    type: 'line',
-                    clip: false,
-                    smooth: true,
-                    stack: 'area',
-                    animation: false,
-                    lineStyle: {
-                      opacity: 1,
-                      width: 5,
-                      color: '#ffffff',
-                      shadowColor: 'rgba(0, 0, 0, 0.05)',
-                      shadowBlur: 0,
-                      shadowOffsetX: 5,
-                      shadowOffsetY: 14
-                    }
-                  }]
-                }
-              ''',
-              ),
+              child: LineChart(
+                points: _data,
+                lineWidth: 5.0,
+                lineColor: Colors.white,
+                gradientStart: Colors.transparent,
+                gradientEnd: Colors.transparent
+              )
             ),
+            SizedBox(height: 8.0),
             Padding(
               padding: const EdgeInsets.only(left: 16, top: 4, right: 16, bottom: 16),
               child: _platforms(context, project.platforms)
