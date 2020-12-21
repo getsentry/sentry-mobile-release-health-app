@@ -107,7 +107,6 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                     HealthDivider(
                       onSeeAll: () {},
                       title: 'Charts',
-                      paddingBottom: 10,
                     ),
                     ChartRow(
                         title: 'Issues',
@@ -120,7 +119,6 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                     HealthDivider(
                       onSeeAll: () {},
                       title: 'Statistics',
-                      paddingBottom: 0,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -202,17 +200,15 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
 class HealthDivider extends StatelessWidget {
   HealthDivider(
       {@required this.title,
-      @required this.onSeeAll,
-      @required this.paddingBottom});
+      @required this.onSeeAll});
 
   final String title;
   final void Function() onSeeAll;
-  final double paddingBottom;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(bottom: paddingBottom),
+      padding: EdgeInsets.only(top: 22.0, bottom: 16.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -224,19 +220,19 @@ class HealthDivider extends StatelessWidget {
               fontSize: 16,
             ),
           ),
-          MaterialButton(
-            minWidth: 0,
-            padding: EdgeInsets.zero,
-            onPressed: onSeeAll,
-            child: Text(
-              'See All',
-              style: TextStyle(
-                color: Color(0xFF81B4FE),
-                fontWeight: FontWeight.w500,
-                fontSize: 16,
-              ),
-            ),
-          )
+          // MaterialButton(
+          //   minWidth: 0,
+          //   padding: EdgeInsets.zero,
+          //   onPressed: onSeeAll,
+          //   child: Text(
+          //     'See All',
+          //     style: TextStyle(
+          //       color: Color(0xFF81B4FE),
+          //       fontWeight: FontWeight.w500,
+          //       fontSize: 16,
+          //     ),
+          //   ),
+          // )
         ],
       ),
     );
