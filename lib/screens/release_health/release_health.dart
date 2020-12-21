@@ -7,6 +7,7 @@ import 'package:sentry_mobile/screens/chart/line_chart.dart';
 import 'package:sentry_mobile/screens/empty/empty_screen.dart';
 import 'package:sentry_mobile/screens/release_health/release_health_data.dart';
 import 'package:sentry_mobile/screens/empty/empty_screen.dart';
+import 'package:sentry_mobile/utils/sentry_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../redux/state/app_state.dart';
@@ -261,15 +262,15 @@ class HealthCard extends StatelessWidget {
           : value > dangerThreshold ? Color(0xFFFFC227) : Color(0xFFEE6855);
   }
 
-  String getIcon() {
+  Icon getIcon(Color color) {
     if (value == null) {
       return null;
     }
     return value > warningThreshold
-        ? 'assets/status-green.png'
+        ? Icon(SentryIcons.status_ok, color: color, size: 20.0)
         : value > dangerThreshold
-            ? 'assets/status-orange.png'
-            : 'assets/status-red.png';
+            ? Icon(SentryIcons.status_warning, color: color, size: 20.0)
+            : Icon(SentryIcons.status_error, color: color, size: 20.0);
   }
 
   String getTrendSign() {
@@ -299,8 +300,11 @@ class HealthCard extends StatelessWidget {
         children: [
           Padding(
             padding: EdgeInsets.only(top: 10, bottom: 10),
-            child: getIcon() != null ? Image.asset(getIcon(), height: 50) : SizedBox(height: 50),
-          ),
+            child: CircleAvatar(
+              radius: 24,
+              backgroundColor: getColor().withAlpha(0x19),
+              child: getIcon(getColor()),
+            )),
           Text(
             value != null ? value.toString() + '%' : '--',
             style: TextStyle(
