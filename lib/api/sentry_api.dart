@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import '../api/api_errors.dart';
 import '../types/organization.dart';
@@ -14,7 +15,7 @@ class SentryApi {
   SentryApi(this.session);
 
   final Cookie session;
-  final client = Client();
+  final client = SentryHttpClient(client: Client());
   final baseUrlScheme = 'https://';
   final baseUrlName = 'sentry.io';
   final baseUrlPath = '/api/0';

@@ -35,27 +35,25 @@ Future<Store<AppState>> createStore() async {
 }
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitDown,
-    DeviceOrientation.portraitUp,
-  ]);
-
-  final store = await createStore();
-
-  store.dispatch(RehydrateAction());
-
   await SentryFlutter.init(
-      (options) {
-        options.dsn = 'https://cb0fad6f5d4e42ebb9c956cb0463edc9@o447951.ingest.sentry.io/5428562';
-      },
-      () {
-        runApp(StoreProvider(
-          store: store,
-          child: SentryMobile(),
-        ));
-      }
+    (options) {
+      options.dsn = 'https://b647bf95c35249fe967c91feae3f72d7@o447951.ingest.sentry.io/5555613';
+    },
+    appRunner: () async {
+
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitDown,
+        DeviceOrientation.portraitUp,
+      ]);
+
+      final store = await createStore();
+      store.dispatch(RehydrateAction());
+
+      runApp(StoreProvider(
+        store: store,
+        child: SentryMobile(),
+      ));
+    }
   );
 }
 
@@ -135,7 +133,10 @@ class SentryMobile extends StatelessWidget {
               return MainScreen();
             }
           },
-        )
+        ),
+        navigatorObservers: [
+          SentryNavigatorObserver()
+        ],
     );
   }
 }
