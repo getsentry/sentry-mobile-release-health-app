@@ -19,6 +19,7 @@ final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, FetchLatestReleasesAction>(_fetchLatestReleasesAction),
   TypedReducer<GlobalState, FetchLatestReleasesSuccessAction>(_fetchLatestReleasesSuccessAction),
   TypedReducer<GlobalState, FetchLatestReleasesFailureAction>(_fetchLatestReleasesFailureAction),
+  TypedReducer<GlobalState, FetchIssuesSuccessAction>(_fetchIssuesSuccessAction),
   TypedReducer<GlobalState, SelectOrganizationAction>(_selectOrganizationAction),
   TypedReducer<GlobalState, SelectProjectAction>(_selectProjectAction),
 ]);
@@ -88,6 +89,16 @@ GlobalState _fetchLatestReleasesSuccessAction(GlobalState state, FetchLatestRele
 
 GlobalState _fetchLatestReleasesFailureAction(GlobalState state, FetchLatestReleasesFailureAction action) {
   return state.copyWith(releasesLoading: false);
+}
+
+GlobalState _fetchIssuesSuccessAction(GlobalState state, FetchIssuesSuccessAction action) {
+  final issuedByProjectSlug = action.handled ? state.handledIssuesByProjectSlug : state.unhandledIssuesByProjectSlug;
+  issuedByProjectSlug[action.projectSlug] = action.issues;
+  if (action.handled) {
+    return state.copyWith(handledIssuesByProjectSlug: issuedByProjectSlug);
+  } else {
+    return state.copyWith(unhandledIssuesByProjectSlug: issuedByProjectSlug);
+  }
 }
 
 // -----------------------------
