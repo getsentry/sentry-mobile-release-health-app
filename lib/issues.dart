@@ -15,7 +15,7 @@ import 'types/project.dart';
 Future<List<Group>> fetchGroups(String orgSlug, String projSlug, Cookie cookie) async {
   final api = SentryApi(cookie);
   try {
-    return await api.fetchGroups(organizationSlug: orgSlug, projectSlug: projSlug);
+    return await api.issues(organizationSlug: orgSlug, projectSlug: projSlug);
   } catch (exception) {
     rethrow;
   } finally {

@@ -68,7 +68,11 @@ class SentryApi {
     return _parseResponse(response, (jsonMap) => Release.fromJson(jsonMap)).asFuture;
   }
 
-  Future<List<Group>> fetchGroups({@required String organizationSlug, @required String projectSlug}) async {
+  Future<List<Group>> issues({@required String organizationSlug, @required String projectSlug, bool handled}) async {
+    final queryParameters = {};
+    if (handled != null) {
+      queryParameters['query'] = 'handled:${handled ? 'yes' : 'no'}';
+    }
     final response = await client.get(Uri.https(baseUrlName, '$baseUrlPath/projects/$organizationSlug/$projectSlug/issues/'),
         headers: _defaultHeader()
     );
