@@ -31,6 +31,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
         return AppBar(
             backgroundColor: Colors.white,
             shadowColor: Colors.transparent,
+            brightness: Brightness.light,
             centerTitle: false,
             actions: [
               IconButton(
