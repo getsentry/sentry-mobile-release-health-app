@@ -57,8 +57,17 @@ GlobalState _fetchOrganizationsAndProjectsAction(GlobalState state, FetchOrganiz
 }
 
 GlobalState _fetchOrganizationsAndProjectsSuccessAction(GlobalState state, FetchOrganizationsAndProjectsSuccessAction action) {
+  final organizationsSlugByProjectSlug = <String, String>{};
+
+  for (final organizationSlug in action.projectsByOrganizationSlug.keys) {
+    for (final project in action.projectsByOrganizationSlug[organizationSlug]) {
+      organizationsSlugByProjectSlug[project.slug] = organizationSlug;
+    }
+  }
+
   return state.copyWith(
       organizations: action.organizations,
+      organizationsSlugByProjectSlug: organizationsSlugByProjectSlug,
       projectsByOrganizationSlug: action.projectsByOrganizationSlug,
       projectsFetchedOnce: true,
       projectsLoading: false

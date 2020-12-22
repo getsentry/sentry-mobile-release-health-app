@@ -31,6 +31,7 @@ class GlobalState {
       this.hydrated,
       this.selectedTab,
       this.organizations,
+      this.organizationsSlugByProjectSlug,
       this.projectsByOrganizationSlug,
       this.projectsFetchedOnce,
       this.projectsLoading,
@@ -48,6 +49,7 @@ class GlobalState {
       hydrated: false,
       selectedTab: 0,
       organizations: [],
+      organizationsSlugByProjectSlug: {},
       projectsByOrganizationSlug: {},
       projectsFetchedOnce: false,
       projectsLoading: false,
@@ -66,6 +68,7 @@ class GlobalState {
   final int selectedTab;
 
   final List<Organization> organizations;
+  final Map<String, String> organizationsSlugByProjectSlug;
   final Map<String, List<Project>> projectsByOrganizationSlug;
   final bool projectsFetchedOnce;
   final bool projectsLoading;
@@ -86,6 +89,7 @@ class GlobalState {
     int selectedTab,
     bool setSessionNull = false,
     List<Organization> organizations,
+    final Map<String, String> organizationsSlugByProjectSlug,
     final Map<String, List<Project>> projectsByOrganizationSlug,
     bool projectsFetchedOnce,
     bool projectsLoading,
@@ -102,6 +106,7 @@ class GlobalState {
       hydrated: hydrated ?? this.hydrated,
       selectedTab: selectedTab ?? this.selectedTab,
       organizations: organizations ?? this.organizations,
+      organizationsSlugByProjectSlug: organizationsSlugByProjectSlug ?? this.organizationsSlugByProjectSlug,
       projectsByOrganizationSlug: projectsByOrganizationSlug ?? this.projectsByOrganizationSlug,
       projectsFetchedOnce: projectsFetchedOnce ?? this.projectsFetchedOnce,
       projectsLoading: projectsLoading ?? this.projectsLoading,

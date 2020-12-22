@@ -1,4 +1,5 @@
 import 'package:redux/redux.dart';
+import 'package:sentry_mobile/types/release.dart';
 
 import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
@@ -47,5 +48,34 @@ class ReleaseHealthViewModel {
 
   void fetchReleases() {
     _store.dispatch(FetchLatestReleasesAction(_store.state.globalState.bookmarkedProjectsByOrganizationSlug()));
+  }
+
+  void fetchIssues(ProjectWithLatestRelease projectWithLatestRelease) {
+    final organizationSlug = _store.state.globalState.organizationsSlugByProjectSlug[projectWithLatestRelease.project.slug];
+    if (organizationSlug == null) {
+      return;
+    }
+
+    // Only fetch when there is no data available yet
+    if (_store.state.globalState.handledIssuesByProjectSlug[projectWithLatestRelease.project.slug] == null) {
+      _store.dispatch(
+          FetchIssuesAction(
+              organizationSlug,
+              projectWithLatestRelease.project.slug,
+              true
+          )
+      );
+    }
+
+    // Only fetch when there is no data available yet
+    if (_store.state.globalState.unhandledIssuesByProjectSlug[projectWithLatestRelease.project.slug] == null) {
+      _store.dispatch(
+          FetchIssuesAction(
+              organizationSlug,
+              projectWithLatestRelease.project.slug,
+              false
+          )
+      );
+    }
   }
 }

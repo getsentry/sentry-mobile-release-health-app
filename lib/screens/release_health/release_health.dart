@@ -22,7 +22,7 @@ class ReleaseHealth extends StatefulWidget {
 }
 
 class _ReleaseHealthState extends State<ReleaseHealth> {
-  int _index = 0;
+  int _index;
 
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
 
@@ -78,6 +78,15 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
         }
       });
 
+      final updateIndex = (int index) {
+        viewModel.fetchIssues(viewModel.releases[index]);
+        _index = index;
+      };
+
+      if (_index == null) {
+        updateIndex(0);
+      }
+
       return RefreshIndicator(
         key: _refreshKey,
         backgroundColor: Colors.white,
@@ -90,8 +99,7 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                   child: PageView.builder(
                     itemCount: viewModel.releases.length,
                     controller: PageController(viewportFraction: 0.9),
-                    onPageChanged: (int index) =>
-                        setState(() => _index = index),
+                    onPageChanged: (int index) => setState(() => updateIndex(index)),
                     itemBuilder: (context, index) {
                       return ReleaseCard(
                           viewModel.releases[index].project,
