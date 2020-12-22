@@ -3,15 +3,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:sentry_mobile/screens/chart/line_chart.dart';
-import 'package:sentry_mobile/screens/empty/empty_screen.dart';
-import 'package:sentry_mobile/screens/release_health/release_health_data.dart';
-import 'package:sentry_mobile/screens/empty/empty_screen.dart';
-import 'package:sentry_mobile/utils/sentry_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../redux/state/app_state.dart';
+import '../../screens/chart/line_chart.dart';
+import '../../screens/empty/empty_screen.dart';
 import '../../screens/project_picker/project_picker.dart';
+import '../../screens/release_health/release_health_data.dart';
+import '../../utils/sentry_icons.dart';
 import 'release_card.dart';
 import 'release_health_view_model.dart';
 
