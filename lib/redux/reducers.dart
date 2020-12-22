@@ -47,6 +47,8 @@ GlobalState _logoutAction(GlobalState state, LogoutAction action) {
     projectsWithLatestReleases: [],
     releasesFetchedOnce: false,
     releasesLoading: false,
+    handledIssuesByProjectSlug: {},
+    unhandledIssuesByProjectSlug: {}
   );
 }
 
