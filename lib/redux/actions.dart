@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:sentry_mobile/types/group.dart';
+
 import '../types/organization.dart';
 import '../types/project.dart';
 import '../types/project_with_latest_release.dart';
@@ -53,6 +55,26 @@ class FetchLatestReleasesSuccessAction {
 
 class FetchLatestReleasesFailureAction {
   FetchLatestReleasesFailureAction(this.error);
+  final dynamic error;
+}
+
+// FetchIssues
+
+class FetchIssuesAction {
+  FetchIssuesAction(this.projectSlug, this.handled);
+  final String projectSlug;
+  final bool handled;
+}
+
+class FetchIssuesSuccessAction {
+  FetchIssuesSuccessAction(this.projectSlug, this.handled, this.issues);
+  final String projectSlug;
+  final bool handled;
+  final List<Group> issues;
+}
+
+class FetchIssuesFailureAction {
+  FetchIssuesFailureAction(this.error);
   final dynamic error;
 }
 
