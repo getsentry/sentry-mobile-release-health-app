@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:redux/redux.dart';
+import 'package:sentry_mobile/types/group.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../api/sentry_api.dart';
@@ -32,8 +33,7 @@ void apiMiddleware(Store<AppState> store, dynamic action, NextDispatcher next) a
     };
     next(action);
     store.dispatch(thunkAction);
-  }
-  else if (action is FetchLatestReleasesAction) {
+  } else if (action is FetchLatestReleasesAction) {
     final thunkAction = (Store<AppState> store) async {
       final api = SentryApi(store.state.globalState.session);
       try {
@@ -43,12 +43,12 @@ void apiMiddleware(Store<AppState> store, dynamic action, NextDispatcher next) a
           final projectsToFetch = action.projectsByOrganizationSlug[organizationSlug] ?? [];
           for (final projectToFetch in projectsToFetch) {
             final project = await api.project(
-                organizationSlug, projectToFetch.slug
+              organizationSlug, projectToFetch.slug
             );
             final latestRelease = await api.release(
-                organizationSlug: organizationSlug,
-                projectId: project.id,
-                releaseId: project.latestRelease.version
+              organizationSlug: organizationSlug,
+              projectId: project.id,
+              releaseId: project.latestRelease.version
             );
             projectsWithLatestRelease.add(ProjectWithLatestRelease(project, latestRelease));
           }
@@ -56,6 +56,25 @@ void apiMiddleware(Store<AppState> store, dynamic action, NextDispatcher next) a
         store.dispatch(FetchLatestReleasesSuccessAction(projectsWithLatestRelease));
       } catch (e) {
         store.dispatch(FetchLatestReleasesFailureAction(e));
+      }
+      api.close();
+    };
+    next(action);
+    store.dispatch(thunkAction);
+  } else if (action is FetchIssuesAction) {
+    final thunkAction = (Store<AppState> store) async {
+      final api = SentryApi(store.state.globalState.session);
+      try {
+        final List<Group> issues = await api.issues(
+          organizationSlug: action.organizationSlug,
+          projectSlug: action.projectSlug,
+          handled: action.handled
+        );
+        store.dispatch(
+          FetchIssuesSuccessAction(action.projectSlug, action.handled, issues)
+        );
+      } catch (e) {
+        store.dispatch(FetchIssuesFailureAction(e));
       }
       api.close();
     };
