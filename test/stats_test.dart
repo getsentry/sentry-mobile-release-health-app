@@ -19,8 +19,14 @@ void main() {
         [statsA, statsB]
       );
 
-      expect(aggregatedStats.stats24h, equals(statsA.stats24h));
-      expect(aggregatedStats.stats14d, equals(statsB.stats14d));
+      expect(
+          aggregatedStats.stats24h.map((e) => [e.timestamp, e.value]),
+          equals(statsA.stats24h.map((e) => [e.timestamp, e.value]))
+      );
+      expect(
+          aggregatedStats.stats14d.map((e) => [e.timestamp, e.value]),
+          equals(statsB.stats14d.map((e) => [e.timestamp, e.value]))
+      );
     });
 
     test('multiple 24h', () {
@@ -60,6 +66,30 @@ void main() {
       expect(
           aggregatedStats.stats24h.map((e) => [e.timestamp, e.value]),
           equals([Stat(0, 1), Stat(1, 1), Stat(2, 0), Stat(3, 1), Stat(4, 1), Stat(5, 0)].map((e) => [e.timestamp, e.value]))
+      );
+    });
+
+    test('multiple values with same timestamp added', () {
+      final statsA = Stats(
+          [Stat(0, 1)],
+          null
+      );
+      final statsB = Stats(
+          [Stat(0, 2)],
+          null
+      );
+      final statsC = Stats(
+          [Stat(0, 4)],
+          null
+      );
+
+      final aggregatedStats = Stats.aggregated(
+          [statsA, statsB, statsC]
+      );
+
+      expect(
+          aggregatedStats.stats24h.map((e) => [e.timestamp, e.value]),
+          equals([Stat(0, 7)].map((e) => [e.timestamp, e.value]))
       );
     });
   });

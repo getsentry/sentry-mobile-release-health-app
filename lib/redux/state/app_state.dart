@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:sentry_mobile/types/group.dart';
+import 'package:sentry_mobile/types/stats.dart';
 
 import '../../issues.dart';
 import '../../types/organization.dart';
@@ -130,5 +131,19 @@ class GlobalState {
       }
     }
     return bookmarkedProjectsByOrganizationSlug;
+  }
+
+  Map<String, Stats> aggregatedStatsByProjectSlug(bool handled) {
+    final aggregatedStatsByProjectSlug = <String, Stats>{};
+    if (handled) {
+      handledIssuesByProjectSlug.forEach((key, value) => {
+        aggregatedStatsByProjectSlug[key] = Stats.aggregated(value.map((e) => e.stats).toList())
+      });
+    } else {
+      unhandledIssuesByProjectSlug.forEach((key, value) => {
+        aggregatedStatsByProjectSlug[key] = Stats.aggregated(value.map((e) => e.stats).toList())
+      });
+    }
+    return aggregatedStatsByProjectSlug;
   }
 }

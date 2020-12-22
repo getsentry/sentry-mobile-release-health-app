@@ -1,5 +1,7 @@
 import 'package:redux/redux.dart';
 import 'package:sentry_mobile/types/release.dart';
+import 'package:sentry_mobile/types/stat.dart';
+import 'package:sentry_mobile/types/stats.dart';
 
 import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
@@ -9,6 +11,8 @@ class ReleaseHealthViewModel {
   ReleaseHealthViewModel.fromStore(Store<AppState> store)
     : _store = store,
       releases = store.state.globalState.projectsWithLatestReleases,
+      handledStatsByProjectSlug = store.state.globalState.aggregatedStatsByProjectSlug(true),
+      unhandledStatsByProjectSlug = store.state.globalState.aggregatedStatsByProjectSlug(false),
       _fetchProjectsNeeded = !store.state.globalState.projectsFetchedOnce &&
         !store.state.globalState.projectsLoading,
       _fetchReleasesNeeded = store.state.globalState.projectsFetchedOnce &&
@@ -26,6 +30,9 @@ class ReleaseHealthViewModel {
   final Store<AppState> _store;
 
   final List<ProjectWithLatestRelease> releases;
+
+  final Map<String, Stats> handledStatsByProjectSlug; // Aggregated
+  final Map<String, Stats> unhandledStatsByProjectSlug; // Aggregated
 
   final bool _fetchProjectsNeeded;
   final bool _fetchReleasesNeeded;
@@ -48,6 +55,14 @@ class ReleaseHealthViewModel {
 
   void fetchReleases() {
     _store.dispatch(FetchLatestReleasesAction(_store.state.globalState.bookmarkedProjectsByOrganizationSlug()));
+  }
+
+  List<Stat> stats(ProjectWithLatestRelease projectWithLatestRelease, bool handled) {
+    if (handled) {
+      return handledStatsByProjectSlug[projectWithLatestRelease.project.slug]?.stats24h ?? [];
+    } else {
+      return unhandledStatsByProjectSlug[projectWithLatestRelease.project.slug]?.stats24h ?? [];
+    }
   }
 
   void fetchIssues(ProjectWithLatestRelease projectWithLatestRelease) {

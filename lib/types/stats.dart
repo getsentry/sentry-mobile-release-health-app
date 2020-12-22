@@ -20,12 +20,19 @@ class Stats {
   // Helper
 
   static List<Stat> _aggregateAndSort(List<List<Stat>> allStats) {
-    final aggregatedStats = <Stat>[];
+
+    final aggregatedValuesByTimestamp = <int, int>{};
 
     final Function(List<Stat> stats) addAll = (List<Stat> stats) {
-      aggregatedStats.addAll(stats);
+      for (final stat in stats) {
+        aggregatedValuesByTimestamp[stat.timestamp] =  stat.value + (aggregatedValuesByTimestamp[stat.timestamp] ?? 0);
+      }
     };
     allStats.forEach(addAll);
+
+    final aggregatedStats = aggregatedValuesByTimestamp.keys
+      .map((timestamp) => Stat(timestamp, aggregatedValuesByTimestamp[timestamp]))
+      .toList();
 
     aggregatedStats.sort((a, b) => a.timestamp.compareTo(b.timestamp));
     
