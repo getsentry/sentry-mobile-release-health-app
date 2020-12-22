@@ -3,6 +3,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:sentry_mobile/screens/chart/line_chart_data.dart';
+import 'package:sentry_mobile/screens/chart/line_chart_point.dart';
+import 'package:sentry_mobile/types/stat.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../redux/state/app_state.dart';
@@ -117,12 +120,12 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                     ),
                     ChartRow(
                         title: 'Issues',
-                        total: viewModel.releases[_index].release.issues,
+                        data: viewModel.statsAsLineChartPoints(viewModel.releases[_index], true),
                         change: 3.6
                     ), // TODO: api
                     ChartRow(
                         title: 'Crashes',
-                        total: viewModel.releases[_index].release.crashes,
+                        data: viewModel.statsAsLineChartPoints(viewModel.releases[_index], false),
                         change: -4.2
                     ), // TODO: api
                     HealthDivider(
@@ -353,10 +356,10 @@ class HealthCard extends StatelessWidget {
 }
 
 class ChartRow extends StatelessWidget {
-  ChartRow({@required this.title, @required this.total, @required this.change});
+  ChartRow({@required this.title, @required this.data, @required this.change});
 
   final String title;
-  final int total;
+  final List<LineChartPoint> data;
   final double change;
 
   String getTrendSign() {
@@ -376,6 +379,16 @@ class ChartRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    int numberOfIssues;
+    if (data.isNotEmpty) {
+      numberOfIssues = data
+          .map((e) => e.y.toInt())
+          .reduce((a, b) => a + b);
+    } else {
+      numberOfIssues = 0;
+    }
+
     return Container(
         padding: EdgeInsets.only(bottom: 22),
         margin: EdgeInsets.only(bottom: 22),
@@ -407,7 +420,7 @@ class ChartRow extends StatelessWidget {
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 20),
               child: LineChart(
-                points: Random().nextInt(100) > 50 ? ReleaseHealthData.placeholderChartRowDataA : ReleaseHealthData.placeholderChartRowDataB,
+                points: data,
                 lineWidth: 2.0,
                 lineColor: Color(0xff81B4FE),
                 gradientStart: Color(0x2881b4fe),
@@ -420,7 +433,7 @@ class ChartRow extends StatelessWidget {
             children: [
               Padding(
                   padding: EdgeInsets.only(bottom: 5),
-                  child: Text(total.toString(),
+                  child: Text('$numberOfIssues',
                       style: TextStyle(
                         color: Color(0xFF18181A),
                         fontWeight: FontWeight.w600,

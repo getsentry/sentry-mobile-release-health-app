@@ -1,4 +1,5 @@
 import 'package:redux/redux.dart';
+import 'package:sentry_mobile/screens/chart/line_chart_point.dart';
 import 'package:sentry_mobile/types/release.dart';
 import 'package:sentry_mobile/types/stat.dart';
 import 'package:sentry_mobile/types/stats.dart';
@@ -57,12 +58,15 @@ class ReleaseHealthViewModel {
     _store.dispatch(FetchLatestReleasesAction(_store.state.globalState.bookmarkedProjectsByOrganizationSlug()));
   }
 
-  List<Stat> stats(ProjectWithLatestRelease projectWithLatestRelease, bool handled) {
+  List<LineChartPoint> statsAsLineChartPoints(ProjectWithLatestRelease projectWithLatestRelease, bool handled) {
+    var stats = <Stat>[];
     if (handled) {
-      return handledStatsByProjectSlug[projectWithLatestRelease.project.slug]?.stats24h ?? [];
+      // ignore: unnecessary_parenthesis
+      stats = handledStatsByProjectSlug[projectWithLatestRelease.project.slug]?.stats24h ?? [];
     } else {
-      return unhandledStatsByProjectSlug[projectWithLatestRelease.project.slug]?.stats24h ?? [];
+      stats = unhandledStatsByProjectSlug[projectWithLatestRelease.project.slug]?.stats24h ?? [];
     }
+    return stats.map((e) => LineChartPoint(e.timestamp.toDouble(), e.value.toDouble())).toList();
   }
 
   void fetchIssues(ProjectWithLatestRelease projectWithLatestRelease) {
@@ -71,13 +75,13 @@ class ReleaseHealthViewModel {
       return;
     }
 
-    // Only fetch when there is no data available yet
+    //Only fetch when there is no data available yet
     if (_store.state.globalState.handledIssuesByProjectSlug[projectWithLatestRelease.project.slug] == null) {
       _store.dispatch(
           FetchIssuesAction(
               organizationSlug,
               projectWithLatestRelease.project.slug,
-              true
+              false
           )
       );
     }
@@ -88,7 +92,7 @@ class ReleaseHealthViewModel {
           FetchIssuesAction(
               organizationSlug,
               projectWithLatestRelease.project.slug,
-              false
+              true
           )
       );
     }

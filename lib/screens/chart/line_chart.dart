@@ -43,6 +43,10 @@ class _LineChartPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    if (data.points.length < 2) {
+      return;
+    }
+
     final screenSize = Size(size.width, size.height - linePadding * 2);
 
     final screenCoordinateX = (double x) {

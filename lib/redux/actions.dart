@@ -61,16 +61,16 @@ class FetchLatestReleasesFailureAction {
 // FetchIssues
 
 class FetchIssuesAction {
-  FetchIssuesAction(this.organizationSlug, this.projectSlug, this.handled);
+  FetchIssuesAction(this.organizationSlug, this.projectSlug, this.unhandled);
   final String organizationSlug;
   final String projectSlug;
-  final bool handled;
+  final bool unhandled;
 }
 
 class FetchIssuesSuccessAction {
-  FetchIssuesSuccessAction(this.projectSlug, this.handled, this.issues);
+  FetchIssuesSuccessAction(this.projectSlug, this.unhandled, this.issues);
   final String projectSlug;
-  final bool handled;
+  final bool unhandled;
   final List<Group> issues;
 }
 

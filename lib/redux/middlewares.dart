@@ -68,10 +68,10 @@ void apiMiddleware(Store<AppState> store, dynamic action, NextDispatcher next) a
         final List<Group> issues = await api.issues(
           organizationSlug: action.organizationSlug,
           projectSlug: action.projectSlug,
-          handled: action.handled
+          fetchUnhandled: action.unhandled
         );
         store.dispatch(
-          FetchIssuesSuccessAction(action.projectSlug, action.handled, issues)
+          FetchIssuesSuccessAction(action.projectSlug, action.unhandled, issues)
         );
       } catch (e) {
         store.dispatch(FetchIssuesFailureAction(e));

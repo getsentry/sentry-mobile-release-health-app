@@ -103,12 +103,12 @@ GlobalState _fetchLatestReleasesFailureAction(GlobalState state, FetchLatestRele
 }
 
 GlobalState _fetchIssuesSuccessAction(GlobalState state, FetchIssuesSuccessAction action) {
-  final issuedByProjectSlug = action.handled ? state.handledIssuesByProjectSlug : state.unhandledIssuesByProjectSlug;
+  final issuedByProjectSlug = action.unhandled ? state.unhandledIssuesByProjectSlug : state.handledIssuesByProjectSlug;
   issuedByProjectSlug[action.projectSlug] = action.issues;
-  if (action.handled) {
-    return state.copyWith(handledIssuesByProjectSlug: issuedByProjectSlug);
-  } else {
+  if (action.unhandled) {
     return state.copyWith(unhandledIssuesByProjectSlug: issuedByProjectSlug);
+  } else {
+    return state.copyWith(handledIssuesByProjectSlug: issuedByProjectSlug);
   }
 }
 

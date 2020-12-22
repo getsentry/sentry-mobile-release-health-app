@@ -4,6 +4,33 @@ import '../chart/line_chart_point.dart';
 // ignore: avoid_classes_with_only_static_members
 class ReleaseHealthData {
 
+  static final testData = [
+      LineChartPoint(1608573600.0, 0.0),
+      LineChartPoint(1608577200.0, 0.0),
+      LineChartPoint(1608580800.0, 0.0),
+      LineChartPoint(1608584400.0, 0.0),
+      LineChartPoint(1608588000.0, 0.0),
+      LineChartPoint(1608591600.0, 0.0),
+      LineChartPoint(1608595200.0, 0.0),
+      LineChartPoint(1608598800.0, 0.0),
+      LineChartPoint(1608602400.0, 0.0),
+      LineChartPoint(1608606000.0, 0.0),
+      LineChartPoint(1608609600.0, 0.0),
+      LineChartPoint(1608613200.0, 0.0),
+      LineChartPoint(1608616800.0, 0.0),
+      LineChartPoint(1608620400.0, 0.0),
+      LineChartPoint(1608624000.0, 2.0),
+      LineChartPoint(1608627600.0, 6.0),
+      LineChartPoint(1608631200.0, 0.0),
+      LineChartPoint(1608634800.0, 0.0),
+      LineChartPoint(1608638400.0, 0.0),
+      LineChartPoint(1608642000.0, 0.0),
+      LineChartPoint(1608645600.0, 0.0),
+      LineChartPoint(1608649200.0, 0.0),
+      LineChartPoint(1608652800.0, 0.0),
+      LineChartPoint(1608656400.0, 0.0)
+  ];
+
   static final placeholderCrashes = [
     LineChartPoint(1596067200000,0),
     LineChartPoint(1596070800000,0),
