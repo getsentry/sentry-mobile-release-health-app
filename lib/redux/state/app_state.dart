@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:sentry_mobile/types/group.dart';
+
+import '../../issues.dart';
 import '../../types/organization.dart';
 import '../../types/project.dart';
 import '../../types/project_with_latest_release.dart';
@@ -34,6 +37,8 @@ class GlobalState {
       this.projectsWithLatestReleases,
       this.releasesFetchedOnce,
       this.releasesLoading,
+      this.handledIssuesByProjectSlug,
+      this.unhandledIssuesByProjectSlug,
       this.selectedOrganization,
       this.selectedProject});
 
@@ -49,6 +54,8 @@ class GlobalState {
       projectsWithLatestReleases: [],
       releasesFetchedOnce: false,
       releasesLoading: false,
+      handledIssuesByProjectSlug: {},
+      unhandledIssuesByProjectSlug: {},
       selectedOrganization: null,
       selectedProject: null,
     );
@@ -67,6 +74,9 @@ class GlobalState {
   final bool releasesFetchedOnce;
   final bool releasesLoading;
 
+  final Map<String, List<Group>> handledIssuesByProjectSlug;
+  final Map<String, List<Group>> unhandledIssuesByProjectSlug;
+
   final Organization selectedOrganization;
   final Project selectedProject;
 
@@ -82,6 +92,8 @@ class GlobalState {
     List<ProjectWithLatestRelease> projectsWithLatestReleases,
     bool releasesFetchedOnce,
     bool releasesLoading,
+    Map<String, List<Group>> handledIssuesByProjectSlug,
+    Map<String, List<Group>> unhandledIssuesByProjectSlug,
     Organization selectedOrganization,
     Project selectedProject,
   }) {
@@ -96,6 +108,8 @@ class GlobalState {
       projectsWithLatestReleases: projectsWithLatestReleases ?? this.projectsWithLatestReleases,
       releasesFetchedOnce: releasesFetchedOnce ?? this.releasesFetchedOnce,
       releasesLoading: releasesLoading ?? this.releasesLoading,
+      handledIssuesByProjectSlug: handledIssuesByProjectSlug ?? this.handledIssuesByProjectSlug,
+      unhandledIssuesByProjectSlug: unhandledIssuesByProjectSlug ?? this.unhandledIssuesByProjectSlug,
       selectedOrganization: selectedOrganization ?? this.selectedOrganization,
       selectedProject: selectedProject ?? this.selectedProject
     );
