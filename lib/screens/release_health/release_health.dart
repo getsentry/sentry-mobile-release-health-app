@@ -122,8 +122,6 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                       title: 'Statistics',
                     ),
                     Row(
-                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //mainAxisSize: MainAxisSize.max,
                       children: [
                         HealthCard(
                             title: 'Crash Free Users',

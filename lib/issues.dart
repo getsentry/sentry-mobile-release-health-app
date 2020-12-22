@@ -1,9 +1,7 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:http/http.dart' as http;
 import 'package:redux/redux.dart';
 import 'package:sentry_mobile/api/sentry_api.dart';
 import 'package:timeago/timeago.dart' as timeago;
