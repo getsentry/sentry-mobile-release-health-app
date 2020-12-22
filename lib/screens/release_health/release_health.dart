@@ -90,7 +90,7 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                   height: 200,
                   child: PageView.builder(
                     itemCount: viewModel.releases.length,
-                    controller: PageController(viewportFraction: 0.85),
+                    controller: PageController(viewportFraction: 0.9),
                     onPageChanged: (int index) =>
                         setState(() => _index = index),
                     itemBuilder: (context, index) {
@@ -101,7 +101,7 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                     },
                   )),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 16),
+                padding: EdgeInsets.only(top: 22, left: 22, right: 22),
                 child: Column(
                   children: [
                     HealthDivider(
@@ -111,80 +111,84 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                     ChartRow(
                         title: 'Issues',
                         total: viewModel.releases[_index].release.issues,
-                        change: 3.6), // TODO: api
+                        change: 3.6
+                    ), // TODO: api
                     ChartRow(
                         title: 'Crashes',
                         total: viewModel.releases[_index].release.crashes,
-                        change: -4.2), // TODO: api
+                        change: -4.2
+                    ), // TODO: api
                     HealthDivider(
                       onSeeAll: () {},
                       title: 'Statistics',
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      mainAxisSize: MainAxisSize.max,
+                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //mainAxisSize: MainAxisSize.max,
                       children: [
                         HealthCard(
                             title: 'Crash Free Users',
                             value: viewModel.releases[_index].release.crashFreeUsers,
-                            change: 0.04), // TODO: api
+                            change: 0.04
+                        ), // TODO: api
                         HealthCard(
                             title: 'Crash Free Sessions',
                             value: viewModel.releases[_index].release.crashFreeSessions,
-                            change: -0.01), // TODO: api
+                            change: -0.01
+                        ), // TODO: api
                       ],
                     )
                   ],
                 ),
               ),
-              Column(children: [
-                // WARNING Those line charts are just stacked one over the other, so the scaling between them is not in sync. Implement if we will keep this view.
-                Stack(
-                  children: [
-                    Container(
-                      height: 120,
-                      child: LineChart(
-                          points: ReleaseHealthData.palceholderHealthy,
-                          lineWidth: 1.0,
-                          lineColor: Color(0xffffc227),
-                          gradientStart: Color(0xffffc227),
-                          gradientEnd: Color(0xe1ffc227)
-                      ),
-                    ),
-                    Container(
-                      height: 120,
-                      child: LineChart(
-                          points: ReleaseHealthData.placeholderError,
-                          lineWidth: 1.0,
-                          lineColor: Color(0xffef7061),
-                          gradientStart: Color(0xffef7061),
-                          gradientEnd: Color(0xe1ef7061)
-                      ),
-                    ),
-                    Container(
-                      height: 120,
-                      child: LineChart(
-                          points: ReleaseHealthData.placeholderAbnormal,
-                          lineWidth: 1.0,
-                          lineColor: Color(0xffa35488),
-                          gradientStart: Color(0xffa35488),
-                          gradientEnd: Color(0xe1a35488)
-                      ),
-                    ),
-                    Container(
-                      height: 120,
-                      child: LineChart(
-                          points: ReleaseHealthData.placeholderCrashes,
-                          lineWidth: 1.0,
-                          lineColor: Color(0xff444674),
-                          gradientStart: Color(0xff444674),
-                          gradientEnd: Color(0xe1444674)
-                      ),
-                    ),
-                  ],
-                )
-
-              ])
+              // Column(children: [
+              //   // WARNING Those line charts are just stacked one over the other, so the scaling between them is not in sync. Implement if we will keep this view.
+              //   Stack(
+              //     children: [
+              //       Container(
+              //         height: 120,
+              //         child: LineChart(
+              //             points: ReleaseHealthData.palceholderHealthy,
+              //             lineWidth: 1.0,
+              //             lineColor: Color(0xffffc227),
+              //             gradientStart: Color(0xffffc227),
+              //             gradientEnd: Color(0xe1ffc227)
+              //         ),
+              //       ),
+              //       Container(
+              //         height: 120,
+              //         child: LineChart(
+              //             points: ReleaseHealthData.placeholderError,
+              //             lineWidth: 1.0,
+              //             lineColor: Color(0xffef7061),
+              //             gradientStart: Color(0xffef7061),
+              //             gradientEnd: Color(0xe1ef7061)
+              //         ),
+              //       ),
+              //       Container(
+              //         height: 120,
+              //         child: LineChart(
+              //             points: ReleaseHealthData.placeholderAbnormal,
+              //             lineWidth: 1.0,
+              //             lineColor: Color(0xffa35488),
+              //             gradientStart: Color(0xffa35488),
+              //             gradientEnd: Color(0xe1a35488)
+              //         ),
+              //       ),
+              //       Container(
+              //         height: 120,
+              //         child: LineChart(
+              //             points: ReleaseHealthData.placeholderCrashes,
+              //             lineWidth: 1.0,
+              //             lineColor: Color(0xff444674),
+              //             gradientStart: Color(0xff444674),
+              //             gradientEnd: Color(0xe1444674)
+              //         ),
+              //       ),
+              //     ],
+              //   )
+              //
+              // ])
             ],
           ),
         ),
@@ -208,7 +212,7 @@ class HealthDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 22.0, bottom: 16.0),
+      padding: EdgeInsets.only(top: 6.0, bottom: 22.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -292,17 +296,18 @@ class HealthCard extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(15))),
       elevation: 3,
       shadowColor: Color(0x99FFFFFF),
-      margin: EdgeInsets.only(left: 7, right: 7, top: 1, bottom: 10),
+      margin: EdgeInsets.only(left: 7, right: 7, top: 0, bottom: 22),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 10, bottom: 10),
+            padding: EdgeInsets.only(top: 8, bottom: 8),
             child: CircleAvatar(
               radius: 24,
               backgroundColor: getColor().withAlpha(0x19),
               child: getIcon(getColor()),
-            )),
+            )
+          ),
           Text(
             value != null ? value.toString() + '%' : '--',
             style: TextStyle(
@@ -312,7 +317,7 @@ class HealthCard extends StatelessWidget {
             ),
           ),
           Padding(
-              padding: EdgeInsets.only(top: 5, bottom: 10),
+              padding: EdgeInsets.only(top: 5, bottom: 8),
               child: Text(
                 title,
                 style: TextStyle(
@@ -321,7 +326,7 @@ class HealthCard extends StatelessWidget {
                 ),
               )),
           Padding(
-              padding: EdgeInsets.only(bottom: 10),
+              padding: EdgeInsets.only(bottom: 8),
               child:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Text(
@@ -383,13 +388,13 @@ class ChartRow extends StatelessWidget {
                   child: Text(title,
                       style: TextStyle(
                         color: Color(0xFF18181A),
-                        fontWeight: FontWeight.w500,
-                        fontSize: 17,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
                       ))),
               Text('Last 24 hours',
                   style: TextStyle(
                     color: Color(0xFFB9C1D9),
-                    fontSize: 14,
+                    fontSize: 12,
                   ))
             ],
           ),
@@ -413,14 +418,14 @@ class ChartRow extends StatelessWidget {
                   child: Text(total.toString(),
                       style: TextStyle(
                         color: Color(0xFF18181A),
-                        fontWeight: FontWeight.w500,
-                        fontSize: 17,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
                       ))),
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Text(getTrendSign() + change.toString() + '%',
                     style: TextStyle(
                       color: Color(0xFFB9C1D9),
-                      fontSize: 14,
+                      fontSize: 12,
                     )),
                 Padding(
                   padding: EdgeInsets.only(left: 7),
