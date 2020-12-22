@@ -18,7 +18,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
         var title = 'Health';
         switch (state.globalState.selectedTab) {
           case 1:
-            title = 'Top Issues';
+            title = 'Issues';
             break;
           case 2:
             title = 'Settings';

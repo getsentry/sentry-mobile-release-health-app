@@ -7,6 +7,7 @@ import 'package:http/http.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 import '../api/api_errors.dart';
+import '../types/group.dart';
 import '../types/organization.dart';
 import '../types/project.dart';
 import '../types/release.dart';
@@ -65,6 +66,13 @@ class SentryApi {
         headers: _defaultHeader()
     );
     return _parseResponse(response, (jsonMap) => Release.fromJson(jsonMap)).asFuture;
+  }
+
+  Future<List<Group>> fetchGroups({@required String organizationSlug, @required String projectSlug}) async {
+    final response = await client.get(Uri.https(baseUrlName, '$baseUrlPath/projects/$organizationSlug/$projectSlug/issues/'),
+        headers: _defaultHeader()
+    );
+    return _parseResponseList(response, (jsonMap) => Group.fromJson(jsonMap)).asFuture;
   }
 
   void close() {
