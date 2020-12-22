@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:sentry_mobile/types/stats.dart';
 
 import '../utils/conversion.dart';
 import './event_metadata.dart';
@@ -18,7 +19,9 @@ class Group {
       this.title,
       this.metadata,
       this.firstRelease,
-      this.lastRelease});
+      this.lastRelease,
+      this.stats
+      });
   factory Group.fromJson(Map<String, dynamic> json) => _$GroupFromJson(json);
 
   final String id;
@@ -38,6 +41,8 @@ class Group {
 
   @JsonKey(fromJson: metadataFromJson, toJson: metadataToJson)
   final EventMetadata metadata;
+
+  final Stats stats;
 }
 
 Release _releaseFromJson(Map<String, dynamic> json) =>

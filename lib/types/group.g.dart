@@ -19,6 +19,9 @@ Group _$GroupFromJson(Map<String, dynamic> json) {
     firstRelease:
         _releaseFromJson(json['firstRelease'] as Map<String, dynamic>),
     lastRelease: _releaseFromJson(json['lastRelease'] as Map<String, dynamic>),
+    stats: json['stats'] == null
+        ? null
+        : Stats.fromJson(json['stats'] as Map<String, dynamic>),
   );
 }
 
@@ -33,4 +36,5 @@ Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
       'firstRelease': _releaseToJson(instance.firstRelease),
       'lastRelease': _releaseToJson(instance.lastRelease),
       'metadata': metadataToJson(instance.metadata),
+      'stats': instance.stats,
     };
