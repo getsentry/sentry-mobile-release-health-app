@@ -122,7 +122,6 @@ class _IssuesScreenState extends State<IssuesScreenStateWrapper> {
             if (groups.isEmpty) {
               return Center(
                 child: Text('No issues',
-                  style: Theme.of(context).textTheme.caption,
                   textAlign: TextAlign.center,
                 )
               );
@@ -147,7 +146,6 @@ class _IssuesScreenState extends State<IssuesScreenStateWrapper> {
             return Center(
               child:
                 Text('Error fetching issues. Please try again.',
-                  style: Theme.of(context).textTheme.caption,
                   textAlign: TextAlign.center,
                 )
             );
