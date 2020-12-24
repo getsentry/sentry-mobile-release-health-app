@@ -7,9 +7,9 @@ import 'line_chart_data.dart';
 import 'line_chart_point.dart';
 
 class LineChart extends StatelessWidget {
-  LineChart({@required this.points, @required this.lineWidth, @required this.lineColor, @required this.gradientStart, @required this.gradientEnd});
+  LineChart({@required this.data, @required this.lineWidth, @required this.lineColor, @required this.gradientStart, @required this.gradientEnd});
 
-  final List<LineChartPoint> points;
+  final LineChartData data;
   final double lineWidth;
   final Color lineColor;
   final Color gradientStart;
@@ -18,15 +18,14 @@ class LineChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      painter: _LineChartPainter.create(points, lineWidth, lineColor, gradientStart, gradientEnd),
+      painter: _LineChartPainter.create(data, lineWidth, lineColor, gradientStart, gradientEnd),
       child: Center(),
     );
   }
 }
 
 class _LineChartPainter extends CustomPainter {
-  _LineChartPainter.create(List<LineChartPoint> points, double lineWidth, Color lineColor, this.gradientStart, this.gradientEnd) {
-    data = _prepareData(points);
+  _LineChartPainter.create(this.data, double lineWidth, Color lineColor, this.gradientStart, this.gradientEnd) {
     linePaint = Paint()
       ..isAntiAlias = true
       ..style = PaintingStyle.stroke
@@ -135,35 +134,7 @@ class _LineChartPainter extends CustomPainter {
     return gradientPath;
   }
 
-  /// Normalize data points so they all start at zero. Return min/max values.
-  LineChartData _prepareData(List<LineChartPoint> points) {
-    var minX = double.maxFinite;
-    var maxX = 0.0;
-    var minY = double.maxFinite;
-    var maxY = 0.0;
 
-    for (final point in points)  {
-      if (point.x < minX) {
-        minX = point.x;
-      }
-      if (point.x > maxX) {
-        maxX = point.x;
-      }
-      if (point.y < minY) {
-        minY = point.y;
-      }
-      if (point.y > maxY) {
-        maxY = point.y;
-      }
-    }
-    return LineChartData(
-      points.map((point) => LineChartPoint(point.x - minX, point.y - minY)).toList(),
-      0,
-      maxX - minX,
-      0,
-      maxY - minY
-    );
-  }
 
   double _normalized(double point, double min, double max) {
     if ((max - min) == 0) {

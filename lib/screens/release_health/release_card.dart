@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sentry_mobile/screens/chart/line_chart_data.dart';
 
 import '../../types/project.dart';
 import '../../types/release.dart';
@@ -56,7 +57,7 @@ class ReleaseCard extends StatelessWidget {
             SizedBox(height: 8.0),
             Expanded(
               child: LineChart(
-                points: _data,
+                data: LineChartData.prepareData(points: _data),
                 lineWidth: 5.0,
                 lineColor: Colors.white,
                 gradientStart: Colors.transparent,

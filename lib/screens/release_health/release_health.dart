@@ -126,6 +126,7 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                     ChartRow(
                         title: 'Crashes',
                         data: viewModel.statsAsLineChartPoints(viewModel.releases[_index], false),
+                        parentData: viewModel.statsAsLineChartPoints(viewModel.releases[_index], true), // Crashes are included in issues
                         change: -4.2
                     ), // TODO: api
                     HealthDivider(
@@ -356,11 +357,13 @@ class HealthCard extends StatelessWidget {
 }
 
 class ChartRow extends StatelessWidget {
-  ChartRow({@required this.title, @required this.data, @required this.change});
+  ChartRow({@required this.title, @required this.data, @required this.change, this.parentData});
 
   final String title;
   final List<LineChartPoint> data;
   final double change;
+
+  final List<LineChartPoint> parentData;
 
   String getTrendSign() {
     return change > 0 ? '+' : '';
@@ -387,6 +390,18 @@ class ChartRow extends StatelessWidget {
           .reduce((a, b) => a + b);
     } else {
       numberOfIssues = 0;
+    }
+
+    LineChartData lineChartData;
+    if (parentData != null) {
+      final parentLineChartData = LineChartData.prepareData(points: parentData);
+      lineChartData = LineChartData.prepareData(
+        points: data,
+        preferredMinY: parentLineChartData.minY,
+        preferredMaxY: parentLineChartData.maxY,
+      );
+    } else {
+      lineChartData = LineChartData.prepareData(points: data);
     }
 
     return Container(
@@ -420,7 +435,7 @@ class ChartRow extends StatelessWidget {
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 20),
               child: LineChart(
-                points: data,
+                data: lineChartData,
                 lineWidth: 2.0,
                 lineColor: Color(0xff81B4FE),
                 gradientStart: Color(0x2881b4fe),
