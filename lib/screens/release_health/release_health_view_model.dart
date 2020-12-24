@@ -85,16 +85,5 @@ class ReleaseHealthViewModel {
           )
       );
     }
-
-    // Only fetch when there is no data available yet
-    if (_store.state.globalState.unhandledIssuesByProjectSlug[projectWithLatestRelease.project.slug] == null) {
-      _store.dispatch(
-          FetchIssuesAction(
-              organizationSlug,
-              projectWithLatestRelease.project.slug,
-              true
-          )
-      );
-    }
   }
 }

@@ -17,6 +17,7 @@ class Group {
       this.userCount,
       this.count,
       this.title,
+      this.type,
       this.metadata,
       this.firstRelease,
       this.lastRelease,
@@ -29,6 +30,7 @@ class Group {
   final int userCount;
   final String count;
   final String title;
+  final String type;
 
   @JsonKey(fromJson: dateTimeFromString, toJson: dateTimeToString)
   final DateTime lastSeen;
