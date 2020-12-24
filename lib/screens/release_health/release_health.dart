@@ -15,6 +15,7 @@ import '../../screens/project_picker/project_picker.dart';
 import '../../screens/release_health/release_health_data.dart';
 import '../../utils/sentry_icons.dart';
 import 'release_card.dart';
+import 'release_health_chart_row.dart';
 import 'release_health_view_model.dart';
 
 class ReleaseHealth extends StatefulWidget {
@@ -118,16 +119,14 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                       onSeeAll: () {},
                       title: 'Charts',
                     ),
-                    ChartRow(
+                    ReleaseHealthChartRow(
                         title: 'Issues',
                         data: viewModel.statsAsLineChartPoints(viewModel.releases[_index], true),
-                        change: 3.6
                     ), // TODO: api
-                    ChartRow(
+                    ReleaseHealthChartRow(
                         title: 'Crashes',
                         data: viewModel.statsAsLineChartPoints(viewModel.releases[_index], false),
                         parentData: viewModel.statsAsLineChartPoints(viewModel.releases[_index], true), // Crashes are included in issues
-                        change: -4.2
                     ), // TODO: api
                     HealthDivider(
                       onSeeAll: () {},
@@ -353,120 +352,5 @@ class HealthCard extends StatelessWidget {
         ],
       ),
     ));
-  }
-}
-
-class ChartRow extends StatelessWidget {
-  ChartRow({@required this.title, @required this.data, @required this.change, this.parentData});
-
-  final String title;
-  final List<LineChartPoint> data;
-  final double change;
-
-  final List<LineChartPoint> parentData;
-
-  String getTrendSign() {
-    return change > 0 ? '+' : '';
-  }
-
-  Icon getTrendIcon() {
-    if (change == 0) {
-      return null;
-    }
-    return change == 0
-        ? Icon(SentryIcons.trend_same, color: Color(0xffB9C1D9), size: 8.0)
-        :  change > 0
-        ? Icon(SentryIcons.trend_up, color: Color(0xff23B480), size: 8.0)
-        : Icon(SentryIcons.trend_down, color: Color(0xffEE6855), size: 8.0);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
-    int numberOfIssues;
-    if (data.isNotEmpty) {
-      numberOfIssues = data
-          .map((e) => e.y.toInt())
-          .reduce((a, b) => a + b);
-    } else {
-      numberOfIssues = 0;
-    }
-
-    LineChartData lineChartData;
-    if (parentData != null) {
-      final parentLineChartData = LineChartData.prepareData(points: parentData);
-      lineChartData = LineChartData.prepareData(
-        points: data,
-        preferredMinY: parentLineChartData.minY,
-        preferredMaxY: parentLineChartData.maxY,
-      );
-    } else {
-      lineChartData = LineChartData.prepareData(points: data);
-    }
-
-    return Container(
-        padding: EdgeInsets.only(bottom: 22),
-        margin: EdgeInsets.only(bottom: 22),
-        decoration: BoxDecoration(
-          border:
-              Border(bottom: BorderSide(width: 1, color: Color(0x33B9C1D9))),
-        ),
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                  padding: EdgeInsets.only(bottom: 5),
-                  child: Text(title,
-                      style: TextStyle(
-                        color: Color(0xFF18181A),
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ))),
-              Text('Last 24 hours',
-                  style: TextStyle(
-                    color: Color(0xFFB9C1D9),
-                    fontSize: 12,
-                  ))
-            ],
-          ),
-          Expanded(
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              child: LineChart(
-                data: lineChartData,
-                lineWidth: 2.0,
-                lineColor: Color(0xff81B4FE),
-                gradientStart: Color(0x2881b4fe),
-                gradientEnd: Colors.transparent
-              ),
-              height: 35,
-          )),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Padding(
-                  padding: EdgeInsets.only(bottom: 5),
-                  child: Text('$numberOfIssues',
-                      style: TextStyle(
-                        color: Color(0xFF18181A),
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ))),
-              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Text(getTrendSign() + change.toString() + '%',
-                    style: TextStyle(
-                      color: Color(0xFFB9C1D9),
-                      fontSize: 12,
-                    )),
-                Padding(
-                  padding: EdgeInsets.only(left: 7),
-                  child: getTrendIcon(),
-                )
-              ])
-            ],
-          ),
-        ]));
   }
 }
