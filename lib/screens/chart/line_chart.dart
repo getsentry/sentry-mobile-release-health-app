@@ -110,7 +110,8 @@ class _LineChartPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
+    final oldLineChartPainter = oldDelegate as _LineChartPainter;
+    return oldLineChartPainter.data.points != data.points;
   }
 
   // Helper
