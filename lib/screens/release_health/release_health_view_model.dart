@@ -60,7 +60,6 @@ class ReleaseHealthViewModel {
   List<LineChartPoint> statsAsLineChartPoints(ProjectWithLatestRelease projectWithLatestRelease, bool handled) {
     var stats = <Stat>[];
     if (handled) {
-      // ignore: unnecessary_parenthesis
       stats = handledStatsByProjectSlug[projectWithLatestRelease.project.slug]?.stats24h ?? [];
     } else {
       stats = unhandledStatsByProjectSlug[projectWithLatestRelease.project.slug]?.stats24h ?? [];
@@ -74,7 +73,7 @@ class ReleaseHealthViewModel {
       return;
     }
 
-    //Only fetch when there is no data available yet
+    // Only fetch when there is no data available yet
     if (_store.state.globalState.handledIssuesByProjectSlug[projectWithLatestRelease.project.slug] == null) {
       _store.dispatch(
           FetchIssuesAction(
