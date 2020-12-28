@@ -1,10 +1,9 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:http/http.dart' as http;
 import 'package:redux/redux.dart';
+import 'package:sentry_mobile/api/sentry_api.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import 'issue_screen.dart';
@@ -13,24 +12,14 @@ import 'types/group.dart';
 import 'types/organization.dart';
 import 'types/project.dart';
 
-Future<List<Group>> fetchGroups(
-    String orgSlug, String projSlug, Cookie cookie) async {
-  final response = await http.get(
-      'https://sentry.io/api/0/projects/$orgSlug/$projSlug/issues/',
-      headers: {HttpHeaders.cookieHeader: cookie.toString()});
-
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    final List<dynamic> responseJson =
-        json.decode(response.body) as List<dynamic>;
-    return responseJson
-        .map((dynamic json) => Group.fromJson(json as Map<String, dynamic>))
-        .toList();
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load Groups');
+Future<List<Group>> fetchGroups(String orgSlug, String projSlug, Cookie cookie) async {
+  final api = SentryApi(cookie);
+  try {
+    return await api.fetchGroups(organizationSlug: orgSlug, projectSlug: projSlug);
+  } catch (exception) {
+    rethrow;
+  } finally {
+    api.close();
   }
 }
 
@@ -54,7 +43,7 @@ class IssuesScreenBuilder extends StatelessWidget {
             break;
 
           default:
-            throw Exception("Invalid route");
+            throw Exception('Invalid route');
         }
       },
     );
@@ -84,7 +73,8 @@ class IssuesViewModel {
   static IssuesViewModel fromStore(Store<AppState> store) => IssuesViewModel(
       selectedOrganization: store.state.globalState.selectedOrganization,
       selectedProject: store.state.globalState.selectedProject,
-      sessionCookie: store.state.globalState.session);
+      sessionCookie: store.state.globalState.session
+  );
 }
 
 class IssuesScreenStateWrapper extends StatefulWidget {
@@ -111,8 +101,11 @@ class _IssuesScreenState extends State<IssuesScreenStateWrapper> {
 
   void getData() {
     setState(() {
-      groupsFuture = fetchGroups(viewModel.selectedOrganization.slug,
-          viewModel.selectedProject.slug, viewModel.sessionCookie);
+      groupsFuture = fetchGroups(
+          viewModel.selectedOrganization?.slug,
+          viewModel.selectedProject?.slug,
+          viewModel.sessionCookie
+      );
     });
   }
 
@@ -124,27 +117,43 @@ class _IssuesScreenState extends State<IssuesScreenStateWrapper> {
           if (snapshot.hasData) {
             final List<Group> groups = snapshot.data as List<Group>;
 
-            return ListView.builder(
-              itemCount: groups.length,
-              itemBuilder: (context, index) {
-                final group = groups[index];
-
-                return Issue(
-                    title: group.metadata.type ?? 'Error',
-                    value: group.title,
-                    culprit: group.culprit,
-                    userCount: group.userCount,
-                    count: group.count,
-                    lastSeen: group.lastSeen,
-                    firstSeen: group.lastSeen);
-              },
-            );
+            if (groups.isEmpty) {
+              return Center(
+                child: Text('No issues',
+                  textAlign: TextAlign.center,
+                )
+              );
+            } else {
+              return ListView.builder(
+                itemCount: groups.length,
+                itemBuilder: (context, index) {
+                  final group = groups[index];
+                  return Issue(
+                      title: group.metadata.type ?? 'Error',
+                      value: group.title,
+                      culprit: group.culprit,
+                      userCount: group.userCount,
+                      count: group.count,
+                      lastSeen: group.lastSeen,
+                      firstSeen: group.lastSeen
+                  );
+                },
+              );
+            }
           } else if (snapshot.hasError) {
-            return Text('${snapshot.error}');
+            return Center(
+              child:
+                Text('Error fetching issues. Please try again.',
+                  textAlign: TextAlign.center,
+                )
+            );
           }
 
           return Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(
+              backgroundColor: Colors.white,
+              valueColor: AlwaysStoppedAnimation(Color(0xff81B4FE)),
+            ),
           );
         });
   }

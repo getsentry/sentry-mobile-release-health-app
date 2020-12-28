@@ -24,56 +24,61 @@ class _SettingsState extends State<Settings> {
   }
 
   Widget _content(SettingsViewModel viewModel) {
-    return SingleChildScrollView(
-      child: Container(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: SettingsHeader('Projects'),
-            ),
-            ListTile(
-              title: Text(
-                "Bookmarked Projects",
-                style: Theme.of(context).textTheme.bodyText1.apply(
-                  color: Color(0xFF18181A)
-                ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Settings'),
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: SettingsHeader('Projects'),
               ),
-              subtitle: Text(
-                  viewModel.bookmarkedProjects,
-                  style: Theme.of(context).textTheme.subtitle1.apply(
-                      color: Color(0xFFB9C1D9)
-                  )
-              ),
-              leading: Icon(
-                Icons.star,
-                color: Colors.orangeAccent,
-              ),
-              onTap: () =>
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => ProjectPicker()
-                    ),
-                  ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: SettingsHeader('Account'),
-            ),
-            ListTile(
-              title: Text(
-                "Sign Out",
-                style: Theme.of(context).textTheme.bodyText1.apply(
+              ListTile(
+                title: Text(
+                  'Bookmarked Projects',
+                  style: Theme.of(context).textTheme.bodyText1.apply(
                     color: Color(0xFF18181A)
+                  ),
                 ),
+                subtitle: Text(
+                    viewModel.bookmarkedProjects,
+                    style: Theme.of(context).textTheme.subtitle1.apply(
+                        color: Color(0xFFB9C1D9)
+                    )
+                ),
+                leading: Icon(
+                  Icons.star,
+                  color: Colors.orangeAccent,
+                ),
+                onTap: () =>
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => ProjectPicker()
+                      ),
+                    ),
               ),
-              leading: Icon(
-                Icons.exit_to_app,
-                color: Colors.blueAccent,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: SettingsHeader('Account'),
               ),
-              onTap: () => viewModel.logout(),
-            )
-          ],
+              ListTile(
+                title: Text(
+                  "Sign Out",
+                  style: Theme.of(context).textTheme.bodyText1.apply(
+                      color: Color(0xFF18181A)
+                  ),
+                ),
+                leading: Icon(
+                  Icons.exit_to_app,
+                  color: Colors.blueAccent,
+                ),
+                onTap: () => viewModel.logout(),
+              )
+            ],
+          ),
         ),
       ),
     );

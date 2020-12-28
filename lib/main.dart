@@ -62,6 +62,9 @@ class SentryMobile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent
+    ));
     return MaterialApp(
         title: 'Sentry',
         theme: ThemeData(
@@ -90,7 +93,7 @@ class SentryMobile extends StatelessWidget {
               TextTheme(
                   headline1: TextStyle(
                     fontWeight: FontWeight.w500,
-                    fontSize: 24,
+                    fontSize: 26,
                     color: Colors.black,
                   ),
                   headline2: TextStyle(

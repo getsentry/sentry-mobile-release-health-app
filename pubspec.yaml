@@ -60,15 +60,11 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  assets:
-    - assets/line-flat.png
-    - assets/status-green.png
-    - assets/status-orange.png
-    - assets/status-red.png
-    - assets/trend-up-green.png
-    - assets/trend-down-green.png
-    - assets/trend-up-red.png
-    - assets/trend-down-red.png
+  fonts:
+   - family: SentryIcons
+     fonts:
+       - asset: assets/fonts/SentryIcons.ttf
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
