@@ -152,10 +152,7 @@ class _IssuesScreenState extends State<IssuesScreenStateWrapper> {
           }
 
           return Center(
-            child: CircularProgressIndicator(
-              backgroundColor: Colors.white,
-              valueColor: AlwaysStoppedAnimation(SentryColors.royalBlue),
-            ),
+            child: CircularProgressIndicator(),
           );
         });
   }

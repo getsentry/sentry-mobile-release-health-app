@@ -101,9 +101,7 @@ class _IssueState extends State<IssueScreen> {
           }
 
           return Center(
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation(SentryColors.royalBlue),
-            ),
+            child: CircularProgressIndicator(),
           );
         });
   }

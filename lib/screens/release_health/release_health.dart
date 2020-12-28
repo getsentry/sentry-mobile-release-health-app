@@ -62,10 +62,7 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
       );
     } else if (viewModel.showLoadingScreen || viewModel.releases.isEmpty) {
       return Center(
-        child: CircularProgressIndicator(
-          backgroundColor: Colors.white,
-          valueColor: AlwaysStoppedAnimation(SentryColors.royalBlue),
-        ),
+        child: CircularProgressIndicator(),
       );
     } else {
 
