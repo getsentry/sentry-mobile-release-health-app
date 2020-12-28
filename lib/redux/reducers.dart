@@ -10,7 +10,7 @@ AppState appReducer(AppState state, dynamic action) =>
 
 final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, SwitchTabAction>(_switchTabAction),
-  TypedReducer<GlobalState, RehydrateAction>(_bootAction),
+  TypedReducer<GlobalState, RehydrateSuccessAction>(_rehydrateSuccessAction),
   TypedReducer<GlobalState, LoginAction>(_loginAction),
   TypedReducer<GlobalState, LogoutAction>(_logoutAction),
   TypedReducer<GlobalState, FetchOrganizationsAndProjectsAction>(_fetchOrganizationsAndProjectsAction),
@@ -28,8 +28,8 @@ GlobalState _switchTabAction(GlobalState state, SwitchTabAction action) {
   return state.copyWith(selectedTab: action.selectedTab);
 }
 
-GlobalState _bootAction(GlobalState state, RehydrateAction action) {
-  return state.copyWith(hydrated: true);
+GlobalState _rehydrateSuccessAction(GlobalState state, RehydrateSuccessAction action) {
+  return state.copyWith(hydrated: true, session: action.cookie);
 }
 
 GlobalState _loginAction(GlobalState state, LoginAction action) {
