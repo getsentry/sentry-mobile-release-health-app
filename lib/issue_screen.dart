@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:http/http.dart' as http;
 import 'package:redux/redux.dart';
+import 'package:sentry_mobile/utils/sentry_colors.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
 
@@ -100,7 +101,9 @@ class _IssueState extends State<IssueScreen> {
           }
 
           return Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation(SentryColors.royalBlue),
+            ),
           );
         });
   }

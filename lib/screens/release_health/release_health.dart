@@ -64,7 +64,7 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
       return Center(
         child: CircularProgressIndicator(
           backgroundColor: Colors.white,
-          valueColor: AlwaysStoppedAnimation(Color(0xff81B4FE)),
+          valueColor: AlwaysStoppedAnimation(SentryColors.royalBlue),
         ),
       );
     } else {

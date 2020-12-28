@@ -95,17 +95,17 @@ class SentryMobile extends StatelessWidget {
                   headline2: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 20,
-                    color: Colors.black,
+                    color: SentryColors.revolver,
                   ),
                   headline3: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 18,
-                    color: Colors.black,
+                    color: SentryColors.revolver,
                   ),
                   headline4: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 16,
-                    color: Colors.black,
+                    color: SentryColors.revolver,
                   ),
                   headline5: TextStyle(
                     fontWeight: FontWeight.w500,
@@ -115,7 +115,7 @@ class SentryMobile extends StatelessWidget {
                   subtitle1: TextStyle(
                     fontWeight: FontWeight.normal,
                     fontSize: 14,
-                    color: Color(0xb3ffffff),
+                    color: SentryColors.mamba,
                   ),
                   caption: TextStyle(
                     fontWeight: FontWeight.w500,

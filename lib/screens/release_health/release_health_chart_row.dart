@@ -39,7 +39,7 @@ class ReleaseHealthChartRow extends StatelessWidget {
                       ))),
               Text('Last ${viewModel.data.points.length} hours',
                   style: TextStyle(
-                    color: SentryColors.rum,
+                    color: SentryColors.mamba,
                     fontSize: 12,
                   ))
             ],
