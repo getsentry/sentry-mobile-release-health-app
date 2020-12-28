@@ -1,12 +1,11 @@
 import 'package:redux/redux.dart';
-import 'package:sentry_mobile/screens/chart/line_chart_point.dart';
-import 'package:sentry_mobile/types/release.dart';
-import 'package:sentry_mobile/types/stat.dart';
-import 'package:sentry_mobile/types/stats.dart';
 
 import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
+import '../../screens/chart/line_chart_point.dart';
 import '../../types/project_with_latest_release.dart';
+import '../../types/stat.dart';
+import '../../types/stats.dart';
 
 class ReleaseHealthViewModel {
   ReleaseHealthViewModel.fromStore(Store<AppState> store)

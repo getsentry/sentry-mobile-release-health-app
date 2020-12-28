@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:sentry_mobile/types/stat.dart';
+import 'stat.dart';
 
 part 'stats.g.dart';
 

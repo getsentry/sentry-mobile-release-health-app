@@ -1,7 +1,6 @@
 import 'dart:io';
 
-import 'package:sentry_mobile/types/group.dart';
-
+import '../types/group.dart';
 import '../types/organization.dart';
 import '../types/project.dart';
 import '../types/project_with_latest_release.dart';

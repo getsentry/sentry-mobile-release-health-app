@@ -1,6 +1,6 @@
 
 // TODO(denis): Change to JsonSerializable and generate Json code,
-import 'package:sentry_mobile/types/stat.dart';
+import 'stat.dart';
 
 class Release {
   Release.fromJson(dynamic json)

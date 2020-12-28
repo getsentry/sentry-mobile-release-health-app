@@ -1,9 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:sentry_mobile/types/stats.dart';
 
-import '../utils/conversion.dart';
 import './event_metadata.dart';
 import './release.dart';
+import '../types/stats.dart';
+import '../utils/conversion.dart';
 
 part 'group.g.dart';
 

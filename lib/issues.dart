@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
-import 'package:sentry_mobile/api/sentry_api.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+import 'api/sentry_api.dart';
 import 'issue_screen.dart';
 import 'redux/state/app_state.dart';
 import 'types/group.dart';

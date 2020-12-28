@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:redux/redux.dart';
-import 'package:sentry_mobile/types/group.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../api/sentry_api.dart';
+import '../types/group.dart';
 import '../types/project.dart';
 import '../types/project_with_latest_release.dart';
 import 'actions.dart';

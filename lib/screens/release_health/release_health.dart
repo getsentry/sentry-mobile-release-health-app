@@ -1,18 +1,12 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:sentry_mobile/screens/chart/line_chart_data.dart';
-import 'package:sentry_mobile/screens/chart/line_chart_point.dart';
-import 'package:sentry_mobile/types/stat.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../redux/state/app_state.dart';
-import '../../screens/chart/line_chart.dart';
 import '../../screens/empty/empty_screen.dart';
 import '../../screens/project_picker/project_picker.dart';
-import '../../screens/release_health/release_health_data.dart';
 import '../../utils/sentry_icons.dart';
 import 'release_card.dart';
 import 'release_health_chart_row.dart';
