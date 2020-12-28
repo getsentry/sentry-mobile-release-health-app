@@ -69,14 +69,14 @@ class ReleaseHealthChartRow extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(getTrendPercentage(viewModel.percentChange),
+                  Text(_getTrendPercentage(viewModel.percentChange),
                     style: TextStyle(
                       color: Color(0xFFB9C1D9),
                       fontSize: 12,
                     )),
                   Padding(
                     padding: EdgeInsets.only(left: viewModel.percentChange == 0.0 ? 0 : 7),
-                    child: getTrendIcon(viewModel.percentChange),
+                    child: _getTrendIcon(viewModel.percentChange),
                   )
                 ]
               )
@@ -87,25 +87,15 @@ class ReleaseHealthChartRow extends StatelessWidget {
 
   // Helper
 
-  double getPercentChange(double previous, double current) {
-    if (previous == 0.0) {
-      return 0.0; // Cannot show % increase from previous zero value.
-    }
-    final increase = current - previous;
-    return increase / previous * 100.0;
+  String _getTrendSign(double change) {
+    return change > 0 ? '+' : '';
   }
 
-  String getTrendSign(double change) {
-    return change > 0
-        ? '+'
-        : '';
+  String _getTrendPercentage(double change) {
+    return change == 0 ? '--' : _getTrendSign(change) + change.floor().toString() + '%';
   }
 
-  String getTrendPercentage(double change) {
-    return change == 0 ? '--' : getTrendSign(change) + change.floor().toString() + '%';
-  }
-
-  Icon getTrendIcon(double change) {
+  Icon _getTrendIcon(double change) {
     if (change == 0) {
       return null;
     }
