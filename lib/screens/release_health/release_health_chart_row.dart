@@ -1,52 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:sentry_mobile/screens/release_health/release_health_chart_row_view_model.dart';
 
 import '../../screens/chart/line_chart.dart';
-import '../../screens/chart/line_chart_data.dart';
 import '../../screens/chart/line_chart_point.dart';
 import '../../utils/sentry_icons.dart';
 
 class ReleaseHealthChartRow extends StatelessWidget {
-  ReleaseHealthChartRow({@required this.title, @required this.data, this.parentData});
+  ReleaseHealthChartRow({@required this.title, @required this.points, this.parentPoints});
 
   final String title;
-  final List<LineChartPoint> data;
-  final int hours = 12;
-
-  final List<LineChartPoint> parentData;
+  final List<LineChartPoint> points;
+  final List<LineChartPoint> parentPoints;
 
   @override
   Widget build(BuildContext context) {
-    final List<LineChartPoint> dataLeading = data.take(hours).toList();
-    final List<LineChartPoint> dataTrailing = data.reversed.take(hours).toList().reversed.toList();
-    List<LineChartPoint> parentData;
-    if (this.parentData != null) {
-      parentData = this.parentData.reversed.take(hours).toList().reversed.toList();
-    }
-
-    int numberOfIssues;
-    if (dataTrailing.isNotEmpty) {
-      numberOfIssues = dataTrailing
-          .map((e) => e.y.toInt())
-          .reduce((a, b) => a + b);
-    } else {
-      numberOfIssues = 0;
-    }
-
-    final leadingLineChartData = LineChartData.prepareData(points: dataLeading);
-    LineChartData lineChartData;
-    if (parentData != null) {
-      final parentLineChartData = LineChartData.prepareData(points: parentData);
-      lineChartData = LineChartData.prepareData(
-        points: dataTrailing,
-        preferredMinY: parentLineChartData.minY,
-        preferredMaxY: parentLineChartData.maxY,
-      );
-    } else {
-      lineChartData = LineChartData.prepareData(points: dataTrailing);
-    }
-
-    final change = getPercentChange(leadingLineChartData.countY, lineChartData.countY);
-
+    final viewModel = ReleaseHealthChartRowViewModel.createByHalvingPoints(points, parentPoints ?? []);
+    
     return Container(
         padding: EdgeInsets.only(bottom: 22),
         margin: EdgeInsets.only(bottom: 22),
@@ -67,7 +36,7 @@ class ReleaseHealthChartRow extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
                       ))),
-              Text('Last $hours hours',
+              Text('Last ${viewModel.data.points.length} hours',
                   style: TextStyle(
                     color: Color(0xFFB9C1D9),
                     fontSize: 12,
@@ -78,7 +47,7 @@ class ReleaseHealthChartRow extends StatelessWidget {
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 20),
                 child: LineChart(
-                    data: lineChartData,
+                    data: viewModel.data,
                     lineWidth: 2.0,
                     lineColor: Color(0xff81B4FE),
                     gradientStart: Color(0x2881b4fe),
@@ -91,7 +60,7 @@ class ReleaseHealthChartRow extends StatelessWidget {
             children: [
               Padding(
                   padding: EdgeInsets.only(bottom: 5),
-                  child: Text('$numberOfIssues',
+                  child: Text('${viewModel.numberOfIssues}',
                       style: TextStyle(
                         color: Color(0xFF18181A),
                         fontWeight: FontWeight.w600,
@@ -100,14 +69,14 @@ class ReleaseHealthChartRow extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(getTrendPercentage(change),
+                  Text(getTrendPercentage(viewModel.percentChange),
                     style: TextStyle(
                       color: Color(0xFFB9C1D9),
                       fontSize: 12,
                     )),
                   Padding(
-                    padding: EdgeInsets.only(left: change == 0 ? 0 : 7),
-                    child: getTrendIcon(change),
+                    padding: EdgeInsets.only(left: viewModel.percentChange == 0.0 ? 0 : 7),
+                    child: getTrendIcon(viewModel.percentChange),
                   )
                 ]
               )
