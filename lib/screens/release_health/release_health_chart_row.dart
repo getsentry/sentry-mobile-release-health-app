@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sentry_mobile/utils/sentry_colors.dart';
 
 import '../../screens/chart/line_chart.dart';
 import '../../screens/chart/line_chart_point.dart';
@@ -32,13 +33,13 @@ class ReleaseHealthChartRow extends StatelessWidget {
                   padding: EdgeInsets.only(bottom: 5),
                   child: Text(title,
                       style: TextStyle(
-                        color: Color(0xFF18181A),
+                        color: SentryColors.revolver,
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
                       ))),
               Text('Last ${viewModel.data.points.length} hours',
                   style: TextStyle(
-                    color: Color(0xFFB9C1D9),
+                    color: SentryColors.rum,
                     fontSize: 12,
                   ))
             ],
@@ -49,8 +50,8 @@ class ReleaseHealthChartRow extends StatelessWidget {
                 child: LineChart(
                     data: viewModel.data,
                     lineWidth: 2.0,
-                    lineColor: Color(0xff81B4FE),
-                    gradientStart: Color(0x2881b4fe),
+                    lineColor: SentryColors.tapestry,
+                    gradientStart: SentryColors.tapestry.withAlpha(28),
                     gradientEnd: Colors.transparent
                 ),
                 height: 35,
@@ -62,7 +63,7 @@ class ReleaseHealthChartRow extends StatelessWidget {
                   padding: EdgeInsets.only(bottom: 5),
                   child: Text('${viewModel.numberOfIssues}',
                       style: TextStyle(
-                        color: Color(0xFF18181A),
+                        color: SentryColors.woodSmoke,
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
                       ))),
@@ -71,7 +72,7 @@ class ReleaseHealthChartRow extends StatelessWidget {
                 children: [
                   Text(_getTrendPercentage(viewModel.percentChange),
                     style: TextStyle(
-                      color: Color(0xFFB9C1D9),
+                      color: SentryColors.lavenderGray,
                       fontSize: 12,
                     )),
                   Padding(

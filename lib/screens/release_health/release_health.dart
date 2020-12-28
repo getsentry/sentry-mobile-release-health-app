@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:sentry_mobile/utils/sentry_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../redux/state/app_state.dart';
@@ -219,11 +220,11 @@ class HealthDivider extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            title,
+            title.toUpperCase(),
             style: TextStyle(
-              color: Color(0xFFB9C1D9),
+              color: SentryColors.mamba,
               fontWeight: FontWeight.w500,
-              fontSize: 16,
+              fontSize: 12,
             ),
           ),
           // MaterialButton(
@@ -258,10 +259,10 @@ class HealthCard extends StatelessWidget {
 
   Color getColor() {
     return value == null
-        ? Color(0xFFB9C1D9)
+        ? SentryColors.lavenderGray
         : value > warningThreshold
-          ? Color(0xFF23B480)
-          : value > dangerThreshold ? Color(0xFFFFC227) : Color(0xFFEE6855);
+          ? SentryColors.shamrock
+          : value > dangerThreshold ? SentryColors.lightningYellow : SentryColors.burntSienna;
   }
 
   Icon getIcon(Color color) {
@@ -284,10 +285,10 @@ class HealthCard extends StatelessWidget {
       return null;
     }
     return change == 0
-      ? Icon(SentryIcons.trend_same, color: Color(0xffB9C1D9), size: 8.0)
+      ? Icon(SentryIcons.trend_same, color: SentryColors.lavenderGray, size: 8.0)
       :  change > 0
-        ? Icon(SentryIcons.trend_up, color: Color(0xff23B480), size: 8.0)
-        : Icon(SentryIcons.trend_down, color: Color(0xffEE6855), size: 8.0);
+        ? Icon(SentryIcons.trend_up, color: SentryColors.shamrock, size: 8.0)
+        : Icon(SentryIcons.trend_down, color: SentryColors.burntSienna, size: 8.0);
   }
 
   @override
@@ -296,8 +297,8 @@ class HealthCard extends StatelessWidget {
         child: Card(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(15))),
-      elevation: 3,
-      shadowColor: Color(0x99FFFFFF),
+      elevation: 4,
+      shadowColor: SentryColors.silverChalice.withAlpha((256 * 0.2).toInt()),
       margin: EdgeInsets.only(left: 7, right: 7, top: 0, bottom: 22),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -323,7 +324,7 @@ class HealthCard extends StatelessWidget {
               child: Text(
                 title,
                 style: TextStyle(
-                  color: Color(0xFF14223B),
+                  color: SentryColors.revolver,
                   fontSize: 14,
                 ),
               )),
@@ -334,7 +335,7 @@ class HealthCard extends StatelessWidget {
                 Text(
                   change != null ? getTrendSign() + change.toString() + '%' : '--',
                   style: TextStyle(
-                    color: Color(0xFFB9C1D9),
+                    color: SentryColors.mamba,
                     fontSize: 13,
                   ),
                 ),
