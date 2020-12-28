@@ -326,21 +326,25 @@ class HealthCard extends StatelessWidget {
                 ),
               )),
           Padding(
-              padding: EdgeInsets.only(bottom: 8),
-              child:
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Text(
-                  change != null ? getTrendSign() + change.toString() + '%' : '--',
-                  style: TextStyle(
-                    color: SentryColors.mamba,
-                    fontSize: 13,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 5),
-                  child: getTrendIcon() ?? Spacer(),
-                )
-              ])),
+            padding: EdgeInsets.only(bottom: 8),
+            child:
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Text(
+                  //   change != null ? getTrendSign() + change.toString() + '%' : '--',
+                  //   style: TextStyle(
+                  //     color: SentryColors.mamba,
+                  //     fontSize: 13,
+                  //   ),
+                  // ),
+                  // Padding(
+                  //   padding: EdgeInsets.only(left: 5),
+                  //   child: getTrendIcon() ?? Spacer(),
+                  // )
+                ]
+              )
+          ),
         ],
       ),
     ));
