@@ -31,8 +31,8 @@ class ReleaseHealthViewModel {
 
   final List<ProjectWithLatestRelease> releases;
 
-  final Map<String, Stats> handledStatsByProjectSlug; // Aggregated
-  final Map<String, Stats> unhandledStatsByProjectSlug; // Aggregated
+  final Map<String, Stats> handledStatsByProjectSlug; // Aggregated over all issue stats
+  final Map<String, Stats> unhandledStatsByProjectSlug; // Aggregated over all error issue stats
 
   final bool _fetchProjectsNeeded;
   final bool _fetchReleasesNeeded;
