@@ -116,12 +116,12 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                     ReleaseHealthChartRow(
                         title: 'Issues',
                         points: viewModel.statsAsLineChartPoints(viewModel.releases[_index], true),
-                    ), // TODO: api
+                    ),
                     ReleaseHealthChartRow(
                         title: 'Crashes',
                         points: viewModel.statsAsLineChartPoints(viewModel.releases[_index], false),
                         parentPoints: viewModel.statsAsLineChartPoints(viewModel.releases[_index], true), // Crashes are included in issues
-                    ), // TODO: api
+                    ),
                     HealthDivider(
                       onSeeAll: () {},
                       title: 'Statistics',
