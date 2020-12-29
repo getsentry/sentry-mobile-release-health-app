@@ -9,12 +9,7 @@ class SettingsViewModel {
         .values.expand((element) => element).map((e) => e.name)
         .join(', ');
     bookmarkedProjects = projects.isNotEmpty ? projects : '--';
-    logout = () {
-      store.dispatch(LogoutAction());
-    };
   }
 
   String bookmarkedProjects;
-  Function() logout;
-
 }

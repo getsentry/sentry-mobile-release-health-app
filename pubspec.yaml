@@ -30,13 +30,11 @@ dependencies:
   redux: ^4.0.0
   flutter_redux: ^0.6.0
   redux_thunk: ^0.3.0
-  modal_bottom_sheet: ^0.2.0+1
   timeago: ^2.0.26
   google_fonts: ^1.1.0
   shared_preferences: ^0.5.8
   json_annotation: ^3.0.1
   url_launcher: ^5.5.0
-  custom_splash: ^0.0.2
   sentry_flutter: ^4.0.0
   equatable: ^1.2.3
 

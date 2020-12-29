@@ -9,6 +9,11 @@ class RehydrateAction {
   RehydrateAction();
 }
 
+class RehydrateSuccessAction {
+  RehydrateSuccessAction(this.cookie);
+  final Cookie cookie;
+}
+
 class SwitchTabAction {
   SwitchTabAction(this.selectedTab);
   final int selectedTab;

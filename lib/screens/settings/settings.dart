@@ -16,6 +16,7 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
 
+
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, SettingsViewModel>(
@@ -76,7 +77,7 @@ class _SettingsState extends State<Settings> {
                   Icons.exit_to_app,
                   color: SentryColors.royalBlue,
                 ),
-                onTap: () => viewModel.logout(),
+                onTap: () => Navigator.pop(context, true),
               )
             ],
           ),

@@ -1,5 +1,4 @@
-import 'package:flutter/cupertino.dart';
-
+import 'package:flutter/material.dart';
 import 'line_chart_point.dart';
 
 class LineChartData {
