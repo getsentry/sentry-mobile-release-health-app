@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:sentry_mobile/redux/actions.dart';
 
 import '../../redux/state/app_state.dart';
 import '../../utils/sentry_icons.dart';
@@ -37,12 +38,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
               IconButton(
                 icon: Icon(SentryIcons.settings),
                 color: Color(0xffb9c1d9),
-                onPressed: () =>
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => Settings()
-                      ),
-                    ),
+                onPressed: () => _pushSettings(context)
               )
             ],
             title: Text(
@@ -51,5 +47,16 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
             ));
       },
     );
+  }
+
+  void _pushSettings(BuildContext context) async {
+    final bool logout = await Navigator.of(context).push(
+      MaterialPageRoute(
+          builder: (BuildContext context) => Settings()
+      ),
+    );
+    if (logout) {
+      StoreProvider.of<AppState>(context).dispatch(LogoutAction());
+    }
   }
 }
