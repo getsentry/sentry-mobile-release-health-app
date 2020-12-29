@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:intl/intl.dart';
 import 'package:sentry_mobile/utils/sentry_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -253,6 +254,7 @@ class HealthCard extends StatelessWidget {
 
   final warningThreshold = 99.5;
   final dangerThreshold = 98;
+  final valueFormat = NumberFormat('###.##');
 
   Color getColor() {
     return value == null
@@ -309,7 +311,7 @@ class HealthCard extends StatelessWidget {
             )
           ),
           Text(
-            value != null ? value.toString() + '%' : '--',
+            value != null ? valueFormat.format(value) + '%' : '--',
             style: TextStyle(
               color: getColor(),
               fontWeight: FontWeight.w500,
