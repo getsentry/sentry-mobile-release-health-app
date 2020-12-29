@@ -19,6 +19,7 @@ final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, FetchLatestReleasesAction>(_fetchLatestReleasesAction),
   TypedReducer<GlobalState, FetchLatestReleasesSuccessAction>(_fetchLatestReleasesSuccessAction),
   TypedReducer<GlobalState, FetchLatestReleasesFailureAction>(_fetchLatestReleasesFailureAction),
+  TypedReducer<GlobalState, FetchIssuesSuccessAction>(_fetchIssuesSuccessAction),
   TypedReducer<GlobalState, SelectOrganizationAction>(_selectOrganizationAction),
   TypedReducer<GlobalState, SelectProjectAction>(_selectProjectAction),
 ]);
@@ -46,6 +47,8 @@ GlobalState _logoutAction(GlobalState state, LogoutAction action) {
     projectsWithLatestReleases: [],
     releasesFetchedOnce: false,
     releasesLoading: false,
+    handledIssuesByProjectSlug: {},
+    unhandledIssuesByProjectSlug: {}
   );
 }
 
@@ -54,8 +57,17 @@ GlobalState _fetchOrganizationsAndProjectsAction(GlobalState state, FetchOrganiz
 }
 
 GlobalState _fetchOrganizationsAndProjectsSuccessAction(GlobalState state, FetchOrganizationsAndProjectsSuccessAction action) {
+  final organizationsSlugByProjectSlug = <String, String>{};
+
+  for (final organizationSlug in action.projectsByOrganizationSlug.keys) {
+    for (final project in action.projectsByOrganizationSlug[organizationSlug]) {
+      organizationsSlugByProjectSlug[project.slug] = organizationSlug;
+    }
+  }
+
   return state.copyWith(
       organizations: action.organizations,
+      organizationsSlugByProjectSlug: organizationsSlugByProjectSlug,
       projectsByOrganizationSlug: action.projectsByOrganizationSlug,
       projectsFetchedOnce: true,
       projectsLoading: false
@@ -88,6 +100,24 @@ GlobalState _fetchLatestReleasesSuccessAction(GlobalState state, FetchLatestRele
 
 GlobalState _fetchLatestReleasesFailureAction(GlobalState state, FetchLatestReleasesFailureAction action) {
   return state.copyWith(releasesLoading: false);
+}
+
+GlobalState _fetchIssuesSuccessAction(GlobalState state, FetchIssuesSuccessAction action) {
+  final handledIssuedByProjectSlug = state.handledIssuesByProjectSlug;
+  final unhandledIssuesByByProjectSlug = state.unhandledIssuesByProjectSlug;
+
+  if (action.unhandled) {
+    unhandledIssuesByByProjectSlug[action.projectSlug] = action.issues;
+  } else {
+    handledIssuedByProjectSlug[action.projectSlug] = action.issues;
+    unhandledIssuesByByProjectSlug[action.projectSlug] = action.issues
+        .where((element) => element.type == 'error').toList();
+  }
+
+  return state.copyWith(
+      handledIssuesByProjectSlug: handledIssuedByProjectSlug,
+      unhandledIssuesByProjectSlug: unhandledIssuesByByProjectSlug
+  );
 }
 
 // -----------------------------

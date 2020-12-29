@@ -1,17 +1,15 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../redux/state/app_state.dart';
-import '../../screens/chart/line_chart.dart';
 import '../../screens/empty/empty_screen.dart';
 import '../../screens/project_picker/project_picker.dart';
-import '../../screens/release_health/release_health_data.dart';
 import '../../utils/sentry_icons.dart';
 import 'release_card.dart';
+import 'release_health_chart_row.dart';
 import 'release_health_view_model.dart';
 
 class ReleaseHealth extends StatefulWidget {
@@ -22,7 +20,7 @@ class ReleaseHealth extends StatefulWidget {
 }
 
 class _ReleaseHealthState extends State<ReleaseHealth> {
-  int _index = 0;
+  int _index;
 
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
 
@@ -78,6 +76,15 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
         }
       });
 
+      final updateIndex = (int index) {
+        viewModel.fetchIssues(viewModel.releases[index]);
+        _index = index;
+      };
+
+      if (_index == null) {
+        updateIndex(0);
+      }
+
       return RefreshIndicator(
         key: _refreshKey,
         backgroundColor: Colors.white,
@@ -90,8 +97,7 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                   child: PageView.builder(
                     itemCount: viewModel.releases.length,
                     controller: PageController(viewportFraction: 0.9),
-                    onPageChanged: (int index) =>
-                        setState(() => _index = index),
+                    onPageChanged: (int index) => setState(() => updateIndex(index)),
                     itemBuilder: (context, index) {
                       return ReleaseCard(
                           viewModel.releases[index].project,
@@ -107,16 +113,15 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                       onSeeAll: () {},
                       title: 'Charts',
                     ),
-                    ChartRow(
+                    ReleaseHealthChartRow(
                         title: 'Issues',
-                        total: viewModel.releases[_index].release.issues,
-                        change: 3.6
-                    ), // TODO: api
-                    ChartRow(
+                        points: viewModel.statsAsLineChartPoints(viewModel.releases[_index], true),
+                    ),
+                    ReleaseHealthChartRow(
                         title: 'Crashes',
-                        total: viewModel.releases[_index].release.crashes,
-                        change: -4.2
-                    ), // TODO: api
+                        points: viewModel.statsAsLineChartPoints(viewModel.releases[_index], false),
+                        parentPoints: viewModel.statsAsLineChartPoints(viewModel.releases[_index], true), // Crashes are included in issues
+                    ),
                     HealthDivider(
                       onSeeAll: () {},
                       title: 'Statistics',
@@ -341,96 +346,5 @@ class HealthCard extends StatelessWidget {
         ],
       ),
     ));
-  }
-}
-
-class ChartRow extends StatelessWidget {
-  ChartRow({@required this.title, @required this.total, @required this.change});
-
-  final String title;
-  final int total;
-  final double change;
-
-  String getTrendSign() {
-    return change > 0 ? '+' : '';
-  }
-
-  Icon getTrendIcon() {
-    if (change == 0) {
-      return null;
-    }
-    return change == 0
-        ? Icon(SentryIcons.trend_same, color: Color(0xffB9C1D9), size: 8.0)
-        :  change > 0
-        ? Icon(SentryIcons.trend_up, color: Color(0xff23B480), size: 8.0)
-        : Icon(SentryIcons.trend_down, color: Color(0xffEE6855), size: 8.0);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.only(bottom: 22),
-        margin: EdgeInsets.only(bottom: 22),
-        decoration: BoxDecoration(
-          border:
-              Border(bottom: BorderSide(width: 1, color: Color(0x33B9C1D9))),
-        ),
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                  padding: EdgeInsets.only(bottom: 5),
-                  child: Text(title,
-                      style: TextStyle(
-                        color: Color(0xFF18181A),
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ))),
-              Text('Last 24 hours',
-                  style: TextStyle(
-                    color: Color(0xFFB9C1D9),
-                    fontSize: 12,
-                  ))
-            ],
-          ),
-          Expanded(
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              child: LineChart(
-                points: Random().nextInt(100) > 50 ? ReleaseHealthData.placeholderChartRowDataA : ReleaseHealthData.placeholderChartRowDataB,
-                lineWidth: 2.0,
-                lineColor: Color(0xff81B4FE),
-                gradientStart: Color(0x2881b4fe),
-                gradientEnd: Colors.transparent
-              ),
-              height: 35,
-          )),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Padding(
-                  padding: EdgeInsets.only(bottom: 5),
-                  child: Text(total.toString(),
-                      style: TextStyle(
-                        color: Color(0xFF18181A),
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ))),
-              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Text(getTrendSign() + change.toString() + '%',
-                    style: TextStyle(
-                      color: Color(0xFFB9C1D9),
-                      fontSize: 12,
-                    )),
-                Padding(
-                  padding: EdgeInsets.only(left: 7),
-                  child: getTrendIcon(),
-                )
-              ])
-            ],
-          ),
-        ]));
   }
 }

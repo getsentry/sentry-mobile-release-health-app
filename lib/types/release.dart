@@ -1,5 +1,7 @@
 
 // TODO(denis): Change to JsonSerializable and generate Json code,
+import 'stat.dart';
+
 class Release {
   Release.fromJson(dynamic json)
       : version = json['versionInfo']['description'] as String,
@@ -11,7 +13,7 @@ class Release {
             json['projects'][0]['healthData']['crashFreeUsers'] as double,
         crashFreeSessions =
             json['projects'][0]['healthData']['crashFreeSessions'] as double,
-        stats24h = (json['projects'][0]['healthData']['stats']['24h'] as List).map((e) => Stat.fromJson(e))?.toList(),
+        stats24h = (json['projects'][0]['healthData']['stats']['24h'] as List).map((e) => Stat.fromJson(e as List))?.toList(),
         users24h = json['projects'][0]['healthData']['totalUsers24h'] as int,
         usersTotal = json['projects'][0]['healthData']['totalUsers'] as int,
         sessions24h =
@@ -34,13 +36,4 @@ class Release {
   final int sessions24h;
   final int sessionsTotal;
   final double durationP90;
-}
-
-class Stat {
-  Stat.fromJson(List json)
-    : timestamp = json.map((e) => e as int)?.first ?? 0,
-      value = json.map((e) => e as int)?.last ?? 0;
-
-  int timestamp;
-  int value;
 }

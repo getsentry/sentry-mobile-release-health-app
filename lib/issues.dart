@@ -6,6 +6,7 @@ import 'package:redux/redux.dart';
 import 'package:sentry_mobile/api/sentry_api.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+import 'api/sentry_api.dart';
 import 'issue_screen.dart';
 import 'redux/state/app_state.dart';
 import 'types/group.dart';
@@ -15,7 +16,7 @@ import 'types/project.dart';
 Future<List<Group>> fetchGroups(String orgSlug, String projSlug, Cookie cookie) async {
   final api = SentryApi(cookie);
   try {
-    return await api.fetchGroups(organizationSlug: orgSlug, projectSlug: projSlug);
+    return await api.issues(organizationSlug: orgSlug, projectSlug: projSlug, fetchUnhandled: false);
   } catch (exception) {
     rethrow;
   } finally {

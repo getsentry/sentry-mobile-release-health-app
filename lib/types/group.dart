@@ -1,8 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import '../utils/conversion.dart';
 import './event_metadata.dart';
 import './release.dart';
+import '../types/stats.dart';
+import '../utils/conversion.dart';
 
 part 'group.g.dart';
 
@@ -16,9 +17,12 @@ class Group {
       this.userCount,
       this.count,
       this.title,
+      this.type,
       this.metadata,
       this.firstRelease,
-      this.lastRelease});
+      this.lastRelease,
+      this.stats
+      });
   factory Group.fromJson(Map<String, dynamic> json) => _$GroupFromJson(json);
 
   final String id;
@@ -26,6 +30,7 @@ class Group {
   final int userCount;
   final String count;
   final String title;
+  final String type;
 
   @JsonKey(fromJson: dateTimeFromString, toJson: dateTimeToString)
   final DateTime lastSeen;
@@ -38,6 +43,8 @@ class Group {
 
   @JsonKey(fromJson: metadataFromJson, toJson: metadataToJson)
   final EventMetadata metadata;
+
+  final Stats stats;
 }
 
 Release _releaseFromJson(Map<String, dynamic> json) =>

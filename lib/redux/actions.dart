@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import '../types/group.dart';
 import '../types/organization.dart';
 import '../types/project.dart';
 import '../types/project_with_latest_release.dart';
@@ -53,6 +54,27 @@ class FetchLatestReleasesSuccessAction {
 
 class FetchLatestReleasesFailureAction {
   FetchLatestReleasesFailureAction(this.error);
+  final dynamic error;
+}
+
+// FetchIssues
+
+class FetchIssuesAction {
+  FetchIssuesAction(this.organizationSlug, this.projectSlug, this.unhandled);
+  final String organizationSlug;
+  final String projectSlug;
+  final bool unhandled;
+}
+
+class FetchIssuesSuccessAction {
+  FetchIssuesSuccessAction(this.projectSlug, this.unhandled, this.issues);
+  final String projectSlug;
+  final bool unhandled;
+  final List<Group> issues;
+}
+
+class FetchIssuesFailureAction {
+  FetchIssuesFailureAction(this.error);
   final dynamic error;
 }
 
