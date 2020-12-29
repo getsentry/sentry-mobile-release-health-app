@@ -49,16 +49,25 @@ class _LoginWebViewState extends State<LoginWebView> {
         ? 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Mobile Safari/537.36'
         : 'Mozilla/5.0 (iPhone; CPU OS 13_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/23.0 Mobile/15E148 Safari/605.1.15';
 
-    return WebviewScaffold(
-      url: loginUrl,
-      userAgent: userAgent,
-      clearCookies: true,
-      withZoom: false,
-      hidden: true,
-      appBar: AppBar(
-        title: Text('SignIn'),
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: WebviewScaffold(
+        url: loginUrl,
+        userAgent: userAgent,
+        clearCookies: true,
+        withZoom: false,
+        hidden: true,
+        appBar: AppBar(
+          title: Text('SignIn'),
+        ),
       ),
     );
+  }
+
+  Future<bool> _onWillPop() async {
+    // Needed for animated dismiss
+    await _flutterWebviewPlugin.hide();
+    return Future.value(true);
   }
 
   void _asyncInit() async {
@@ -81,25 +90,25 @@ class _LoginWebViewState extends State<LoginWebView> {
             try {
               // Session is returned even before authenticated so this is called many times
               await client.organizations();
-              if (mounted && !_popped) {
-                _flutterWebviewPlugin.hide();
-                _popped = true; // Don't dismiss multiple times.
-                Navigator.pop(context, Result<Cookie>.value(session));
-              }
+              _popIfPossible(Result<Cookie>.value(session));
             } catch (error) {
               if (error is ApiError) {
                 return; // Stay in callback loop
               } else {
-                if (mounted && !_popped) {
-                  _flutterWebviewPlugin.hide();
-                  _popped = true; // Don't dismiss multiple times.
-                  Navigator.pop(context, Result<Cookie>.error(error));
-                }
+                _popIfPossible(Result<Cookie>.error(error));
               }
             } finally {
               client.close();
             }
           }
         });
+  }
+
+  void _popIfPossible(Result<Cookie> result) async {
+    if (mounted && !_popped) {
+      _popped = true; // Don't dismiss multiple times.
+      await _flutterWebviewPlugin.hide();
+      Navigator.pop(context, result);
+    }
   }
 }
