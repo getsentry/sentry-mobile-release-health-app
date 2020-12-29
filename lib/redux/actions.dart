@@ -28,6 +28,11 @@ class LogoutAction {
   LogoutAction();
 }
 
+class ApiFailureAction {
+  ApiFailureAction(this.error);
+  final dynamic error;
+}
+
 // FetchOrganizationsAndProjects
 
 class FetchOrganizationsAndProjectsAction {
@@ -40,9 +45,8 @@ class FetchOrganizationsAndProjectsSuccessAction {
   final Map<String, List<Project>> projectsByOrganizationSlug;
 }
 
-class FetchOrganizationsAndProjectsFailureAction {
-  FetchOrganizationsAndProjectsFailureAction(this.error);
-  final dynamic error;
+class FetchOrganizationsAndProjectsFailureAction extends ApiFailureAction {
+  FetchOrganizationsAndProjectsFailureAction(error) : super(error);
 }
 
 // FetchLatestReleases
@@ -57,9 +61,8 @@ class FetchLatestReleasesSuccessAction {
   final List<ProjectWithLatestRelease> projectsWithLatestReleases;
 }
 
-class FetchLatestReleasesFailureAction {
-  FetchLatestReleasesFailureAction(this.error);
-  final dynamic error;
+class FetchLatestReleasesFailureAction extends ApiFailureAction {
+  FetchLatestReleasesFailureAction(error) : super(error);
 }
 
 // FetchIssues
@@ -78,9 +81,8 @@ class FetchIssuesSuccessAction {
   final List<Group> issues;
 }
 
-class FetchIssuesFailureAction {
-  FetchIssuesFailureAction(this.error);
-  final dynamic error;
+class FetchIssuesFailureAction extends ApiFailureAction {
+  FetchIssuesFailureAction(error) : super(error);
 }
 
 // SelectOrganization

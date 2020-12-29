@@ -35,7 +35,7 @@ dependencies:
   shared_preferences: ^0.5.8
   json_annotation: ^3.0.1
   url_launcher: ^5.5.0
-  sentry_flutter: ^4.0.0-alpha.2
+  sentry_flutter: ^4.0.0
   equatable: ^1.2.3
 
   # The following adds the Cupertino Icons font to your application.

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sentry_mobile/utils/sentry_colors.dart';
 
 import '../../types/project.dart';
 import '../../types/release.dart';
@@ -28,48 +29,55 @@ class ReleaseCard extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(16)),
-              gradient: LinearGradient(
-                colors: [Color(0xff23B480), Color(0xff23B480)],
-                begin: Alignment.bottomLeft,
-                end: Alignment.topRight,
-              )),
-          child: Column(children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 16, top: 20, right: 16, bottom: 0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  release.version,
-                  style: Theme.of(context).textTheme.headline5,
+              color: SentryColors.rum
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(16)),
+                gradient: LinearGradient(
+                  colors: [Colors.white.withAlpha((256 * 0.2).toInt()), Colors.transparent],
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                )
+            ),
+            child: Column(children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 16, top: 20, right: 16, bottom: 0),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    release.version,
+                    style: Theme.of(context).textTheme.headline5,
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 16, top: 0, right: 16, bottom: 4),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  release.project,
-                  style: Theme.of(context).textTheme.subtitle1,
+              Padding(
+                padding: const EdgeInsets.only(left: 16, top: 0, right: 16, bottom: 4),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    release.project,
+                    style: Theme.of(context).textTheme.subtitle1,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 8.0),
-            Expanded(
-              child: LineChart(
-                data: LineChartData.prepareData(points: _data),
-                lineWidth: 5.0,
-                lineColor: Colors.white,
-                gradientStart: Colors.transparent,
-                gradientEnd: Colors.transparent
+              SizedBox(height: 8.0),
+              Expanded(
+                child: LineChart(
+                  data: LineChartData.prepareData(points: _data),
+                  lineWidth: 5.0,
+                  lineColor: Colors.white,
+                  gradientStart: Colors.transparent,
+                  gradientEnd: Colors.transparent
+                )
+              ),
+              SizedBox(height: 8.0),
+              Padding(
+                padding: const EdgeInsets.only(left: 16, top: 4, right: 16, bottom: 16),
+                child: _platforms(context, project.platforms)
               )
-            ),
-            SizedBox(height: 8.0),
-            Padding(
-              padding: const EdgeInsets.only(left: 16, top: 4, right: 16, bottom: 16),
-              child: _platforms(context, project.platforms)
-            )
-          ]),
+            ]),
+          ),
         ));
   }
 

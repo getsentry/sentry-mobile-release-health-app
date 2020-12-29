@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:sentry_mobile/utils/sentry_colors.dart';
 
 import '../../redux/state/app_state.dart';
 import '../../screens/project_picker/project_picker.dart';
@@ -41,18 +42,18 @@ class _SettingsState extends State<Settings> {
                 title: Text(
                   'Bookmarked Projects',
                   style: Theme.of(context).textTheme.bodyText1.apply(
-                    color: Color(0xFF18181A)
+                    color: SentryColors.revolver
                   ),
                 ),
                 subtitle: Text(
                     viewModel.bookmarkedProjects,
                     style: Theme.of(context).textTheme.subtitle1.apply(
-                        color: Color(0xFFB9C1D9)
+                        color: SentryColors.mamba
                     )
                 ),
                 leading: Icon(
                   Icons.star,
-                  color: Colors.orangeAccent,
+                  color: SentryColors.lightningYellow,
                 ),
                 onTap: () =>
                     Navigator.of(context).push(
@@ -69,12 +70,12 @@ class _SettingsState extends State<Settings> {
                 title: Text(
                   "Sign Out",
                   style: Theme.of(context).textTheme.bodyText1.apply(
-                      color: Color(0xFF18181A)
+                      color: SentryColors.revolver
                   ),
                 ),
                 leading: Icon(
                   Icons.exit_to_app,
-                  color: Colors.blueAccent,
+                  color: SentryColors.royalBlue,
                 ),
                 onTap: () => Navigator.pop(context, true),
               )

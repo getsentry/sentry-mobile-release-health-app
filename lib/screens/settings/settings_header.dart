@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sentry_mobile/utils/sentry_colors.dart';
 
 class SettingsHeader extends StatelessWidget {
   SettingsHeader(this.title);
@@ -13,11 +14,11 @@ class SettingsHeader extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            title,
+            title.toUpperCase(),
             style: TextStyle(
-              color: Color(0xFFB9C1D9),
+              color: SentryColors.mamba,
               fontWeight: FontWeight.w500,
-              fontSize: 16,
+              fontSize: 12,
             ),
           )
         ],
