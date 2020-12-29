@@ -44,12 +44,3 @@ jobs:
             flutter build appbundle
             ;;
             esac
-
-  package-analysis:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: axel-op/dart-package-analyzer@v2
-        id: analysis
-        with:
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
