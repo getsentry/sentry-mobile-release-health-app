@@ -1,4 +1,5 @@
 import 'package:redux/redux.dart';
+import 'package:sentry_mobile/api/api_errors.dart';
 
 import 'actions.dart';
 import 'state/app_state.dart';
@@ -22,6 +23,7 @@ final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, FetchIssuesSuccessAction>(_fetchIssuesSuccessAction),
   TypedReducer<GlobalState, SelectOrganizationAction>(_selectOrganizationAction),
   TypedReducer<GlobalState, SelectProjectAction>(_selectProjectAction),
+  TypedReducer<GlobalState, ApiFailureAction>(_apiFailureAction),
 ]);
 
 GlobalState _switchTabAction(GlobalState state, SwitchTabAction action) {
@@ -118,6 +120,15 @@ GlobalState _fetchIssuesSuccessAction(GlobalState state, FetchIssuesSuccessActio
       handledIssuesByProjectSlug: handledIssuedByProjectSlug,
       unhandledIssuesByProjectSlug: unhandledIssuesByByProjectSlug
   );
+}
+
+GlobalState _apiFailureAction(GlobalState state, ApiFailureAction action) {
+  final error = action.error;
+  if (error is ApiError && error.statusCode == 401) {
+    return _logoutAction(state, LogoutAction());
+  } else {
+    return state;
+  }
 }
 
 // -----------------------------
