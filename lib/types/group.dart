@@ -45,6 +45,8 @@ class Group {
   final EventMetadata metadata;
 
   final Stats stats;
+
+  Map<String, dynamic> toJson() => _$GroupToJson(this);
 }
 
 Release _releaseFromJson(Map<String, dynamic> json) =>
