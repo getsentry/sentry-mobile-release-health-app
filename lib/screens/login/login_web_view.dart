@@ -21,6 +21,7 @@ class _LoginWebViewState extends State<LoginWebView> {
 
   final _flutterWebviewPlugin = FlutterWebviewPlugin();
   final _cookieManager = WebviewCookieManager();
+  var _popped = false;
 
   StreamSubscription<String> _onUrlChanged;
 
@@ -80,14 +81,18 @@ class _LoginWebViewState extends State<LoginWebView> {
             try {
               // Session is returned even before authenticated so this is called many times
               await client.organizations();
-              if (mounted) {
+              if (mounted && !_popped) {
+                _flutterWebviewPlugin.hide();
+                _popped = true; // Don't dismiss multiple times.
                 Navigator.pop(context, Result<Cookie>.value(session));
               }
             } catch (error) {
               if (error is ApiError) {
                 return; // Stay in callback loop
               } else {
-                if (mounted) {
+                if (mounted && !_popped) {
+                  _flutterWebviewPlugin.hide();
+                  _popped = true; // Don't dismiss multiple times.
                   Navigator.pop(context, Result<Cookie>.error(error));
                 }
               }
