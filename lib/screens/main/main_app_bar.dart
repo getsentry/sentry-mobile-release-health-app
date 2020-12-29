@@ -51,7 +51,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
     );
   }
 
-  void _pushSettings(BuildContext context) async {
+  Future<void> _pushSettings(BuildContext context) async {
     final bool logout = await Navigator.of(context).push(
       MaterialPageRoute(
           builder: (BuildContext context) => Settings()
