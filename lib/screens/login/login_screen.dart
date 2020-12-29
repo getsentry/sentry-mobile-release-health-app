@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:sentry_mobile/utils/sentry_colors.dart';
 
 import '../../redux/state/app_state.dart';
+import '../../utils/sentry_colors.dart';
 import 'login_view_model.dart';
 import 'login_web_view.dart';
 

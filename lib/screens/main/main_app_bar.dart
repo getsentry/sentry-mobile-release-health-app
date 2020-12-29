@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:sentry_mobile/redux/actions.dart';
-import 'package:sentry_mobile/utils/sentry_colors.dart';
+
 
 import '../../redux/state/app_state.dart';
 import '../../utils/sentry_icons.dart';
 import '../settings/settings.dart';
+import '../../redux/actions.dart';
+import '../../utils/sentry_colors.dart';
 
 class MainAppBar extends StatelessWidget with PreferredSizeWidget {
 

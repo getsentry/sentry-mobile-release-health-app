@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:sentry_mobile/utils/sentry_colors.dart';
 
 import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
 import '../../screens/project_picker/project_picker_item.dart';
 import '../../screens/settings/settings_header.dart';
+import '../../utils/sentry_colors.dart';
 import 'project_picker_view_model.dart';
 
 class ProjectPicker extends StatefulWidget {

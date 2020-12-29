@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:sentry_mobile/utils/sentry_colors.dart';
 
 import '../../redux/state/app_state.dart';
 import '../../screens/project_picker/project_picker.dart';
+import '../../utils/sentry_colors.dart';
 import 'settings_header.dart';
 import 'settings_view_model.dart';
 

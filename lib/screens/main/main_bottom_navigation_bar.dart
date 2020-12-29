@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:sentry_mobile/utils/sentry_colors.dart';
 
 import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
+import '../../utils/sentry_colors.dart';
 import '../../utils/sentry_icons.dart';
 
 class MainBottomNavigationBar extends StatelessWidget {

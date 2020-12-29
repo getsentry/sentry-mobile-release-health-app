@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sentry_mobile/utils/sentry_colors.dart';
 
 import '../../types/project.dart';
 import '../../types/release.dart';
+import '../../utils/sentry_colors.dart';
 import '../chart/line_chart.dart';
 import '../chart/line_chart_data.dart';
 import '../chart/line_chart_point.dart';

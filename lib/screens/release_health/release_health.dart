@@ -2,12 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:sentry_mobile/utils/sentry_colors.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../redux/state/app_state.dart';
 import '../../screens/empty/empty_screen.dart';
 import '../../screens/project_picker/project_picker.dart';
+import '../../utils/sentry_colors.dart';
 import '../../utils/sentry_icons.dart';
 import 'release_card.dart';
 import 'release_health_chart_row.dart';
@@ -253,6 +254,7 @@ class HealthCard extends StatelessWidget {
 
   final warningThreshold = 99.5;
   final dangerThreshold = 98;
+  final valueFormat = NumberFormat('###.##');
 
   Color getColor() {
     return value == null
@@ -309,7 +311,7 @@ class HealthCard extends StatelessWidget {
             )
           ),
           Text(
-            value != null ? value.toString() + '%' : '--',
+            value != null ? valueFormat.format(value) + '%' : '--',
             style: TextStyle(
               color: getColor(),
               fontWeight: FontWeight.w500,

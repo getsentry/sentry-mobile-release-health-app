@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sentry_mobile/utils/sentry_colors.dart';
+
+import '../../utils/sentry_colors.dart';
 
 class SettingsHeader extends StatelessWidget {
   SettingsHeader(this.title);

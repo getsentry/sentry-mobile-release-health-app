@@ -5,8 +5,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
-import 'package:sentry_mobile/screens/splash/splash_screen.dart';
-import 'package:sentry_mobile/utils/sentry_colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -16,6 +14,8 @@ import 'redux/reducers.dart';
 import 'redux/state/app_state.dart';
 import 'screens/login/login_screen.dart';
 import 'screens/main/main_screen.dart';
+import 'screens/splash/splash_screen.dart';
+import 'utils/sentry_colors.dart';
 
 Future<Store<AppState>> createStore() async {
   final prefs = await SharedPreferences.getInstance();

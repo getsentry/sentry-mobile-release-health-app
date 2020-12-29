@@ -1,6 +1,6 @@
 import 'package:redux/redux.dart';
-import 'package:sentry_mobile/api/api_errors.dart';
 
+import '../api/api_errors.dart';
 import 'actions.dart';
 import 'state/app_state.dart';
 
