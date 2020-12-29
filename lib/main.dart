@@ -5,6 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
+import 'package:sentry_mobile/utils/sentry_colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -77,13 +78,8 @@ class SentryMobile extends StatelessWidget {
           // or simply save your changes to "hot reload" in a Flutter IDE).
           // Notice that the counter didn't reset back to zero; the application
           // is not restarted.
-            primarySwatch: Colors.purple,
-            primaryColorDark: Color(0xff4e3fb4),
-            primaryColorLight: Color(0xffE7E1EC),
-            highlightColor: Colors.transparent,
-            splashColor: Colors.transparent,
-            backgroundColor: Colors.white,
-            dividerColor: Color(0xffE7E1EC),
+            primarySwatch: SentryColors.primarySwatch,
+            dividerColor: SentryColors.lavenderGray,
 
             // This makes the visual density adapt to the platform that you run
             // the app on. For desktop platforms, the controls will be smaller and
@@ -94,22 +90,22 @@ class SentryMobile extends StatelessWidget {
                   headline1: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 26,
-                    color: Colors.black,
+                    color: SentryColors.revolver,
                   ),
                   headline2: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 20,
-                    color: Colors.black,
+                    color: SentryColors.revolver,
                   ),
                   headline3: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 18,
-                    color: Colors.black,
+                    color: SentryColors.revolver,
                   ),
                   headline4: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 16,
-                    color: Colors.black,
+                    color: SentryColors.revolver,
                   ),
                   headline5: TextStyle(
                     fontWeight: FontWeight.w500,
@@ -119,7 +115,7 @@ class SentryMobile extends StatelessWidget {
                   subtitle1: TextStyle(
                     fontWeight: FontWeight.normal,
                     fontSize: 14,
-                    color: Color(0xb3ffffff),
+                    color: SentryColors.mamba,
                   ),
                   caption: TextStyle(
                     fontWeight: FontWeight.w500,

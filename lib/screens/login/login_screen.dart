@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:sentry_mobile/utils/sentry_colors.dart';
 
 import '../../redux/state/app_state.dart';
 import 'login_view_model.dart';
@@ -41,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 RaisedButton(
                   child: Text('SignIn'),
                   textColor: Colors.white,
-                  color: Color(0xff4e3fb4),
+                  color: SentryColors.rum,
                   onPressed: () {
                     setState(() {
                       _navigateAndWaitForSession()

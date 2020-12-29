@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:sentry_mobile/utils/sentry_colors.dart';
 
 import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
@@ -54,12 +55,12 @@ class _ProjectPickerState extends State<ProjectPicker> {
                   title: Text(
                     item.title,
                     style: Theme.of(context).textTheme.bodyText1.apply(
-                        color: Colors.black
+                        color: SentryColors.revolver
                     ),
                   ),
                   trailing: Icon(
                     item.isBookmarked ? Icons.star : Icons.star_border,
-                    color: item.isBookmarked ? Colors.orangeAccent : Colors.grey,
+                    color: item.isBookmarked ? SentryColors.lightningYellow : SentryColors.graySuit,
                   ),
                 onTap: () {
                   // TODO(denis) Bookmark/Un-Bookmark project
