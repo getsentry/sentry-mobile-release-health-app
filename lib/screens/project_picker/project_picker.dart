@@ -63,7 +63,7 @@ class _ProjectPickerState extends State<ProjectPicker> {
                     color: item.isBookmarked ? SentryColors.lightningYellow : SentryColors.graySuit,
                   ),
                 onTap: () {
-                  // TODO(denis) Bookmark/Un-Bookmark project
+                  // TODO(denis): Bookmark/Un-Bookmark project, https://github.com/getsentry/sentry-mobile/issues/43
                 },
               );
             } else {

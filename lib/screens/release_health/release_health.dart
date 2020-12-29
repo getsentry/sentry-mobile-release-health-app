@@ -131,12 +131,12 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                             title: 'Crash Free Users',
                             value: viewModel.releases[_index].release.crashFreeUsers,
                             change: 0.04
-                        ), // TODO: api
+                        ), // TODO(denis): Use delta from api, https://github.com/getsentry/sentry-mobile/issues/11
                         HealthCard(
                             title: 'Crash Free Sessions',
                             value: viewModel.releases[_index].release.crashFreeSessions,
                             change: -0.01
-                        ), // TODO: api
+                        ), // TODO(denis): Use delta from api, https://github.com/getsentry/sentry-mobile/issues/11
                       ],
                     )
                   ],
