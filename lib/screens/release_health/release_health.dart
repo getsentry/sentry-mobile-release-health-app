@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:intl/intl.dart';
-import 'package:sentry_mobile/utils/sentry_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../redux/state/app_state.dart';
 import '../../screens/empty/empty_screen.dart';
 import '../../screens/project_picker/project_picker.dart';
+import '../../utils/sentry_colors.dart';
 import '../../utils/sentry_icons.dart';
 import 'release_card.dart';
 import 'release_health_chart_row.dart';

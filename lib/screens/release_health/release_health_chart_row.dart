@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:sentry_mobile/utils/sentry_colors.dart';
 
 import '../../screens/chart/line_chart.dart';
 import '../../screens/chart/line_chart_point.dart';
 import '../../screens/release_health/release_health_chart_row_view_model.dart';
+import '../../utils/sentry_colors.dart';
 import '../../utils/sentry_icons.dart';
 
 class ReleaseHealthChartRow extends StatelessWidget {
