@@ -29,9 +29,6 @@ jobs:
         - name: Fix iOS build bug
           if: matrix.target == 'ios'
           run: rm ios/Podfile
-        - name: enable web
-          if: matrix.target == 'web'
-          run: flutter config --enable-web
         - name: Test
           run: flutter test
         - name: Build ${{ matrix.target }}
@@ -43,9 +40,6 @@ jobs:
             ;;
             android)
             flutter build appbundle
-            ;;
-            web)
-            flutter build web
             ;;
             esac
 
