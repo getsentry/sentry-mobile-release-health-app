@@ -95,7 +95,13 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
   void call(Store<AppState> store, dynamic action, NextDispatcher next) async {
     if (action is RehydrateAction) {
       final String session = await secureStorage.read(key: 'session');
-      store.dispatch(RehydrateSuccessAction(Cookie.fromSetCookieValue(session)));
+      Cookie cookie;
+      try {
+        cookie = session != null ? Cookie.fromSetCookieValue(session) : null;
+      } catch (e) {
+        await secureStorage.delete(key: 'session');
+      }
+      store.dispatch(RehydrateSuccessAction(cookie));
     }
     if (action is LoginAction) {
       await secureStorage.write(key: 'session', value: action.cookie.toString());
