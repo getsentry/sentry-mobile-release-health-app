@@ -31,6 +31,8 @@ jobs:
           run: rm ios/Podfile
         - name: Test
           run: flutter test
+        - name: Analyze
+          run: flutter analyze
         - name: Build ${{ matrix.target }}
           run: |
             TARGET=${{ matrix.target }}
