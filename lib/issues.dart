@@ -175,6 +175,7 @@ class Issue extends StatelessWidget {
   final DateTime firstSeen;
   final DateTime lastSeen;
 
+  @override
   Widget build(BuildContext context) => GestureDetector(
       onTap: () {
         Navigator.push<dynamic>(

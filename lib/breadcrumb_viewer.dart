@@ -8,6 +8,7 @@ class BreadcrumbViewer extends StatelessWidget {
 
   final List<Breadcrumb> breadcrumbs;
 
+  @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 14),
@@ -60,6 +61,7 @@ class BreadcrumbCard extends StatelessWidget {
 
   final Breadcrumb breadcrumb;
 
+  @override
   Widget build(BuildContext context) {
     IconData icon = Icons.info_outline;
     Color iconColor = Colors.black54;
@@ -74,7 +76,7 @@ class BreadcrumbCard extends StatelessWidget {
       iconColor = Colors.green;
     }
 
-    List<Widget> dataRows = [];
+    final List<Widget> dataRows = [];
     breadcrumb.data.forEach((key, dynamic value) {
       dataRows.add(BreadcrumbDataRow(title: key, value: '$value'));
     });
@@ -150,6 +152,7 @@ class BreadcrumbDataRow extends StatelessWidget {
   final String title;
   final String value;
 
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(top: 4),

@@ -83,6 +83,7 @@ class _IssueState extends State<IssueScreen> {
     });
   }
 
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<dynamic>>(
         future: Future.wait<dynamic>([futureEvent, futureGroup]),
@@ -127,18 +128,19 @@ class IssueView extends StatelessWidget {
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     List<Breadcrumb> breadcrumbs = [];
 
-    latestEvent.entries.forEach((entry) {
+    for (final entry in latestEvent.entries) {
       if (entry['type'] == 'breadcrumbs') {
-        List<dynamic> d = entry['data']['values'] as List<dynamic>;
+        final List<dynamic> d = entry['data']['values'] as List<dynamic>;
 
         breadcrumbs = d
             .map((dynamic b) => Breadcrumb.fromJson(b as Map<String, dynamic>))
             .toList();
       }
-    });
+    }
 
     return SingleChildScrollView(
         child: Container(
@@ -209,6 +211,7 @@ class Tags extends StatelessWidget {
   Tags({@required this.tags});
   final List<Tag> tags;
 
+  @override
   Widget build(BuildContext context) {
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 16),
@@ -242,6 +245,7 @@ class TagCard extends StatelessWidget {
   final String tagKey;
   final String tagValue;
 
+  @override
   Widget build(BuildContext context) {
     return Container(
       height: 26,
@@ -302,8 +306,8 @@ class EventCounts extends StatelessWidget {
             )),
         padding: EdgeInsets.symmetric(vertical: 14),
         child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-          EventCount(title: "Events", value: count),
-          EventCount(title: "Users", value: userCount)
+          EventCount(title: 'Events', value: count),
+          EventCount(title: 'Users', value: userCount)
         ]));
   }
 }
@@ -314,6 +318,7 @@ class EventCount extends StatelessWidget {
   final String title;
   final String value;
 
+  @override
   Widget build(BuildContext context) {
     return Container(
         alignment: Alignment.centerLeft,
@@ -333,8 +338,9 @@ class Contexts extends StatelessWidget {
 
   final Map<String, dynamic> eventContext;
 
+  @override
   Widget build(BuildContext context) {
-    List<Widget> contexts = new List<Widget>();
+    final List<Widget> contexts = <Widget>[];
 
     eventContext.forEach((title, dynamic value) =>
         contexts.add(ContextView(title: title, value: value)));
@@ -352,6 +358,7 @@ class IssueSeenRelease extends StatelessWidget {
   final String when;
   final String time;
 
+  @override
   Widget build(BuildContext context) {
     return Container(
         margin: EdgeInsets.only(bottom: 14),
@@ -369,7 +376,7 @@ class IssueSeenRelease extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("When"),
+                    Text('When'),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [Text(when), Text(time)],
@@ -378,7 +385,7 @@ class IssueSeenRelease extends StatelessWidget {
                 )),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [Text("Release"), Text(version)],
+              children: [Text('Release'), Text(version)],
             )
           ],
         ));
