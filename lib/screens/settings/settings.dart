@@ -68,7 +68,7 @@ class _SettingsState extends State<Settings> {
               ),
               ListTile(
                 title: Text(
-                  "Sign Out",
+                  'Sign Out',
                   style: Theme.of(context).textTheme.bodyText1.apply(
                       color: SentryColors.revolver
                   ),

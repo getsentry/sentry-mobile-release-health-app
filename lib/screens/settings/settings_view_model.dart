@@ -1,5 +1,4 @@
 import 'package:redux/redux.dart';
-import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
 
 class SettingsViewModel {
