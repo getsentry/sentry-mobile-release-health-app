@@ -98,7 +98,7 @@ class SentryApi {
   Result<List<T>> _parseResponseList<T>(Response response, T Function(Map<String, dynamic> r) map) {
     if (response.statusCode == 200) {
       try {
-        final responseJson = json.decode(response.body) as List;
+        final responseJson = json.decode(utf8.decode(response.bodyBytes)) as List;
         final orgList = List<Map<String, dynamic>>.from(responseJson);
         return Result.value(orgList.map((Map<String, dynamic> r) => map(r)).toList());
       } catch (e) {
@@ -112,7 +112,7 @@ class SentryApi {
   Result<T> _parseResponse<T>(Response response, T Function(Map<String, dynamic> r) map) {
     if (response.statusCode == 200) {
       try {
-        final responseJson = json.decode(response.body) as Map<String, dynamic>;
+        final responseJson = json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
         return Result.value(map(responseJson));
       } catch (e) {
         return Result.error(JsonError(e));
