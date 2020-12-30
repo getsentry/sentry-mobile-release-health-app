@@ -40,9 +40,10 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
 
     if (viewModel.showProjectEmptyScreen) {
       return EmptyScreen(
-        'Remain Calm',
-        'You need at least one project to use this view.',
-        () async {
+        title: 'Remain Calm',
+        text: 'You need at least one project to use this view.',
+        button: 'Visit sentry.io',
+        action: () async {
           const url = 'https://sentry.io';
           if (await canLaunch(url)) {
             await launch(url);
@@ -51,14 +52,14 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
       );
     } else if (viewModel.showReleaseEmptyScreen) {
       return EmptyScreen(
-        'Remain Calm',
-        'You need at least one bookmarked project to use this view.',
-        () => {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (BuildContext context) => ProjectPicker()
-            ),
-          )
+        title: 'Remain Calm',
+        text: 'You need at least one release in you projects to use this view.',
+        button: 'Visit sentry.io',
+        action: () async {
+          const url = 'https://sentry.io';
+          if (await canLaunch(url)) {
+            await launch(url);
+          }
         }
       );
     } else if (viewModel.showLoadingScreen || viewModel.releases.isEmpty) {

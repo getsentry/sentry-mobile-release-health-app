@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:sentry_mobile/utils/sentry_colors.dart';
 
 class EmptyScreen extends StatelessWidget {
-  EmptyScreen(this.title, this.text, this.action);
+  EmptyScreen({@required this.title, @required this.text, @required this.button, @required this.action});
 
   final String title;
   final String text;
+  final String button;
   final void Function() action;
 
   @override
@@ -20,9 +22,9 @@ class EmptyScreen extends StatelessWidget {
             Text(text, textAlign: TextAlign.center),
             SizedBox(height: 22),
             RaisedButton(
-              child: Text('Bookmark project'),
+              child: Text(button),
               textColor: Colors.white,
-              color: Color(0xff4e3fb4),
+              color: SentryColors.rum,
               onPressed: () async {
                 action();
               },
