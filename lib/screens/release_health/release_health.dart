@@ -7,7 +7,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../redux/state/app_state.dart';
 import '../../screens/empty/empty_screen.dart';
-import '../../screens/project_picker/project_picker.dart';
 import '../../utils/sentry_colors.dart';
 import '../../utils/sentry_icons.dart';
 import 'release_card.dart';
@@ -38,27 +37,23 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
     viewModel.fetchProjectsIfNeeded();
     viewModel.fetchReleasesIfNeeded();
 
-    if (viewModel.showProjectEmptyScreen) {
+    if (viewModel.showProjectEmptyScreen || viewModel.showReleaseEmptyScreen) {
+      String text = '';
+      if (viewModel.showProjectEmptyScreen) {
+        text = 'You need at least one project to use this view.';
+      }
+      if (viewModel.showReleaseEmptyScreen) {
+        text = 'You need at least one release in you projects to use this view.';
+      }
       return EmptyScreen(
-        'Remain Calm',
-        'You need at least one project to use this view.',
-        () async {
+        title: 'Remain Calm',
+        text: text,
+        button: 'Visit sentry.io',
+        action: () async {
           const url = 'https://sentry.io';
           if (await canLaunch(url)) {
             await launch(url);
           }
-        }
-      );
-    } else if (viewModel.showReleaseEmptyScreen) {
-      return EmptyScreen(
-        'Remain Calm',
-        'You need at least one bookmarked project to use this view.',
-        () => {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (BuildContext context) => ProjectPicker()
-            ),
-          )
         }
       );
     } else if (viewModel.showLoadingScreen || viewModel.releases.isEmpty) {

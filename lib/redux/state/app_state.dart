@@ -119,16 +119,26 @@ class GlobalState {
     );
   }
 
-  Map<String, List<Project>> bookmarkedProjectsByOrganizationSlug() {
+  // When there are no bookmarked projects, we return all of them.
+  Map<String, List<Project>> allOrBookmarkedProjectsByOrganizationSlug() {
+    final Map<String, List<Project>> allProjectsByOrganizationSlug = {};
     final Map<String, List<Project>> bookmarkedProjectsByOrganizationSlug = {};
 
     for (final organization in organizations) {
-      final bookmarkedProjects = (projectsByOrganizationSlug[organization.slug] ?? []).where((element) => element.isBookmarked);
+      final allProjects = projectsByOrganizationSlug[organization.slug] ?? [];
+      if (allProjects.isNotEmpty && organization.slug != null) {
+        allProjectsByOrganizationSlug[organization.slug] = allProjects.toList();
+      }
+      final bookmarkedProjects = allProjects.where((element) => element.isBookmarked);
       if (bookmarkedProjects.isNotEmpty && organization.slug != null) {
         bookmarkedProjectsByOrganizationSlug[organization.slug] = bookmarkedProjects.toList();
       }
     }
-    return bookmarkedProjectsByOrganizationSlug;
+    if (bookmarkedProjectsByOrganizationSlug.isEmpty) {
+      return allProjectsByOrganizationSlug;
+    } else {
+      return bookmarkedProjectsByOrganizationSlug;
+    }
   }
 
   Map<String, Stats> aggregatedStatsByProjectSlug(bool handled) {
