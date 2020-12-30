@@ -45,9 +45,13 @@ class ReleaseCard extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 16, top: 20, right: 16, bottom: 0),
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: Text(
-                    release.version,
-                    style: Theme.of(context).textTheme.headline5,
+                  child: FittedBox(
+                    fit: BoxFit.cover,
+                    child: Text(
+                      release.version,
+                      maxLines: 2,
+                      style: Theme.of(context).textTheme.headline5,
+                    ),
                   ),
                 ),
               ),
