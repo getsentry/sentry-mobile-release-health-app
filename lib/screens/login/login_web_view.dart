@@ -73,6 +73,14 @@ class _LoginWebViewState extends State<LoginWebView> {
   Future<void> _asyncInit() async {
     await _cookieManager.clearCookies();
 
+    _flutterWebviewPlugin.onStateChanged.listen((event) async {
+      if (event.type == WebViewState.finishLoad && !event.url.contains('/issues/')) {
+        await _flutterWebviewPlugin.show();
+      } else {
+        await _flutterWebviewPlugin.hide();
+      }
+    });
+
     // Add a listener to on url changed
     _onUrlChanged =
         _flutterWebviewPlugin.onUrlChanged.listen((String url) async {
