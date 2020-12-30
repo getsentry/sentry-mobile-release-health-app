@@ -15,10 +15,10 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
 
-  final _children = [
-    ReleaseHealth(),
-    IssuesScreenBuilder()
-  ];
+  // final _children = [
+  //   ReleaseHealth(),
+  //   IssuesScreenBuilder()
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +29,17 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget _content(Store<AppState> store) {
+
+    // todo(denis): Change back once issues are implemented.
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: MainAppBar(),
-      bottomNavigationBar: MainBottomNavigationBar(),
-      body: Center(
-        child: _children[store.state.globalState.selectedTab],
-      ),
+      // bottomNavigationBar: MainBottomNavigationBar(),
+      // body: Center(
+      //   child: _children[store.state.globalState.selectedTab],
+      // ),
+      body: ReleaseHealth(),
     );
   }
 }
