@@ -54,7 +54,7 @@ class ReleaseHealthViewModel {
   }
 
   void fetchReleases() {
-    _store.dispatch(FetchLatestReleasesAction(_store.state.globalState.bookmarkedProjectsByOrganizationSlug()));
+    _store.dispatch(FetchLatestReleasesAction(_store.state.globalState.allOrBookmarkedProjectsByOrganizationSlug()));
   }
 
   List<LineChartPoint> statsAsLineChartPoints(ProjectWithLatestRelease projectWithLatestRelease, bool handled) {

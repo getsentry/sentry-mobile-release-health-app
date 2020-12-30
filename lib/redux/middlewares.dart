@@ -40,7 +40,9 @@ dynamic apiMiddleware(Store<AppState> store, dynamic action, NextDispatcher next
         final List<ProjectWithLatestRelease> projectsWithLatestRelease = [];
 
         for (final organizationSlug in action.projectsByOrganizationSlug.keys) {
-          final projectsToFetch = action.projectsByOrganizationSlug[organizationSlug] ?? [];
+          final projectsToFetch = (action.projectsByOrganizationSlug[organizationSlug] ?? [])
+            .where((element) => element.latestRelease != null); // Only fetch when there is a release
+
           for (final projectToFetch in projectsToFetch) {
             final project = await api.project(
               organizationSlug, projectToFetch.slug
