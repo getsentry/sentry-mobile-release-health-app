@@ -61,17 +61,32 @@ class ReleaseCard extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 8.0),
               Expanded(
-                child: LineChart(
-                  data: LineChartData.prepareData(points: _data),
-                  lineWidth: 5.0,
-                  lineColor: Colors.white,
-                  gradientStart: Colors.transparent,
-                  gradientEnd: Colors.transparent
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12),
+                      child: LineChart(
+                        data: LineChartData.prepareData(points: _data),
+                        lineWidth: 5.0,
+                        lineColor: Colors.black.withOpacity(0.05),
+                        gradientStart: Colors.transparent,
+                        gradientEnd: Colors.transparent
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: LineChart(
+                          data: LineChartData.prepareData(points: _data),
+                          lineWidth: 5.0,
+                          lineColor: Colors.white,
+                          gradientStart: Colors.transparent,
+                          gradientEnd: Colors.transparent
+                      ),
+                    ),
+                  ]
                 )
               ),
-              SizedBox(height: 8.0),
               Padding(
                 padding: const EdgeInsets.only(left: 16, top: 4, right: 16, bottom: 16),
                 child: _platforms(context, project.platforms)
