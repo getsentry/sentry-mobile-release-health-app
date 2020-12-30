@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
-import '../../issues.dart';
+// import '../../issues.dart';
 import '../../redux/state/app_state.dart';
 import '../release_health/release_health.dart';
 import 'main_app_bar.dart';
-import 'main_bottom_navigation_bar.dart';
+// import 'main_bottom_navigation_bar.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -15,10 +15,10 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
 
-  final _children = [
-    ReleaseHealth(),
-    IssuesScreenBuilder()
-  ];
+  // final _children = [
+  //   ReleaseHealth(),
+  //   IssuesScreenBuilder()
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +29,17 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget _content(Store<AppState> store) {
+
+    // todo(denis): Change back once issues are implemented.
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: MainAppBar(),
-      bottomNavigationBar: MainBottomNavigationBar(),
-      body: Center(
-        child: _children[store.state.globalState.selectedTab],
-      ),
+      // bottomNavigationBar: MainBottomNavigationBar(),
+      // body: Center(
+      //   child: _children[store.state.globalState.selectedTab],
+      // ),
+      body: ReleaseHealth(),
     );
   }
 }
