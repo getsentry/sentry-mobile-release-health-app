@@ -1,4 +1,3 @@
-import 'package:json_annotation/json_annotation.dart';
 
 class Stat {
   Stat(this.timestamp, this.value);

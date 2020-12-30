@@ -46,6 +46,7 @@ class ContextRow extends StatelessWidget {
   final String name;
   final String value;
 
+  @override
   Widget build(BuildContext context) {
     return Container(
         margin: EdgeInsets.only(bottom: 6),

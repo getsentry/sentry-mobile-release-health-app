@@ -44,21 +44,21 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
-              child: Text("Captured", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+              child: Text('Captured', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
             ),
             _createListTile('Sentry.captureException', _TypeToThrow.EXCEPTION),
             _createListTile('Sentry.captureException', _TypeToThrow.ERROR),
             _createListTile('Sentry.captureException', _TypeToThrow.STRING),
             Padding(
               padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
-              child: Text("Not Captured", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+              child: Text('Not Captured', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
             ),
             _createListTile('Throw Exception', _TypeToThrow.EXCEPTION, fatal: true),
             _createListTile('Throw Exception', _TypeToThrow.ERROR, fatal: true),
             _createListTile('Throw Exception', _TypeToThrow.STRING, fatal: true),
             Padding(
               padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
-              child: Text("Native", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+              child: Text('Native', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
             ),
             _createNativeListTile(_NativePlatform.Android, true),
             _createNativeListTile(_NativePlatform.Android, false),
@@ -214,6 +214,7 @@ extension _TypeToThrowPrint on _TypeToThrow {
         return 'String';
         break;
     }
+    return null;
   }
 }
 

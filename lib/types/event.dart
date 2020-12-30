@@ -72,11 +72,11 @@ List<Map<String, dynamic>> _tagsToJson(List<Tag> tags) =>
     tags.map((Tag tag) => tag.toJson()).toList();
 
 Map<String, dynamic> _contextFromJson(Map<String, dynamic> json) {
-  final Map<String, dynamic> newMap = Map<String, dynamic>();
+  final newMap = <String, dynamic>{};
 
   json.forEach((String key, dynamic value) {
     if (value is Map) {
-      final Map<String, String> stringMap = Map();
+      final stringMap = <String, String>{};
       value.forEach((dynamic innerKey, dynamic innerValue) {
         stringMap[innerKey as String] = '$innerValue';
       });

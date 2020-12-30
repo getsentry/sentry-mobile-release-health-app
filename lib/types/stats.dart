@@ -17,6 +17,8 @@ class Stats {
   @JsonKey(name: '14d')
   final List<Stat> stats14d;
 
+  Map<String, dynamic> toJson() => _$StatsToJson(this);
+
   // Helper
 
   static List<Stat> _aggregateAndSort(List<List<Stat>> allStats) {

@@ -1,9 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import './event_metadata.dart';
-import './release.dart';
 import '../types/stats.dart';
 import '../utils/conversion.dart';
+import 'event_metadata.dart';
+import 'release.dart';
 
 part 'group.g.dart';
 
@@ -45,6 +45,8 @@ class Group {
   final EventMetadata metadata;
 
   final Stats stats;
+
+  Map<String, dynamic> toJson() => _$GroupToJson(this);
 }
 
 Release _releaseFromJson(Map<String, dynamic> json) =>

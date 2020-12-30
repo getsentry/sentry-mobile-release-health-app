@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
-
+import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
+import '../../utils/sentry_colors.dart';
 import '../../utils/sentry_icons.dart';
 import '../settings/settings.dart';
-import '../../redux/actions.dart';
-import '../../utils/sentry_colors.dart';
 
 class MainAppBar extends StatelessWidget with PreferredSizeWidget {
 
@@ -51,7 +50,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
     );
   }
 
-  void _pushSettings(BuildContext context) async {
+  Future<void> _pushSettings(BuildContext context) async {
     final bool logout = await Navigator.of(context).push(
       MaterialPageRoute(
           builder: (BuildContext context) => Settings()

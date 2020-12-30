@@ -11,7 +11,7 @@ import '../types/project_with_latest_release.dart';
 import 'actions.dart';
 import 'state/app_state.dart';
 
-void apiMiddleware(Store<AppState> store, dynamic action, NextDispatcher next) async {
+dynamic apiMiddleware(Store<AppState> store, dynamic action, NextDispatcher next) async {
 
   if (action is FetchOrganizationsAndProjectsAction) {
     final thunkAction = (Store<AppState> store) async {
@@ -92,7 +92,7 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
   final FlutterSecureStorage secureStorage;
 
   @override
-  void call(Store<AppState> store, dynamic action, NextDispatcher next) async {
+  dynamic call(Store<AppState> store, dynamic action, NextDispatcher next) async {
     if (action is RehydrateAction) {
       final String session = await secureStorage.read(key: 'session');
       Cookie cookie;

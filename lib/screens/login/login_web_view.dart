@@ -70,7 +70,7 @@ class _LoginWebViewState extends State<LoginWebView> {
     return Future.value(true);
   }
 
-  void _asyncInit() async {
+  Future<void> _asyncInit() async {
     await _cookieManager.clearCookies();
 
     // Add a listener to on url changed
@@ -104,7 +104,7 @@ class _LoginWebViewState extends State<LoginWebView> {
         });
   }
 
-  void _popIfPossible(Result<Cookie> result) async {
+  Future<void> _popIfPossible(Result<Cookie> result) async {
     if (mounted && !_popped) {
       _popped = true; // Don't dismiss multiple times.
       await _flutterWebviewPlugin.hide();
