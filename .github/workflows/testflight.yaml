@@ -1,0 +1,76 @@
+name: Build & Deploy iOS TestFlight
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+  steps:
+  - uses: actions/checkout@v2
+    with:
+      fetch-depth: 0
+  - uses: actions/setup-java@v1
+    with:
+      java-version: '8'
+  - uses: subosito/flutter-action@v1
+    with:
+      channel: 'stable'
+
+  - name: Import Codesign Certificate
+    id: codesign-cert
+    uses: Apple-Actions/import-codesign-certs@v1
+      with:
+        p12-file-base64: ${{ secrets.DISTRIBUTION_CERTIFICATE_BASE64 }}
+        p12-password: ${{ secrets.DISTRIBUTION_CERTIFICATE_PASSWORD }}
+
+  - name: Generate AppStore Connect API Token
+    id: app-store-api-token
+    env:
+      ISSUER_ID: ${{ secrets.APPSTORE_CONNECT_API_ISSUER_ID }}
+      KEY_ID: ${{ secrets.APPSTORE_CONNECT_API_KEY_ID }}
+      AUTH_KEY: ${{ secrets.APPSTORE_CONNECT_API_AUTH_KEY }}
+    run: |
+      pip3 install cryptography
+      pip3 install pyjwt
+      exp=$(date -v +20M +%s)
+      iss=$(date -v -1M +%s)
+      jwt=$(python3 -c "import jwt; print(jwt.encode({'aud':'appstoreconnect-v1','iss':'$ISSUER_ID','exp':$exp,'iat':$iss},'''$AUTH_KEY''',algorithm='ES256', headers={'kid': '$KEY_ID'}).decode('utf-8'))")
+      echo "::add-mask::$jwt"
+      echo "::set-output name=appStoreToken::$jwt"
+
+  - name: Prime App Store Connect API
+    env:
+      JWT: ${{ steps.app-store-api-token.outputs.appStoreToken }}
+    uses: nick-invision/retry@v2
+    with:
+      timeout_minutes: 1
+      max_attempts: 30
+      command: 'curl --header "Authorization: Bearer $JWT" -s -o /dev/null -w "%{http_code}" --fail https://api.appstoreconnect.apple.com/v1/bundleIds'
+
+  - name: Import Provisioning Profile
+    id: prov-profile
+    uses: Apple-Actions/download-provisioning-profiles@v1
+    with:
+      bundle-id: io.sentry.mobile.app
+      issuer-id: ${{ secrets.APPSTORE_CONNECT_API_ISSUER_ID }}
+      api-key-id: ${{ secrets.APPSTORE_CONNECT_API_KEY_ID }}
+      api-private-key: ${{ secrets.APPSTORE_CONNECT_API_AUTH_KEY }}
+      profile-type: IOS_APP_STORE
+
+  - name: Remove Podfile
+    run: rm ios/Podfile
+
+  - name: Build iOS
+    run: flutter build ios --release --no-codesign
+
+  - name: Upload to TestFlight
+    env:
+      FASTLANE_USERNAME:  ${{ secrets.FASTLANE_USERNAME }}
+      FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APP_PASSWORD }}
+      APPLE_ID: ${{ secrets.APPLE_ID }}
+    run: fastlane pilot upload -u $FASTLANE_USERNAME -p $APPLE_ID -i $GITHUB_WORKSPACE/build/*.ipa -a io.sentry.mobile.app --skip_waiting_for_build_processing true --verbose
+
+
