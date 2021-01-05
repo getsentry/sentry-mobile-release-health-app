@@ -74,10 +74,12 @@ class _LoginWebViewState extends State<LoginWebView> {
     await _cookieManager.clearCookies();
 
     _flutterWebviewPlugin.onStateChanged.listen((event) async {
-      if (event.type == WebViewState.finishLoad && !event.url.contains('/issues/')) {
-        await _flutterWebviewPlugin.show();
-      } else {
-        await _flutterWebviewPlugin.hide();
+      if (event.url.contains('https://sentry.io')) {
+        if (event.type == WebViewState.finishLoad && !event.url.contains('/issues/')) {
+          await _flutterWebviewPlugin.show();
+        } else {
+          await _flutterWebviewPlugin.hide();
+        }
       }
     });
 
