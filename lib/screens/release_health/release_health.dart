@@ -24,7 +24,6 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
   int _index;
 
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
-  Timer _fetchLatestReleaseOrIssueDebounce;
 
   @override
   Widget build(BuildContext context) {
