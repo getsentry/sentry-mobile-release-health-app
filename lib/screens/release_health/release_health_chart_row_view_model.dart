@@ -5,8 +5,17 @@ import '../../screens/chart/line_chart_point.dart';
 class ReleaseHealthChartRowViewModel {
 
   ReleaseHealthChartRowViewModel.createByHalvingPoints(List<LineChartPoint> points, List<LineChartPoint> parentPoints) {
-    if (points.length < 2) {
-      data = LineChartData.prepareData(points: points);
+    if (points == null) {
+      data = null;
+      percentChange = 0.0;
+      numberOfIssues = 0;
+    } else if (points.length < 2) {
+      data = LineChartData.prepareData(
+          points: [
+            LineChartPoint(0, 0),
+            LineChartPoint(1, 0)
+          ]
+      );
       percentChange = 0.0;
       numberOfIssues = data.countY.toInt();
     } else {

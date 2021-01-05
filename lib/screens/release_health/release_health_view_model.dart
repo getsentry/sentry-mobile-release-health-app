@@ -60,9 +60,19 @@ class ReleaseHealthViewModel {
   List<LineChartPoint> statsAsLineChartPoints(ProjectWithLatestRelease projectWithLatestRelease, bool handled) {
     var stats = <Stat>[];
     if (handled) {
-      stats = handledStatsByProjectSlug[projectWithLatestRelease.project.slug]?.stats24h ?? [];
+      final handledStatsByProjectSlug = this.handledStatsByProjectSlug[projectWithLatestRelease.project.slug]?.stats24h;
+      if (handledStatsByProjectSlug == null) {
+        return null;
+      } else {
+        stats = handledStatsByProjectSlug;
+      }
     } else {
-      stats = unhandledStatsByProjectSlug[projectWithLatestRelease.project.slug]?.stats24h ?? [];
+      final unhandledStatsByProjectSlug = this.unhandledStatsByProjectSlug[projectWithLatestRelease.project.slug]?.stats24h;
+      if (unhandledStatsByProjectSlug == null) {
+        return null;
+      } else {
+        stats = unhandledStatsByProjectSlug;
+      }
     }
     return stats.map((e) => LineChartPoint(e.timestamp.toDouble(), e.value.toDouble())).toList();
   }
