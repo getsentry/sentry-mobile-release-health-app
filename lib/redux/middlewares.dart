@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:redux/redux.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 
 import '../api/sentry_api.dart';
 import '../types/group.dart';
@@ -111,6 +112,8 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
     if (action is LogoutAction) {
       await secureStorage.delete(key: 'session');
       await preferences.clear();
+      
+      await WebviewCookieManager().clearCookies();
     }
     next(action);
   }
