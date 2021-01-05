@@ -26,6 +26,7 @@ Future<Store<AppState>> createStore() async {
     initialState: AppState.initial(),
     middleware: [
       apiMiddleware,
+      ActionThrottlingMiddleware(),
       LocalStorageMiddleware(prefs, secStorage),
 //      ValidationMiddleware(),
 //      LoggingMiddleware.printer(),

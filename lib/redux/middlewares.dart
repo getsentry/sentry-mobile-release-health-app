@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:redux/redux.dart';
+import 'package:sentry_mobile/utils/throttled_action_collection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 
@@ -133,5 +134,32 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
       await WebviewCookieManager().clearCookies();
     }
     next(action);
+  }
+}
+
+// Some actions should not be run multiple times.
+class ActionThrottlingMiddleware extends MiddlewareClass<AppState> {
+
+  final _actions = ThrottledActionCollection();
+  
+  @override
+  dynamic call(Store<AppState> store, action, next) {
+    if (action is LoginAction ||
+        action is LogoutAction ||
+        action is FetchOrganizationsAndProjectsAction ||
+        action is FetchLatestReleaseFailureAction ||
+        action is FetchIssuesFailureAction) {
+      // Not super elegant to clear everything on one release/issue failure,
+      // but it should be enough for now.
+      _actions.clear();
+      next(action);
+    } else if (action is ThrottledAction) {
+      if (!_actions.contains(action)) {
+        _actions.insert(action);
+        next(action);
+      }
+    } else {
+      next(action);
+    }
   }
 }

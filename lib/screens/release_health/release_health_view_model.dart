@@ -15,10 +15,6 @@ class ReleaseHealthViewModel {
       unhandledStatsByProjectSlug = store.state.globalState.aggregatedStatsByProjectSlug(false),
       _fetchProjectsNeeded = !store.state.globalState.projectsFetchedOnce &&
         !store.state.globalState.projectsLoading,
-      _fetchReleasesNeeded = store.state.globalState.projectsFetchedOnce &&
-        !store.state.globalState.projectsLoading &&
-        !store.state.globalState.releasesFetchedOnce &&
-        !store.state.globalState.releasesLoading,
       showProjectEmptyScreen = !store.state.globalState.projectsLoading &&
           store.state.globalState.projectsFetchedOnce &&
           store.state.globalState.projectsByOrganizationSlug.keys.isEmpty,
@@ -35,7 +31,6 @@ class ReleaseHealthViewModel {
   final Map<String, Stats> unhandledStatsByProjectSlug; // Aggregated over all error issue stats
 
   final bool _fetchProjectsNeeded;
-  final bool _fetchReleasesNeeded;
 
   final bool showProjectEmptyScreen;
   final bool showReleaseEmptyScreen;
@@ -43,18 +38,12 @@ class ReleaseHealthViewModel {
 
   void fetchProjectsIfNeeded() {
     if (_fetchProjectsNeeded) {
-      _store.dispatch(FetchOrganizationsAndProjectsAction());
+      fetchProjects();
     }
   }
 
-  void fetchReleasesIfNeeded() {
-    if (_fetchReleasesNeeded) {
-      //fetchReleases();
-    }
-  }
-
-  void fetchReleases() {
-    //_store.dispatch(FetchLatestReleasesAction(_store.state.globalState.allOrBookmarkedProjectsByOrganizationSlug()));
+  void fetchProjects() {
+    _store.dispatch(FetchOrganizationsAndProjectsAction());
   }
 
   List<LineChartPoint> statsAsLineChartPoints(ProjectWithLatestRelease projectWithLatestRelease, bool handled) {
@@ -77,7 +66,20 @@ class ReleaseHealthViewModel {
     return stats.map((e) => LineChartPoint(e.timestamp.toDouble(), e.value.toDouble())).toList();
   }
 
-  void fetchLatestRelease(ProjectWithLatestRelease projectWithLatestRelease) {
+  void fetchLatestReleaseOrIssues(int index) {
+    final projectWithLatestRelease = releases[index];
+    if (projectWithLatestRelease != null) {
+      _fetchLatestRelease(projectWithLatestRelease);
+      _fetchIssues(projectWithLatestRelease);
+    }
+    final nextProjectWithLatestRelease = releases[index + 1];
+    if (nextProjectWithLatestRelease != null) {
+      _fetchLatestRelease(nextProjectWithLatestRelease);
+      _fetchIssues(nextProjectWithLatestRelease);
+    }
+  }
+
+  void _fetchLatestRelease(ProjectWithLatestRelease projectWithLatestRelease) {
     if (projectWithLatestRelease.release != null) {
       return;
     }
@@ -95,7 +97,7 @@ class ReleaseHealthViewModel {
     );
   }
 
-  void fetchIssues(ProjectWithLatestRelease projectWithLatestRelease) {
+  void _fetchIssues(ProjectWithLatestRelease projectWithLatestRelease) {
     if (projectWithLatestRelease.release == null) {
       return;
     }

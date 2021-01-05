@@ -24,6 +24,7 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
   int _index;
 
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
+  Timer _fetchLatestReleaseOrIssueDebounce;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,6 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
 
   Widget _content(ReleaseHealthViewModel viewModel) {
     viewModel.fetchProjectsIfNeeded();
-    viewModel.fetchReleasesIfNeeded();
 
     if (viewModel.showProjectEmptyScreen || viewModel.showReleaseEmptyScreen) {
       String text = '';
@@ -71,8 +71,7 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
       });
 
       final updateIndex = (int index) {
-        viewModel.fetchLatestRelease(viewModel.releases[index]);
-        viewModel.fetchIssues(viewModel.releases[index]);
+        viewModel.fetchLatestReleaseOrIssues(index);
         _index = index;
       };
 
@@ -193,7 +192,7 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
         ),
         onRefresh: () => Future.delayed(
           Duration(microseconds: 100),
-          () { viewModel.fetchReleases(); }
+          () { viewModel.fetchProjects(); }
         ),
       );
     }
