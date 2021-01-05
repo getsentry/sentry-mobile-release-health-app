@@ -67,15 +67,19 @@ class ReleaseHealthViewModel {
   }
 
   void fetchLatestReleaseOrIssues(int index) {
-    final projectWithLatestRelease = releases[index];
-    if (projectWithLatestRelease != null) {
-      _fetchLatestRelease(projectWithLatestRelease);
-      _fetchIssues(projectWithLatestRelease);
+    if (index < releases.length) {
+      final projectWithLatestRelease = releases[index];
+      if (projectWithLatestRelease != null) {
+        _fetchLatestRelease(projectWithLatestRelease);
+        _fetchIssues(projectWithLatestRelease);
+      }
     }
-    final nextProjectWithLatestRelease = releases[index + 1];
-    if (nextProjectWithLatestRelease != null) {
-      _fetchLatestRelease(nextProjectWithLatestRelease);
-      _fetchIssues(nextProjectWithLatestRelease);
+    if (index + 1 < releases.length) {
+      final nextProjectWithLatestRelease = releases[index + 1];
+      if (nextProjectWithLatestRelease != null) {
+        _fetchLatestRelease(nextProjectWithLatestRelease);
+        _fetchIssues(nextProjectWithLatestRelease);
+      }
     }
   }
 
