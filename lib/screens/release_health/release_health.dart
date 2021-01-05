@@ -78,6 +78,8 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
 
       if (_index == null) {
         updateIndex(0);
+      } else {
+        updateIndex(_index);
       }
 
       return RefreshIndicator(
