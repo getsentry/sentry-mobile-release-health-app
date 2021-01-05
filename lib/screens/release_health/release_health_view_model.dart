@@ -84,9 +84,6 @@ class ReleaseHealthViewModel {
   }
 
   void _fetchLatestRelease(ProjectWithLatestRelease projectWithLatestRelease) {
-    if (projectWithLatestRelease.release != null) {
-      return;
-    }
     final organizationSlug = _store.state.globalState.organizationsSlugByProjectSlug[projectWithLatestRelease.project.slug];
     if (organizationSlug == null) {
       return;

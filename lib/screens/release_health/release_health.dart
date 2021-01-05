@@ -86,6 +86,7 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
         backgroundColor: Colors.white,
         color: Color(0xff81B4FE),
         child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
           child: Column(
             children: [
               SizedBox(
