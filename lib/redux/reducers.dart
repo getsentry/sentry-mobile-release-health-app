@@ -62,19 +62,25 @@ GlobalState _fetchOrganizationsAndProjectsAction(GlobalState state, FetchOrganiz
 
 GlobalState _fetchOrganizationsAndProjectsSuccessAction(GlobalState state, FetchOrganizationsAndProjectsSuccessAction action) {
   final organizationsSlugByProjectSlug = <String, String>{};
+  final projectsWithLatestReleases = state.projectsWithLatestReleases;
 
   for (final organizationSlug in action.projectsByOrganizationSlug.keys) {
     for (final project in action.projectsByOrganizationSlug[organizationSlug]) {
       organizationsSlugByProjectSlug[project.slug] = organizationSlug;
+      if (project.latestRelease != null) {
+        projectsWithLatestReleases.add(ProjectWithLatestRelease(project, null));
+      }
     }
   }
 
   return state.copyWith(
-      organizations: action.organizations,
-      organizationsSlugByProjectSlug: organizationsSlugByProjectSlug,
-      projectsByOrganizationSlug: action.projectsByOrganizationSlug,
-      projectsFetchedOnce: true,
-      projectsLoading: false
+    organizations: action.organizations,
+    organizationsSlugByProjectSlug: organizationsSlugByProjectSlug,
+    projectsByOrganizationSlug: action.projectsByOrganizationSlug,
+    projectsWithLatestReleases: projectsWithLatestReleases,
+    projectsFetchedOnce: true,
+    projectsLoading: false,
+    releasesLoading: false
   );
 }
 
@@ -110,9 +116,16 @@ GlobalState _fetchLatestReleaseSuccessAction(GlobalState state, FetchLatestRelea
   final projectsWithLatestReleases = state.projectsWithLatestReleases;
   final organizationSlug = state.organizationsSlugByProjectSlug[action.projectSlug];
   final project = state.projectsByOrganizationSlug[organizationSlug].where((element) => element.slug == action.projectSlug).first;
-  projectsWithLatestReleases.add(
-    ProjectWithLatestRelease(project, action.latestRelease)
-  );
+
+  if (project != null) {
+    final index = projectsWithLatestReleases.indexWhere((element) => element.project.id == project.id);
+    if (index != -1) {
+      projectsWithLatestReleases.removeAt(index);
+      projectsWithLatestReleases.insert(index, ProjectWithLatestRelease(project, action.latestRelease));
+    } else {
+      projectsWithLatestReleases.add(ProjectWithLatestRelease(project, action.latestRelease));
+    }
+  }
   return state.copyWith(
       projectsWithLatestReleases: projectsWithLatestReleases,
       releasesFetchedOnce: true,

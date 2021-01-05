@@ -49,12 +49,12 @@ class ReleaseHealthViewModel {
 
   void fetchReleasesIfNeeded() {
     if (_fetchReleasesNeeded) {
-      fetchReleases();
+      //fetchReleases();
     }
   }
 
   void fetchReleases() {
-    _store.dispatch(FetchLatestReleasesAction(_store.state.globalState.allOrBookmarkedProjectsByOrganizationSlug()));
+    //_store.dispatch(FetchLatestReleasesAction(_store.state.globalState.allOrBookmarkedProjectsByOrganizationSlug()));
   }
 
   List<LineChartPoint> statsAsLineChartPoints(ProjectWithLatestRelease projectWithLatestRelease, bool handled) {
@@ -67,7 +67,28 @@ class ReleaseHealthViewModel {
     return stats.map((e) => LineChartPoint(e.timestamp.toDouble(), e.value.toDouble())).toList();
   }
 
+  void fetchLatestRelease(ProjectWithLatestRelease projectWithLatestRelease) {
+    if (projectWithLatestRelease.release != null) {
+      return;
+    }
+    final organizationSlug = _store.state.globalState.organizationsSlugByProjectSlug[projectWithLatestRelease.project.slug];
+    if (organizationSlug == null) {
+      return;
+    }
+    _store.dispatch(
+      FetchLatestReleaseAction(
+          organizationSlug,
+          projectWithLatestRelease.project.slug,
+          projectWithLatestRelease.project.id,
+          projectWithLatestRelease.project.latestRelease.version
+      )
+    );
+  }
+
   void fetchIssues(ProjectWithLatestRelease projectWithLatestRelease) {
+    if (projectWithLatestRelease.release == null) {
+      return;
+    }
     final organizationSlug = _store.state.globalState.organizationsSlugByProjectSlug[projectWithLatestRelease.project.slug];
     if (organizationSlug == null) {
       return;

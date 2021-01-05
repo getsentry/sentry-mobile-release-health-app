@@ -71,6 +71,7 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
       });
 
       final updateIndex = (int index) {
+        viewModel.fetchLatestRelease(viewModel.releases[index]);
         viewModel.fetchIssues(viewModel.releases[index]);
         _index = index;
       };
@@ -124,12 +125,12 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                       children: [
                         HealthCard(
                             title: 'Crash Free Users',
-                            value: viewModel.releases[_index].release.crashFreeUsers,
+                            value: viewModel.releases[_index].release?.crashFreeUsers,
                             change: 0.04
                         ), // TODO(denis): Use delta from api, https://github.com/getsentry/sentry-mobile/issues/11
                         HealthCard(
                             title: 'Crash Free Sessions',
-                            value: viewModel.releases[_index].release.crashFreeSessions,
+                            value: viewModel.releases[_index].release?.crashFreeSessions,
                             change: -0.01
                         ), // TODO(denis): Use delta from api, https://github.com/getsentry/sentry-mobile/issues/11
                       ],
