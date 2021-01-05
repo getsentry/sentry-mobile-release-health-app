@@ -1,4 +1,5 @@
 import 'package:redux/redux.dart';
+import 'package:sentry_mobile/types/project_with_latest_release.dart';
 
 import '../api/api_errors.dart';
 import 'actions.dart';
@@ -20,6 +21,7 @@ final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, FetchLatestReleasesAction>(_fetchLatestReleasesAction),
   TypedReducer<GlobalState, FetchLatestReleasesSuccessAction>(_fetchLatestReleasesSuccessAction),
   TypedReducer<GlobalState, FetchLatestReleasesFailureAction>(_fetchLatestReleasesFailureAction),
+  TypedReducer<GlobalState, FetchLatestReleaseSuccessAction>(_fetchLatestReleaseSuccessAction),
   TypedReducer<GlobalState, FetchIssuesSuccessAction>(_fetchIssuesSuccessAction),
   TypedReducer<GlobalState, SelectOrganizationAction>(_selectOrganizationAction),
   TypedReducer<GlobalState, SelectProjectAction>(_selectProjectAction),
@@ -102,6 +104,20 @@ GlobalState _fetchLatestReleasesSuccessAction(GlobalState state, FetchLatestRele
 
 GlobalState _fetchLatestReleasesFailureAction(GlobalState state, FetchLatestReleasesFailureAction action) {
   return state.copyWith(releasesLoading: false);
+}
+
+GlobalState _fetchLatestReleaseSuccessAction(GlobalState state, FetchLatestReleaseSuccessAction action) {
+  final projectsWithLatestReleases = state.projectsWithLatestReleases;
+  final organizationSlug = state.organizationsSlugByProjectSlug[action.projectSlug];
+  final project = state.projectsByOrganizationSlug[organizationSlug].where((element) => element.slug == action.projectSlug).first;
+  projectsWithLatestReleases.add(
+    ProjectWithLatestRelease(project, action.latestRelease)
+  );
+  return state.copyWith(
+      projectsWithLatestReleases: projectsWithLatestReleases,
+      releasesFetchedOnce: true,
+      releasesLoading: false
+  );
 }
 
 GlobalState _fetchIssuesSuccessAction(GlobalState state, FetchIssuesSuccessAction action) {
