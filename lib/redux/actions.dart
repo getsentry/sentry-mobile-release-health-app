@@ -4,6 +4,7 @@ import '../types/group.dart';
 import '../types/organization.dart';
 import '../types/project.dart';
 import '../types/project_with_latest_release.dart';
+import '../types/release.dart';
 
 class RehydrateAction {
   RehydrateAction();
@@ -47,6 +48,26 @@ class FetchOrganizationsAndProjectsSuccessAction {
 
 class FetchOrganizationsAndProjectsFailureAction extends ApiFailureAction {
   FetchOrganizationsAndProjectsFailureAction(error) : super(error);
+}
+
+// FetchLatestRelease
+
+class FetchLatestReleaseAction {
+  FetchLatestReleaseAction(this.organizationSlug, this.projectSlug, this.projectId, this.releaseId);
+  final String organizationSlug;
+  final String projectSlug;
+  final String projectId;
+  final String releaseId;
+}
+
+class FetchLatestReleaseSuccessAction {
+  FetchLatestReleaseSuccessAction(this.projectSlug, this.latestRelease);
+  final String projectSlug;
+  final Release latestRelease;
+}
+
+class FetchLatestReleaseFailureAction extends ApiFailureAction {
+  FetchLatestReleaseFailureAction(error) : super(error);
 }
 
 // FetchLatestReleases

@@ -64,6 +64,23 @@ dynamic apiMiddleware(Store<AppState> store, dynamic action, NextDispatcher next
     };
     next(action);
     store.dispatch(thunkAction);
+  } else if (action is FetchLatestReleaseAction) {
+    final thunkAction = (Store<AppState> store) async {
+      final api = SentryApi(store.state.globalState.session);
+      try {
+        final latestRelease = await api.release(
+            organizationSlug: action.organizationSlug,
+            projectId: action.projectId,
+            releaseId: action.releaseId
+        );
+        store.dispatch(FetchLatestReleaseSuccessAction(action.projectSlug, latestRelease));
+      } catch (e) {
+        store.dispatch(FetchLatestReleaseFailureAction(e));
+      }
+      api.close();
+    };
+    next(action);
+    store.dispatch(thunkAction);
   } else if (action is FetchIssuesAction) {
     final thunkAction = (Store<AppState> store) async {
       final api = SentryApi(store.state.globalState.session);
