@@ -5,25 +5,28 @@ import 'package:sentry_mobile/utils/throttled_action_collection.dart';
 
 void main() {
   group('ThrottledAction', () {
-    test('length', () {
+    test('hashCode', () {
       expect(Test('a').hashCode, equals(Test('a').hashCode));
     });
 
     test('length', () {
       final collection = ThrottledActionCollection();
-      collection.insert(Test('a'));
 
+      collection.insert(Test('a'));
       expect(collection.length, equals(1));
+
+      collection.insert(Test('b'));
+      expect(collection.length, equals(2));
     });
 
-    test('contains true with different instance', () {
+    test('contains true with different instance & same hashValue', () {
       final collection = ThrottledActionCollection();
       collection.insert(Test('a'));
 
       expect(collection.contains(Test('a')), equals(true));
     });
 
-    test('cannot add multiple times', () {
+    test('cannot add instances with same hashValue multiple times', () {
       final collection = ThrottledActionCollection();
       collection.insert(Test('a'));
       collection.insert(Test('a'));
@@ -40,7 +43,7 @@ void main() {
       expect(collection.length, equals(0));
     });
 
-    test('clear removes everything', () {
+    test('clear', () {
       final collection = ThrottledActionCollection();
       collection.insert(Test('a'));
       collection.insert(Test('b'));
