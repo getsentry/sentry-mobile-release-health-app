@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sentry_mobile/utils/sentry_colors.dart';
+
+import '../../utils/sentry_colors.dart';
 
 class EmptyScreen extends StatelessWidget {
   EmptyScreen({@required this.title, @required this.text, @required this.button, @required this.action});

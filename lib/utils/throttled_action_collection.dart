@@ -1,5 +1,5 @@
 
-import 'package:sentry_mobile/redux/actions.dart';
+import '../redux/actions.dart';
 
 class ThrottledActionCollection {
 

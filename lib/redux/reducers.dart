@@ -1,7 +1,7 @@
 import 'package:redux/redux.dart';
-import 'package:sentry_mobile/types/project_with_latest_release.dart';
 
 import '../api/api_errors.dart';
+import '../types/project_with_latest_release.dart';
 import 'actions.dart';
 import 'state/app_state.dart';
 
