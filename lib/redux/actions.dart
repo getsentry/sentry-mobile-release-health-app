@@ -1,9 +1,16 @@
 import 'dart:io';
 
+import 'package:equatable/equatable.dart';
+
 import '../types/group.dart';
 import '../types/organization.dart';
 import '../types/project.dart';
 import '../types/project_with_latest_release.dart';
+import '../types/release.dart';
+
+abstract class ThrottledAction extends Equatable {
+  
+}
 
 class RehydrateAction {
   RehydrateAction();
@@ -49,6 +56,32 @@ class FetchOrganizationsAndProjectsFailureAction extends ApiFailureAction {
   FetchOrganizationsAndProjectsFailureAction(error) : super(error);
 }
 
+// FetchLatestRelease
+
+class FetchLatestReleaseAction extends ThrottledAction {
+  FetchLatestReleaseAction(this.organizationSlug, this.projectSlug, this.projectId, this.releaseId);
+  final String organizationSlug;
+  final String projectSlug;
+  final String projectId;
+  final String releaseId;
+
+  @override
+  List<Object> get props => [organizationSlug, projectSlug, projectId, releaseId];
+
+  @override
+  bool get stringify => false;
+}
+
+class FetchLatestReleaseSuccessAction {
+  FetchLatestReleaseSuccessAction(this.projectSlug, this.latestRelease);
+  final String projectSlug;
+  final Release latestRelease;
+}
+
+class FetchLatestReleaseFailureAction extends ApiFailureAction {
+  FetchLatestReleaseFailureAction(error) : super(error);
+}
+
 // FetchLatestReleases
 
 class FetchLatestReleasesAction {
@@ -67,11 +100,17 @@ class FetchLatestReleasesFailureAction extends ApiFailureAction {
 
 // FetchIssues
 
-class FetchIssuesAction {
+class FetchIssuesAction extends ThrottledAction {
   FetchIssuesAction(this.organizationSlug, this.projectSlug, this.unhandled);
   final String organizationSlug;
   final String projectSlug;
   final bool unhandled;
+
+  @override
+  List<Object> get props => [organizationSlug, projectSlug, unhandled];
+
+  @override
+  bool get stringify => false;
 }
 
 class FetchIssuesSuccessAction {
