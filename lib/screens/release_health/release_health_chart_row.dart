@@ -37,7 +37,7 @@ class ReleaseHealthChartRow extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
                       ))),
-              Text('Last ${viewModel.data.points.length} hours',
+              Text('Last 12 hours',
                   style: TextStyle(
                     color: SentryColors.mamba,
                     fontSize: 12,
@@ -45,17 +45,35 @@ class ReleaseHealthChartRow extends StatelessWidget {
             ],
           ),
           Expanded(
-              child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 20),
-                child: LineChart(
-                    data: viewModel.data,
-                    lineWidth: 2.0,
-                    lineColor: SentryColors.tapestry,
-                    gradientStart: SentryColors.tapestry.withAlpha(28),
-                    gradientEnd: Colors.transparent
-                ),
-                height: 35,
-              )),
+              child:
+                viewModel.data == null
+                ? Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        LinearProgressIndicator(
+                            minHeight: 2.0,
+                            backgroundColor: Colors.white,
+                            valueColor: AlwaysStoppedAnimation<Color>(SentryColors.tapestry)
+                        )
+                      ]
+                  ),
+                  height: 35,
+                )
+                : Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  child: LineChart(
+                      data: viewModel.data,
+                      lineWidth: 2.0,
+                      lineColor: SentryColors.tapestry,
+                      gradientStart: SentryColors.tapestry.withAlpha(28),
+                      gradientEnd: Colors.transparent
+                  ),
+                  height: 35,
+                )
+          ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [

@@ -35,7 +35,6 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
 
   Widget _content(ReleaseHealthViewModel viewModel) {
     viewModel.fetchProjectsIfNeeded();
-    viewModel.fetchReleasesIfNeeded();
 
     if (viewModel.showProjectEmptyScreen || viewModel.showReleaseEmptyScreen) {
       String text = '';
@@ -71,12 +70,14 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
       });
 
       final updateIndex = (int index) {
-        viewModel.fetchIssues(viewModel.releases[index]);
+        viewModel.fetchLatestReleaseOrIssues(index);
         _index = index;
       };
 
       if (_index == null) {
         updateIndex(0);
+      } else {
+        updateIndex(_index);
       }
 
       return RefreshIndicator(
@@ -84,6 +85,7 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
         backgroundColor: Colors.white,
         color: Color(0xff81B4FE),
         child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
           child: Column(
             children: [
               SizedBox(
@@ -124,12 +126,12 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                       children: [
                         HealthCard(
                             title: 'Crash Free Users',
-                            value: viewModel.releases[_index].release.crashFreeUsers,
+                            value: viewModel.releases[_index].release?.crashFreeUsers,
                             change: 0.04
                         ), // TODO(denis): Use delta from api, https://github.com/getsentry/sentry-mobile/issues/11
                         HealthCard(
                             title: 'Crash Free Sessions',
-                            value: viewModel.releases[_index].release.crashFreeSessions,
+                            value: viewModel.releases[_index].release?.crashFreeSessions,
                             change: -0.01
                         ), // TODO(denis): Use delta from api, https://github.com/getsentry/sentry-mobile/issues/11
                       ],
@@ -190,7 +192,7 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
         ),
         onRefresh: () => Future.delayed(
           Duration(microseconds: 100),
-          () { viewModel.fetchReleases(); }
+          () { viewModel.fetchProjects(); }
         ),
       );
     }
