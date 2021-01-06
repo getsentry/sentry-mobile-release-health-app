@@ -62,7 +62,7 @@ GlobalState _fetchOrganizationsAndProjectsAction(GlobalState state, FetchOrganiz
 
 GlobalState _fetchOrganizationsAndProjectsSuccessAction(GlobalState state, FetchOrganizationsAndProjectsSuccessAction action) {
   final organizationsSlugByProjectSlug = <String, String>{};
-  final projectsWithLatestReleases = state.projectsWithLatestReleases;
+  final projectsWithLatestReleases = <ProjectWithLatestRelease>[];
 
   for (final organizationSlug in action.projectsByOrganizationSlug.keys) {
     for (final project in action.projectsByOrganizationSlug[organizationSlug]) {
