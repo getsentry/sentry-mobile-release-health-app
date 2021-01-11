@@ -25,5 +25,4 @@ class BorderedCircleAvatarViewModel {
   final String url;
   final String initials;
   final Color backgroundColor;
-
 }
