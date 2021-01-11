@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -37,6 +38,8 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
     viewModel.fetchProjectsIfNeeded();
 
     if (viewModel.showProjectEmptyScreen || viewModel.showReleaseEmptyScreen) {
+      _index = 0;
+
       String text = '';
       if (viewModel.showProjectEmptyScreen) {
         text = 'You need at least one project to use this view.';
@@ -56,6 +59,8 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
         }
       );
     } else if (viewModel.showLoadingScreen || viewModel.releases.isEmpty) {
+      _index = 0;
+
       return Center(
         child: CircularProgressIndicator(),
       );

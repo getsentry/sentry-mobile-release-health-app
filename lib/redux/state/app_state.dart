@@ -120,24 +120,20 @@ class GlobalState {
   }
 
   // When there are no bookmarked projects, we return all of them.
-  Map<String, List<Project>> allOrBookmarkedProjectsByOrganizationSlug() {
-    final Map<String, List<Project>> allProjectsByOrganizationSlug = {};
-    final Map<String, List<Project>> bookmarkedProjectsByOrganizationSlug = {};
+  List<ProjectWithLatestRelease> allOrBookmarkedProjectsWithLatestReleases() {
+    final List<ProjectWithLatestRelease> allProjectsWithLatestReleases = [];
+    final List<ProjectWithLatestRelease> bookmarkedProjectsWithLatestReleases = [];
 
-    for (final organization in organizations) {
-      final allProjects = projectsByOrganizationSlug[organization.slug] ?? [];
-      if (allProjects.isNotEmpty && organization.slug != null) {
-        allProjectsByOrganizationSlug[organization.slug] = allProjects.toList();
-      }
-      final bookmarkedProjects = allProjects.where((element) => element.isBookmarked);
-      if (bookmarkedProjects.isNotEmpty && organization.slug != null) {
-        bookmarkedProjectsByOrganizationSlug[organization.slug] = bookmarkedProjects.toList();
+    for (final projectWithLatestRelease in projectsWithLatestReleases) {
+      allProjectsWithLatestReleases.add(projectWithLatestRelease);
+      if (projectWithLatestRelease.project.isBookmarked) {
+        bookmarkedProjectsWithLatestReleases.add(projectWithLatestRelease);
       }
     }
-    if (bookmarkedProjectsByOrganizationSlug.isEmpty) {
-      return allProjectsByOrganizationSlug;
+    if (bookmarkedProjectsWithLatestReleases.isEmpty) {
+      return allProjectsWithLatestReleases;
     } else {
-      return bookmarkedProjectsByOrganizationSlug;
+      return bookmarkedProjectsWithLatestReleases;
     }
   }
 
