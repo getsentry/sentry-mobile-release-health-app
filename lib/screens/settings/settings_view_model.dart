@@ -7,7 +7,7 @@ class SettingsViewModel {
         .allOrBookmarkedProjectsByOrganizationSlug()
         .values.expand((element) => element)
         .where((element) => element.isBookmarked)
-        .map((e) => e.name)
+        .map((e) => e.slug)
         .join(', ');
     bookmarkedProjects = projects.isNotEmpty ? projects : '--';
   }
