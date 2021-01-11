@@ -12,6 +12,9 @@ Author _$AuthorFromJson(Map<String, dynamic> json) {
     json['name'] as String,
     json['username'] as String,
     json['avatarUrl'] as String,
+    json['avatar'] == null
+        ? null
+        : Avatar.fromJson(json['avatar'] as Map<String, dynamic>),
   );
 }
 
@@ -20,4 +23,5 @@ Map<String, dynamic> _$AuthorToJson(Author instance) => <String, dynamic>{
       'name': instance.name,
       'username': instance.username,
       'avatarUrl': instance.avatarUrl,
+      'avatar': instance.avatar,
     };

@@ -1,6 +1,4 @@
-
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 // Source: https://github.com/getsentry/sentry/blob/c62499d1de8414e119e8a199eee4c73a01393e44/src/sentry/utils/avatar.py
