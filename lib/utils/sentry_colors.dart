@@ -11,6 +11,7 @@ class SentryColors {
   static const rum = Color(0xff776589);
   static const mamba = Color(0xff9386A0);
   static const snuff = Color(0xffE7E1EC);
+  static const whisper = Color(0xffFAF9FB);
 
   static const graySuit = Color(0xffC6BECF);
   static const lavenderGray = Color(0xffB9C1D9);
