@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sentry_mobile/screens/shared/avatar_stack.dart';
+import 'package:sentry_mobile/screens/shared/bordered_circle_avatar_view_model.dart';
 
 import '../../types/project.dart';
 import '../../types/release.dart';
@@ -114,15 +115,15 @@ class ReleaseCard extends StatelessWidget {
                   children: [
                     _platforms(context, project.platforms),
                     AvatarStack(
-                        release?.authors?.map((e) => e.avatarUrl)?.toList() ?? [],
+                        release?.authors
+                          ?.map((e) => BorderedCircleAvatarViewModel.from(e))
+                          ?.toList() ?? [],
                         24,
                         2
                     )
                   ],
                 )
-
               ),
-
             ]),
           ),
         ));

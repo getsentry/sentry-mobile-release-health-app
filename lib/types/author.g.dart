@@ -10,7 +10,7 @@ Author _$AuthorFromJson(Map<String, dynamic> json) {
   return Author(
     json['id'] as String,
     json['name'] as String,
-    json['username'] as String,
+    json['email'] as String,
     json['avatarUrl'] as String,
     json['avatar'] == null
         ? null
@@ -21,7 +21,7 @@ Author _$AuthorFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$AuthorToJson(Author instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'username': instance.username,
+      'email': instance.email,
       'avatarUrl': instance.avatarUrl,
       'avatar': instance.avatar,
     };

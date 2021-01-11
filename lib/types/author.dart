@@ -5,14 +5,14 @@ part 'author.g.dart';
 
 @JsonSerializable()
 class Author {
-  Author(this.id, this.name, this.username, this.avatarUrl, this.avatar);
+  Author(this.id, this.name, this.email, this.avatarUrl, this.avatar);
 
   factory Author.fromJson(Map<String, dynamic> json) =>
       _$AuthorFromJson(json);
 
   final String id;
   final String name;
-  final String username;
+  final String email;
   final String avatarUrl;
   final Avatar avatar;
 
