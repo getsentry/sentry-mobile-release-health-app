@@ -43,9 +43,10 @@ platform :ios do
 			include_bitcode: false,
 			include_symbols: true,
 			xcargs: { # https://github.com/fastlane/fastlane/issues/12849#issuecomment-404978983
-			  :BUNDLE_IDENTIFIER => ENV['APP_BUNDLE_ID'],
-			  :PROVISIONING_PROFILE_SPECIFIER => ENV['APP_PROVISIONING_PROFILE_NAME'],
-			  :DEVELOPMENT_TEAM => ENV['FASTLANE_TEAM_ID']
+				:BUNDLE_IDENTIFIER => "#{ENV['APP_BUNDLE_ID']}",
+				:PROVISIONING_PROFILE_SPECIFIER => "#{ENV['APP_PROVISIONING_PROFILE_NAME']}",
+				:DEVELOPMENT_TEAM => "#{ENV['FASTLANE_TEAM_ID']}",
+				:CODE_SIGN_IDENTITY => "iPhone Distribution"
 			},
 			export_options: {
 				method: "app-store",
