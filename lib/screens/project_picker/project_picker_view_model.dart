@@ -21,7 +21,7 @@ class ProjectPickerViewModel {
               ProjectPickerProjectItem(
                 organization.slug,
                 organizationProject.slug,
-                organizationProject.name,
+                organizationProject.slug,
                 organizationProject.isBookmarked
               )
             );
