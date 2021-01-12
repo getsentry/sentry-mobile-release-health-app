@@ -11,7 +11,7 @@ class BorderedCircleAvatarViewModel {
       return BorderedCircleAvatarViewModel(
           null,
           LetterAvatar.getInitials(author.name ?? author.email),
-          LetterAvatar.getLetterAvatarColor(author.id)
+          LetterAvatar.getLetterAvatarColor('${author.id}-${author.email}')
       );
     } else {
       return BorderedCircleAvatarViewModel(
