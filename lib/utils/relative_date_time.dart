@@ -100,7 +100,7 @@ extension RelativeDateTime on DateTime {
     }
   }
 
-  // This method average months, which will not work correctly for large date differences.
+  // This uses method average month length, which will not work correctly for large date differences.
   int differenceInMonths(DateTime endDate) {
     return endDate.difference(this).inDays ~/ (365.2425 / 12.0);
   }
