@@ -4,7 +4,7 @@ import '../../redux/state/app_state.dart';
 class SettingsViewModel {
   SettingsViewModel.fromStore(Store<AppState> store) {
     final projects = store.state.globalState
-        .allOrBookmarkedProjectsByOrganizationSlug()
+        .projectsByOrganizationSlug
         .values.expand((element) => element)
         .where((element) => element.isBookmarked)
         .map((e) => e.name)
