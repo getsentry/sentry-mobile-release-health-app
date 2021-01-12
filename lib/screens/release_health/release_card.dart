@@ -116,6 +116,7 @@ class ReleaseCard extends StatelessWidget {
                     _platforms(context, project.platforms),
                     AvatarStack(
                         release?.authors
+                          ?.take(5)
                           ?.map((e) => BorderedCircleAvatarViewModel.from(e))
                           ?.toList() ?? [],
                         24,
