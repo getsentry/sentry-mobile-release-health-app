@@ -1,7 +1,5 @@
 name: Build & Deploy iOS TestFlight
 
-on:
-  pull_request: # TODO(denis): Remove after PR is finished
 defaults:
   run:
     shell: bash
