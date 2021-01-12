@@ -36,18 +36,25 @@ platform :ios do
 
 	desc "Build ipa"
 	lane :build do |options|
+		disable_automatic_code_signing(path: "./Runner.xcodeproj")
 		gym(
 			output_directory: "./build",
 			output_name: "sentry-mobile-ios",
 			include_bitcode: false,
 			include_symbols: true,
+			xcargs: { # https://github.com/fastlane/fastlane/issues/12849#issuecomment-404978983
+			  :BUNDLE_IDENTIFIER => ENV['APP_BUNDLE_ID'],
+			  :PROVISIONING_PROFILE_SPECIFIER => ENV['APP_PROVISIONING_PROFILE_NAME'],
+			  :DEVELOPMENT_TEAM => ENV['FASTLANE_TEAM_ID']
+			},
 			export_options: {
-			method: "app-store",
+				method: "app-store",
 				provisioningProfiles: { 
 					"#{ENV['APP_BUNDLE_ID']}" => "#{ENV['APP_PROVISIONING_PROFILE_NAME']}",
 				}
 			}
 		)
+		enable_automatic_code_signing(path: "./Runner.xcodeproj")
 	end
 
 	desc "Upload ipa to TestFlight"
