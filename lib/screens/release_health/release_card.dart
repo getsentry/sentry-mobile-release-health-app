@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sentry_mobile/screens/shared/avatar_stack.dart';
-import 'package:sentry_mobile/screens/shared/bordered_circle_avatar_view_model.dart';
 
+import '../../screens/shared/avatar_stack.dart';
+import '../../screens/shared/bordered_circle_avatar_view_model.dart';
 import '../../types/project.dart';
 import '../../types/release.dart';
 import '../../utils/sentry_colors.dart';

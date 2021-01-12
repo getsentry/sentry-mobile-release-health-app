@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:sentry_mobile/types/avatar.dart';
+
+import 'avatar.dart';
 
 part 'author.g.dart';
 

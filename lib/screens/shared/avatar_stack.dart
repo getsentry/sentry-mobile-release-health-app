@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sentry_mobile/screens/shared/bordered_circle_avatar_view_model.dart';
 
+import '../../screens/shared/bordered_circle_avatar_view_model.dart';
 import 'bordered_circle_avatar.dart';
 
 class AvatarStack extends StatelessWidget {
