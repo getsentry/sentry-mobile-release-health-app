@@ -1,8 +1,7 @@
 name: Build & Deploy iOS TestFlight
 
 on:
-  create:
-    tags:
+  pull_request: # TODO(denis): Remove after PR is finished
 defaults:
   run:
     shell: bash
@@ -75,4 +74,3 @@ jobs:
         FASTLANE_ITC_TEAM_ID: ${{ secrets.FASTLANE_ITC_TEAM_ID }}
       working-directory: ./ios
       run: fastlane upload --verbose
-      
