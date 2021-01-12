@@ -37,9 +37,6 @@ jobs:
         api-private-key: ${{ secrets.APPSTORE_CONNECT_API_AUTH_KEY }}
         profile-type: IOS_APP_STORE
 
-    - name: Remove Podfile
-      run: rm ios/Podfile
-
     - name: Build iOS
       run: flutter build ios --release --no-codesign
 
