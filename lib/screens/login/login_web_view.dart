@@ -58,7 +58,7 @@ class _LoginWebViewState extends State<LoginWebView> {
         withZoom: false,
         hidden: true,
         appBar: AppBar(
-          title: Text('SignIn'),
+          title: Text('Login'),
         ),
       ),
     );
