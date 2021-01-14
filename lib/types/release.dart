@@ -1,5 +1,6 @@
 
 // TODO(denis): Change to JsonSerializable and generate Json code,
+import 'author.dart';
 import 'stat.dart';
 
 class Release {
@@ -21,7 +22,8 @@ class Release {
         sessionsTotal =
             json['projects'][0]['healthData']['totalSessions'] as int,
         durationP90 =
-            json['projects'][0]['healthData']['durationP90'] as double;
+            json['projects'][0]['healthData']['durationP90'] as double,
+        authors = (json['authors'] as List).map((e) => Author.fromJson(e as Map<String, dynamic>))?.toList();
 
   final String version;
   final String project;
@@ -36,4 +38,5 @@ class Release {
   final int sessions24h;
   final int sessionsTotal;
   final double durationP90;
+  final List<Author> authors;
 }
