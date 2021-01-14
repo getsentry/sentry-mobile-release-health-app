@@ -1,8 +1,8 @@
 
 // TODO(denis): Change to JsonSerializable and generate Json code,
 
-import 'deploy.dart';
 import 'author.dart';
+import 'deploy.dart';
 import 'stat.dart';
 
 class Release {
