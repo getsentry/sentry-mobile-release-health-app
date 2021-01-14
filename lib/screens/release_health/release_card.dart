@@ -4,6 +4,7 @@ import '../../screens/shared/avatar_stack.dart';
 import '../../screens/shared/bordered_circle_avatar_view_model.dart';
 import '../../types/project.dart';
 import '../../types/release.dart';
+import '../../utils/relative_date_time.dart';
 import '../../utils/sentry_colors.dart';
 import '../chart/line_chart.dart';
 import '../chart/line_chart_data.dart';
@@ -113,7 +114,7 @@ class ReleaseCard extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _platforms(context, project.platforms),
+                    _releaseAndPlatform(context, release),
                     AvatarStack(
                         release?.authors
                           ?.take(5)
@@ -130,32 +131,36 @@ class ReleaseCard extends StatelessWidget {
         ));
   }
 
-  Widget _platforms(BuildContext context, List<String> platforms) {
-    final platformWidgets = platforms.take(3).map((item) => _platform(context, item)).toList();
+  Widget _releaseAndPlatform(BuildContext context, Release release) {
     final List<Widget> all = [];
-    for (final platformWidget in platformWidgets) {
-      all.add(platformWidget);
-      if (platformWidget != platformWidgets.last) {
-        all.add(SizedBox(width: 8));
-      }
+
+    final date = release?.deploy?.dateFinished ?? release?.dateCreated;
+    if (date != null) {
+      all.add(_infoBox(context, date.relativeFromNow()));
     }
+    final environment = release?.deploy?.environment;
+    if (environment != null) {
+      all.add(_infoBox(context, environment));
+    }
+
     return Row(children: all);
   }
 
-  Widget _platform(BuildContext context, String platform) {
+  Widget _infoBox(BuildContext context, String text) {
     return Container(
       decoration: BoxDecoration(
           color: Color(0x33ffffff),
           borderRadius: BorderRadius.all(Radius.circular(4.0))
       ),
       padding: EdgeInsets.only(left: 8, top: 4, right: 8, bottom: 4),
-      child: Text(
-          platform,
+      child:
+        Text(
+          text,
           style: TextStyle(
             color: Colors.white,
             fontSize: 12
           )
-          )
+        )
       );
   }
 }
