@@ -40,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: Theme.of(context).textTheme.headline1
                 ),
                 RaisedButton(
-                  child: Text('SignIn'),
+                  child: Text('Login'),
                   textColor: Colors.white,
                   color: SentryColors.rum,
                   onPressed: () {

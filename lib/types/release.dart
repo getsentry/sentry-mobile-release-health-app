@@ -1,6 +1,8 @@
 
 // TODO(denis): Change to JsonSerializable and generate Json code,
+
 import 'deploy.dart';
+import 'author.dart';
 import 'stat.dart';
 
 class Release {
@@ -28,7 +30,9 @@ class Release {
           json['projects'][0]['healthData']['durationP90'] as double,
         deploy = json['deploy'] == null
           ? null
-          : Deploy.fromJson(json['deploy'] as Map<String, dynamic>);
+          : Deploy.fromJson(json['deploy'] as Map<String, dynamic>),
+        authors = (json['authors'] as List).map((e) =>
+          Author.fromJson(e as Map<String, dynamic>))?.toList();
 
   final String version;
   final String project;
@@ -44,4 +48,5 @@ class Release {
   final int sessionsTotal;
   final double durationP90;
   final Deploy deploy;
+  final List<Author> authors;
 }

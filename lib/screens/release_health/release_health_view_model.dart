@@ -10,7 +10,7 @@ import '../../types/stats.dart';
 class ReleaseHealthViewModel {
   ReleaseHealthViewModel.fromStore(Store<AppState> store)
     : _store = store,
-      releases = store.state.globalState.projectsWithLatestReleases,
+      releases = store.state.globalState.allOrBookmarkedProjectsWithLatestReleases(),
       handledStatsByProjectSlug = store.state.globalState.aggregatedStatsByProjectSlug(true),
       unhandledStatsByProjectSlug = store.state.globalState.aggregatedStatsByProjectSlug(false),
       _fetchProjectsNeeded = !store.state.globalState.projectsFetchedOnce &&

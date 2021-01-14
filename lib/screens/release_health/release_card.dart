@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../screens/shared/avatar_stack.dart';
+import '../../screens/shared/bordered_circle_avatar_view_model.dart';
 import '../../types/project.dart';
 import '../../types/release.dart';
 import '../../utils/relative_date_time.dart';
@@ -109,8 +111,21 @@ class ReleaseCard extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 16, top: 4, right: 16, bottom: 16),
-                child: _releaseAndPlatform(context, release)
-              )
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _releaseAndPlatform(context, release),
+                    AvatarStack(
+                        release?.authors
+                          ?.take(5)
+                          ?.map((e) => BorderedCircleAvatarViewModel.from(e))
+                          ?.toList() ?? [],
+                        24,
+                        2
+                    )
+                  ],
+                )
+              ),
             ]),
           ),
         ));
