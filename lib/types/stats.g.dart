@@ -20,6 +20,6 @@ Stats _$StatsFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$StatsToJson(Stats instance) => <String, dynamic>{
-      '24h': instance.stats24h,
-      '14d': instance.stats14d,
-    };
+  '24h': instance.stats24h,
+  '14d': instance.stats14d,
+};
