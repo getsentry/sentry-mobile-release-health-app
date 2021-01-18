@@ -5,6 +5,7 @@ import '../../types/organization.dart';
 import '../../types/project.dart';
 import '../../types/project_with_latest_release.dart';
 import '../../types/stats.dart';
+import '../../types/user.dart';
 
 class AppState {
   AppState({this.globalState});
@@ -40,7 +41,9 @@ class GlobalState {
       this.handledIssuesByProjectSlug,
       this.unhandledIssuesByProjectSlug,
       this.selectedOrganization,
-      this.selectedProject});
+      this.selectedProject,
+      this.me,
+      this.meLoading});
 
   factory GlobalState.initial() {
     return GlobalState(
@@ -59,6 +62,8 @@ class GlobalState {
       unhandledIssuesByProjectSlug: {},
       selectedOrganization: null,
       selectedProject: null,
+      me: null,
+      meLoading: false
     );
   }
 
@@ -82,6 +87,9 @@ class GlobalState {
   final Organization selectedOrganization;
   final Project selectedProject;
 
+  final User me;
+  final bool meLoading;
+
   GlobalState copyWith({
     Cookie session,
     bool hydrated,
@@ -99,6 +107,8 @@ class GlobalState {
     Map<String, List<Group>> unhandledIssuesByProjectSlug,
     Organization selectedOrganization,
     Project selectedProject,
+    User me,
+    bool meLoading
   }) {
     return GlobalState(
       session: setSessionNull ? null : (session ?? this.session),
@@ -115,7 +125,9 @@ class GlobalState {
       handledIssuesByProjectSlug: handledIssuesByProjectSlug ?? this.handledIssuesByProjectSlug,
       unhandledIssuesByProjectSlug: unhandledIssuesByProjectSlug ?? this.unhandledIssuesByProjectSlug,
       selectedOrganization: selectedOrganization ?? this.selectedOrganization,
-      selectedProject: selectedProject ?? this.selectedProject
+      selectedProject: selectedProject ?? this.selectedProject,
+      me: me ?? this.me,
+      meLoading: meLoading ?? this.meLoading
     );
   }
 
