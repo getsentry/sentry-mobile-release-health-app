@@ -1,9 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:sentry_mobile/screens/login/login_screen.dart';
-import 'package:sentry_mobile/utils/sentry_colors.dart';
 
+import '../../screens/login/login_screen.dart';
+import '../../utils/sentry_colors.dart';
 import 'onboarding_detail_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {

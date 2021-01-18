@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
-import 'package:sentry_mobile/utils/sentry_colors.dart';
+
+import '../../utils/sentry_colors.dart';
 
 class OnboardingDetailScreen extends StatelessWidget {
   OnboardingDetailScreen(this._headline, this._subtitle);
