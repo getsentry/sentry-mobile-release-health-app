@@ -20,7 +20,7 @@ platform :ios do
 	# Defined in Appfile
 	app_identifier = CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier)
 	team_id = CredentialsManager::AppfileConfig.try_fetch_value(:team_id)
-	
+
 	desc "Bump the build number"
 	lane :bump do
 		increment_build_number(
@@ -31,7 +31,11 @@ platform :ios do
 
 	desc "Build ipa"
 	lane :build do |options|
-		disable_automatic_code_signing(path: "./Runner.xcodeproj")
+		update_code_signing_settings(
+			use_automatic_signing: false,
+			path: "./Runner.xcodeproj",
+			targets: ["Runner"]
+		)
 		gym(
 			output_directory: "./build",
 			output_name: "sentry-mobile-ios",
@@ -50,7 +54,11 @@ platform :ios do
 				}
 			}
 		)
-		enable_automatic_code_signing(path: "./Runner.xcodeproj")
+		update_code_signing_settings(
+			use_automatic_signing: true,
+			path: "./Runner.xcodeproj",
+			targets: ["Runner"]
+		)
 	end
 
 	desc "Upload ipa to TestFlight"
