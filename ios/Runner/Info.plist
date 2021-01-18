@@ -10,8 +10,10 @@
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+    <key>CFBundleDisplayName</key>
+    <string>Sentry Mobile</string>
 	<key>CFBundleName</key>
-	<string>sentry_mobile</string>
+	<string>Sentry Mobile</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
