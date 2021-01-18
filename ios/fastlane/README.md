@@ -20,7 +20,7 @@ or alternatively using `brew install fastlane`
 ```
 fastlane ios bump
 ```
-Bump the build number
+Bump the build number in pubspec.yaml
 ### ios build
 ```
 fastlane ios build

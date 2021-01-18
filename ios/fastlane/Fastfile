@@ -13,6 +13,8 @@
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
+require 'yaml'
+
 default_platform(:ios)
 
 platform :ios do
@@ -21,12 +23,22 @@ platform :ios do
 	app_identifier = CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier)
 	team_id = CredentialsManager::AppfileConfig.try_fetch_value(:team_id)
 
-	desc "Bump the build number"
+	desc "Bump the build number in pubspec.yaml"
 	lane :bump do
-		increment_build_number(
-			xcodeproj: './Runner.xcodeproj',
-  			build_number: latest_testflight_build_number + 1
-		)
+		build_number = latest_testflight_build_number + 1
+
+		pubspec_path = "../../pubspec.yaml"
+		pubspec_yaml_reader = YamlReader.new(pubspec_path)
+		pubspec_file_reader = FileReader.new(pubspec_path)
+		pubspec_file_writter = FileWritter.new(pubspec_path)
+
+		previousVersion = pubspec_yaml_reader.field('version')
+		newVersion = "#{previousVersion.split('+')[0]}+#{build_number}"
+		
+		newContent = pubspec_file_reader.read.map { |s| s.gsub(previousVersion, newVersion) }
+        pubspec_file_writter.write(newContent)
+
+        puts "Wrote new version #{newVersion} to #{pubspec_path}"
 	end
 
 	desc "Build ipa"
@@ -68,5 +80,39 @@ platform :ios do
 			distribute_external: false,
 			skip_waiting_for_build_processing: true
 		)
+	end
+end
+
+class YamlReader
+	def initialize(yaml_path)
+		@yamlFile = YAML.load_file(yaml_path)
+	end
+
+	def field(fieldName)
+		@yamlFile[fieldName]
+	end
+end
+
+
+class FileReader
+	def initialize(file_path)
+		@file_path = file_path
+	end
+
+	def read
+		IO.readlines(@file_path)
+	end
+end
+
+class FileWritter
+	def initialize(file_path)
+		@file_path = file_path
+	end
+
+	def write(content)
+		File.open(@file_path, "w") { |file|
+			file.puts(content)
+			file.close
+		}
 	end
 end
