@@ -47,3 +47,22 @@ or run
 ```
 flutter run 
 ```
+
+6. Build iOS and upload to testflight
+
+Provide environment variables needed for fastlane. For example by updateing your `~/.bash_profile`
+
+```
+export FASTLANE_USER="user@sentry.io"
+export FASTLANE_ITC_TEAM_ID="12345678" # The identifier of the iTunes Connect (AppStore Connect) team
+export FASTLANE_PROVISIONING_PROFILE_NAME="Profile For Appstore" # The name of the provisioning profile
+```
+
+Change working directory to 'ios' and run 'fastlane build_ios_and_upload_ipa'
+
+```
+cd ios
+fastlane build_ios_and_upload_ipa
+```
+
+This will also read the current build number from TestFlight and increment it in `pubspec.yaml`
