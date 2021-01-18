@@ -102,11 +102,26 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
       };
       next(action);
       store.dispatch(thunkAction);
-    } else {
+    } else if (action is FetchAuthenticatedUserAction) {
+      final thunkAction = (Store<AppState> store) async {
+        final api = SentryApi(store.state.globalState.session);
+        try {
+          final me = await api.authenticatedUser();
+          store.dispatch(
+              FetchAuthenticatedUserSuccessAction(me)
+          );
+        } catch (e) {
+          store.dispatch(FetchAuthenticatedUserFailureAction(e));
+        }
+        api.close();
+      };
+      next(action);
+      store.dispatch(thunkAction);
+    }
+    else {
       next(action);
     }
   }
-
 }
 
 class LocalStorageMiddleware extends MiddlewareClass<AppState> {
