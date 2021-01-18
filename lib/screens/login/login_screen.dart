@@ -25,11 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _content(LoginViewModel viewModel) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Login'),
-      ),
-      body: Container(
+    return Container(
         margin: EdgeInsets.all(22.0),
         child: Center(
             child: Column(
@@ -54,7 +50,6 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             )
         )
-    )
     );
   }
 
