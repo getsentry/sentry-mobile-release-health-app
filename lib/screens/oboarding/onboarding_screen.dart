@@ -15,9 +15,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   final _pageController = PageController();
   final _onboardingDetailScreens = <Widget>[
-    OnboardingDetailScreen('Title 1', 'Subtitle 1'),
-    OnboardingDetailScreen('Title 2', 'Subtitle 2'),
-    OnboardingDetailScreen('Title 3', 'Subtitle 3'),
+    OnboardingDetailScreen('Lorem Ipsum', 'At vero eos et accusam et justo duo dolores et ea rebum.'),
+    OnboardingDetailScreen('Lorem Ipsum', 'At vero eos et accusam et justo duo dolores et ea rebum.'),
+    OnboardingDetailScreen('Lorem Ipsum', 'At vero eos et accusam et justo duo dolores et ea rebum.'),
     LoginScreen()
   ];
 
@@ -67,7 +67,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               },
             ),
             Container(
-              margin: EdgeInsets.only(bottom: 35),
+              margin: EdgeInsets.only(bottom: 32),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
