@@ -16,21 +16,31 @@ or alternatively using `brew install fastlane`
 
 # Available Actions
 ## iOS
-### ios bump
+### ios bump_build_number
 ```
-fastlane ios bump
+fastlane ios bump_build_number
 ```
 Bump the build number in pubspec.yaml
-### ios build
+### ios build_ios
 ```
-fastlane ios build
+fastlane ios build_ios
 ```
-Build ipa
-### ios upload
+Build iOS
+### ios build_ipa
 ```
-fastlane ios upload
+fastlane ios build_ipa
+```
+Upload ipa for TestFlight
+### ios upload_ipa
+```
+fastlane ios upload_ipa
 ```
 Upload ipa to TestFlight
+### ios build_ios_and_upload_ipa
+```
+fastlane ios build_ios_and_upload_ipa
+```
+Build for iOS and upload ipa to TestFlight/
 
 ----
 

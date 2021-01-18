@@ -24,7 +24,7 @@ platform :ios do
 	team_id = CredentialsManager::AppfileConfig.try_fetch_value(:team_id)
 
 	desc "Bump the build number in pubspec.yaml"
-	lane :bump do
+	lane :bump_build_number do
 		build_number = latest_testflight_build_number + 1
 
 		pubspec_path = "../../pubspec.yaml"
@@ -41,8 +41,17 @@ platform :ios do
         puts "Wrote new version #{newVersion} to #{pubspec_path}"
 	end
 
-	desc "Build ipa"
-	lane :build do |options|
+	desc "Build iOS"
+	lane :build_ios do |options|
+		Dir.chdir "../.." do
+			sh("flutter", "packages", "get")
+			sh("flutter", "clean")
+			sh("flutter", "build", "ios", "--release", "--no-codesign")
+		end
+	end
+
+	desc "Upload ipa for TestFlight"
+	lane :build_ipa do |options|
 		update_code_signing_settings(
 			use_automatic_signing: false,
 			path: "./Runner.xcodeproj",
@@ -74,14 +83,25 @@ platform :ios do
 	end
 
 	desc "Upload ipa to TestFlight"
-	lane :upload do |options|
+	lane :upload_ipa do |options|
 		pilot(
 			ipa: "build/sentry-mobile-ios.ipa",
 			distribute_external: false,
 			skip_waiting_for_build_processing: true
 		)
 	end
+
+	desc "Build for iOS and upload ipa to TestFlight/"
+	lane :build_ios_and_upload_ipa do |options|
+		bump_build_number()
+		
+		build_ios()
+		build_ipa()
+		upload_ipa()
+	end
 end
+
+# Helper
 
 class YamlReader
 	def initialize(yaml_path)
