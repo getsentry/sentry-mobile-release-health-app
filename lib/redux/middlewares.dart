@@ -44,7 +44,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
 
           for (final organizationSlug in action.projectsByOrganizationSlug.keys) {
             final projectsToFetch = (action.projectsByOrganizationSlug[organizationSlug] ?? [])
-                .where((element) => element.latestRelease != null); // Only fetch when there is a release
+              .where((element) => element.latestRelease != null); // Only fetch when there is a release
 
             for (final projectToFetch in projectsToFetch) {
               final project = await api.project(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:sentry_mobile/redux/actions.dart';
 
 import '../../redux/state/app_state.dart';
 import '../../screens/project_picker/project_picker.dart';
@@ -16,12 +17,12 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
 
-
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, SettingsViewModel>(
       builder: (_, viewModel) => _content(viewModel),
       converter: (store) => SettingsViewModel.fromStore(store),
+      onInitialBuild: (viewModel) => viewModel.fetchAuthenticatedUserIfNeeded(),
     );
   }
 
@@ -72,6 +73,12 @@ class _SettingsState extends State<Settings> {
                   style: Theme.of(context).textTheme.bodyText1.apply(
                       color: SentryColors.revolver
                   ),
+                ),
+                subtitle: Text(
+                  viewModel.userInfo,
+                  style: Theme.of(context).textTheme.subtitle1.apply(
+                      color: SentryColors.mamba
+                  )
                 ),
                 leading: Icon(
                   Icons.exit_to_app,

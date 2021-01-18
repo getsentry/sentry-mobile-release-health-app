@@ -42,8 +42,7 @@ class GlobalState {
       this.unhandledIssuesByProjectSlug,
       this.selectedOrganization,
       this.selectedProject,
-      this.me,
-      this.meLoading});
+      this.me});
 
   factory GlobalState.initial() {
     return GlobalState(
@@ -62,8 +61,7 @@ class GlobalState {
       unhandledIssuesByProjectSlug: {},
       selectedOrganization: null,
       selectedProject: null,
-      me: null,
-      meLoading: false
+      me: null
     );
   }
 
@@ -88,7 +86,6 @@ class GlobalState {
   final Project selectedProject;
 
   final User me;
-  final bool meLoading;
 
   GlobalState copyWith({
     Cookie session,
@@ -108,7 +105,6 @@ class GlobalState {
     Organization selectedOrganization,
     Project selectedProject,
     User me,
-    bool meLoading
   }) {
     return GlobalState(
       session: setSessionNull ? null : (session ?? this.session),
@@ -126,8 +122,7 @@ class GlobalState {
       unhandledIssuesByProjectSlug: unhandledIssuesByProjectSlug ?? this.unhandledIssuesByProjectSlug,
       selectedOrganization: selectedOrganization ?? this.selectedOrganization,
       selectedProject: selectedProject ?? this.selectedProject,
-      me: me ?? this.me,
-      meLoading: meLoading ?? this.meLoading
+      me: me ?? this.me
     );
   }
 
