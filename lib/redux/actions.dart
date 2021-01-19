@@ -147,7 +147,7 @@ class FetchSessionsAction {
   FetchSessionsAction(this.organizationSlug, this.projectId);
 
   final String organizationSlug;
-  final int projectId;
+  final String projectId;
 }
 
 class FetchSessionsSuccessAction {

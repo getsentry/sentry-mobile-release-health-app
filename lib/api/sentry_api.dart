@@ -90,9 +90,9 @@ class SentryApi {
     return _parseResponse(response, (jsonMap) => User.fromJson(jsonMap['user'] as Map<String, dynamic>)).asFuture;
   }
 
-  Future<Sessions> sessions({@required String organizationSlug, @required int projectId, @required String field, String statsPeriod = '12h', String interval = '1h', String groupBy}) async {
+  Future<Sessions> sessions({@required String organizationSlug, @required String projectId, @required String field, String statsPeriod = '12h', String interval = '1h', String groupBy}) async {
     final queryParameters = <String, String>{
-      'project': '$projectId',
+      'project': projectId,
       'statsPeriod': statsPeriod,
       'interval': interval,
       'field': field
