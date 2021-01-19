@@ -7,6 +7,7 @@ import '../types/organization.dart';
 import '../types/project.dart';
 import '../types/project_with_latest_release.dart';
 import '../types/release.dart';
+import '../types/user.dart';
 
 abstract class ThrottledAction extends Equatable {
   
@@ -122,6 +123,21 @@ class FetchIssuesSuccessAction {
 
 class FetchIssuesFailureAction extends ApiFailureAction {
   FetchIssuesFailureAction(error) : super(error);
+}
+
+// FetchAuthenticatedUser
+
+class FetchAuthenticatedUserAction {
+  FetchAuthenticatedUserAction();
+}
+
+class FetchAuthenticatedUserSuccessAction {
+  FetchAuthenticatedUserSuccessAction(this.me);
+  final User me;
+}
+
+class FetchAuthenticatedUserFailureAction extends ApiFailureAction {
+  FetchAuthenticatedUserFailureAction(error) : super(error);
 }
 
 // SelectOrganization

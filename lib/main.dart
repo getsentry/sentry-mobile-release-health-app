@@ -5,15 +5,15 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'redux/actions.dart';
 import 'redux/middlewares.dart';
 import 'redux/reducers.dart';
 import 'redux/state/app_state.dart';
-import 'screens/login/login_screen.dart';
 import 'screens/main/main_screen.dart';
+import 'screens/oboarding/onboarding_screen.dart';
 import 'screens/splash/splash_screen.dart';
 import 'utils/sentry_colors.dart';
 
@@ -130,7 +130,7 @@ class SentryMobile extends StatelessWidget {
           builder: (_, state) {
             if (state.globalState.hydrated) {
               if (state.globalState.session == null) {
-                return LoginScreen();
+                return OnboardingScreen();
               } else {
                 return MainScreen();
               }

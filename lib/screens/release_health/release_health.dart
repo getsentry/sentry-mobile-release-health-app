@@ -88,111 +88,120 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
         key: _refreshKey,
         backgroundColor: Colors.white,
         color: Color(0xff81B4FE),
-        child: SingleChildScrollView(
-          physics: AlwaysScrollableScrollPhysics(),
-          child: Column(
-            children: [
-              SizedBox(
-                  height: 200,
-                  child: PageView.builder(
-                    itemCount: viewModel.releases.length,
-                    controller: PageController(viewportFraction: 0.9),
-                    onPageChanged: (int index) => setState(() => updateIndex(index)),
-                    itemBuilder: (context, index) {
-                      return ReleaseCard(
-                          viewModel.releases[index].project,
-                          viewModel.releases[index].release,
-                      );
-                    },
-                  )),
-              Container(
-                padding: EdgeInsets.only(top: 22, left: 22, right: 22),
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints viewportConstraints) {
+            return ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: viewportConstraints.maxHeight,
+              ),
+              child: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
                 child: Column(
                   children: [
-                    HealthDivider(
-                      onSeeAll: () {},
-                      title: 'Charts',
+                    SizedBox(
+                        height: 200,
+                        child: PageView.builder(
+                          itemCount: viewModel.releases.length,
+                          controller: PageController(viewportFraction: 0.9),
+                          onPageChanged: (int index) => setState(() => updateIndex(index)),
+                          itemBuilder: (context, index) {
+                            return ReleaseCard(
+                                viewModel.releases[index].project,
+                                viewModel.releases[index].release,
+                            );
+                          },
+                        )),
+                    Container(
+                      padding: EdgeInsets.only(top: 22, left: 22, right: 22),
+                      child: Column(
+                        children: [
+                          HealthDivider(
+                            onSeeAll: () {},
+                            title: 'Charts',
+                          ),
+                          ReleaseHealthChartRow(
+                              title: 'Issues',
+                              points: viewModel.statsAsLineChartPoints(viewModel.releases[_index], true),
+                          ),
+                          ReleaseHealthChartRow(
+                              title: 'Crashes',
+                              points: viewModel.statsAsLineChartPoints(viewModel.releases[_index], false),
+                              parentPoints: viewModel.statsAsLineChartPoints(viewModel.releases[_index], true), // Crashes are included in issues
+                          ),
+                          HealthDivider(
+                            onSeeAll: () {},
+                            title: 'Statistics',
+                          ),
+                          Row(
+                            children: [
+                              HealthCard(
+                                  title: 'Crash Free Users',
+                                  value: viewModel.releases[_index].release?.crashFreeUsers,
+                                  change: 0.04
+                              ), // TODO(denis): Use delta from api, https://github.com/getsentry/sentry-mobile/issues/11
+                              HealthCard(
+                                  title: 'Crash Free Sessions',
+                                  value: viewModel.releases[_index].release?.crashFreeSessions,
+                                  change: -0.01
+                              ), // TODO(denis): Use delta from api, https://github.com/getsentry/sentry-mobile/issues/11
+                            ],
+                          )
+                        ],
+                      ),
                     ),
-                    ReleaseHealthChartRow(
-                        title: 'Issues',
-                        points: viewModel.statsAsLineChartPoints(viewModel.releases[_index], true),
-                    ),
-                    ReleaseHealthChartRow(
-                        title: 'Crashes',
-                        points: viewModel.statsAsLineChartPoints(viewModel.releases[_index], false),
-                        parentPoints: viewModel.statsAsLineChartPoints(viewModel.releases[_index], true), // Crashes are included in issues
-                    ),
-                    HealthDivider(
-                      onSeeAll: () {},
-                      title: 'Statistics',
-                    ),
-                    Row(
-                      children: [
-                        HealthCard(
-                            title: 'Crash Free Users',
-                            value: viewModel.releases[_index].release?.crashFreeUsers,
-                            change: 0.04
-                        ), // TODO(denis): Use delta from api, https://github.com/getsentry/sentry-mobile/issues/11
-                        HealthCard(
-                            title: 'Crash Free Sessions',
-                            value: viewModel.releases[_index].release?.crashFreeSessions,
-                            change: -0.01
-                        ), // TODO(denis): Use delta from api, https://github.com/getsentry/sentry-mobile/issues/11
-                      ],
-                    )
+                    // Column(children: [
+                    //   // WARNING Those line charts are just stacked one over the other, so the scaling between them is not in sync. Implement if we will keep this view.
+                    //   Stack(
+                    //     children: [
+                    //       Container(
+                    //         height: 120,
+                    //         child: LineChart(
+                    //             points: ReleaseHealthData.palceholderHealthy,
+                    //             lineWidth: 1.0,
+                    //             lineColor: Color(0xffffc227),
+                    //             gradientStart: Color(0xffffc227),
+                    //             gradientEnd: Color(0xe1ffc227)
+                    //         ),
+                    //       ),
+                    //       Container(
+                    //         height: 120,
+                    //         child: LineChart(
+                    //             points: ReleaseHealthData.placeholderError,
+                    //             lineWidth: 1.0,
+                    //             lineColor: Color(0xffef7061),
+                    //             gradientStart: Color(0xffef7061),
+                    //             gradientEnd: Color(0xe1ef7061)
+                    //         ),
+                    //       ),
+                    //       Container(
+                    //         height: 120,
+                    //         child: LineChart(
+                    //             points: ReleaseHealthData.placeholderAbnormal,
+                    //             lineWidth: 1.0,
+                    //             lineColor: Color(0xffa35488),
+                    //             gradientStart: Color(0xffa35488),
+                    //             gradientEnd: Color(0xe1a35488)
+                    //         ),
+                    //       ),
+                    //       Container(
+                    //         height: 120,
+                    //         child: LineChart(
+                    //             points: ReleaseHealthData.placeholderCrashes,
+                    //             lineWidth: 1.0,
+                    //             lineColor: Color(0xff444674),
+                    //             gradientStart: Color(0xff444674),
+                    //             gradientEnd: Color(0xe1444674)
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   )
+                    //
+                    // ])
                   ],
                 ),
               ),
-              // Column(children: [
-              //   // WARNING Those line charts are just stacked one over the other, so the scaling between them is not in sync. Implement if we will keep this view.
-              //   Stack(
-              //     children: [
-              //       Container(
-              //         height: 120,
-              //         child: LineChart(
-              //             points: ReleaseHealthData.palceholderHealthy,
-              //             lineWidth: 1.0,
-              //             lineColor: Color(0xffffc227),
-              //             gradientStart: Color(0xffffc227),
-              //             gradientEnd: Color(0xe1ffc227)
-              //         ),
-              //       ),
-              //       Container(
-              //         height: 120,
-              //         child: LineChart(
-              //             points: ReleaseHealthData.placeholderError,
-              //             lineWidth: 1.0,
-              //             lineColor: Color(0xffef7061),
-              //             gradientStart: Color(0xffef7061),
-              //             gradientEnd: Color(0xe1ef7061)
-              //         ),
-              //       ),
-              //       Container(
-              //         height: 120,
-              //         child: LineChart(
-              //             points: ReleaseHealthData.placeholderAbnormal,
-              //             lineWidth: 1.0,
-              //             lineColor: Color(0xffa35488),
-              //             gradientStart: Color(0xffa35488),
-              //             gradientEnd: Color(0xe1a35488)
-              //         ),
-              //       ),
-              //       Container(
-              //         height: 120,
-              //         child: LineChart(
-              //             points: ReleaseHealthData.placeholderCrashes,
-              //             lineWidth: 1.0,
-              //             lineColor: Color(0xff444674),
-              //             gradientStart: Color(0xff444674),
-              //             gradientEnd: Color(0xe1444674)
-              //         ),
-              //       ),
-              //     ],
-              //   )
-              //
-              // ])
-            ],
-          ),
+            );
+          }
         ),
         onRefresh: () => Future.delayed(
           Duration(microseconds: 100),

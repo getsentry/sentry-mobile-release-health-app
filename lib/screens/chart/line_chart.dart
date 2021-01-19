@@ -7,25 +7,26 @@ import 'line_chart_data.dart';
 import 'line_chart_point.dart';
 
 class LineChart extends StatelessWidget {
-  LineChart({@required this.data, @required this.lineWidth, @required this.lineColor, @required this.gradientStart, @required this.gradientEnd});
+  LineChart({@required this.data, @required this.lineWidth, @required this.lineColor, @required this.gradientStart, @required this.gradientEnd, this.cubicLines});
 
   final LineChartData data;
   final double lineWidth;
   final Color lineColor;
   final Color gradientStart;
   final Color gradientEnd;
+  final bool cubicLines;
 
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      painter: _LineChartPainter.create(data, lineWidth, lineColor, gradientStart, gradientEnd),
+      painter: _LineChartPainter.create(data, lineWidth, lineColor, gradientStart, gradientEnd, cubicLines),
       child: Center(),
     );
   }
 }
 
 class _LineChartPainter extends CustomPainter {
-  _LineChartPainter.create(this.data, double lineWidth, Color lineColor, this.gradientStart, this.gradientEnd) {
+  _LineChartPainter.create(this.data, double lineWidth, Color lineColor, this.gradientStart, this.gradientEnd, this.cubicLines) {
     linePaint = Paint()
       ..isAntiAlias = true
       ..style = PaintingStyle.stroke
@@ -39,6 +40,7 @@ class _LineChartPainter extends CustomPainter {
   double linePadding;
   Color gradientStart;
   Color gradientEnd;
+  bool cubicLines;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -87,7 +89,7 @@ class _LineChartPainter extends CustomPainter {
       final cx2 = (x1 + x2) / 2;
       final cy2 = y2;
 
-      if (y1 == y2) {
+      if (y1 == y2 || !cubicLines) {
         linePath.lineTo(x2, flipY(y2));
       } else {
         linePath.cubicTo(cx1, flipY(cy1), cx2, flipY(cy2), x2, flipY(y2));
