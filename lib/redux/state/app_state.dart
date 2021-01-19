@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:sentry_mobile/types/sessions.dart';
+
 import '../../types/group.dart';
 import '../../types/organization.dart';
 import '../../types/project.dart';
@@ -38,6 +40,7 @@ class GlobalState {
       this.projectsWithLatestReleases,
       this.releasesFetchedOnce,
       this.releasesLoading,
+      this.sessionsByProjectId,
       this.handledIssuesByProjectSlug,
       this.unhandledIssuesByProjectSlug,
       this.selectedOrganization,
@@ -57,6 +60,7 @@ class GlobalState {
       projectsWithLatestReleases: [],
       releasesFetchedOnce: false,
       releasesLoading: false,
+      sessionsByProjectId: {},
       handledIssuesByProjectSlug: {},
       unhandledIssuesByProjectSlug: {},
       selectedOrganization: null,
@@ -79,6 +83,8 @@ class GlobalState {
   final bool releasesFetchedOnce;
   final bool releasesLoading;
 
+  final Map<String, Sessions> sessionsByProjectId;
+
   final Map<String, List<Group>> handledIssuesByProjectSlug;
   final Map<String, List<Group>> unhandledIssuesByProjectSlug;
 
@@ -100,6 +106,7 @@ class GlobalState {
     List<ProjectWithLatestRelease> projectsWithLatestReleases,
     bool releasesFetchedOnce,
     bool releasesLoading,
+    Map<String, Sessions> sessionsByProjectId,
     Map<String, List<Group>> handledIssuesByProjectSlug,
     Map<String, List<Group>> unhandledIssuesByProjectSlug,
     Organization selectedOrganization,
@@ -118,6 +125,7 @@ class GlobalState {
       projectsWithLatestReleases: projectsWithLatestReleases ?? this.projectsWithLatestReleases,
       releasesFetchedOnce: releasesFetchedOnce ?? this.releasesFetchedOnce,
       releasesLoading: releasesLoading ?? this.releasesLoading,
+      sessionsByProjectId: sessionsByProjectId ?? this.sessionsByProjectId,
       handledIssuesByProjectSlug: handledIssuesByProjectSlug ?? this.handledIssuesByProjectSlug,
       unhandledIssuesByProjectSlug: unhandledIssuesByProjectSlug ?? this.unhandledIssuesByProjectSlug,
       selectedOrganization: selectedOrganization ?? this.selectedOrganization,

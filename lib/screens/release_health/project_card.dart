@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sentry_mobile/screens/shared/bordered_circle_avatar_view_model.dart';
+import 'package:sentry_mobile/types/sessions.dart';
 
 import '../../screens/shared/avatar_stack.dart';
-import '../../screens/shared/bordered_circle_avatar_view_model.dart';
 import '../../types/project.dart';
 import '../../types/release.dart';
 import '../../utils/relative_date_time.dart';
@@ -10,20 +11,25 @@ import '../chart/line_chart.dart';
 import '../chart/line_chart_data.dart';
 import '../chart/line_chart_point.dart';
 
-class ReleaseCard extends StatelessWidget {
-  ReleaseCard(this.project , this.release);
+class ProjectCard extends StatelessWidget {
+  ProjectCard(this.project, this.release, this.sessions);
 
   final Project project;
   final Release release; // Nullable
+  final Sessions sessions; // Nullable
 
   @override
   Widget build(BuildContext context) {
 
-    final List<LineChartPoint> _data = release
-        ?.stats24h
-        ?.map((stat) => LineChartPoint(stat.timestamp.toDouble(), stat.value.toDouble()))
-        ?.toList()
-        ?? [];
+    final List<LineChartPoint> _data = [];
+
+    if (sessions != null && sessions.groups.first != null) {
+      for (var index = 0; index < sessions.intervals.length - 1; index++) {
+        final timestamp = sessions.intervals[index];
+        final sumSession = sessions.groups.first.series.sumSession[index];
+        _data.add(LineChartPoint(timestamp.millisecondsSinceEpoch.toDouble(), sumSession.toDouble()));
+      }
+    }
 
     return Card(
         margin: const EdgeInsets.only(top: 8, bottom: 8, left: 0, right: 16),
@@ -52,7 +58,7 @@ class ReleaseCard extends StatelessWidget {
                   child: FittedBox(
                     fit: BoxFit.cover,
                     child: Text(
-                      release?.version ?? '--',
+                      project.slug ?? project.name ?? '--',
                       maxLines: 2,
                       style: Theme.of(context).textTheme.headline5,
                     ),
@@ -64,14 +70,14 @@ class ReleaseCard extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    release?.project ?? project.name,
+                    release?.version ?? project.latestRelease?.version ?? '--',
                     style: Theme.of(context).textTheme.subtitle1,
                   ),
                 ),
               ),
               Expanded(
                 child:
-                  release == null
+                  sessions == null
                   ? Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [

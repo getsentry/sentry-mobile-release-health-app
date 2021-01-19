@@ -151,7 +151,8 @@ class FetchSessionsAction {
 }
 
 class FetchSessionsSuccessAction {
-  FetchSessionsSuccessAction(this.sessions);
+  FetchSessionsSuccessAction(this.projectId, this.sessions);
+  final String projectId;
   final Sessions sessions;
 }
 

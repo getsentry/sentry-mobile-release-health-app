@@ -128,8 +128,11 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
             projectId: action.projectId,
             field: SessionGroup.sumSessionKey
           );
+
+          // TODO(denis): Throttling
+
           store.dispatch(
-              FetchSessionsSuccessAction(sessions)
+              FetchSessionsSuccessAction(action.projectId, sessions)
           );
         } catch (e) {
           store.dispatch(FetchSessionsFailureAction(e));

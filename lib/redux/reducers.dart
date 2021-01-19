@@ -26,6 +26,7 @@ final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, SelectOrganizationAction>(_selectOrganizationAction),
   TypedReducer<GlobalState, SelectProjectAction>(_selectProjectAction),
   TypedReducer<GlobalState, FetchAuthenticatedUserSuccessAction>(_fetchAuthenticatedUserSuccessAction),
+  TypedReducer<GlobalState, FetchSessionsSuccessAction>(_fetchSessionsSuccessAction),
   TypedReducer<GlobalState, ApiFailureAction>(_apiFailureAction),
 ]);
 
@@ -155,6 +156,14 @@ GlobalState _fetchIssuesSuccessAction(GlobalState state, FetchIssuesSuccessActio
 GlobalState _fetchAuthenticatedUserSuccessAction(GlobalState state, FetchAuthenticatedUserSuccessAction action) {
   return state.copyWith(
       me: action.me
+  );
+}
+
+GlobalState _fetchSessionsSuccessAction(GlobalState state, FetchSessionsSuccessAction action) {
+  final sessionsByProjectId = state.sessionsByProjectId;
+  sessionsByProjectId[action.projectId] = action.sessions;
+  return state.copyWith(
+      sessionsByProjectId: sessionsByProjectId
   );
 }
 

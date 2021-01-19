@@ -9,7 +9,7 @@ import '../../redux/state/app_state.dart';
 import '../../screens/empty/empty_screen.dart';
 import '../../utils/sentry_colors.dart';
 import '../../utils/sentry_icons.dart';
-import 'release_card.dart';
+import 'project_card.dart';
 import 'release_health_chart_row.dart';
 import 'release_health_view_model.dart';
 
@@ -57,7 +57,7 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
           }
         }
       );
-    } else if (viewModel.showLoadingScreen || viewModel.releases.isEmpty) {
+    } else if (viewModel.showLoadingScreen || viewModel.projects.isEmpty) {
       _index = 0;
 
       return Center(
@@ -101,13 +101,15 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                     SizedBox(
                         height: 200,
                         child: PageView.builder(
-                          itemCount: viewModel.releases.length,
+                          itemCount: viewModel.projects.length,
                           controller: PageController(viewportFraction: 0.9),
                           onPageChanged: (int index) => setState(() => updateIndex(index)),
                           itemBuilder: (context, index) {
-                            return ReleaseCard(
-                                viewModel.releases[index].project,
-                                viewModel.releases[index].release,
+                            final projectWitLatestRelease = viewModel.projects[index];
+                            return ProjectCard(
+                                projectWitLatestRelease.project,
+                                projectWitLatestRelease.release,
+                                viewModel.sessionsForProject(projectWitLatestRelease.project)
                             );
                           },
                         )),
@@ -121,12 +123,12 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                           ),
                           ReleaseHealthChartRow(
                               title: 'Issues',
-                              points: viewModel.statsAsLineChartPoints(viewModel.releases[_index], true),
+                              points: viewModel.statsAsLineChartPoints(viewModel.projects[_index], true),
                           ),
                           ReleaseHealthChartRow(
                               title: 'Crashes',
-                              points: viewModel.statsAsLineChartPoints(viewModel.releases[_index], false),
-                              parentPoints: viewModel.statsAsLineChartPoints(viewModel.releases[_index], true), // Crashes are included in issues
+                              points: viewModel.statsAsLineChartPoints(viewModel.projects[_index], false),
+                              parentPoints: viewModel.statsAsLineChartPoints(viewModel.projects[_index], true), // Crashes are included in issues
                           ),
                           HealthDivider(
                             onSeeAll: () {},
@@ -136,12 +138,12 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                             children: [
                               HealthCard(
                                   title: 'Crash Free Users',
-                                  value: viewModel.releases[_index].release?.crashFreeUsers,
+                                  value: viewModel.projects[_index].release?.crashFreeUsers,
                                   change: 0.04
                               ), // TODO(denis): Use delta from api, https://github.com/getsentry/sentry-mobile/issues/11
                               HealthCard(
                                   title: 'Crash Free Sessions',
-                                  value: viewModel.releases[_index].release?.crashFreeSessions,
+                                  value: viewModel.projects[_index].release?.crashFreeSessions,
                                   change: -0.01
                               ), // TODO(denis): Use delta from api, https://github.com/getsentry/sentry-mobile/issues/11
                             ],
