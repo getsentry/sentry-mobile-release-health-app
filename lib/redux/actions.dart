@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
+import 'package:sentry_mobile/types/sessions.dart';
 
 import '../types/group.dart';
 import '../types/organization.dart';
@@ -138,6 +139,24 @@ class FetchAuthenticatedUserSuccessAction {
 
 class FetchAuthenticatedUserFailureAction extends ApiFailureAction {
   FetchAuthenticatedUserFailureAction(error) : super(error);
+}
+
+// FetchSessions
+
+class FetchSessionsAction {
+  FetchSessionsAction(this.organizationSlug, this.projectId);
+
+  final String organizationSlug;
+  final int projectId;
+}
+
+class FetchSessionsSuccessAction {
+  FetchSessionsSuccessAction(this.sessions);
+  final Sessions sessions;
+}
+
+class FetchSessionsFailureAction extends ApiFailureAction {
+  FetchSessionsFailureAction(error) : super(error);
 }
 
 // SelectOrganization

@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:redux/redux.dart';
+import 'package:sentry_mobile/types/session_group.dart';
+import 'package:sentry_mobile/types/session_group_series.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 
@@ -117,8 +119,26 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
       };
       next(action);
       store.dispatch(thunkAction);
-    }
-    else {
+    } else if (action is FetchSessionsAction) {
+      final thunkAction = (Store<AppState> store) async {
+        final api = SentryApi(store.state.globalState.session);
+        try {
+          final sessions = await api.sessions(
+            organizationSlug: action.organizationSlug,
+            projectId: action.projectId,
+            field: SessionGroup.sumSessionKey
+          );
+          store.dispatch(
+              FetchSessionsSuccessAction(sessions)
+          );
+        } catch (e) {
+          store.dispatch(FetchSessionsFailureAction(e));
+        }
+        api.close();
+      };
+      next(action);
+      store.dispatch(thunkAction);
+    } else {
       next(action);
     }
   }

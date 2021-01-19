@@ -5,6 +5,7 @@ import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:sentry_flutter/sentry_flutter.dart' as sentry;
+import 'package:sentry_mobile/types/sessions.dart';
 
 import '../api/api_errors.dart';
 import '../types/group.dart';
@@ -87,6 +88,22 @@ class SentryApi {
         headers: _defaultHeader()
     );
     return _parseResponse(response, (jsonMap) => User.fromJson(jsonMap['user'] as Map<String, dynamic>)).asFuture;
+  }
+
+  Future<Sessions> sessions({@required String organizationSlug, @required int projectId, @required String field, String statsPeriod = '12h', String interval = '1h', String groupBy}) async {
+    final queryParameters = <String, String>{
+      'project': '$projectId',
+      'statsPeriod': statsPeriod,
+      'interval': interval,
+      'field': field
+    };
+    if (groupBy != null) {
+      queryParameters['groupBy'] = groupBy;
+    }
+    final response = await client.get(Uri.https(baseUrlName, '$baseUrlPath/organizations/$organizationSlug/sessions/', queryParameters),
+        headers: _defaultHeader()
+    );
+    return _parseResponse(response, (jsonMap) => Sessions.fromJson(jsonMap)).asFuture;
   }
 
   void close() {
