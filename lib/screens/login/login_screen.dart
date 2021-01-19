@@ -25,19 +25,26 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _content(LoginViewModel viewModel) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Login'),
-      ),
-      body: Container(
-        margin: EdgeInsets.all(22.0),
+    return Container(
+        margin: EdgeInsets.all(32.0),
         child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Text(
-                    'Working Code, Happy Customers',
-                    style: Theme.of(context).textTheme.headline1
+                Column(
+                  children: [
+                    Text(
+                      'Lets get started!',
+                      style: Theme.of(context).textTheme.headline1,
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 12),
+                    Text(
+                      'Login to see your projects.',
+                      style: Theme.of(context).textTheme.subtitle1,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                 ),
                 RaisedButton(
                   child: Text('Login'),
@@ -54,7 +61,6 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             )
         )
-    )
     );
   }
 
