@@ -4,19 +4,20 @@ import 'dart:io';
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:sentry_flutter/sentry_flutter.dart' as sentry;
 
 import '../api/api_errors.dart';
 import '../types/group.dart';
 import '../types/organization.dart';
 import '../types/project.dart';
 import '../types/release.dart';
+import '../types/user.dart';
 
 class SentryApi {
   SentryApi(this.session);
 
   final Cookie session;
-  final client = SentryHttpClient(client: Client());
+  final client = sentry.SentryHttpClient(client: Client());
   final baseUrlScheme = 'https://';
   final baseUrlName = 'sentry.io';
   final baseUrlPath = '/api/0';
@@ -79,6 +80,13 @@ class SentryApi {
         headers: _defaultHeader()
     );
     return _parseResponseList(response, (jsonMap) => Group.fromJson(jsonMap)).asFuture;
+  }
+
+  Future<User> authenticatedUser() async {
+    final response = await client.get(Uri.https(baseUrlName, '$baseUrlPath/'),
+        headers: _defaultHeader()
+    );
+    return _parseResponse(response, (jsonMap) => User.fromJson(jsonMap['user'] as Map<String, dynamic>)).asFuture;
   }
 
   void close() {
