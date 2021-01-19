@@ -93,7 +93,8 @@ class ReleaseCard extends StatelessWidget {
                           lineWidth: 5.0,
                           lineColor: Colors.black.withOpacity(0.05),
                           gradientStart: Colors.transparent,
-                          gradientEnd: Colors.transparent
+                          gradientEnd: Colors.transparent,
+                          cubicLines: false
                         ),
                       ),
                       Padding(
@@ -103,7 +104,8 @@ class ReleaseCard extends StatelessWidget {
                             lineWidth: 5.0,
                             lineColor: Colors.white,
                             gradientStart: Colors.transparent,
-                            gradientEnd: Colors.transparent
+                            gradientEnd: Colors.transparent,
+                            cubicLines: false
                         ),
                       ),
                     ]
