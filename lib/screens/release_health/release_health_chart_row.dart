@@ -68,8 +68,9 @@ class ReleaseHealthChartRow extends StatelessWidget {
                       data: viewModel.data,
                       lineWidth: 2.0,
                       lineColor: SentryColors.tapestry,
-                      gradientStart: SentryColors.tapestry.withAlpha(28),
-                      gradientEnd: Colors.transparent
+                      gradientStart: SentryColors.tapestry.withAlpha(84),
+                      gradientEnd: SentryColors.tapestry.withAlpha(28),
+                      cubicLines: false
                   ),
                   height: 35,
                 )
