@@ -43,18 +43,8 @@ GlobalState _loginAction(GlobalState state, LoginAction action) {
 }
 
 GlobalState _logoutAction(GlobalState state, LogoutAction action) {
-  return state.copyWith(
-    setSessionNull: true,
-    selectedTab: 0,
-    organizations: [],
-    projectsByOrganizationSlug: {},
-    projectsFetchedOnce: false,
-    projectsLoading: false,
-    projectsWithLatestReleases: [],
-    releasesFetchedOnce: false,
-    releasesLoading: false,
-    handledIssuesByProjectSlug: {},
-    unhandledIssuesByProjectSlug: {}
+  return GlobalState.initial().copyWith(
+      hydrated: true
   );
 }
 
@@ -136,20 +126,11 @@ GlobalState _fetchLatestReleaseSuccessAction(GlobalState state, FetchLatestRelea
 }
 
 GlobalState _fetchIssuesSuccessAction(GlobalState state, FetchIssuesSuccessAction action) {
-  final handledIssuedByProjectSlug = state.handledIssuesByProjectSlug;
-  final unhandledIssuesByByProjectSlug = state.unhandledIssuesByProjectSlug;
-
-  if (action.unhandled) {
-    unhandledIssuesByByProjectSlug[action.projectSlug] = action.issues;
-  } else {
-    handledIssuedByProjectSlug[action.projectSlug] = action.issues;
-    unhandledIssuesByByProjectSlug[action.projectSlug] = action.issues
-        .where((element) => element.type == 'error').toList();
-  }
+  final issuesByProjectSlug = state.issuesByProjectSlug;
+  issuesByProjectSlug[action.projectSlug] = action.issues;
 
   return state.copyWith(
-      handledIssuesByProjectSlug: handledIssuedByProjectSlug,
-      unhandledIssuesByProjectSlug: unhandledIssuesByByProjectSlug
+      issuesByProjectSlug: issuesByProjectSlug
   );
 }
 

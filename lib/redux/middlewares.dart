@@ -93,10 +93,9 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           final List<Group> issues = await api.issues(
               organizationSlug: action.organizationSlug,
               projectSlug: action.projectSlug,
-              fetchUnhandled: action.unhandled
           );
           store.dispatch(
-              FetchIssuesSuccessAction(action.projectSlug, action.unhandled, issues)
+              FetchIssuesSuccessAction(action.projectSlug, issues)
           );
         } catch (e) {
           store.dispatch(FetchIssuesFailureAction(e));

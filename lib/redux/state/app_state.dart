@@ -8,7 +8,6 @@ import '../../types/group.dart';
 import '../../types/organization.dart';
 import '../../types/project.dart';
 import '../../types/project_with_latest_release.dart';
-import '../../types/stats.dart';
 import '../../types/user.dart';
 
 class AppState {
@@ -43,8 +42,7 @@ class GlobalState {
       this.releasesFetchedOnce,
       this.releasesLoading,
       this.sessionsByProjectId,
-      this.handledIssuesByProjectSlug,
-      this.unhandledIssuesByProjectSlug,
+      this.issuesByProjectSlug,
       this.selectedOrganization,
       this.selectedProject,
       this.me});
@@ -63,8 +61,7 @@ class GlobalState {
       releasesFetchedOnce: false,
       releasesLoading: false,
       sessionsByProjectId: {},
-      handledIssuesByProjectSlug: {},
-      unhandledIssuesByProjectSlug: {},
+      issuesByProjectSlug: {},
       selectedOrganization: null,
       selectedProject: null,
       me: null
@@ -87,8 +84,7 @@ class GlobalState {
 
   final Map<String, Sessions> sessionsByProjectId;
 
-  final Map<String, List<Group>> handledIssuesByProjectSlug;
-  final Map<String, List<Group>> unhandledIssuesByProjectSlug;
+  final Map<String, List<Group>> issuesByProjectSlug;
 
   final Organization selectedOrganization;
   final Project selectedProject;
@@ -109,8 +105,7 @@ class GlobalState {
     bool releasesFetchedOnce,
     bool releasesLoading,
     Map<String, Sessions> sessionsByProjectId,
-    Map<String, List<Group>> handledIssuesByProjectSlug,
-    Map<String, List<Group>> unhandledIssuesByProjectSlug,
+    Map<String, List<Group>> issuesByProjectSlug,
     Organization selectedOrganization,
     Project selectedProject,
     User me,
@@ -128,8 +123,7 @@ class GlobalState {
       releasesFetchedOnce: releasesFetchedOnce ?? this.releasesFetchedOnce,
       releasesLoading: releasesLoading ?? this.releasesLoading,
       sessionsByProjectId: sessionsByProjectId ?? this.sessionsByProjectId,
-      handledIssuesByProjectSlug: handledIssuesByProjectSlug ?? this.handledIssuesByProjectSlug,
-      unhandledIssuesByProjectSlug: unhandledIssuesByProjectSlug ?? this.unhandledIssuesByProjectSlug,
+      issuesByProjectSlug: issuesByProjectSlug ?? this.issuesByProjectSlug,
       selectedOrganization: selectedOrganization ?? this.selectedOrganization,
       selectedProject: selectedProject ?? this.selectedProject,
       me: me ?? this.me
@@ -182,19 +176,5 @@ class GlobalState {
     }
 
     return sessionPointsByProjectId;
-  }
-
-  Map<String, Stats> aggregatedStatsByProjectSlug(bool handled) {
-    final aggregatedStatsByProjectSlug = <String, Stats>{};
-    if (handled) {
-      handledIssuesByProjectSlug.forEach((key, value) => {
-        aggregatedStatsByProjectSlug[key] = Stats.aggregated(value.map((e) => e.stats).toList())
-      });
-    } else {
-      unhandledIssuesByProjectSlug.forEach((key, value) => {
-        aggregatedStatsByProjectSlug[key] = Stats.aggregated(value.map((e) => e.stats).toList())
-      });
-    }
-    return aggregatedStatsByProjectSlug;
   }
 }

@@ -103,22 +103,20 @@ class FetchLatestReleasesFailureAction extends ApiFailureAction {
 // FetchIssues
 
 class FetchIssuesAction extends ThrottledAction {
-  FetchIssuesAction(this.organizationSlug, this.projectSlug, this.unhandled);
+  FetchIssuesAction(this.organizationSlug, this.projectSlug);
   final String organizationSlug;
   final String projectSlug;
-  final bool unhandled;
 
   @override
-  List<Object> get props => [organizationSlug, projectSlug, unhandled];
+  List<Object> get props => [organizationSlug, projectSlug];
 
   @override
   bool get stringify => false;
 }
 
 class FetchIssuesSuccessAction {
-  FetchIssuesSuccessAction(this.projectSlug, this.unhandled, this.issues);
+  FetchIssuesSuccessAction(this.projectSlug, this.issues);
   final String projectSlug;
-  final bool unhandled;
   final List<Group> issues;
 }
 
