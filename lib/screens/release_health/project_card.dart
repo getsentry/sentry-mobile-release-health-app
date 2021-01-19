@@ -26,7 +26,10 @@ class ProjectCard extends StatelessWidget {
     if (sessions != null && sessions.groups.first != null) {
       for (var index = 0; index < sessions.intervals.length - 1; index++) {
         final timestamp = sessions.intervals[index];
-        final sumSession = sessions.groups.first.series.sumSession[index];
+        var sumSession = 0;
+        for (final group in sessions.groups) {
+          sumSession += group.series.sumSession[index];
+        }
         _data.add(LineChartPoint(timestamp.millisecondsSinceEpoch.toDouble(), sumSession.toDouble()));
       }
     }

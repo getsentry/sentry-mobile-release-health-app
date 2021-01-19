@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:redux/redux.dart';
 import 'package:sentry_mobile/types/session_group.dart';
+import 'package:sentry_mobile/types/session_group_by.dart';
 import 'package:sentry_mobile/types/session_group_series.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
@@ -126,7 +127,8 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           final sessions = await api.sessions(
             organizationSlug: action.organizationSlug,
             projectId: action.projectId,
-            field: SessionGroup.sumSessionKey
+            field: SessionGroup.sumSessionKey,
+            groupBy: SessionGroupBy.sessionStatusKey
           );
 
           // TODO(denis): Throttling

@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:sentry_mobile/types/session_status.dart';
 
 part 'session_group_by.g.dart';
 
@@ -10,7 +11,7 @@ class SessionGroupBy {
   static const sessionStatusKey = 'session.status';
 
   @JsonKey(name: SessionGroupBy.sessionStatusKey)
-  final String sessionStatus;
+  final SessionStatus sessionStatus;
 
   Map<String, dynamic> toJson() => _$SessionGroupByToJson(this);
 }
