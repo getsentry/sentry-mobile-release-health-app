@@ -15,7 +15,7 @@ class ReleaseHealthChartRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = ReleaseHealthChartRowViewModel.createByHalvingPoints(points, parentPoints ?? []);
+    final viewModel = ReleaseHealthChartRowViewModel.create(points, parentPoints ?? []);
     
     return Container(
         padding: EdgeInsets.only(bottom: 22),

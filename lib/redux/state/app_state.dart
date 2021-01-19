@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:sentry_mobile/screens/chart/line_chart_point.dart';
+import 'package:sentry_mobile/types/session_status.dart';
 import 'package:sentry_mobile/types/sessions.dart';
 
 import '../../types/group.dart';
@@ -150,6 +152,36 @@ class GlobalState {
     } else {
       return bookmarkedProjectsWithLatestReleases;
     }
+  }
+
+  Map<String, List<LineChartPoint>> sessionPointsByProjectId(Set<SessionStatus> sessionStatus) {
+    final sessionPointsByProjectId = <String, List<LineChartPoint>>{};
+
+    for (final projectId in sessionsByProjectId.keys) {
+      final sessions = sessionsByProjectId[projectId];
+      if (sessions != null) {
+        final groups = sessions.groups.where((element) =>
+          sessionStatus.contains(element.by.sessionStatus)
+        ).toList();
+        
+        final lineChartPoints = <LineChartPoint>[];
+
+        for (var intervalIndex = 0; intervalIndex < sessions.intervals.length; intervalIndex++) {
+          final interval = sessions.intervals[intervalIndex];
+          var sum = 0;
+
+          for (final group in groups) {
+            sum += group.series.sumSession[intervalIndex];
+          }
+
+          lineChartPoints.add(LineChartPoint(interval.millisecondsSinceEpoch.toDouble(), sum.toDouble()));
+        }
+
+        sessionPointsByProjectId[projectId] = lineChartPoints;
+      }
+    }
+
+    return sessionPointsByProjectId;
   }
 
   Map<String, Stats> aggregatedStatsByProjectSlug(bool handled) {

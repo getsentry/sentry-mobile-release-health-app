@@ -13,7 +13,7 @@ void main() {
         LineChartPoint(3, 5),
       ];
 
-      final sut = ReleaseHealthChartRowViewModel.createByHalvingPoints(points, []);
+      final sut = ReleaseHealthChartRowViewModel.create(points, []);
       expect(sut.data.points,
         equals([LineChartPoint(0, 0), LineChartPoint(1, 5)]) // x normalized
       );
@@ -29,7 +29,7 @@ void main() {
         LineChartPoint(4, 5),
       ];
 
-      final sut = ReleaseHealthChartRowViewModel.createByHalvingPoints(points, []);
+      final sut = ReleaseHealthChartRowViewModel.create(points, []);
       expect(sut.data.points,
           equals([LineChartPoint(0, 0), LineChartPoint(1, 5)]) // x normalized
       );
@@ -44,7 +44,7 @@ void main() {
         LineChartPoint(3, 5),
       ];
 
-      final sut = ReleaseHealthChartRowViewModel.createByHalvingPoints(points, []);
+      final sut = ReleaseHealthChartRowViewModel.create(points, []);
       expect(sut.percentChange,
           equals(-50.0)
       );
@@ -60,7 +60,7 @@ void main() {
         LineChartPoint(4, 5),
       ];
 
-      final sut = ReleaseHealthChartRowViewModel.createByHalvingPoints(points, []);
+      final sut = ReleaseHealthChartRowViewModel.create(points, []);
       expect(sut.percentChange,
           equals(-50.0)
       );
@@ -75,7 +75,7 @@ void main() {
         LineChartPoint(3, 5),
       ];
 
-      final sut = ReleaseHealthChartRowViewModel.createByHalvingPoints(points, []);
+      final sut = ReleaseHealthChartRowViewModel.create(points, []);
       expect(sut.numberOfIssues,
           equals(5)
       );
@@ -95,7 +95,7 @@ void main() {
         LineChartPoint(1, 1000)
       ];
 
-      final sut = ReleaseHealthChartRowViewModel.createByHalvingPoints(points, parentPoints);
+      final sut = ReleaseHealthChartRowViewModel.create(points, parentPoints);
       expect(sut.data.maxY,
           equals(1000)
       );

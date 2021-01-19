@@ -1,5 +1,6 @@
 import 'package:redux/redux.dart';
 import 'package:sentry_mobile/types/project.dart';
+import 'package:sentry_mobile/types/session_status.dart';
 import 'package:sentry_mobile/types/sessions.dart';
 
 import '../../redux/actions.dart';
@@ -14,8 +15,8 @@ class ReleaseHealthViewModel {
     : _store = store,
       projects = store.state.globalState.allOrBookmarkedProjectsWithLatestReleases(),
       _sessionByProjectId = store.state.globalState.sessionsByProjectId,
-      handledStatsByProjectSlug = store.state.globalState.aggregatedStatsByProjectSlug(true),
-      unhandledStatsByProjectSlug = store.state.globalState.aggregatedStatsByProjectSlug(false),
+      issueStatsByProjectSlug = store.state.globalState.sessionPointsByProjectId({SessionStatus.errored, SessionStatus.abnormal, SessionStatus.crashed}),
+      crashedStatsByProjectSlug = store.state.globalState.sessionPointsByProjectId({SessionStatus.crashed}),
       _fetchProjectsNeeded = !store.state.globalState.projectsFetchedOnce &&
         !store.state.globalState.projectsLoading,
       showProjectEmptyScreen = !store.state.globalState.projectsLoading &&
@@ -31,8 +32,8 @@ class ReleaseHealthViewModel {
   final List<ProjectWithLatestRelease> projects;
   final Map<String, Sessions> _sessionByProjectId;
 
-  final Map<String, Stats> handledStatsByProjectSlug; // Aggregated over all issue stats
-  final Map<String, Stats> unhandledStatsByProjectSlug; // Aggregated over all error issue stats
+  final Map<String, List<LineChartPoint>> issueStatsByProjectSlug;
+  final Map<String, List<LineChartPoint>> crashedStatsByProjectSlug;
 
   final bool _fetchProjectsNeeded;
 
@@ -55,23 +56,21 @@ class ReleaseHealthViewModel {
   }
 
   List<LineChartPoint> statsAsLineChartPoints(ProjectWithLatestRelease projectWithLatestRelease, bool handled) {
-    var stats = <Stat>[];
     if (handled) {
-      final handledStatsByProjectSlug = this.handledStatsByProjectSlug[projectWithLatestRelease.project.slug]?.stats24h;
+      final handledStatsByProjectSlug = issueStatsByProjectSlug[projectWithLatestRelease.project.id];
       if (handledStatsByProjectSlug == null) {
         return null;
       } else {
-        stats = handledStatsByProjectSlug;
+        return handledStatsByProjectSlug;
       }
     } else {
-      final unhandledStatsByProjectSlug = this.unhandledStatsByProjectSlug[projectWithLatestRelease.project.slug]?.stats24h;
+      final unhandledStatsByProjectSlug = crashedStatsByProjectSlug[projectWithLatestRelease.project.id];
       if (unhandledStatsByProjectSlug == null) {
         return null;
       } else {
-        stats = unhandledStatsByProjectSlug;
+        return unhandledStatsByProjectSlug;
       }
     }
-    return stats.map((e) => LineChartPoint(e.timestamp.toDouble(), e.value.toDouble())).toList();
   }
 
   void fetchLatestReleaseOrIssues(int index) {
@@ -80,16 +79,13 @@ class ReleaseHealthViewModel {
       if (projectWithLatestRelease != null) {
         _fetchLatestRelease(projectWithLatestRelease);
         _fetchSessions(projectWithLatestRelease);
-        _fetchIssues(projectWithLatestRelease);
       }
-
     }
     if (index + 1 < projects.length) {
       final nextProjectWithLatestRelease = projects[index + 1];
       if (nextProjectWithLatestRelease != null) {
         _fetchLatestRelease(nextProjectWithLatestRelease);
         _fetchSessions(nextProjectWithLatestRelease);
-        _fetchIssues(nextProjectWithLatestRelease);
       }
     }
   }
@@ -107,27 +103,6 @@ class ReleaseHealthViewModel {
           projectWithLatestRelease.project.latestRelease.version
       )
     );
-  }
-
-  void _fetchIssues(ProjectWithLatestRelease projectWithLatestRelease) {
-    if (projectWithLatestRelease.release == null) {
-      return;
-    }
-    final organizationSlug = _store.state.globalState.organizationsSlugByProjectSlug[projectWithLatestRelease.project.slug];
-    if (organizationSlug == null) {
-      return;
-    }
-
-    // Only fetch when there is no data available yet
-    if (_store.state.globalState.handledIssuesByProjectSlug[projectWithLatestRelease.project.slug] == null) {
-      _store.dispatch(
-          FetchIssuesAction(
-              organizationSlug,
-              projectWithLatestRelease.project.slug,
-              false
-          )
-      );
-    }
   }
 
   void _fetchSessions(ProjectWithLatestRelease projectWithLatestRelease) {
