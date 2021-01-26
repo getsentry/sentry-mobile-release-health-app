@@ -1,15 +1,17 @@
 
+import 'package:sentry_mobile/redux/state/session_state.dart';
+
 import '../../screens/chart/line_chart_data.dart';
 import '../../screens/chart/line_chart_point.dart';
 
 class ReleaseHealthChartRowViewModel {
 
-  ReleaseHealthChartRowViewModel.create(List<LineChartPoint> points, List<LineChartPoint> parentPoints) {
-    if (points == null) {
+  ReleaseHealthChartRowViewModel.create(SessionState sessionState, List<LineChartPoint> parentPoints) {
+    if (sessionState == null || sessionState.points == null) {
       data = null;
       percentChange = 0.0;
       numberOfIssues = 0;
-    } else if (points.length < 2) {
+    } else if (sessionState.points.length < 2) {
       data = LineChartData.prepareData(
           points: [
             LineChartPoint(0, 0),
@@ -20,15 +22,18 @@ class ReleaseHealthChartRowViewModel {
       numberOfIssues = data.countY.toInt();
     } else {
 
-      if (parentPoints.isNotEmpty) {
+      if (parentPoints != null && parentPoints.isNotEmpty) {
         final parent = LineChartData.prepareData(points: parentPoints);
-        data = LineChartData.prepareData(points: points, preferredMinY: parent.minY, preferredMaxY: parent.maxY);
+        data = LineChartData.prepareData(points: sessionState.points, preferredMinY: parent.minY, preferredMaxY: parent.maxY);
       } else {
-        data = LineChartData.prepareData(points: points);
+        data = LineChartData.prepareData(points: sessionState.points);
       }
-      
-      // TODO(denis) Percent change
-      percentChange = 0.0;// _percentChange(leading.countY, data.countY);
+
+      if (sessionState.previousSessionCount != null) {
+        percentChange = _percentChange(sessionState.previousSessionCount.toDouble(), sessionState.sessionCount.toDouble());
+      } else {
+        percentChange = 0.0;
+      }
       numberOfIssues = data.countY.toInt();
     }
   }
