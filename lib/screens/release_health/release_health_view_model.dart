@@ -1,4 +1,5 @@
 import 'package:redux/redux.dart';
+import 'package:sentry_mobile/redux/state/session_state.dart';
 import 'package:sentry_mobile/types/project.dart';
 import 'package:sentry_mobile/types/session_status.dart';
 import 'package:sentry_mobile/types/sessions.dart';
@@ -15,8 +16,8 @@ class ReleaseHealthViewModel {
     : _store = store,
       projects = store.state.globalState.allOrBookmarkedProjectsWithLatestReleases(),
       _sessionByProjectId = store.state.globalState.sessionsByProjectId,
-      issueStatsByProjectSlug = store.state.globalState.sessionPointsByProjectId({SessionStatus.errored, SessionStatus.abnormal, SessionStatus.crashed}),
-      crashedStatsByProjectSlug = store.state.globalState.sessionPointsByProjectId({SessionStatus.crashed}),
+      issueStatsByProjectSlug = store.state.globalState.sessionStateByProjectId({SessionStatus.errored, SessionStatus.abnormal, SessionStatus.crashed}),
+      crashedStatsByProjectSlug = store.state.globalState.sessionStateByProjectId({SessionStatus.crashed}),
       _fetchProjectsNeeded = !store.state.globalState.projectsFetchedOnce &&
         !store.state.globalState.projectsLoading,
       showProjectEmptyScreen = !store.state.globalState.projectsLoading &&
@@ -32,8 +33,8 @@ class ReleaseHealthViewModel {
   final List<ProjectWithLatestRelease> projects;
   final Map<String, Sessions> _sessionByProjectId;
 
-  final Map<String, List<LineChartPoint>> issueStatsByProjectSlug;
-  final Map<String, List<LineChartPoint>> crashedStatsByProjectSlug;
+  final Map<String, SessionState> issueStatsByProjectSlug;
+  final Map<String, SessionState> crashedStatsByProjectSlug;
 
   final bool _fetchProjectsNeeded;
 
@@ -55,7 +56,7 @@ class ReleaseHealthViewModel {
     return _sessionByProjectId[project.id];
   }
 
-  List<LineChartPoint> statsAsLineChartPoints(ProjectWithLatestRelease projectWithLatestRelease, bool handled) {
+  SessionState sessionStateForProject(ProjectWithLatestRelease projectWithLatestRelease, bool handled) {
     if (handled) {
       final handledStatsByProjectSlug = issueStatsByProjectSlug[projectWithLatestRelease.project.id];
       if (handledStatsByProjectSlug == null) {

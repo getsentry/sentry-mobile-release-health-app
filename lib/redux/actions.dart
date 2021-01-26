@@ -149,9 +149,10 @@ class FetchSessionsAction {
 }
 
 class FetchSessionsSuccessAction {
-  FetchSessionsSuccessAction(this.projectId, this.sessions);
+  FetchSessionsSuccessAction(this.projectId, this.sessions, this.sessionsBefore);
   final String projectId;
   final Sessions sessions;
+  final Sessions sessionsBefore;
 }
 
 class FetchSessionsFailureAction extends ApiFailureAction {

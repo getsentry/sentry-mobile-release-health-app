@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:sentry_mobile/redux/state/session_state.dart';
 import 'package:sentry_mobile/screens/chart/line_chart_point.dart';
 import 'package:sentry_mobile/types/session_status.dart';
 import 'package:sentry_mobile/types/sessions.dart';
@@ -42,6 +43,7 @@ class GlobalState {
       this.releasesFetchedOnce,
       this.releasesLoading,
       this.sessionsByProjectId,
+      this.sessionsBeforeByProjectId,
       this.issuesByProjectSlug,
       this.selectedOrganization,
       this.selectedProject,
@@ -61,6 +63,7 @@ class GlobalState {
       releasesFetchedOnce: false,
       releasesLoading: false,
       sessionsByProjectId: {},
+      sessionsBeforeByProjectId: {},
       issuesByProjectSlug: {},
       selectedOrganization: null,
       selectedProject: null,
@@ -83,6 +86,7 @@ class GlobalState {
   final bool releasesLoading;
 
   final Map<String, Sessions> sessionsByProjectId;
+  final Map<String, Sessions> sessionsBeforeByProjectId; // Interval before sessionsByProjectId
 
   final Map<String, List<Group>> issuesByProjectSlug;
 
@@ -105,6 +109,7 @@ class GlobalState {
     bool releasesFetchedOnce,
     bool releasesLoading,
     Map<String, Sessions> sessionsByProjectId,
+    Map<String, Sessions> sessionsBeforeByProjectId,
     Map<String, List<Group>> issuesByProjectSlug,
     Organization selectedOrganization,
     Project selectedProject,
@@ -123,6 +128,7 @@ class GlobalState {
       releasesFetchedOnce: releasesFetchedOnce ?? this.releasesFetchedOnce,
       releasesLoading: releasesLoading ?? this.releasesLoading,
       sessionsByProjectId: sessionsByProjectId ?? this.sessionsByProjectId,
+      sessionsBeforeByProjectId: sessionsBeforeByProjectId ?? this.sessionsBeforeByProjectId,
       issuesByProjectSlug: issuesByProjectSlug ?? this.issuesByProjectSlug,
       selectedOrganization: selectedOrganization ?? this.selectedOrganization,
       selectedProject: selectedProject ?? this.selectedProject,
@@ -148,33 +154,65 @@ class GlobalState {
     }
   }
 
-  Map<String, List<LineChartPoint>> sessionPointsByProjectId(Set<SessionStatus> sessionStatus) {
-    final sessionPointsByProjectId = <String, List<LineChartPoint>>{};
+  Map<String, SessionState> sessionStateByProjectId(Set<SessionStatus> sessionStatus) {
+    final sessionStateByProjectId = <String, SessionState>{};
 
     for (final projectId in sessionsByProjectId.keys) {
       final sessions = sessionsByProjectId[projectId];
+      final previousSession = sessionsBeforeByProjectId[projectId];
+
+      var total = 0;
+      var previousTotal = 0;
+
+      final lineChartPoints = <LineChartPoint>[];
+      final previousLineChartPoints = <LineChartPoint>[];
+
       if (sessions != null) {
         final groups = sessions.groups.where((element) =>
           sessionStatus.contains(element.by.sessionStatus)
         ).toList();
-        
-        final lineChartPoints = <LineChartPoint>[];
 
         for (var intervalIndex = 0; intervalIndex < sessions.intervals.length; intervalIndex++) {
           final interval = sessions.intervals[intervalIndex];
           var sum = 0;
 
           for (final group in groups) {
+            total += group.totals.sumSession;
             sum += group.series.sumSession[intervalIndex];
           }
 
           lineChartPoints.add(LineChartPoint(interval.millisecondsSinceEpoch.toDouble(), sum.toDouble()));
         }
+      }
 
-        sessionPointsByProjectId[projectId] = lineChartPoints;
+      if (previousSession != null) {
+        final groups = previousSession.groups.where((element) =>
+            sessionStatus.contains(element.by.sessionStatus)
+        ).toList();
+
+        for (var intervalIndex = 0; intervalIndex < previousSession.intervals.length; intervalIndex++) {
+          final interval = previousSession.intervals[intervalIndex];
+          var sum = 0;
+
+          for (final group in groups) {
+            previousTotal += group.totals.sumSession;
+            sum += group.series.sumSession[intervalIndex];
+          }
+
+          previousLineChartPoints.add(LineChartPoint(interval.millisecondsSinceEpoch.toDouble(), sum.toDouble()));
+        }
+      }
+
+      if (sessions != null) {
+        sessionStateByProjectId[projectId] = SessionState(
+          projectId: projectId,
+          sessionCount: total,
+          previousSessionCount: previousTotal,
+          points: lineChartPoints,
+          previousPoints: previousLineChartPoints
+        );
       }
     }
-
-    return sessionPointsByProjectId;
+    return sessionStateByProjectId;
   }
 }

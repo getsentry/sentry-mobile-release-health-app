@@ -87,15 +87,28 @@ class SentryApi {
     return _parseResponse(response, (jsonMap) => User.fromJson(jsonMap['user'] as Map<String, dynamic>)).asFuture;
   }
 
-  Future<Sessions> sessions({@required String organizationSlug, @required String projectId, @required String field, String statsPeriod = '12h', String interval = '1h', String groupBy}) async {
+  Future<Sessions> sessions({
+    @required String organizationSlug,
+    @required String projectId,
+    @required String field,
+    String statsPeriod = '12h',
+    String interval = '1h',
+    String groupBy,
+    String statsPeriodStart,
+    String statsPeriodEnd}) async {
     final queryParameters = <String, String>{
       'project': projectId,
-      'statsPeriod': statsPeriod,
       'interval': interval,
       'field': field
     };
     if (groupBy != null) {
       queryParameters['groupBy'] = groupBy;
+    }
+    if (statsPeriodStart != null && statsPeriodEnd != null) {
+      queryParameters['statsPeriodStart'] = statsPeriodStart;
+      queryParameters['statsPeriodEnd'] = statsPeriodEnd;
+    } else {
+      queryParameters['statsPeriod'] = statsPeriod;
     }
     final response = await client.get(Uri.https(baseUrlName, '$baseUrlPath/organizations/$organizationSlug/sessions/', queryParameters),
         headers: _defaultHeader()

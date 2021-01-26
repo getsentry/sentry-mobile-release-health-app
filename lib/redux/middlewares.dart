@@ -130,10 +130,17 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
             groupBy: SessionGroupBy.sessionStatusKey
           );
 
-          // TODO(denis): Throttling
+          final sessionsBefore = await api.sessions(
+            organizationSlug: action.organizationSlug,
+            projectId: action.projectId,
+            field: SessionGroup.sumSessionKey,
+            groupBy: SessionGroupBy.sessionStatusKey,
+            statsPeriodStart: '24h',
+            statsPeriodEnd: '12h'
+          );
 
           store.dispatch(
-              FetchSessionsSuccessAction(action.projectId, sessions)
+              FetchSessionsSuccessAction(action.projectId, sessions, sessionsBefore)
           );
         } catch (e) {
           store.dispatch(FetchSessionsFailureAction(e));

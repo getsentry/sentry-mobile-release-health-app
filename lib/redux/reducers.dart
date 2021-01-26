@@ -143,8 +143,13 @@ GlobalState _fetchAuthenticatedUserSuccessAction(GlobalState state, FetchAuthent
 GlobalState _fetchSessionsSuccessAction(GlobalState state, FetchSessionsSuccessAction action) {
   final sessionsByProjectId = state.sessionsByProjectId;
   sessionsByProjectId[action.projectId] = action.sessions;
+
+  final sessionsBeforeByProjectId = state.sessionsBeforeByProjectId;
+  sessionsBeforeByProjectId[action.projectId] = action.sessionsBefore;
+  
   return state.copyWith(
-      sessionsByProjectId: sessionsByProjectId
+      sessionsByProjectId: sessionsByProjectId,
+      sessionsBeforeByProjectId: sessionsBeforeByProjectId
   );
 }
 
