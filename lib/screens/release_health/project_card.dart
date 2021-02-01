@@ -72,9 +72,13 @@ class ProjectCard extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 16, top: 0, right: 16, bottom: 4),
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: Text(
-                    release?.version ?? project.latestRelease?.version ?? '--',
-                    style: Theme.of(context).textTheme.subtitle1,
+                  child: FittedBox(
+                    fit: BoxFit.cover,
+                    child: Text(
+                      release?.version ?? project.latestRelease?.version ?? '--',
+                      maxLines: 1,
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
                   ),
                 ),
               ),
