@@ -7,8 +7,8 @@ import '../../types/project.dart';
 import '../../types/project_with_latest_release.dart';
 import '../../types/session_status.dart';
 
-class ReleaseHealthViewModel {
-  ReleaseHealthViewModel.fromStore(Store<AppState> store)
+class HealthScreenViewModel {
+  HealthScreenViewModel.fromStore(Store<AppState> store)
     : _store = store,
       projects = store.state.globalState.allOrBookmarkedProjectsWithLatestReleases(),
       _sessionStateByProjectId = store.state.globalState.sessionStateByProjectId(SessionStatus.values.toSet()),

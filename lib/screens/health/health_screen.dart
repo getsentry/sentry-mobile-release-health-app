@@ -10,30 +10,30 @@ import '../../screens/empty/empty_screen.dart';
 import '../../utils/sentry_colors.dart';
 import '../../utils/sentry_icons.dart';
 import 'project_card.dart';
-import 'release_health_view_model.dart';
+import 'health_screen_view_model.dart';
 import 'sessions_chart_row.dart';
 
-class ReleaseHealth extends StatefulWidget {
-  const ReleaseHealth({Key key}) : super(key: key);
+class HealthScreen extends StatefulWidget {
+  const HealthScreen({Key key}) : super(key: key);
 
   @override
-  _ReleaseHealthState createState() => _ReleaseHealthState();
+  _HealthScreenState createState() => _HealthScreenState();
 }
 
-class _ReleaseHealthState extends State<ReleaseHealth> {
+class _HealthScreenState extends State<HealthScreen> {
   int _index;
 
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, ReleaseHealthViewModel>(
+    return StoreConnector<AppState, HealthScreenViewModel>(
       builder: (_, viewModel) => _content(viewModel),
-      converter: (store) => ReleaseHealthViewModel.fromStore(store),
+      converter: (store) => HealthScreenViewModel.fromStore(store),
     );
   }
 
-  Widget _content(ReleaseHealthViewModel viewModel) {
+  Widget _content(HealthScreenViewModel viewModel) {
     viewModel.fetchProjectsIfNeeded();
 
     if (viewModel.showProjectEmptyScreen || viewModel.showReleaseEmptyScreen) {
