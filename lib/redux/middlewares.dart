@@ -161,16 +161,16 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
             apdexThreshold: action.apdexThreshold,
             organizationSlug: action.organizationSlug,
             projectId: action.projectId,
-            start: now,
-            end: twelveHoursAgo
+            start: twelveHoursAgo,
+            end: now
           );
 
           final apdexBefore = await api.apdex(
               apdexThreshold: action.apdexThreshold,
               organizationSlug: action.organizationSlug,
               projectId: action.projectId,
-              start: twelveHoursAgo,
-              end: twentyFourHoursAgo
+              start: twentyFourHoursAgo,
+              end: twelveHoursAgo
           );
 
           store.dispatch(

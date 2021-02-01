@@ -161,14 +161,18 @@ class FetchSessionsFailureAction extends ApiFailureAction {
 
 // FetchApDex
 
-class FetchApdexAction {
-  FetchApdexAction(this.apdexThreshold, this.organizationSlug, this.projectId, this.start, this.end);
+class FetchApdexAction extends ThrottledAction {
+  FetchApdexAction(this.apdexThreshold, this.organizationSlug, this.projectId);
 
   final int apdexThreshold;
   final String organizationSlug;
   final String projectId;
-  final DateTime start;
-  final DateTime end;
+
+  @override
+  List<Object> get props => [apdexThreshold, organizationSlug, projectId];
+
+  @override
+  bool get stringify => false;
 }
 
 class FetchApdexSuccessAction {

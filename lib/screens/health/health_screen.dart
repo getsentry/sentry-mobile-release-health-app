@@ -74,7 +74,7 @@ class _HealthScreenState extends State<HealthScreen> {
       });
 
       final updateIndex = (int index) {
-        viewModel.fetchLatestReleaseOrIssues(index);
+        viewModel.fetchDataForProject(index);
         _index = index;
       };
 

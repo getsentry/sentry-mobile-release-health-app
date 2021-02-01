@@ -81,10 +81,11 @@ class SentryApi {
     return _parseResponseList(response, (jsonMap) => Group.fromJson(jsonMap)).asFuture;
   }
 
-  Future<double> apdex({@required apdexThreshold, @required String organizationSlug, @required String projectId, @required DateTime start, @required DateTime end}) async {
+  Future<double> apdex({@required int apdexThreshold, @required String organizationSlug, @required String projectId, @required DateTime start, @required DateTime end}) async {
     final queryParameters = {
-      'field': 'apdexThreshold($apdexThreshold)',
+      'field': 'apdex($apdexThreshold)',
       'project': projectId,
+      'query': 'event.type:transaction count():>0',
       'start': start.utcDateTime(),
       'end': end.utcDateTime(),
     };
@@ -94,9 +95,14 @@ class SentryApi {
     if (response.statusCode == 200) {
       try {
         final responseJson = json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
-        final data = responseJson['data'] as List<Map<String, dynamic>>;
-        final apDex = data.first['apdex_$apdexThreshold'] as double;
-        return Result.value(apDex).asFuture;
+        final data = responseJson['data'] as List<dynamic>;
+        if (data.isNotEmpty) {
+          final apdexData = data.first as Map<String, dynamic>;
+          final apDex = apdexData['apdex_$apdexThreshold'] as double;
+          return Result.value(apDex).asFuture;
+        } else {
+          return Result.value(null).asFuture;
+        }
       } catch (e) {
         throw JsonError(e);
       }

@@ -73,12 +73,13 @@ class HealthScreenViewModel {
     );
   }
   
-  void fetchLatestReleaseOrIssues(int index) {
+  void fetchDataForProject(int index) {
     if (index < projects.length) {
       final projectWithLatestRelease = projects[index];
       if (projectWithLatestRelease != null) {
         _fetchLatestRelease(projectWithLatestRelease);
         _fetchSessions(projectWithLatestRelease);
+        _fetchApdex(projectWithLatestRelease);
       }
     }
     if (index + 1 < projects.length) {
@@ -86,6 +87,7 @@ class HealthScreenViewModel {
       if (nextProjectWithLatestRelease != null) {
         _fetchLatestRelease(nextProjectWithLatestRelease);
         _fetchSessions(nextProjectWithLatestRelease);
+        _fetchApdex(nextProjectWithLatestRelease);
       }
     }
   }
@@ -123,5 +125,18 @@ class HealthScreenViewModel {
           )
       );
     }
+  }
+  void _fetchApdex(ProjectWithLatestRelease projectWithLatestRelease) {
+    final organizationSlug = _store.state.globalState.organizationsSlugByProjectSlug[projectWithLatestRelease.project.slug];
+    if (organizationSlug == null) {
+      return;
+    }
+    _store.dispatch(
+        FetchApdexAction(
+          450,
+          organizationSlug,
+          projectWithLatestRelease.project.id,
+        )
+    );
   }
 }
