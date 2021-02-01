@@ -164,43 +164,19 @@ class GlobalState {
       var total = 0;
       var previousTotal = 0;
 
-      final lineChartPoints = <LineChartPoint>[];
-      final previousLineChartPoints = <LineChartPoint>[];
+      var lineChartPoints = <LineChartPoint>[];
+      var previousLineChartPoints = <LineChartPoint>[];
 
       if (sessions != null) {
-        final groups = sessions.groups.where((element) =>
-          sessionStatus.contains(element.by.sessionStatus)
-        ).toList();
-
-        for (var intervalIndex = 0; intervalIndex < sessions.intervals.length; intervalIndex++) {
-          final interval = sessions.intervals[intervalIndex];
-          var sum = 0;
-
-          for (final group in groups) {
-            total += group.totals.sumSession;
-            sum += group.series.sumSession[intervalIndex];
-          }
-
-          lineChartPoints.add(LineChartPoint(interval.millisecondsSinceEpoch.toDouble(), sum.toDouble()));
-        }
+        final totalAndPoints = createTotalSessionCountAndLinePoints(sessionStatus, sessions);
+        total = totalAndPoints[0] as int;
+        lineChartPoints = totalAndPoints[1] as List<LineChartPoint>;
       }
 
       if (previousSession != null) {
-        final groups = previousSession.groups.where((element) =>
-            sessionStatus.contains(element.by.sessionStatus)
-        ).toList();
-
-        for (var intervalIndex = 0; intervalIndex < previousSession.intervals.length; intervalIndex++) {
-          final interval = previousSession.intervals[intervalIndex];
-          var sum = 0;
-
-          for (final group in groups) {
-            previousTotal += group.totals.sumSession;
-            sum += group.series.sumSession[intervalIndex];
-          }
-
-          previousLineChartPoints.add(LineChartPoint(interval.millisecondsSinceEpoch.toDouble(), sum.toDouble()));
-        }
+        final totalAndPoints = createTotalSessionCountAndLinePoints(sessionStatus, previousSession);
+        previousTotal = totalAndPoints[0] as int;
+        previousLineChartPoints = totalAndPoints[1] as List<LineChartPoint>;
       }
 
       if (sessions != null) {
@@ -214,5 +190,31 @@ class GlobalState {
       }
     }
     return sessionStateByProjectId;
+  }
+
+  // Returns the total number of sessions and the line chart points for individual intervals.
+  List<dynamic> createTotalSessionCountAndLinePoints(Set<SessionStatus> sessionStatus, Sessions sessions) {
+    final groups = sessions.groups.where((element) =>
+        sessionStatus.contains(element.by.sessionStatus)
+    ).toList();
+
+    var total = 0;
+    final lineChartPoints = <LineChartPoint>[];
+    for (var index = 0; index < sessions.intervals.length; index++) {
+      final interval = sessions.intervals[index];
+      var sum = 0;
+
+      for (final group in groups) {
+        total += group.totals.sumSession;
+        sum += group.series.sumSession[index];
+      }
+      lineChartPoints.add(
+        LineChartPoint(
+          interval.millisecondsSinceEpoch.toDouble(),
+          sum.toDouble()
+        )
+      );
+    }
+    return [total, lineChartPoints];
   }
 }
