@@ -159,6 +159,29 @@ class FetchSessionsFailureAction extends ApiFailureAction {
   FetchSessionsFailureAction(error) : super(error);
 }
 
+// FetchApDex
+
+class FetchApdexAction {
+  FetchApdexAction(this.apdexThreshold, this.organizationSlug, this.projectId, this.start, this.end);
+
+  final int apdexThreshold;
+  final String organizationSlug;
+  final String projectId;
+  final DateTime start;
+  final DateTime end;
+}
+
+class FetchApdexSuccessAction {
+  FetchApdexSuccessAction(this.projectId, this.apdex);
+
+  final String projectId;
+  final double apdex;
+}
+
+class FetchApdexFailureAction extends ApiFailureAction {
+  FetchApdexFailureAction(error) : super(error);
+}
+
 // SelectOrganization
 
 class SelectOrganizationAction {
