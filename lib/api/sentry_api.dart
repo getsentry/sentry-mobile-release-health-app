@@ -13,6 +13,7 @@ import '../types/project.dart';
 import '../types/release.dart';
 import '../types/sessions.dart';
 import '../types/user.dart';
+import '../utils/date_time_format.dart';
 
 class SentryApi {
   SentryApi(this.session);
@@ -78,6 +79,30 @@ class SentryApi {
         headers: _defaultHeader()
     );
     return _parseResponseList(response, (jsonMap) => Group.fromJson(jsonMap)).asFuture;
+  }
+
+  Future<double> apdex({@required apdexThreshold, @required String organizationSlug, @required String projectId, @required DateTime start, @required DateTime end}) async {
+    final queryParameters = {
+      'field': 'apdexThreshold($apdexThreshold)',
+      'project': projectId,
+      'start': start.utcDateTime(),
+      'end': end.utcDateTime(),
+    };
+    final response = await client.get(Uri.https(baseUrlName, '$baseUrlPath/organizations/$organizationSlug/eventsv2/', queryParameters),
+        headers: _defaultHeader()
+    );
+    if (response.statusCode == 200) {
+      try {
+        final responseJson = json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
+        final data = responseJson['data'] as List<Map<String, dynamic>>;
+        final apDex = data.first['apdex_$apdexThreshold'] as double;
+        return Result.value(apDex).asFuture;
+      } catch (e) {
+        throw JsonError(e);
+      }
+    } else {
+      throw ApiError(response.statusCode, response.body);
+    }
   }
 
   Future<User> authenticatedUser() async {
