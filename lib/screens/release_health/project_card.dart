@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sentry_mobile/redux/state/session_state.dart';
 import 'package:sentry_mobile/screens/shared/bordered_circle_avatar_view_model.dart';
-import 'package:sentry_mobile/types/sessions.dart';
 
 import '../../screens/shared/avatar_stack.dart';
 import '../../types/project.dart';
@@ -9,30 +9,16 @@ import '../../utils/relative_date_time.dart';
 import '../../utils/sentry_colors.dart';
 import '../chart/line_chart.dart';
 import '../chart/line_chart_data.dart';
-import '../chart/line_chart_point.dart';
 
 class ProjectCard extends StatelessWidget {
   ProjectCard(this.project, this.release, this.sessions);
 
   final Project project;
   final Release release; // Nullable
-  final Sessions sessions; // Nullable
+  final SessionState sessions; // Nullable
 
   @override
   Widget build(BuildContext context) {
-
-    final List<LineChartPoint> _data = [];
-
-    if (sessions != null && sessions.groups.first != null) {
-      for (var index = 0; index < sessions.intervals.length - 1; index++) {
-        final timestamp = sessions.intervals[index];
-        var sumSession = 0;
-        for (final group in sessions.groups) {
-          sumSession += group.series.sumSession[index];
-        }
-        _data.add(LineChartPoint(timestamp.millisecondsSinceEpoch.toDouble(), sumSession.toDouble()));
-      }
-    }
 
     return Card(
         margin: const EdgeInsets.only(top: 8, bottom: 8, left: 0, right: 16),
@@ -102,7 +88,7 @@ class ProjectCard extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: 12),
                         child: LineChart(
-                          data: LineChartData.prepareData(points: _data),
+                          data: LineChartData.prepareData(points: sessions.points),
                           lineWidth: 5.0,
                           lineColor: Colors.black.withOpacity(0.05),
                           gradientStart: Colors.transparent,
@@ -113,7 +99,7 @@ class ProjectCard extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 12),
                         child: LineChart(
-                            data: LineChartData.prepareData(points: _data),
+                            data: LineChartData.prepareData(points: sessions.points),
                             lineWidth: 5.0,
                             lineColor: Colors.white,
                             gradientStart: Colors.transparent,

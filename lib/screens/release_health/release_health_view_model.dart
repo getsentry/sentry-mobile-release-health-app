@@ -15,26 +15,26 @@ class ReleaseHealthViewModel {
   ReleaseHealthViewModel.fromStore(Store<AppState> store)
     : _store = store,
       projects = store.state.globalState.allOrBookmarkedProjectsWithLatestReleases(),
-      _sessionByProjectId = store.state.globalState.sessionsByProjectId,
-      issueStatsByProjectSlug = store.state.globalState.sessionStateByProjectId({SessionStatus.errored, SessionStatus.abnormal, SessionStatus.crashed}),
-      crashedStatsByProjectSlug = store.state.globalState.sessionStateByProjectId({SessionStatus.crashed}),
+      _sessionStateByProjectId = store.state.globalState.sessionStateByProjectId(SessionStatus.values.toSet()),
+      _handledAndCrashedSessionStateByProjectId = store.state.globalState.sessionStateByProjectId({SessionStatus.errored, SessionStatus.abnormal, SessionStatus.crashed}),
+      _crashedSessionStateByProjectId = store.state.globalState.sessionStateByProjectId({SessionStatus.crashed}),
       _fetchProjectsNeeded = !store.state.globalState.projectsFetchedOnce &&
         !store.state.globalState.projectsLoading,
       showProjectEmptyScreen = !store.state.globalState.projectsLoading &&
-          store.state.globalState.projectsFetchedOnce &&
-          store.state.globalState.projectsByOrganizationSlug.keys.isEmpty,
+        store.state.globalState.projectsFetchedOnce &&
+        store.state.globalState.projectsByOrganizationSlug.keys.isEmpty,
       showReleaseEmptyScreen = !store.state.globalState.releasesLoading &&
-          store.state.globalState.releasesFetchedOnce &&
-          store.state.globalState.projectsWithLatestReleases.isEmpty,
+        store.state.globalState.releasesFetchedOnce &&
+        store.state.globalState.projectsWithLatestReleases.isEmpty,
       showLoadingScreen = store.state.globalState.projectsLoading || store.state.globalState.releasesLoading;
 
   final Store<AppState> _store;
 
   final List<ProjectWithLatestRelease> projects;
-  final Map<String, Sessions> _sessionByProjectId;
 
-  final Map<String, SessionState> issueStatsByProjectSlug;
-  final Map<String, SessionState> crashedStatsByProjectSlug;
+  final Map<String, SessionState> _sessionStateByProjectId;
+  final Map<String, SessionState> _handledAndCrashedSessionStateByProjectId;
+  final Map<String, SessionState> _crashedSessionStateByProjectId;
 
   final bool _fetchProjectsNeeded;
 
@@ -52,28 +52,18 @@ class ReleaseHealthViewModel {
     _store.dispatch(FetchOrganizationsAndProjectsAction());
   }
 
-  Sessions sessionsForProject(Project project) {
-    return _sessionByProjectId[project.id];
+  SessionState sessionStateForProject(Project project) {
+    return _sessionStateByProjectId[project.id];
   }
 
-  SessionState sessionStateForProject(ProjectWithLatestRelease projectWithLatestRelease, bool handled) {
-    if (handled) {
-      final handledStatsByProjectSlug = issueStatsByProjectSlug[projectWithLatestRelease.project.id];
-      if (handledStatsByProjectSlug == null) {
-        return null;
-      } else {
-        return handledStatsByProjectSlug;
-      }
-    } else {
-      final unhandledStatsByProjectSlug = crashedStatsByProjectSlug[projectWithLatestRelease.project.id];
-      if (unhandledStatsByProjectSlug == null) {
-        return null;
-      } else {
-        return unhandledStatsByProjectSlug;
-      }
-    }
+  SessionState handledAndCrashedSessionStateForProject(Project project) {
+    return _handledAndCrashedSessionStateByProjectId[project.id];
   }
 
+  SessionState crashedSessionStateForProject(Project project) {
+    return _crashedSessionStateByProjectId[project.id];
+  }
+  
   void fetchLatestReleaseOrIssues(int index) {
     if (index < projects.length) {
       final projectWithLatestRelease = projects[index];

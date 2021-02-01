@@ -109,7 +109,7 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                             return ProjectCard(
                                 projectWitLatestRelease.project,
                                 projectWitLatestRelease.release,
-                                viewModel.sessionsForProject(projectWitLatestRelease.project)
+                                viewModel.sessionStateForProject(projectWitLatestRelease.project)
                             );
                           },
                         )),
@@ -123,12 +123,12 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                           ),
                           SessionsChartRow(
                             title: 'Issues',
-                            sessionState: viewModel.sessionStateForProject(viewModel.projects[_index], true),
+                            sessionState: viewModel.handledAndCrashedSessionStateForProject(viewModel.projects[_index].project),
                           ),
                           SessionsChartRow(
                             title: 'Crashes',
-                            sessionState: viewModel.sessionStateForProject(viewModel.projects[_index], false),
-                            parentPoints: viewModel.sessionStateForProject(viewModel.projects[_index], true)?.points, // Crashes are included in issues
+                            sessionState: viewModel.crashedSessionStateForProject(viewModel.projects[_index].project),
+                            parentPoints: viewModel.handledAndCrashedSessionStateForProject(viewModel.projects[_index].project)?.points,
                           ),
                           HealthDivider(
                             onSeeAll: () {},
