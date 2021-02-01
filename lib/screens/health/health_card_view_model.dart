@@ -10,7 +10,7 @@ class HealthCardViewModel {
   HealthCardViewModel.stabilityScore(double value, double valueBefore) {
     color = colorForValue(value);
     if (value != null) {
-      this.value = valueFormatPercent.format(value);
+      this.value = valueFormatPercent.format(value) + '%';
     } else {
       this.value = '--';
     }
