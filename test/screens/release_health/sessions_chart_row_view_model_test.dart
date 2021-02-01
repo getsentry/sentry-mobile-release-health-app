@@ -1,6 +1,6 @@
 import 'package:sentry_mobile/redux/state/session_state.dart';
 import 'package:sentry_mobile/screens/chart/line_chart_point.dart';
-import 'package:sentry_mobile/screens/release_health/sessions_chart_row_view_model.dart';
+import 'package:sentry_mobile/screens/health/sessions_chart_row_view_model.dart';
 import 'package:test/test.dart';
 
 void main() {

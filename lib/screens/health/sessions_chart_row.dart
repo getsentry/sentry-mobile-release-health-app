@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../redux/state/session_state.dart';
 import '../../screens/chart/line_chart.dart';
 import '../../screens/chart/line_chart_point.dart';
-import '../../screens/release_health/sessions_chart_row_view_model.dart';
+import '../../screens/health/sessions_chart_row_view_model.dart';
 import '../../utils/sentry_colors.dart';
 import '../../utils/sentry_icons.dart';
 
