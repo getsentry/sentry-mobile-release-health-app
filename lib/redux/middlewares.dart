@@ -9,6 +9,8 @@ import '../api/sentry_api.dart';
 import '../types/group.dart';
 import '../types/project.dart';
 import '../types/project_with_latest_release.dart';
+import '../types/session_group.dart';
+import '../types/session_group_by.dart';
 import '../utils/throttled_action_collection.dart';
 import 'actions.dart';
 import 'state/app_state.dart';
@@ -90,10 +92,9 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           final List<Group> issues = await api.issues(
               organizationSlug: action.organizationSlug,
               projectSlug: action.projectSlug,
-              fetchUnhandled: action.unhandled
           );
           store.dispatch(
-              FetchIssuesSuccessAction(action.projectSlug, action.unhandled, issues)
+              FetchIssuesSuccessAction(action.projectSlug, issues)
           );
         } catch (e) {
           store.dispatch(FetchIssuesFailureAction(e));
@@ -117,8 +118,37 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
       };
       next(action);
       store.dispatch(thunkAction);
-    }
-    else {
+    } else if (action is FetchSessionsAction) {
+      final thunkAction = (Store<AppState> store) async {
+        final api = SentryApi(store.state.globalState.session);
+        try {
+          final sessions = await api.sessions(
+            organizationSlug: action.organizationSlug,
+            projectId: action.projectId,
+            field: SessionGroup.sumSessionKey,
+            groupBy: SessionGroupBy.sessionStatusKey
+          );
+
+          final sessionsBefore = await api.sessions(
+            organizationSlug: action.organizationSlug,
+            projectId: action.projectId,
+            field: SessionGroup.sumSessionKey,
+            groupBy: SessionGroupBy.sessionStatusKey,
+            statsPeriodStart: '24h',
+            statsPeriodEnd: '12h'
+          );
+
+          store.dispatch(
+              FetchSessionsSuccessAction(action.projectId, sessions, sessionsBefore)
+          );
+        } catch (e) {
+          store.dispatch(FetchSessionsFailureAction(e));
+        }
+        api.close();
+      };
+      next(action);
+      store.dispatch(thunkAction);
+    } else {
       next(action);
     }
   }

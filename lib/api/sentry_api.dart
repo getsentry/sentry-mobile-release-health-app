@@ -11,6 +11,7 @@ import '../types/group.dart';
 import '../types/organization.dart';
 import '../types/project.dart';
 import '../types/release.dart';
+import '../types/sessions.dart';
 import '../types/user.dart';
 
 class SentryApi {
@@ -69,13 +70,10 @@ class SentryApi {
     return _parseResponse(response, (jsonMap) => Release.fromJson(jsonMap)).asFuture;
   }
 
-  Future<List<Group>> issues({@required String organizationSlug, @required String projectSlug, @required bool fetchUnhandled}) async {
+  Future<List<Group>> issues({@required String organizationSlug, @required String projectSlug}) async {
     final queryParameters = {
       'statsPeriod': '24h'
     };
-    if (fetchUnhandled) {
-      queryParameters['query'] = 'handled:no';
-    }
     final response = await client.get(Uri.https(baseUrlName, '$baseUrlPath/projects/$organizationSlug/$projectSlug/issues/', queryParameters),
         headers: _defaultHeader()
     );
@@ -87,6 +85,35 @@ class SentryApi {
         headers: _defaultHeader()
     );
     return _parseResponse(response, (jsonMap) => User.fromJson(jsonMap['user'] as Map<String, dynamic>)).asFuture;
+  }
+
+  Future<Sessions> sessions({
+    @required String organizationSlug,
+    @required String projectId,
+    @required String field,
+    String statsPeriod = '12h',
+    String interval = '1h',
+    String groupBy,
+    String statsPeriodStart,
+    String statsPeriodEnd}) async {
+    final queryParameters = <String, String>{
+      'project': projectId,
+      'interval': interval,
+      'field': field
+    };
+    if (groupBy != null) {
+      queryParameters['groupBy'] = groupBy;
+    }
+    if (statsPeriodStart != null && statsPeriodEnd != null) {
+      queryParameters['statsPeriodStart'] = statsPeriodStart;
+      queryParameters['statsPeriodEnd'] = statsPeriodEnd;
+    } else {
+      queryParameters['statsPeriod'] = statsPeriod;
+    }
+    final response = await client.get(Uri.https(baseUrlName, '$baseUrlPath/organizations/$organizationSlug/sessions/', queryParameters),
+        headers: _defaultHeader()
+    );
+    return _parseResponse(response, (jsonMap) => Sessions.fromJson(jsonMap)).asFuture;
   }
 
   void close() {

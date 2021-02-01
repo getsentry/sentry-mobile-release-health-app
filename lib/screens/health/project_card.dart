@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../redux/state/session_state.dart';
 import '../../screens/shared/avatar_stack.dart';
 import '../../screens/shared/bordered_circle_avatar_view_model.dart';
 import '../../types/project.dart';
@@ -8,22 +9,16 @@ import '../../utils/relative_date_time.dart';
 import '../../utils/sentry_colors.dart';
 import '../chart/line_chart.dart';
 import '../chart/line_chart_data.dart';
-import '../chart/line_chart_point.dart';
 
-class ReleaseCard extends StatelessWidget {
-  ReleaseCard(this.project , this.release);
+class ProjectCard extends StatelessWidget {
+  ProjectCard(this.project, this.release, this.sessions);
 
   final Project project;
   final Release release; // Nullable
+  final SessionState sessions; // Nullable
 
   @override
   Widget build(BuildContext context) {
-
-    final List<LineChartPoint> _data = release
-        ?.stats24h
-        ?.map((stat) => LineChartPoint(stat.timestamp.toDouble(), stat.value.toDouble()))
-        ?.toList()
-        ?? [];
 
     return Card(
         margin: const EdgeInsets.only(top: 8, bottom: 8, left: 0, right: 16),
@@ -52,7 +47,7 @@ class ReleaseCard extends StatelessWidget {
                   child: FittedBox(
                     fit: BoxFit.cover,
                     child: Text(
-                      release?.version ?? '--',
+                      project.slug ?? project.name ?? '--',
                       maxLines: 2,
                       style: Theme.of(context).textTheme.headline5,
                     ),
@@ -63,15 +58,19 @@ class ReleaseCard extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 16, top: 0, right: 16, bottom: 4),
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: Text(
-                    release?.project ?? project.name,
-                    style: Theme.of(context).textTheme.subtitle1,
+                  child: FittedBox(
+                    fit: BoxFit.cover,
+                    child: Text(
+                      release?.version ?? project.latestRelease?.version ?? '--',
+                      maxLines: 1,
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
                   ),
                 ),
               ),
               Expanded(
                 child:
-                  release == null
+                  sessions == null
                   ? Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -89,7 +88,7 @@ class ReleaseCard extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: 12),
                         child: LineChart(
-                          data: LineChartData.prepareData(points: _data),
+                          data: LineChartData.prepareData(points: sessions.points),
                           lineWidth: 5.0,
                           lineColor: Colors.black.withOpacity(0.05),
                           gradientStart: Colors.transparent,
@@ -100,7 +99,7 @@ class ReleaseCard extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 12),
                         child: LineChart(
-                            data: LineChartData.prepareData(points: _data),
+                            data: LineChartData.prepareData(points: sessions.points),
                             lineWidth: 5.0,
                             lineColor: Colors.white,
                             gradientStart: Colors.transparent,

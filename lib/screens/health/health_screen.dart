@@ -9,31 +9,31 @@ import '../../redux/state/app_state.dart';
 import '../../screens/empty/empty_screen.dart';
 import '../../utils/sentry_colors.dart';
 import '../../utils/sentry_icons.dart';
-import 'release_card.dart';
-import 'release_health_chart_row.dart';
-import 'release_health_view_model.dart';
+import 'health_screen_view_model.dart';
+import 'project_card.dart';
+import 'sessions_chart_row.dart';
 
-class ReleaseHealth extends StatefulWidget {
-  const ReleaseHealth({Key key}) : super(key: key);
+class HealthScreen extends StatefulWidget {
+  const HealthScreen({Key key}) : super(key: key);
 
   @override
-  _ReleaseHealthState createState() => _ReleaseHealthState();
+  _HealthScreenState createState() => _HealthScreenState();
 }
 
-class _ReleaseHealthState extends State<ReleaseHealth> {
+class _HealthScreenState extends State<HealthScreen> {
   int _index;
 
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, ReleaseHealthViewModel>(
+    return StoreConnector<AppState, HealthScreenViewModel>(
       builder: (_, viewModel) => _content(viewModel),
-      converter: (store) => ReleaseHealthViewModel.fromStore(store),
+      converter: (store) => HealthScreenViewModel.fromStore(store),
     );
   }
 
-  Widget _content(ReleaseHealthViewModel viewModel) {
+  Widget _content(HealthScreenViewModel viewModel) {
     viewModel.fetchProjectsIfNeeded();
 
     if (viewModel.showProjectEmptyScreen || viewModel.showReleaseEmptyScreen) {
@@ -57,7 +57,7 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
           }
         }
       );
-    } else if (viewModel.showLoadingScreen || viewModel.releases.isEmpty) {
+    } else if (viewModel.showLoadingScreen || viewModel.projects.isEmpty) {
       _index = 0;
 
       return Center(
@@ -101,13 +101,15 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                     SizedBox(
                         height: 200,
                         child: PageView.builder(
-                          itemCount: viewModel.releases.length,
+                          itemCount: viewModel.projects.length,
                           controller: PageController(viewportFraction: 0.9),
                           onPageChanged: (int index) => setState(() => updateIndex(index)),
                           itemBuilder: (context, index) {
-                            return ReleaseCard(
-                                viewModel.releases[index].project,
-                                viewModel.releases[index].release,
+                            final projectWitLatestRelease = viewModel.projects[index];
+                            return ProjectCard(
+                                projectWitLatestRelease.project,
+                                projectWitLatestRelease.release,
+                                viewModel.sessionStateForProject(projectWitLatestRelease.project)
                             );
                           },
                         )),
@@ -119,14 +121,14 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                             onSeeAll: () {},
                             title: 'Charts',
                           ),
-                          ReleaseHealthChartRow(
-                              title: 'Issues',
-                              points: viewModel.statsAsLineChartPoints(viewModel.releases[_index], true),
+                          SessionsChartRow(
+                            title: 'Issues',
+                            sessionState: viewModel.handledAndCrashedSessionStateForProject(viewModel.projects[_index].project),
                           ),
-                          ReleaseHealthChartRow(
-                              title: 'Crashes',
-                              points: viewModel.statsAsLineChartPoints(viewModel.releases[_index], false),
-                              parentPoints: viewModel.statsAsLineChartPoints(viewModel.releases[_index], true), // Crashes are included in issues
+                          SessionsChartRow(
+                            title: 'Crashes',
+                            sessionState: viewModel.crashedSessionStateForProject(viewModel.projects[_index].project),
+                            parentPoints: viewModel.handledAndCrashedSessionStateForProject(viewModel.projects[_index].project)?.points,
                           ),
                           HealthDivider(
                             onSeeAll: () {},
@@ -136,12 +138,12 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                             children: [
                               HealthCard(
                                   title: 'Crash Free Users',
-                                  value: viewModel.releases[_index].release?.crashFreeUsers,
+                                  value: viewModel.projects[_index].release?.crashFreeUsers,
                                   change: 0.04
                               ), // TODO(denis): Use delta from api, https://github.com/getsentry/sentry-mobile/issues/11
                               HealthCard(
                                   title: 'Crash Free Sessions',
-                                  value: viewModel.releases[_index].release?.crashFreeSessions,
+                                  value: viewModel.projects[_index].release?.crashFreeSessions,
                                   change: -0.01
                               ), // TODO(denis): Use delta from api, https://github.com/getsentry/sentry-mobile/issues/11
                             ],

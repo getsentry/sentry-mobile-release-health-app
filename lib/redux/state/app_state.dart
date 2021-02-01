@@ -1,10 +1,13 @@
 import 'dart:io';
 
+import '../../redux/state/session_state.dart';
+import '../../screens/chart/line_chart_point.dart';
 import '../../types/group.dart';
 import '../../types/organization.dart';
 import '../../types/project.dart';
 import '../../types/project_with_latest_release.dart';
-import '../../types/stats.dart';
+import '../../types/session_status.dart';
+import '../../types/sessions.dart';
 import '../../types/user.dart';
 
 class AppState {
@@ -38,8 +41,9 @@ class GlobalState {
       this.projectsWithLatestReleases,
       this.releasesFetchedOnce,
       this.releasesLoading,
-      this.handledIssuesByProjectSlug,
-      this.unhandledIssuesByProjectSlug,
+      this.sessionsByProjectId,
+      this.sessionsBeforeByProjectId,
+      this.issuesByProjectSlug,
       this.selectedOrganization,
       this.selectedProject,
       this.me});
@@ -57,8 +61,9 @@ class GlobalState {
       projectsWithLatestReleases: [],
       releasesFetchedOnce: false,
       releasesLoading: false,
-      handledIssuesByProjectSlug: {},
-      unhandledIssuesByProjectSlug: {},
+      sessionsByProjectId: {},
+      sessionsBeforeByProjectId: {},
+      issuesByProjectSlug: {},
       selectedOrganization: null,
       selectedProject: null,
       me: null
@@ -79,8 +84,10 @@ class GlobalState {
   final bool releasesFetchedOnce;
   final bool releasesLoading;
 
-  final Map<String, List<Group>> handledIssuesByProjectSlug;
-  final Map<String, List<Group>> unhandledIssuesByProjectSlug;
+  final Map<String, Sessions> sessionsByProjectId;
+  final Map<String, Sessions> sessionsBeforeByProjectId; // Interval before sessionsByProjectId
+
+  final Map<String, List<Group>> issuesByProjectSlug;
 
   final Organization selectedOrganization;
   final Project selectedProject;
@@ -100,8 +107,9 @@ class GlobalState {
     List<ProjectWithLatestRelease> projectsWithLatestReleases,
     bool releasesFetchedOnce,
     bool releasesLoading,
-    Map<String, List<Group>> handledIssuesByProjectSlug,
-    Map<String, List<Group>> unhandledIssuesByProjectSlug,
+    Map<String, Sessions> sessionsByProjectId,
+    Map<String, Sessions> sessionsBeforeByProjectId,
+    Map<String, List<Group>> issuesByProjectSlug,
     Organization selectedOrganization,
     Project selectedProject,
     User me,
@@ -118,8 +126,9 @@ class GlobalState {
       projectsWithLatestReleases: projectsWithLatestReleases ?? this.projectsWithLatestReleases,
       releasesFetchedOnce: releasesFetchedOnce ?? this.releasesFetchedOnce,
       releasesLoading: releasesLoading ?? this.releasesLoading,
-      handledIssuesByProjectSlug: handledIssuesByProjectSlug ?? this.handledIssuesByProjectSlug,
-      unhandledIssuesByProjectSlug: unhandledIssuesByProjectSlug ?? this.unhandledIssuesByProjectSlug,
+      sessionsByProjectId: sessionsByProjectId ?? this.sessionsByProjectId,
+      sessionsBeforeByProjectId: sessionsBeforeByProjectId ?? this.sessionsBeforeByProjectId,
+      issuesByProjectSlug: issuesByProjectSlug ?? this.issuesByProjectSlug,
       selectedOrganization: selectedOrganization ?? this.selectedOrganization,
       selectedProject: selectedProject ?? this.selectedProject,
       me: me ?? this.me
@@ -144,17 +153,70 @@ class GlobalState {
     }
   }
 
-  Map<String, Stats> aggregatedStatsByProjectSlug(bool handled) {
-    final aggregatedStatsByProjectSlug = <String, Stats>{};
-    if (handled) {
-      handledIssuesByProjectSlug.forEach((key, value) => {
-        aggregatedStatsByProjectSlug[key] = Stats.aggregated(value.map((e) => e.stats).toList())
-      });
-    } else {
-      unhandledIssuesByProjectSlug.forEach((key, value) => {
-        aggregatedStatsByProjectSlug[key] = Stats.aggregated(value.map((e) => e.stats).toList())
-      });
+  Map<String, SessionState> sessionStateByProjectId(Set<SessionStatus> sessionStatus) {
+    final sessionStateByProjectId = <String, SessionState>{};
+
+    for (final projectId in sessionsByProjectId.keys) {
+      final sessions = sessionsByProjectId[projectId];
+      final previousSession = sessionsBeforeByProjectId[projectId];
+
+      var total = 0;
+      var previousTotal = 0;
+
+      var lineChartPoints = <LineChartPoint>[];
+      var previousLineChartPoints = <LineChartPoint>[];
+
+      if (sessions != null) {
+        final totalAndPoints = createTotalSessionCountAndLinePoints(sessionStatus, sessions);
+        total = totalAndPoints[0] as int;
+        lineChartPoints = totalAndPoints[1] as List<LineChartPoint>;
+      }
+
+      if (previousSession != null) {
+        final totalAndPoints = createTotalSessionCountAndLinePoints(sessionStatus, previousSession);
+        previousTotal = totalAndPoints[0] as int;
+        previousLineChartPoints = totalAndPoints[1] as List<LineChartPoint>;
+      }
+
+      if (sessions != null) {
+        sessionStateByProjectId[projectId] = SessionState(
+          projectId: projectId,
+          sessionCount: total,
+          previousSessionCount: previousTotal,
+          points: lineChartPoints,
+          previousPoints: previousLineChartPoints
+        );
+      }
     }
-    return aggregatedStatsByProjectSlug;
+    return sessionStateByProjectId;
+  }
+
+  // Returns the total number of sessions and the line chart points for individual intervals.
+  List<dynamic> createTotalSessionCountAndLinePoints(Set<SessionStatus> sessionStatus, Sessions sessions) {
+    final groups = sessions.groups.where((element) =>
+        sessionStatus.contains(element.by.sessionStatus)
+    ).toList();
+
+    var total = 0;
+    for (final group in groups) {
+      total += group.totals.sumSession;
+    }
+
+    final lineChartPoints = <LineChartPoint>[];
+    for (var index = 0; index < sessions.intervals.length; index++) {
+      final interval = sessions.intervals[index];
+      var sum = 0;
+
+      for (final group in groups) {
+        sum += group.series.sumSession[index];
+      }
+      lineChartPoints.add(
+        LineChartPoint(
+          interval.millisecondsSinceEpoch.toDouble(),
+          sum.toDouble()
+        )
+      );
+    }
+    return [total, lineChartPoints];
   }
 }

@@ -1,15 +1,15 @@
-
+import '../../redux/state/session_state.dart';
 import '../../screens/chart/line_chart_data.dart';
 import '../../screens/chart/line_chart_point.dart';
 
-class ReleaseHealthChartRowViewModel {
+class SessionsChartRowViewModel {
 
-  ReleaseHealthChartRowViewModel.createByHalvingPoints(List<LineChartPoint> points, List<LineChartPoint> parentPoints) {
-    if (points == null) {
+  SessionsChartRowViewModel.create(SessionState sessionState, List<LineChartPoint> parentPoints) {
+    if (sessionState == null || sessionState.points == null) {
       data = null;
       percentChange = 0.0;
       numberOfIssues = 0;
-    } else if (points.length < 2) {
+    } else if (sessionState.points.length < 2) {
       data = LineChartData.prepareData(
           points: [
             LineChartPoint(0, 0),
@@ -19,20 +19,19 @@ class ReleaseHealthChartRowViewModel {
       percentChange = 0.0;
       numberOfIssues = data.countY.toInt();
     } else {
-      final middle = (points.length / 2).ceil();
-      
-      final trailingPoints = points.sublist(middle, points.length);
-      final leadingPoints = points.sublist(middle - trailingPoints.length, middle);
 
-      if (parentPoints.isNotEmpty) {
+      if (parentPoints != null && parentPoints.isNotEmpty) {
         final parent = LineChartData.prepareData(points: parentPoints);
-        data = LineChartData.prepareData(points: trailingPoints, preferredMinY: parent.minY, preferredMaxY: parent.maxY);
+        data = LineChartData.prepareData(points: sessionState.points, preferredMinY: parent.minY, preferredMaxY: parent.maxY);
       } else {
-        data = LineChartData.prepareData(points: trailingPoints);
+        data = LineChartData.prepareData(points: sessionState.points);
       }
 
-      final leading = LineChartData.prepareData(points: leadingPoints);
-      percentChange = _percentChange(leading.countY, data.countY);
+      if (sessionState.previousSessionCount != null) {
+        percentChange = _percentChange(sessionState.previousSessionCount.toDouble(), sessionState.sessionCount.toDouble());
+      } else {
+        percentChange = 0.0;
+      }
       numberOfIssues = data.countY.toInt();
     }
   }
