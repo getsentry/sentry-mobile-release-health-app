@@ -199,13 +199,16 @@ class GlobalState {
     ).toList();
 
     var total = 0;
+    for (final group in groups) {
+      total += group.totals.sumSession;
+    }
+
     final lineChartPoints = <LineChartPoint>[];
     for (var index = 0; index < sessions.intervals.length; index++) {
       final interval = sessions.intervals[index];
       var sum = 0;
 
       for (final group in groups) {
-        total += group.totals.sumSession;
         sum += group.series.sumSession[index];
       }
       lineChartPoints.add(
