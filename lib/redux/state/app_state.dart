@@ -46,6 +46,8 @@ class GlobalState {
       this.sessionsBeforeByProjectId,
       this.stabilityScoreByProjectId,
       this.stabilityScoreBeforeByProjectId,
+      this.apdexByProjectId,
+      this.apdexBeforeByProjectId,
       this.issuesByProjectSlug,
       this.selectedOrganization,
       this.selectedProject,
@@ -69,6 +71,8 @@ class GlobalState {
       issuesByProjectSlug: {},
       stabilityScoreByProjectId: {},
       stabilityScoreBeforeByProjectId: {},
+      apdexByProjectId: {},
+      apdexBeforeByProjectId: {},
       selectedOrganization: null,
       selectedProject: null,
       me: null
@@ -93,6 +97,8 @@ class GlobalState {
   final Map<String, Sessions> sessionsBeforeByProjectId; // Interval before sessionsByProjectId
   final Map<String, double> stabilityScoreByProjectId;
   final Map<String, double> stabilityScoreBeforeByProjectId; // Interval before stabilityScoreByProjectId
+  final Map<String, double> apdexByProjectId;
+  final Map<String, double> apdexBeforeByProjectId; // Interval before apdexByProjectId
 
   final Map<String, List<Group>> issuesByProjectSlug;
 
@@ -118,6 +124,8 @@ class GlobalState {
     Map<String, Sessions> sessionsBeforeByProjectId,
     Map<String, double> stabilityScoreByProjectId,
     Map<String, double> stabilityScoreBeforeByProjectId,
+    Map<String, double> apdexByProjectId,
+    Map<String, double> apdexBeforeByProjectId,
     Map<String, List<Group>> issuesByProjectSlug,
     Organization selectedOrganization,
     Project selectedProject,
@@ -139,6 +147,8 @@ class GlobalState {
       sessionsBeforeByProjectId: sessionsBeforeByProjectId ?? this.sessionsBeforeByProjectId,
       stabilityScoreByProjectId: stabilityScoreByProjectId ?? this.stabilityScoreByProjectId,
       stabilityScoreBeforeByProjectId: stabilityScoreBeforeByProjectId ?? this.stabilityScoreBeforeByProjectId,
+      apdexByProjectId: apdexByProjectId ?? this.apdexByProjectId,
+      apdexBeforeByProjectId: apdexBeforeByProjectId ?? this.apdexBeforeByProjectId,
       issuesByProjectSlug: issuesByProjectSlug ?? this.issuesByProjectSlug,
       selectedOrganization: selectedOrganization ?? this.selectedOrganization,
       selectedProject: selectedProject ?? this.selectedProject,
