@@ -9,8 +9,8 @@ import '../../redux/state/app_state.dart';
 import '../../screens/empty/empty_screen.dart';
 import '../../utils/sentry_colors.dart';
 import '../../utils/sentry_icons.dart';
-import 'project_card.dart';
 import 'health_screen_view_model.dart';
+import 'project_card.dart';
 import 'sessions_chart_row.dart';
 
 class HealthScreen extends StatefulWidget {
