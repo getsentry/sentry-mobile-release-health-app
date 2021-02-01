@@ -148,6 +148,41 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
       };
       next(action);
       store.dispatch(thunkAction);
+    } else if (action is FetchApdexAction) {
+      final thunkAction = (Store<AppState> store) async {
+        final api = SentryApi(store.state.globalState.session);
+        try {
+
+          final now = DateTime.now();
+          final twelveHoursAgo = now.add(Duration(hours: -12));
+          final twentyFourHoursAgo = now.add(Duration(hours: -24));
+
+          final apdex = await api.apdex(
+            apdexThreshold: action.apdexThreshold,
+            organizationSlug: action.organizationSlug,
+            projectId: action.projectId,
+            start: now,
+            end: twelveHoursAgo
+          );
+
+          final apdexBefore = await api.apdex(
+              apdexThreshold: action.apdexThreshold,
+              organizationSlug: action.organizationSlug,
+              projectId: action.projectId,
+              start: twelveHoursAgo,
+              end: twentyFourHoursAgo
+          );
+
+          store.dispatch(
+              FetchApdexSuccessAction(action.projectId, apdex, apdexBefore)
+          );
+        } catch (e) {
+          store.dispatch(FetchApdexFailureAction(e));
+        }
+        api.close();
+      };
+      next(action);
+      store.dispatch(thunkAction);
     } else {
       next(action);
     }

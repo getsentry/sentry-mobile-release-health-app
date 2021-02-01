@@ -172,10 +172,11 @@ class FetchApdexAction {
 }
 
 class FetchApdexSuccessAction {
-  FetchApdexSuccessAction(this.projectId, this.apdex);
+  FetchApdexSuccessAction(this.projectId, this.apdex, this.apdexBefore);
 
   final String projectId;
   final double apdex;
+  final double apdexBefore;
 }
 
 class FetchApdexFailureAction extends ApiFailureAction {
