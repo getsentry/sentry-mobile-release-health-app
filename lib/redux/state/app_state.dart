@@ -89,7 +89,7 @@ class GlobalState {
 
   final Map<String, Sessions> sessionsByProjectId;
   final Map<String, Sessions> sessionsBeforeByProjectId; // Interval before sessionsByProjectId
-  final Map<String, Double> stabilityScoreByProjectId;
+  final Map<String, double> stabilityScoreByProjectId;
 
   final Map<String, List<Group>> issuesByProjectSlug;
 
@@ -113,7 +113,7 @@ class GlobalState {
     bool releasesLoading,
     Map<String, Sessions> sessionsByProjectId,
     Map<String, Sessions> sessionsBeforeByProjectId,
-    Map<String, Double> stabilityScoreByProjectId,
+    Map<String, double> stabilityScoreByProjectId,
     Map<String, List<Group>> issuesByProjectSlug,
     Organization selectedOrganization,
     Project selectedProject,
