@@ -21,6 +21,11 @@ extension StabilityScore on Sessions {
     if (healthy == null || errored == null || abnormal == null || crashed == null) {
       return null;
     }
-    return 100 - (crashed / (healthy + abnormal + crashed + errored)) * 100;
+    final sum = healthy + abnormal + crashed + errored;
+    if (sum == 0) {
+      return 100;
+    } else {
+      return 100 - (crashed / sum) * 100;
+    }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:redux/redux.dart';
+import 'package:sentry_mobile/screens/health/health_card_view_model.dart';
 
 import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
@@ -14,6 +15,8 @@ class HealthScreenViewModel {
       _sessionStateByProjectId = store.state.globalState.sessionStateByProjectId(SessionStatus.values.toSet()),
       _handledAndCrashedSessionStateByProjectId = store.state.globalState.sessionStateByProjectId({SessionStatus.errored, SessionStatus.abnormal, SessionStatus.crashed}),
       _crashedSessionStateByProjectId = store.state.globalState.sessionStateByProjectId({SessionStatus.crashed}),
+      _stabilityScoreByProjectId = store.state.globalState.stabilityScoreByProjectId,
+      _stabilityScoreBeforeByProjectId = store.state.globalState.stabilityScoreBeforeByProjectId,
       _fetchProjectsNeeded = !store.state.globalState.projectsFetchedOnce &&
         !store.state.globalState.projectsLoading,
       showProjectEmptyScreen = !store.state.globalState.projectsLoading &&
@@ -32,6 +35,9 @@ class HealthScreenViewModel {
   final Map<String, SessionState> _handledAndCrashedSessionStateByProjectId;
   final Map<String, SessionState> _crashedSessionStateByProjectId;
 
+  final Map<String, double> _stabilityScoreByProjectId;
+  final Map<String, double> _stabilityScoreBeforeByProjectId;
+  
   final bool _fetchProjectsNeeded;
 
   final bool showProjectEmptyScreen;
@@ -58,6 +64,13 @@ class HealthScreenViewModel {
 
   SessionState crashedSessionStateForProject(Project project) {
     return _crashedSessionStateByProjectId[project.id];
+  }
+  
+  HealthCardViewModel healthCardViewModelForProject(Project project) {
+    return HealthCardViewModel.changeFromValueBefore(
+      _stabilityScoreByProjectId[project.id],
+      _stabilityScoreBeforeByProjectId[project.id],
+    );
   }
   
   void fetchLatestReleaseOrIssues(int index) {
