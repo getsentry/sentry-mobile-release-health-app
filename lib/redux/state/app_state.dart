@@ -45,6 +45,7 @@ class GlobalState {
       this.sessionsByProjectId,
       this.sessionsBeforeByProjectId,
       this.stabilityScoreByProjectId,
+      this.stabilityScoreBeforeByProjectId,
       this.issuesByProjectSlug,
       this.selectedOrganization,
       this.selectedProject,
@@ -67,6 +68,7 @@ class GlobalState {
       sessionsBeforeByProjectId: {},
       issuesByProjectSlug: {},
       stabilityScoreByProjectId: {},
+      stabilityScoreBeforeByProjectId: {},
       selectedOrganization: null,
       selectedProject: null,
       me: null
@@ -90,6 +92,7 @@ class GlobalState {
   final Map<String, Sessions> sessionsByProjectId;
   final Map<String, Sessions> sessionsBeforeByProjectId; // Interval before sessionsByProjectId
   final Map<String, double> stabilityScoreByProjectId;
+  final Map<String, double> stabilityScoreBeforeByProjectId; // Interval before stabilityScoreByProjectId
 
   final Map<String, List<Group>> issuesByProjectSlug;
 
@@ -114,6 +117,7 @@ class GlobalState {
     Map<String, Sessions> sessionsByProjectId,
     Map<String, Sessions> sessionsBeforeByProjectId,
     Map<String, double> stabilityScoreByProjectId,
+    Map<String, double> stabilityScoreBeforeByProjectId,
     Map<String, List<Group>> issuesByProjectSlug,
     Organization selectedOrganization,
     Project selectedProject,
@@ -134,6 +138,7 @@ class GlobalState {
       sessionsByProjectId: sessionsByProjectId ?? this.sessionsByProjectId,
       sessionsBeforeByProjectId: sessionsBeforeByProjectId ?? this.sessionsBeforeByProjectId,
       stabilityScoreByProjectId: stabilityScoreByProjectId ?? this.stabilityScoreByProjectId,
+      stabilityScoreBeforeByProjectId: stabilityScoreBeforeByProjectId ?? this.stabilityScoreBeforeByProjectId,
       issuesByProjectSlug: issuesByProjectSlug ?? this.issuesByProjectSlug,
       selectedOrganization: selectedOrganization ?? this.selectedOrganization,
       selectedProject: selectedProject ?? this.selectedProject,

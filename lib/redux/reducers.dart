@@ -2,6 +2,7 @@ import 'package:redux/redux.dart';
 
 import '../api/api_errors.dart';
 import '../types/project_with_latest_release.dart';
+import '../utils/stability_score.dart';
 import 'actions.dart';
 import 'state/app_state.dart';
 
@@ -144,15 +145,20 @@ GlobalState _fetchSessionsSuccessAction(GlobalState state, FetchSessionsSuccessA
   final sessionsByProjectId = state.sessionsByProjectId;
   sessionsByProjectId[action.projectId] = action.sessions;
 
+  final stabilityScoreByProjectId = state.stabilityScoreByProjectId;
+  stabilityScoreByProjectId[action.projectId] = action.sessions.stabilityScore();
+
   final sessionsBeforeByProjectId = state.sessionsBeforeByProjectId;
   sessionsBeforeByProjectId[action.projectId] = action.sessionsBefore;
 
-  final stabilityScoreByProjectId = state.stabilityScoreByProjectId;
-  stabilityScoreByProjectId[action.projectId] = action.sessions.sta;
+  final stabilityScoreBeforeByProjectId = state.stabilityScoreBeforeByProjectId;
+  stabilityScoreBeforeByProjectId[action.projectId] = action.sessionsBefore.stabilityScore();
 
   return state.copyWith(
       sessionsByProjectId: sessionsByProjectId,
-      sessionsBeforeByProjectId: sessionsBeforeByProjectId
+      stabilityScoreByProjectId: stabilityScoreByProjectId,
+      sessionsBeforeByProjectId: sessionsBeforeByProjectId,
+      stabilityScoreBeforeByProjectId: stabilityScoreBeforeByProjectId
   );
 }
 
