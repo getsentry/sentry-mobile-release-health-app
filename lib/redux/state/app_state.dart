@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import '../../redux/state/session_state.dart';
@@ -43,6 +44,7 @@ class GlobalState {
       this.releasesLoading,
       this.sessionsByProjectId,
       this.sessionsBeforeByProjectId,
+      this.stabilityScoreByProjectId,
       this.issuesByProjectSlug,
       this.selectedOrganization,
       this.selectedProject,
@@ -64,6 +66,7 @@ class GlobalState {
       sessionsByProjectId: {},
       sessionsBeforeByProjectId: {},
       issuesByProjectSlug: {},
+      stabilityScoreByProjectId: {},
       selectedOrganization: null,
       selectedProject: null,
       me: null
@@ -86,6 +89,7 @@ class GlobalState {
 
   final Map<String, Sessions> sessionsByProjectId;
   final Map<String, Sessions> sessionsBeforeByProjectId; // Interval before sessionsByProjectId
+  final Map<String, Double> stabilityScoreByProjectId;
 
   final Map<String, List<Group>> issuesByProjectSlug;
 
@@ -109,6 +113,7 @@ class GlobalState {
     bool releasesLoading,
     Map<String, Sessions> sessionsByProjectId,
     Map<String, Sessions> sessionsBeforeByProjectId,
+    Map<String, Double> stabilityScoreByProjectId,
     Map<String, List<Group>> issuesByProjectSlug,
     Organization selectedOrganization,
     Project selectedProject,
@@ -128,6 +133,7 @@ class GlobalState {
       releasesLoading: releasesLoading ?? this.releasesLoading,
       sessionsByProjectId: sessionsByProjectId ?? this.sessionsByProjectId,
       sessionsBeforeByProjectId: sessionsBeforeByProjectId ?? this.sessionsBeforeByProjectId,
+      stabilityScoreByProjectId: stabilityScoreByProjectId ?? this.stabilityScoreByProjectId,
       issuesByProjectSlug: issuesByProjectSlug ?? this.issuesByProjectSlug,
       selectedOrganization: selectedOrganization ?? this.selectedOrganization,
       selectedProject: selectedProject ?? this.selectedProject,

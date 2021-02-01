@@ -146,7 +146,9 @@ GlobalState _fetchSessionsSuccessAction(GlobalState state, FetchSessionsSuccessA
 
   final sessionsBeforeByProjectId = state.sessionsBeforeByProjectId;
   sessionsBeforeByProjectId[action.projectId] = action.sessionsBefore;
-  
+
+  final stabilityScoreByProjectId = sta
+
   return state.copyWith(
       sessionsByProjectId: sessionsByProjectId,
       sessionsBeforeByProjectId: sessionsBeforeByProjectId
