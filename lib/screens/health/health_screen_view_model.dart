@@ -17,6 +17,8 @@ class HealthScreenViewModel {
       _crashedSessionStateByProjectId = store.state.globalState.sessionStateByProjectId({SessionStatus.crashed}),
       _stabilityScoreByProjectId = store.state.globalState.stabilityScoreByProjectId,
       _stabilityScoreBeforeByProjectId = store.state.globalState.stabilityScoreBeforeByProjectId,
+      _apdexByProjectId = store.state.globalState.apdexByProjectId,
+      _apdexBeforeByProjectId = store.state.globalState.apdexBeforeByProjectId,
       _fetchProjectsNeeded = !store.state.globalState.projectsFetchedOnce &&
         !store.state.globalState.projectsLoading,
       showProjectEmptyScreen = !store.state.globalState.projectsLoading &&
@@ -37,6 +39,9 @@ class HealthScreenViewModel {
 
   final Map<String, double> _stabilityScoreByProjectId;
   final Map<String, double> _stabilityScoreBeforeByProjectId;
+
+  final Map<String, double> _apdexByProjectId;
+  final Map<String, double> _apdexBeforeByProjectId;
   
   final bool _fetchProjectsNeeded;
 
@@ -66,10 +71,17 @@ class HealthScreenViewModel {
     return _crashedSessionStateByProjectId[project.id];
   }
   
-  HealthCardViewModel healthCardViewModelForProject(Project project) {
-    return HealthCardViewModel.changeFromValueBefore(
+  HealthCardViewModel stabilityScoreForProject(Project project) {
+    return HealthCardViewModel.stabilityScore(
       _stabilityScoreByProjectId[project.id],
       _stabilityScoreBeforeByProjectId[project.id],
+    );
+  }
+
+  HealthCardViewModel apdexForProject(Project project) {
+    return HealthCardViewModel.apdex(
+      _apdexByProjectId[project.id],
+      _apdexBeforeByProjectId[project.id],
     );
   }
   

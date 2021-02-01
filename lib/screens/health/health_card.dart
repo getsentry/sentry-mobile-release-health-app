@@ -12,33 +12,6 @@ class HealthCard extends StatelessWidget {
   final String title;
   final HealthCardViewModel viewModel;
 
-  final warningThreshold = 99.5;
-  final dangerThreshold = 98;
-  final valueFormat = NumberFormat('###.##');
-
-  Color getColor() {
-    return viewModel.value == null
-        ? SentryColors.lavenderGray
-        : viewModel.value > warningThreshold
-        ? SentryColors.shamrock
-        : viewModel.value > dangerThreshold ? SentryColors.lightningYellow : SentryColors.burntSienna;
-  }
-
-  String getTrendSign() {
-    return viewModel.change > 0 ? '+' : '';
-  }
-
-  Icon getTrendIcon() {
-    if (viewModel.change == null || viewModel.change == 0) {
-      return null;
-    }
-    return viewModel.change == 0
-        ? Icon(SentryIcons.trend_same, color: SentryColors.lavenderGray, size: 8.0)
-        : viewModel.change > 0
-        ? Icon(SentryIcons.trend_up, color: SentryColors.shamrock, size: 8.0)
-        : Icon(SentryIcons.trend_down, color: SentryColors.burntSienna, size: 8.0);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -54,9 +27,9 @@ class HealthCard extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(top: 8),
                 child: Text(
-                  viewModel.value != null ? valueFormat.format(viewModel.value) + '%' : '--',
+                  viewModel.value,
                   style: TextStyle(
-                    color: getColor(),
+                    color: viewModel.color,
                     fontWeight: FontWeight.w500,
                     fontSize: 17,
                   ),
@@ -78,7 +51,7 @@ class HealthCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          viewModel.change != null ? getTrendSign() +valueFormat.format(viewModel.change) + '%' : '--',
+                          viewModel.change,
                           style: TextStyle(
                             color: SentryColors.mamba,
                             fontSize: 13,
@@ -86,7 +59,7 @@ class HealthCard extends StatelessWidget {
                         ),
                         Padding(
                           padding: EdgeInsets.only(left: 5),
-                          child: getTrendIcon() ?? Spacer(),
+                          child: viewModel.trendIcon ?? Spacer(),
                         )
                       ]
                   )

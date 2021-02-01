@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:sentry_mobile/screens/health/health_card_view_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../redux/state/app_state.dart';
@@ -138,11 +137,11 @@ class _HealthScreenState extends State<HealthScreen> {
                             children: [
                               HealthCard(
                                   title: 'Stability Score',
-                                  viewModel: viewModel.healthCardViewModelForProject(viewModel.projects[_index]?.project),
+                                  viewModel: viewModel.stabilityScoreForProject(viewModel.projects[_index]?.project),
                               ),
                               HealthCard(
                                 title: 'AppDex',
-                                viewModel: HealthCardViewModel(null, null),
+                                viewModel: viewModel.apdexForProject(viewModel.projects[_index]?.project),
                               ),
                             ],
                           )
