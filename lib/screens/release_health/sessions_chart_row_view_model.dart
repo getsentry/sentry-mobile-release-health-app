@@ -1,6 +1,4 @@
-
-import 'package:sentry_mobile/redux/state/session_state.dart';
-
+import '../../redux/state/session_state.dart';
 import '../../screens/chart/line_chart_data.dart';
 import '../../screens/chart/line_chart_point.dart';
 

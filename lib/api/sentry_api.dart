@@ -5,13 +5,13 @@ import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:sentry_flutter/sentry_flutter.dart' as sentry;
-import 'package:sentry_mobile/types/sessions.dart';
 
 import '../api/api_errors.dart';
 import '../types/group.dart';
 import '../types/organization.dart';
 import '../types/project.dart';
 import '../types/release.dart';
+import '../types/sessions.dart';
 import '../types/user.dart';
 
 class SentryApi {

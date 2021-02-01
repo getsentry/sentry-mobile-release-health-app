@@ -1,15 +1,11 @@
 import 'package:redux/redux.dart';
-import 'package:sentry_mobile/redux/state/session_state.dart';
-import 'package:sentry_mobile/types/project.dart';
-import 'package:sentry_mobile/types/session_status.dart';
-import 'package:sentry_mobile/types/sessions.dart';
 
 import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
-import '../../screens/chart/line_chart_point.dart';
+import '../../redux/state/session_state.dart';
+import '../../types/project.dart';
 import '../../types/project_with_latest_release.dart';
-import '../../types/stat.dart';
-import '../../types/stats.dart';
+import '../../types/session_status.dart';
 
 class ReleaseHealthViewModel {
   ReleaseHealthViewModel.fromStore(Store<AppState> store)

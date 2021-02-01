@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:sentry_mobile/types/session_status.dart';
+import 'session_status.dart';
 
 part 'session_group_by.g.dart';
 

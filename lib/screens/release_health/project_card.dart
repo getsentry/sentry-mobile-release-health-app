@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sentry_mobile/redux/state/session_state.dart';
-import 'package:sentry_mobile/screens/shared/bordered_circle_avatar_view_model.dart';
 
+import '../../redux/state/session_state.dart';
 import '../../screens/shared/avatar_stack.dart';
+import '../../screens/shared/bordered_circle_avatar_view_model.dart';
 import '../../types/project.dart';
 import '../../types/release.dart';
 import '../../utils/relative_date_time.dart';

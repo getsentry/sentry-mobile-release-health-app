@@ -2,9 +2,6 @@ import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:redux/redux.dart';
-import 'package:sentry_mobile/types/session_group.dart';
-import 'package:sentry_mobile/types/session_group_by.dart';
-import 'package:sentry_mobile/types/session_group_series.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 
@@ -12,6 +9,8 @@ import '../api/sentry_api.dart';
 import '../types/group.dart';
 import '../types/project.dart';
 import '../types/project_with_latest_release.dart';
+import '../types/session_group.dart';
+import '../types/session_group_by.dart';
 import '../utils/throttled_action_collection.dart';
 import 'actions.dart';
 import 'state/app_state.dart';

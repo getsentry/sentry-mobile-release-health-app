@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sentry_mobile/redux/state/session_state.dart';
 
+import '../../redux/state/session_state.dart';
 import '../../screens/chart/line_chart.dart';
 import '../../screens/chart/line_chart_point.dart';
 import '../../screens/release_health/sessions_chart_row_view_model.dart';
