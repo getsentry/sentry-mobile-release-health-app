@@ -24,17 +24,6 @@ class HealthCard extends StatelessWidget {
         : viewModel.value > dangerThreshold ? SentryColors.lightningYellow : SentryColors.burntSienna;
   }
 
-  Icon getIcon(Color color) {
-    if (viewModel.value == null) {
-      return null;
-    }
-    return viewModel.value > warningThreshold
-        ? Icon(SentryIcons.status_ok, color: color, size: 20.0)
-        : viewModel.value > dangerThreshold
-        ? Icon(SentryIcons.status_warning, color: color, size: 20.0)
-        : Icon(SentryIcons.status_error, color: color, size: 20.0);
-  }
-
   String getTrendSign() {
     return viewModel.change > 0 ? '+' : '';
   }
@@ -63,19 +52,14 @@ class HealthCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
-                  padding: EdgeInsets.only(top: 8, bottom: 8),
-                  child: CircleAvatar(
-                    radius: 24,
-                    backgroundColor: getColor().withAlpha(0x19),
-                    child: getIcon(getColor()),
-                  )
-              ),
-              Text(
-                viewModel.value != null ? valueFormat.format(viewModel.value) + '%' : '--',
-                style: TextStyle(
-                  color: getColor(),
-                  fontWeight: FontWeight.w500,
-                  fontSize: 17,
+                padding: EdgeInsets.only(top: 8),
+                child: Text(
+                  viewModel.value != null ? valueFormat.format(viewModel.value) + '%' : '--',
+                  style: TextStyle(
+                    color: getColor(),
+                    fontWeight: FontWeight.w500,
+                    fontSize: 17,
+                  ),
                 ),
               ),
               Padding(
