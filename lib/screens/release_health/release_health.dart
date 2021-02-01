@@ -10,7 +10,7 @@ import '../../screens/empty/empty_screen.dart';
 import '../../utils/sentry_colors.dart';
 import '../../utils/sentry_icons.dart';
 import 'project_card.dart';
-import 'release_health_chart_row.dart';
+import 'sessions_chart_row.dart';
 import 'release_health_view_model.dart';
 
 class ReleaseHealth extends StatefulWidget {
@@ -121,11 +121,11 @@ class _ReleaseHealthState extends State<ReleaseHealth> {
                             onSeeAll: () {},
                             title: 'Charts',
                           ),
-                          ReleaseHealthChartRow(
+                          SessionsChartRow(
                             title: 'Issues',
                             sessionState: viewModel.sessionStateForProject(viewModel.projects[_index], true),
                           ),
-                          ReleaseHealthChartRow(
+                          SessionsChartRow(
                             title: 'Crashes',
                             sessionState: viewModel.sessionStateForProject(viewModel.projects[_index], false),
                             parentPoints: viewModel.sessionStateForProject(viewModel.projects[_index], true)?.points, // Crashes are included in issues

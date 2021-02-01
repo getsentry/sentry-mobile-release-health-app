@@ -4,9 +4,9 @@ import 'package:sentry_mobile/redux/state/session_state.dart';
 import '../../screens/chart/line_chart_data.dart';
 import '../../screens/chart/line_chart_point.dart';
 
-class ReleaseHealthChartRowViewModel {
+class SessionsChartRowViewModel {
 
-  ReleaseHealthChartRowViewModel.create(SessionState sessionState, List<LineChartPoint> parentPoints) {
+  SessionsChartRowViewModel.create(SessionState sessionState, List<LineChartPoint> parentPoints) {
     if (sessionState == null || sessionState.points == null) {
       data = null;
       percentChange = 0.0;

@@ -1,6 +1,6 @@
 import 'package:sentry_mobile/redux/state/session_state.dart';
 import 'package:sentry_mobile/screens/chart/line_chart_point.dart';
-import 'package:sentry_mobile/screens/release_health/release_health_chart_row_view_model.dart';
+import 'package:sentry_mobile/screens/release_health/sessions_chart_row_view_model.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -25,7 +25,7 @@ void main() {
           previousPoints: pointsBefore
       );
 
-      final sut = ReleaseHealthChartRowViewModel.create(sessionState, []);
+      final sut = SessionsChartRowViewModel.create(sessionState, []);
       expect(sut.data.points,
         equals([LineChartPoint(0, 0), LineChartPoint(1, 10)])
       );
@@ -50,7 +50,7 @@ void main() {
           previousPoints: pointsBefore
       );
 
-      final sut = ReleaseHealthChartRowViewModel.create(sessionState, []);
+      final sut = SessionsChartRowViewModel.create(sessionState, []);
       expect(sut.percentChange,
           equals(100.0)
       );
@@ -75,7 +75,7 @@ void main() {
           previousPoints: pointsBefore
       );
 
-      final sut = ReleaseHealthChartRowViewModel.create(sessionState, []);
+      final sut = SessionsChartRowViewModel.create(sessionState, []);
       expect(sut.percentChange,
           equals(-20.0)
       );
@@ -105,7 +105,7 @@ void main() {
         LineChartPoint(1, 1000)
       ];
 
-      final sut = ReleaseHealthChartRowViewModel.create(sessionState, parentPoints);
+      final sut = SessionsChartRowViewModel.create(sessionState, parentPoints);
       expect(sut.data.maxY,
           equals(1000)
       );
@@ -120,7 +120,7 @@ void main() {
           previousPoints: []
       );
 
-      final sut = ReleaseHealthChartRowViewModel.create(sessionState, []);
+      final sut = SessionsChartRowViewModel.create(sessionState, []);
       expect(sut.data.points,
           equals([LineChartPoint(0, 0), LineChartPoint(1, 0)])
       );
