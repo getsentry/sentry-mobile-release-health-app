@@ -139,12 +139,13 @@ class SentryApi {
   }
 
   Map<String, String> _defaultHeader() {
-    final headerFields = <String, String>{
-      'Cookie': session.toString(),
-    };
+    final headerFields = <String, String>{};
+    var cookie = 'session=${session.value};';
     if (sc != null) {
-      headerFields['X-CSRFToken'] = sc.toString();
+      cookie += ' sc=${sc.value};';
+      headerFields['X-CSRFToken'] = sc.value;
     }
+    headerFields['Cookie'] = cookie;
     return headerFields;
   }
 
