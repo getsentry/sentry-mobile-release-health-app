@@ -26,7 +26,7 @@ class HealthCardViewModel {
   }
 
   HealthCardViewModel.apdex(double value, double valueBefore) {
-    color = colorForValue(value != null ? value * 100 : null);
+    color = value == null ? SentryColors.lavenderGray : SentryColors.revolver;
     if (value != null) {
       this.value = valueFormatApdex.format(value);
     } else {
