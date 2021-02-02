@@ -27,14 +27,14 @@ class HealthCardViewModel {
   HealthCardViewModel.apdex(double value, double valueBefore) {
     color = colorForValue(value != null ? value * 100 : null);
     if (value != null) {
-      this.value = valueFormatRelative.format(value);
+      this.value = valueFormatApdex.format(value);
     } else {
       this.value = '--';
     }
     if (value != null && valueBefore != null && valueBefore != 0.0) {
-      final changeValue = value / valueBefore - 1;
+      final changeValue = value - valueBefore;
       final trendSign = changeValue > 0 ? '+' : '';
-      change = trendSign + valueFormatPercent.format(changeValue * 100) + '%';
+      change = trendSign + valueFormatApdex.format(changeValue);
       trendIcon = getTrendIcon(changeValue);
     } else {
       change = '--';
@@ -42,7 +42,7 @@ class HealthCardViewModel {
   }
 
   static final valueFormatPercent = NumberFormat('###.##');
-  static final valueFormatRelative = NumberFormat('#.##');
+  static final valueFormatApdex = NumberFormat('#.###');
   static const warningThreshold = 99.5;
   static const dangerThreshold = 98;
 

@@ -140,7 +140,7 @@ class _HealthScreenState extends State<HealthScreen> {
                                   viewModel: viewModel.stabilityScoreForProject(viewModel.projects[_index]?.project),
                               ),
                               HealthCard(
-                                title: 'AppDex',
+                                title: 'Apdex',
                                 viewModel: viewModel.apdexForProject(viewModel.projects[_index]?.project),
                               ),
                             ],
