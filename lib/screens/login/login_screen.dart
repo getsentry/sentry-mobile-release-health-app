@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:sentry_mobile/redux/actions.dart';
 
 import '../../redux/state/app_state.dart';
 import '../../utils/sentry_colors.dart';
@@ -89,14 +90,14 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Future<Cookie> _navigateAndWaitForSession() async {
+  Future<LoginAction> _navigateAndWaitForSession() async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
         fullscreenDialog: true,
         builder: (context) => LoginWebView()
       ),
-    ) as Result<Cookie>;
+    ) as Result<LoginAction>;
 
     return result != null ? result.asFuture : null;
   }

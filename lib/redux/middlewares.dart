@@ -20,7 +20,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
   dynamic call(Store<AppState> store, action, next) {
     if (action is FetchOrganizationsAndProjectsAction) {
       final thunkAction = (Store<AppState> store) async {
-        final api = SentryApi(store.state.globalState.session);
+        final api = SentryApi(store.state.globalState.session, store.state.globalState.sc);
         try {
           final organizations = await api.organizations();
           final Map<String, List<Project>> projectsByOrganizationId = {};
@@ -40,7 +40,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
       store.dispatch(thunkAction);
     } else if (action is FetchLatestReleasesAction) {
       final thunkAction = (Store<AppState> store) async {
-        final api = SentryApi(store.state.globalState.session);
+        final api = SentryApi(store.state.globalState.session, store.state.globalState.sc);
         try {
           final List<ProjectWithLatestRelease> projectsWithLatestRelease = [];
 
@@ -70,7 +70,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
       store.dispatch(thunkAction);
     } else if (action is FetchLatestReleaseAction) {
       final thunkAction = (Store<AppState> store) async {
-        final api = SentryApi(store.state.globalState.session);
+        final api = SentryApi(store.state.globalState.session, store.state.globalState.sc);
         try {
           final latestRelease = await api.release(
               organizationSlug: action.organizationSlug,
@@ -87,7 +87,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
       store.dispatch(thunkAction);
     } else if (action is FetchIssuesAction) {
       final thunkAction = (Store<AppState> store) async {
-        final api = SentryApi(store.state.globalState.session);
+        final api = SentryApi(store.state.globalState.session, store.state.globalState.sc);
         try {
           final List<Group> issues = await api.issues(
               organizationSlug: action.organizationSlug,
@@ -105,7 +105,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
       store.dispatch(thunkAction);
     } else if (action is FetchAuthenticatedUserAction) {
       final thunkAction = (Store<AppState> store) async {
-        final api = SentryApi(store.state.globalState.session);
+        final api = SentryApi(store.state.globalState.session, store.state.globalState.sc);
         try {
           final me = await api.authenticatedUser();
           store.dispatch(
@@ -120,7 +120,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
       store.dispatch(thunkAction);
     } else if (action is FetchSessionsAction) {
       final thunkAction = (Store<AppState> store) async {
-        final api = SentryApi(store.state.globalState.session);
+        final api = SentryApi(store.state.globalState.session, store.state.globalState.sc);
         try {
           final sessions = await api.sessions(
             organizationSlug: action.organizationSlug,
@@ -164,19 +164,25 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
   dynamic call(Store<AppState> store, dynamic action, NextDispatcher next) async {
     if (action is RehydrateAction) {
       final String session = await secureStorage.read(key: 'session');
-      Cookie cookie;
+      final String sc = await secureStorage.read(key: 'sc');
+      Cookie sessionCookie;
+      Cookie scCookie;
       try {
-        cookie = session != null ? Cookie.fromSetCookieValue(session) : null;
+        sessionCookie = session != null ? Cookie.fromSetCookieValue(session) : null;
+        scCookie = sc != null ? Cookie.fromSetCookieValue(sc) : null;
       } catch (e) {
         await secureStorage.delete(key: 'session');
+        await secureStorage.delete(key: 'sc');
       }
-      store.dispatch(RehydrateSuccessAction(cookie));
+      store.dispatch(RehydrateSuccessAction(sessionCookie, scCookie));
     }
     if (action is LoginAction) {
-      await secureStorage.write(key: 'session', value: action.cookie.toString());
+      await secureStorage.write(key: 'session', value: action.sessionCookie.toString());
+      await secureStorage.write(key: 'sc', value: action.scCookie.toString());
     }
     if (action is LogoutAction) {
       await secureStorage.delete(key: 'session');
+      await secureStorage.delete(key: 'sc');
       await preferences.clear();
       
       await WebviewCookieManager().clearCookies();

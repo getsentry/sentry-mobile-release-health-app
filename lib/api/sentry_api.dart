@@ -15,9 +15,11 @@ import '../types/sessions.dart';
 import '../types/user.dart';
 
 class SentryApi {
-  SentryApi(this.session);
+  SentryApi(this.session, this.sc);
 
   final Cookie session;
+  final Cookie sc;
+
   final client = sentry.SentryHttpClient(client: Client());
   final baseUrlScheme = 'https://';
   final baseUrlName = 'sentry.io';
@@ -39,6 +41,16 @@ class SentryApi {
 
   Future<Project> project(String organizationSlug, String projectSlug) async {
     final response = await client.get('${_baseUrl()}/projects/$organizationSlug/$projectSlug/',
+        headers: _defaultHeader()
+    );
+    return _parseResponse(response, (jsonMap) => Project.fromJson(jsonMap)).asFuture;
+  }
+
+  Future<Project> bookmarkProject(String organizationSlug, String projectSlug, bool bookmark) async {
+    final queryParameters = <String, String>{
+      'isBookmarked': bookmark ? 'true' : 'false',
+    };
+    final response = await client.put(Uri.https(baseUrlName, '${_baseUrl()}/projects/$organizationSlug/$projectSlug/', queryParameters),
         headers: _defaultHeader()
     );
     return _parseResponse(response, (jsonMap) => Project.fromJson(jsonMap)).asFuture;
@@ -127,7 +139,13 @@ class SentryApi {
   }
 
   Map<String, String> _defaultHeader() {
-    return {'Cookie': session.toString()};
+    final headerFields = <String, String>{
+      'Cookie': session.toString(),
+    };
+    if (sc != null) {
+      headerFields['X-CSRFToken'] = sc.toString();
+    }
+    return headerFields;
   }
 
   Result<List<T>> _parseResponseList<T>(Response response, T Function(Map<String, dynamic> r) map) {

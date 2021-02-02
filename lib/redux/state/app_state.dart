@@ -31,6 +31,7 @@ class AppState {
 class GlobalState {
   GlobalState(
       {this.session,
+      this.sc,
       this.hydrated,
       this.selectedTab,
       this.organizations,
@@ -51,6 +52,7 @@ class GlobalState {
   factory GlobalState.initial() {
     return GlobalState(
       session: null,
+      sc: null,
       hydrated: false,
       selectedTab: 0,
       organizations: [],
@@ -71,6 +73,8 @@ class GlobalState {
   }
 
   final Cookie session;
+  final Cookie sc;
+
   final bool hydrated;
   final int selectedTab;
 
@@ -96,6 +100,7 @@ class GlobalState {
 
   GlobalState copyWith({
     Cookie session,
+    Cookie sc,
     bool hydrated,
     int selectedTab,
     bool setSessionNull = false,
@@ -116,6 +121,7 @@ class GlobalState {
   }) {
     return GlobalState(
       session: setSessionNull ? null : (session ?? this.session),
+      sc: setSessionNull ? null : (sc ?? this.sc),
       hydrated: hydrated ?? this.hydrated,
       selectedTab: selectedTab ?? this.selectedTab,
       organizations: organizations ?? this.organizations,

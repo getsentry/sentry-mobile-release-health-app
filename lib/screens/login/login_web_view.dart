@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:sentry_mobile/redux/actions.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 
 import '../../api/api_errors.dart';
@@ -93,19 +94,20 @@ class _LoginWebViewState extends State<LoginWebView> {
 
           final cookies = await _cookieManager.getCookies(url);
           final session = cookies.firstWhere((c) => c.name == 'session', orElse: () => null);
+          final sc = cookies.firstWhere((c) => c.name == 'sc', orElse: () => null);
 
           if (session != null) {
             // Test out an API call
-            final client = SentryApi(session);
+            final client = SentryApi(session, sc);
             try {
               // Session is returned even before authenticated so this is called many times
               await client.organizations();
-              _popIfPossible(Result<Cookie>.value(session));
+              _popIfPossible(Result<LoginAction>.value(LoginAction(session, sc)));
             } catch (error) {
               if (error is ApiError) {
                 return; // Stay in callback loop
               } else {
-                _popIfPossible(Result<Cookie>.error(error));
+                _popIfPossible(Result<LoginAction>.error(error));
               }
             } finally {
               client.close();
@@ -114,7 +116,7 @@ class _LoginWebViewState extends State<LoginWebView> {
         });
   }
 
-  Future<void> _popIfPossible(Result<Cookie> result) async {
+  Future<void> _popIfPossible(Result<LoginAction> result) async {
     if (mounted && !_popped) {
       _popped = true; // Don't dismiss multiple times.
       await _flutterWebviewPlugin.hide();

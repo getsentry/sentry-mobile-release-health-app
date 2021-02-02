@@ -35,11 +35,11 @@ GlobalState _switchTabAction(GlobalState state, SwitchTabAction action) {
 }
 
 GlobalState _rehydrateSuccessAction(GlobalState state, RehydrateSuccessAction action) {
-  return state.copyWith(hydrated: true, session: action.cookie);
+  return state.copyWith(hydrated: true, session: action.sessionCookie, sc: action.scCookie);
 }
 
 GlobalState _loginAction(GlobalState state, LoginAction action) {
-  return state.copyWith(session: action.cookie);
+  return state.copyWith(session: action.sessionCookie, sc: action.scCookie);
 }
 
 GlobalState _logoutAction(GlobalState state, LogoutAction action) {

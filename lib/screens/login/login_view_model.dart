@@ -12,7 +12,7 @@ class LoginViewModel {
 
   Store<AppState> store;
 
-  void onLogin(Cookie session) {
-    store.dispatch(LoginAction(session));
+  void onLogin(LoginAction loginAction) {
+    store.dispatch(loginAction);
   }
 }

@@ -19,8 +19,9 @@ class RehydrateAction {
 }
 
 class RehydrateSuccessAction {
-  RehydrateSuccessAction(this.cookie);
-  final Cookie cookie;
+  RehydrateSuccessAction(this.sessionCookie, this.scCookie);
+  final Cookie sessionCookie;
+  final Cookie scCookie;
 }
 
 class SwitchTabAction {
@@ -29,8 +30,9 @@ class SwitchTabAction {
 }
 
 class LoginAction {
-  LoginAction(this.cookie);
-  final Cookie cookie;
+  LoginAction(this.sessionCookie, this.scCookie);
+  final Cookie sessionCookie;
+  final Cookie scCookie;
 }
 
 class LogoutAction {
