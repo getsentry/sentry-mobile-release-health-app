@@ -31,6 +31,13 @@ class SentryApi {
     return _parseResponseList(response, (jsonMap) => Organization.fromJson(jsonMap)).asFuture;
   }
 
+  Future<Organization> organization(String organizationSlug) async {
+    final response = await client.get('${_baseUrl()}/organizations/$organizationSlug/',
+        headers: _defaultHeader()
+    );
+    return _parseResponse(response, (jsonMap) => Organization.fromJson(jsonMap)).asFuture;
+  }
+
   Future<List<Project>> projects(String slug) async {
     final response = await client.get('${_baseUrl()}/organizations/$slug/projects/',
         headers: _defaultHeader()
