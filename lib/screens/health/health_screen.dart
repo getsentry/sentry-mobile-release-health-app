@@ -136,7 +136,7 @@ class _HealthScreenState extends State<HealthScreen> {
                           Row(
                             children: [
                               HealthCard(
-                                  title: 'Stability Score',
+                                  title: 'Crash Free',
                                   viewModel: viewModel.stabilityScoreForProject(viewModel.projects[_index]?.project),
                               ),
                               HealthCard(
