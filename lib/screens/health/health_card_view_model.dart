@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sentry_mobile/utils/sentry_colors.dart';
 import 'package:sentry_mobile/utils/sentry_icons.dart';
+import 'package:sentry_mobile/utils/crash_free_formatting.dart';
 
 class HealthCardViewModel {
   HealthCardViewModel(this.value, this.change);
@@ -10,14 +11,14 @@ class HealthCardViewModel {
   HealthCardViewModel.stabilityScore(double value, double valueBefore) {
     color = colorForValue(value);
     if (value != null) {
-      this.value = valueFormatPercent.format(value) + '%';
+      this.value = value.formattedPercent();
     } else {
       this.value = '--';
     }
     if (value != null && valueBefore != null && value != valueBefore) {
       final changeValue = value - valueBefore;
       final trendSign = changeValue > 0 ? '+' : '';
-      change = trendSign + valueFormatPercent.format(changeValue) + '%';
+      change = trendSign + changeValue.formattedPercent();
       trendIcon = getTrendIcon(changeValue);
     } else {
       change = '--';
@@ -41,7 +42,6 @@ class HealthCardViewModel {
     }
   }
 
-  static final valueFormatPercent = NumberFormat('###.##');
   static final valueFormatApdex = NumberFormat('#.###');
   static const warningThreshold = 99.5;
   static const dangerThreshold = 98;
