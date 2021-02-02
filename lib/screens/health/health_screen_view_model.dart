@@ -139,14 +139,14 @@ class HealthScreenViewModel {
     }
   }
   void _fetchApdex(ProjectWithLatestRelease projectWithLatestRelease) {
-    final organizationSlug = _store.state.globalState.organizationsSlugByProjectSlug[projectWithLatestRelease.project.slug];
-    if (organizationSlug == null) {
+    final organization = _store.state.globalState.organizationForProjectSlug(projectWithLatestRelease.project.slug);
+    if (organization == null) {
       return;
     }
     _store.dispatch(
         FetchApdexAction(
-          450,
-          organizationSlug,
+          organization.apdexThreshold,
+          organization.slug,
           projectWithLatestRelease.project.id,
         )
     );

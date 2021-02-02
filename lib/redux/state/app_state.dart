@@ -240,4 +240,13 @@ class GlobalState {
     }
     return [total, lineChartPoints];
   }
+
+  Organization organizationForProjectSlug(String projectSlug) {
+    final organziationSlug = organizationsSlugByProjectSlug[projectSlug];
+    if (organziationSlug != null) {
+      return organizations.firstWhere((element) => element.slug == organziationSlug);
+    } else {
+      return null;
+    }
+  }
 }
