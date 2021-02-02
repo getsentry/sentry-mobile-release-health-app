@@ -1,0 +1,138 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+require 'yaml'
+
+default_platform(:ios)
+
+platform :ios do
+
+	# Defined in Appfile
+	app_identifier = CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier)
+	team_id = CredentialsManager::AppfileConfig.try_fetch_value(:team_id)
+
+	desc "Bump the build number in pubspec.yaml"
+	lane :bump_build_number do
+		build_number = latest_testflight_build_number + 1
+
+		pubspec_path = "../../pubspec.yaml"
+		pubspec_yaml_reader = YamlReader.new(pubspec_path)
+		pubspec_file_reader = FileReader.new(pubspec_path)
+		pubspec_file_writter = FileWritter.new(pubspec_path)
+
+		previousVersion = pubspec_yaml_reader.field('version')
+		newVersion = "#{previousVersion.split('+')[0]}+#{build_number}"
+		
+		newContent = pubspec_file_reader.read.map { |s| s.gsub(previousVersion, newVersion) }
+        pubspec_file_writter.write(newContent)
+
+        puts "Wrote new version #{newVersion} to #{pubspec_path}"
+	end
+
+	desc "Build iOS"
+	lane :build_ios do |options|
+		Dir.chdir "../.." do
+			sh("flutter", "packages", "get")
+			sh("flutter", "clean")
+			sh("flutter", "build", "ios", "--release", "--no-codesign")
+		end
+	end
+
+	desc "Upload ipa for TestFlight"
+	lane :build_ipa do |options|
+		update_code_signing_settings(
+			use_automatic_signing: false,
+			path: "./Runner.xcodeproj",
+			targets: ["Runner"]
+		)
+		gym(
+			output_directory: "./build",
+			output_name: "sentry-mobile-ios",
+			include_bitcode: false,
+			include_symbols: true,
+			xcargs: { # https://github.com/fastlane/fastlane/issues/12849#issuecomment-404978983
+				:BUNDLE_IDENTIFIER => app_identifier,
+				:PROVISIONING_PROFILE_SPECIFIER => "#{ENV['FASTLANE_PROVISIONING_PROFILE_NAME']}",
+				:DEVELOPMENT_TEAM => team_id,
+				:CODE_SIGN_IDENTITY => "iPhone Distribution"
+			},
+			export_options: {
+				method: "app-store",
+				provisioningProfiles: { 
+					app_identifier => "#{ENV['FASTLANE_PROVISIONING_PROFILE_NAME']}",
+				}
+			}
+		)
+		update_code_signing_settings(
+			use_automatic_signing: true,
+			path: "./Runner.xcodeproj",
+			targets: ["Runner"]
+		)
+	end
+
+	desc "Upload ipa to TestFlight"
+	lane :upload_ipa do |options|
+		pilot(
+			ipa: "build/sentry-mobile-ios.ipa",
+			distribute_external: false,
+			skip_waiting_for_build_processing: true
+		)
+	end
+
+	desc "Build for iOS and upload ipa to TestFlight/"
+	lane :build_ios_and_upload_ipa do |options|
+		bump_build_number()
+		
+		build_ios()
+		build_ipa()
+		upload_ipa()
+	end
+end
+
+# Helper
+
+class YamlReader
+	def initialize(yaml_path)
+		@yamlFile = YAML.load_file(yaml_path)
+	end
+
+	def field(fieldName)
+		@yamlFile[fieldName]
+	end
+end
+
+
+class FileReader
+	def initialize(file_path)
+		@file_path = file_path
+	end
+
+	def read
+		IO.readlines(@file_path)
+	end
+end
+
+class FileWritter
+	def initialize(file_path)
+		@file_path = file_path
+	end
+
+	def write(content)
+		File.open(@file_path, "w") { |file|
+			file.puts(content)
+			file.close
+		}
+	end
+end

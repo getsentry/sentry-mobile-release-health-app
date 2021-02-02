@@ -1,0 +1,6 @@
+# For more information about the Appfile, see:
+# https://docs.fastlane.tools/advanced/#appfile
+
+app_identifier("io.sentry.mobile.app") # The bundle identifier of your app
+
+team_id("97JCY7859U") # Developer Portal Team ID
