@@ -25,13 +25,13 @@ class HealthCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
-                padding: EdgeInsets.only(top: 8),
+                padding: EdgeInsets.only(top: 12),
                 child: Text(
                   viewModel.value,
                   style: TextStyle(
                     color: viewModel.color,
                     fontWeight: FontWeight.w500,
-                    fontSize: 17,
+                    fontSize: 22,
                   ),
                 ),
               ),
@@ -41,11 +41,12 @@ class HealthCard extends StatelessWidget {
                     title,
                     style: TextStyle(
                       color: SentryColors.revolver,
-                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 17,
                     ),
                   )),
               Padding(
-                  padding: EdgeInsets.only(bottom: 8),
+                  padding: EdgeInsets.only(bottom: 12),
                   child:
                   Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -54,7 +55,7 @@ class HealthCard extends StatelessWidget {
                           viewModel.change,
                           style: TextStyle(
                             color: SentryColors.mamba,
-                            fontSize: 13,
+                            fontSize: 16,
                           ),
                         ),
                         Padding(
