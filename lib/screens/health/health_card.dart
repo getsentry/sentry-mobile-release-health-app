@@ -58,7 +58,7 @@ class HealthCard extends StatelessWidget {
                         ),
                         Padding(
                           padding: EdgeInsets.only(left: 5),
-                          child: viewModel.trendIcon ?? Spacer(),
+                          child: viewModel.trendIcon,
                         )
                       ]
                   )
