@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 
+import '../../redux/state/session_state.dart';
 import '../../screens/chart/line_chart.dart';
 import '../../screens/chart/line_chart_point.dart';
-import '../../screens/release_health/release_health_chart_row_view_model.dart';
+import '../../screens/health/sessions_chart_row_view_model.dart';
 import '../../utils/sentry_colors.dart';
 import '../../utils/sentry_icons.dart';
 
-class ReleaseHealthChartRow extends StatelessWidget {
-  ReleaseHealthChartRow({@required this.title, @required this.points, this.parentPoints});
+class SessionsChartRow extends StatelessWidget {
+  SessionsChartRow({@required this.title, @required this.sessionState, this.parentPoints});
 
   final String title;
-  final List<LineChartPoint> points;
+  final SessionState sessionState;
   final List<LineChartPoint> parentPoints;
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = ReleaseHealthChartRowViewModel.createByHalvingPoints(points, parentPoints ?? []);
+    final viewModel = SessionsChartRowViewModel.create(sessionState, parentPoints ?? []);
     
     return Container(
         padding: EdgeInsets.only(bottom: 22),

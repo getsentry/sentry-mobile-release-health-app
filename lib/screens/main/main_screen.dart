@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
-// import '../../issues.dart';
 import '../../redux/state/app_state.dart';
-import '../release_health/release_health.dart';
+import '../health/health_screen.dart';
 import 'main_app_bar.dart';
 // import 'main_bottom_navigation_bar.dart';
 
@@ -39,7 +38,7 @@ class _MainScreenState extends State<MainScreen> {
       // body: Center(
       //   child: _children[store.state.globalState.selectedTab],
       // ),
-      body: ReleaseHealth(),
+      body: HealthScreen(),
     );
   }
 }

@@ -7,6 +7,7 @@ import '../types/organization.dart';
 import '../types/project.dart';
 import '../types/project_with_latest_release.dart';
 import '../types/release.dart';
+import '../types/sessions.dart';
 import '../types/user.dart';
 
 abstract class ThrottledAction extends Equatable {
@@ -102,22 +103,20 @@ class FetchLatestReleasesFailureAction extends ApiFailureAction {
 // FetchIssues
 
 class FetchIssuesAction extends ThrottledAction {
-  FetchIssuesAction(this.organizationSlug, this.projectSlug, this.unhandled);
+  FetchIssuesAction(this.organizationSlug, this.projectSlug);
   final String organizationSlug;
   final String projectSlug;
-  final bool unhandled;
 
   @override
-  List<Object> get props => [organizationSlug, projectSlug, unhandled];
+  List<Object> get props => [organizationSlug, projectSlug];
 
   @override
   bool get stringify => false;
 }
 
 class FetchIssuesSuccessAction {
-  FetchIssuesSuccessAction(this.projectSlug, this.unhandled, this.issues);
+  FetchIssuesSuccessAction(this.projectSlug, this.issues);
   final String projectSlug;
-  final bool unhandled;
   final List<Group> issues;
 }
 
@@ -138,6 +137,26 @@ class FetchAuthenticatedUserSuccessAction {
 
 class FetchAuthenticatedUserFailureAction extends ApiFailureAction {
   FetchAuthenticatedUserFailureAction(error) : super(error);
+}
+
+// FetchSessions
+
+class FetchSessionsAction {
+  FetchSessionsAction(this.organizationSlug, this.projectId);
+
+  final String organizationSlug;
+  final String projectId;
+}
+
+class FetchSessionsSuccessAction {
+  FetchSessionsSuccessAction(this.projectId, this.sessions, this.sessionsBefore);
+  final String projectId;
+  final Sessions sessions;
+  final Sessions sessionsBefore;
+}
+
+class FetchSessionsFailureAction extends ApiFailureAction {
+  FetchSessionsFailureAction(error) : super(error);
 }
 
 // SelectOrganization

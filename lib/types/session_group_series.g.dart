@@ -1,0 +1,18 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'session_group_series.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+SessionGroupSeries _$SessionGroupSeriesFromJson(Map<String, dynamic> json) {
+  return SessionGroupSeries(
+    (json['sum(session)'] as List)?.map((e) => e as int)?.toList(),
+  );
+}
+
+Map<String, dynamic> _$SessionGroupSeriesToJson(SessionGroupSeries instance) =>
+    <String, dynamic>{
+      'sum(session)': instance.sumSession,
+    };
