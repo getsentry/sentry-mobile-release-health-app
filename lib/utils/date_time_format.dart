@@ -15,7 +15,7 @@ extension DateTimeFormat on DateTime {
   }
 
   String _sixDigits(int value) {
-    return NumberFormat('0000').format(value);
+    return NumberFormat('000000').format(value);
   }
 
   String _fourDigits(int value) {
