@@ -50,7 +50,7 @@ flutter run
 
 6. Build iOS and upload to testflight
 
-Provide environment variables needed for fastlane. For example by updateing your `~/.bash_profile`
+Provide environment variables needed for fastlane. For example by updating your `~/.bash_profile`
 
 ```
 export FASTLANE_USER="user@sentry.io"
