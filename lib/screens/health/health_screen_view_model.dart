@@ -1,4 +1,5 @@
 import 'package:redux/redux.dart';
+import 'package:sentry_mobile/screens/health/health_card_view_model.dart';
 
 import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
@@ -14,6 +15,10 @@ class HealthScreenViewModel {
       _sessionStateByProjectId = store.state.globalState.sessionStateByProjectId(SessionStatus.values.toSet()),
       _handledAndCrashedSessionStateByProjectId = store.state.globalState.sessionStateByProjectId({SessionStatus.errored, SessionStatus.abnormal, SessionStatus.crashed}),
       _crashedSessionStateByProjectId = store.state.globalState.sessionStateByProjectId({SessionStatus.crashed}),
+      _stabilityScoreByProjectId = store.state.globalState.stabilityScoreByProjectId,
+      _stabilityScoreBeforeByProjectId = store.state.globalState.stabilityScoreBeforeByProjectId,
+      _apdexByProjectId = store.state.globalState.apdexByProjectId,
+      _apdexBeforeByProjectId = store.state.globalState.apdexBeforeByProjectId,
       _fetchProjectsNeeded = !store.state.globalState.projectsFetchedOnce &&
         !store.state.globalState.projectsLoading,
       showProjectEmptyScreen = !store.state.globalState.projectsLoading &&
@@ -32,6 +37,12 @@ class HealthScreenViewModel {
   final Map<String, SessionState> _handledAndCrashedSessionStateByProjectId;
   final Map<String, SessionState> _crashedSessionStateByProjectId;
 
+  final Map<String, double> _stabilityScoreByProjectId;
+  final Map<String, double> _stabilityScoreBeforeByProjectId;
+
+  final Map<String, double> _apdexByProjectId;
+  final Map<String, double> _apdexBeforeByProjectId;
+  
   final bool _fetchProjectsNeeded;
 
   final bool showProjectEmptyScreen;
@@ -60,12 +71,27 @@ class HealthScreenViewModel {
     return _crashedSessionStateByProjectId[project.id];
   }
   
-  void fetchLatestReleaseOrIssues(int index) {
+  HealthCardViewModel stabilityScoreForProject(Project project) {
+    return HealthCardViewModel.stabilityScore(
+      _stabilityScoreByProjectId[project.id],
+      _stabilityScoreBeforeByProjectId[project.id],
+    );
+  }
+
+  HealthCardViewModel apdexForProject(Project project) {
+    return HealthCardViewModel.apdex(
+      _apdexByProjectId[project.id],
+      _apdexBeforeByProjectId[project.id],
+    );
+  }
+  
+  void fetchDataForProject(int index) {
     if (index < projects.length) {
       final projectWithLatestRelease = projects[index];
       if (projectWithLatestRelease != null) {
         _fetchLatestRelease(projectWithLatestRelease);
         _fetchSessions(projectWithLatestRelease);
+        _fetchApdex(projectWithLatestRelease);
       }
     }
     if (index + 1 < projects.length) {
@@ -73,6 +99,7 @@ class HealthScreenViewModel {
       if (nextProjectWithLatestRelease != null) {
         _fetchLatestRelease(nextProjectWithLatestRelease);
         _fetchSessions(nextProjectWithLatestRelease);
+        _fetchApdex(nextProjectWithLatestRelease);
       }
     }
   }
@@ -110,5 +137,18 @@ class HealthScreenViewModel {
           )
       );
     }
+  }
+  void _fetchApdex(ProjectWithLatestRelease projectWithLatestRelease) {
+    final organization = _store.state.globalState.organizationForProjectSlug(projectWithLatestRelease.project.slug);
+    if (organization == null) {
+      return;
+    }
+    _store.dispatch(
+        FetchApdexAction(
+          organization.apdexThreshold,
+          organization.slug,
+          projectWithLatestRelease.project.id,
+        )
+    );
   }
 }

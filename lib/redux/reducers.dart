@@ -2,6 +2,7 @@ import 'package:redux/redux.dart';
 
 import '../api/api_errors.dart';
 import '../types/project_with_latest_release.dart';
+import '../utils/stability_score.dart';
 import 'actions.dart';
 import 'state/app_state.dart';
 
@@ -27,6 +28,7 @@ final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, SelectProjectAction>(_selectProjectAction),
   TypedReducer<GlobalState, FetchAuthenticatedUserSuccessAction>(_fetchAuthenticatedUserSuccessAction),
   TypedReducer<GlobalState, FetchSessionsSuccessAction>(_fetchSessionsSuccessAction),
+  TypedReducer<GlobalState, FetchApdexSuccessAction>(_fetchApdexSuccessAction),
   TypedReducer<GlobalState, ApiFailureAction>(_apiFailureAction),
 ]);
 
@@ -144,12 +146,33 @@ GlobalState _fetchSessionsSuccessAction(GlobalState state, FetchSessionsSuccessA
   final sessionsByProjectId = state.sessionsByProjectId;
   sessionsByProjectId[action.projectId] = action.sessions;
 
+  final stabilityScoreByProjectId = state.stabilityScoreByProjectId;
+  stabilityScoreByProjectId[action.projectId] = action.sessions.stabilityScore();
+
   final sessionsBeforeByProjectId = state.sessionsBeforeByProjectId;
   sessionsBeforeByProjectId[action.projectId] = action.sessionsBefore;
-  
+
+  final stabilityScoreBeforeByProjectId = state.stabilityScoreBeforeByProjectId;
+  stabilityScoreBeforeByProjectId[action.projectId] = action.sessionsBefore.stabilityScore();
+
   return state.copyWith(
       sessionsByProjectId: sessionsByProjectId,
-      sessionsBeforeByProjectId: sessionsBeforeByProjectId
+      stabilityScoreByProjectId: stabilityScoreByProjectId,
+      sessionsBeforeByProjectId: sessionsBeforeByProjectId,
+      stabilityScoreBeforeByProjectId: stabilityScoreBeforeByProjectId
+  );
+}
+
+GlobalState _fetchApdexSuccessAction(GlobalState state, FetchApdexSuccessAction action) {
+  final apdexByProjectId = state.apdexByProjectId;
+  apdexByProjectId[action.projectId] = action.apdex;
+
+  final apdexBeforeByProjectId = state.apdexBeforeByProjectId;
+  apdexBeforeByProjectId[action.projectId] = action.apdexBefore;
+
+  return state.copyWith(
+    apdexByProjectId: apdexByProjectId,
+    apdexBeforeByProjectId: apdexBeforeByProjectId
   );
 }
 

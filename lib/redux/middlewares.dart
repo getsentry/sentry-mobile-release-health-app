@@ -7,6 +7,7 @@ import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 
 import '../api/sentry_api.dart';
 import '../types/group.dart';
+import '../types/organization.dart';
 import '../types/project.dart';
 import '../types/project_with_latest_release.dart';
 import '../types/session_group.dart';
@@ -23,14 +24,17 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
         final api = SentryApi(store.state.globalState.session);
         try {
           final organizations = await api.organizations();
+          final individualOrganizations = <Organization>[];
           final Map<String, List<Project>> projectsByOrganizationId = {};
           for (final organization in organizations) {
+            final individualOrganization = await api.organization(organization.slug);
+            individualOrganizations.add(individualOrganization ?? organization);
             final projects = await api.projects(organization.slug);
             if (projects.isNotEmpty) {
               projectsByOrganizationId[organization.slug] = projects;
             }
           }
-          store.dispatch(FetchOrganizationsAndProjectsSuccessAction(organizations, projectsByOrganizationId));
+          store.dispatch(FetchOrganizationsAndProjectsSuccessAction(individualOrganizations, projectsByOrganizationId));
         } catch (e) {
           store.dispatch(FetchOrganizationsAndProjectsFailureAction(e));
         }
@@ -143,6 +147,41 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           );
         } catch (e) {
           store.dispatch(FetchSessionsFailureAction(e));
+        }
+        api.close();
+      };
+      next(action);
+      store.dispatch(thunkAction);
+    } else if (action is FetchApdexAction) {
+      final thunkAction = (Store<AppState> store) async {
+        final api = SentryApi(store.state.globalState.session);
+        try {
+
+          final now = DateTime.now();
+          final twelveHoursAgo = now.add(Duration(hours: -12));
+          final twentyFourHoursAgo = now.add(Duration(hours: -24));
+
+          final apdex = await api.apdex(
+            apdexThreshold: action.apdexThreshold,
+            organizationSlug: action.organizationSlug,
+            projectId: action.projectId,
+            start: twelveHoursAgo,
+            end: now
+          );
+
+          final apdexBefore = await api.apdex(
+              apdexThreshold: action.apdexThreshold,
+              organizationSlug: action.organizationSlug,
+              projectId: action.projectId,
+              start: twentyFourHoursAgo,
+              end: twelveHoursAgo
+          );
+
+          store.dispatch(
+              FetchApdexSuccessAction(action.projectId, apdex, apdexBefore)
+          );
+        } catch (e) {
+          store.dispatch(FetchApdexFailureAction(e));
         }
         api.close();
       };

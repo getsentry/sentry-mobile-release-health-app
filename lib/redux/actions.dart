@@ -159,6 +159,34 @@ class FetchSessionsFailureAction extends ApiFailureAction {
   FetchSessionsFailureAction(error) : super(error);
 }
 
+// FetchApDex
+
+class FetchApdexAction extends ThrottledAction {
+  FetchApdexAction(this.apdexThreshold, this.organizationSlug, this.projectId);
+
+  final int apdexThreshold;
+  final String organizationSlug;
+  final String projectId;
+
+  @override
+  List<Object> get props => [apdexThreshold, organizationSlug, projectId];
+
+  @override
+  bool get stringify => false;
+}
+
+class FetchApdexSuccessAction {
+  FetchApdexSuccessAction(this.projectId, this.apdex, this.apdexBefore);
+
+  final String projectId;
+  final double apdex;
+  final double apdexBefore;
+}
+
+class FetchApdexFailureAction extends ApiFailureAction {
+  FetchApdexFailureAction(error) : super(error);
+}
+
 // SelectOrganization
 
 class SelectOrganizationAction {
