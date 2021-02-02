@@ -14,7 +14,7 @@ class HealthCardViewModel {
     } else {
       this.value = '--';
     }
-    if (value != null && valueBefore != null) {
+    if (value != null && valueBefore != null && value != valueBefore) {
       final changeValue = value - valueBefore;
       final trendSign = changeValue > 0 ? '+' : '';
       change = trendSign + valueFormatPercent.format(changeValue) + '%';
@@ -31,7 +31,7 @@ class HealthCardViewModel {
     } else {
       this.value = '--';
     }
-    if (value != null && valueBefore != null && valueBefore != 0.0) {
+    if (value != null && valueBefore != null && value != valueBefore) {
       final changeValue = value - valueBefore;
       final trendSign = changeValue > 0 ? '+' : '';
       change = trendSign + valueFormatApdex.format(changeValue);
