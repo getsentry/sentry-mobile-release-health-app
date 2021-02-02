@@ -148,6 +148,21 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
       };
       next(action);
       store.dispatch(thunkAction);
+    } else if (action is BookmarkProjectAction) {
+      final thunkAction = (Store<AppState> store) async {
+        final api = SentryApi(store.state.globalState.session, store.state.globalState.sc);
+        try {
+          final project = await api.bookmarkProject(action.organizationSlug, action.projectSlug, action.bookmarked);
+          store.dispatch(
+              BookmarkProjectSuccessAction(action.organizationSlug, project)
+          );
+        } catch (e) {
+          store.dispatch(FetchSessionsFailureAction(e));
+        }
+        api.close();
+      };
+      next(action);
+      store.dispatch(thunkAction);
     } else {
       next(action);
     }
