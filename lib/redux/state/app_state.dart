@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:io';
 
 import '../../redux/state/session_state.dart';

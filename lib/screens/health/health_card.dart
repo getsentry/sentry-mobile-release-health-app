@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:sentry_mobile/screens/health/health_card_view_model.dart';
 
 import '../../utils/sentry_colors.dart';
-import '../../utils/sentry_icons.dart';
+import 'health_card_view_model.dart';
 
 class HealthCard extends StatelessWidget {
   HealthCard(
