@@ -38,14 +38,14 @@ void main() {
       expect(sessions.stabilityScore(), equals(75.0));
     });
 
-    test('all zero equals 100', () {
+    test('all zero equals null', () {
       final healthy = _givenSessionGroup(SessionStatus.healthy, 0);
       final errored = _givenSessionGroup(SessionStatus.errored, 0);
       final abnormal = _givenSessionGroup(SessionStatus.abnormal, 0);
       final crashed = _givenSessionGroup(SessionStatus.crashed, 0);
 
       final sessions = Sessions([], [healthy, errored, abnormal, crashed]);
-      expect(sessions.stabilityScore(), equals(100.0));
+      expect(sessions.stabilityScore(), isNull);
     });
 
   });
