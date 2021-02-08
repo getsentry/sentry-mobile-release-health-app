@@ -32,6 +32,7 @@ class GlobalState {
   GlobalState(
       {this.session,
       this.hydrated,
+      this.version,
       this.selectedTab,
       this.organizations,
       this.organizationsSlugByProjectSlug,
@@ -56,6 +57,7 @@ class GlobalState {
     return GlobalState(
       session: null,
       hydrated: false,
+      version: '--',
       selectedTab: 0,
       organizations: [],
       organizationsSlugByProjectSlug: {},
@@ -80,6 +82,7 @@ class GlobalState {
 
   final Cookie session;
   final bool hydrated;
+  final String version;
   final int selectedTab;
 
   final List<Organization> organizations;
@@ -109,6 +112,7 @@ class GlobalState {
   GlobalState copyWith({
     Cookie session,
     bool hydrated,
+    String version,
     int selectedTab,
     bool setSessionNull = false,
     List<Organization> organizations,
@@ -133,6 +137,7 @@ class GlobalState {
     return GlobalState(
       session: setSessionNull ? null : (session ?? this.session),
       hydrated: hydrated ?? this.hydrated,
+      version: version ?? this.version,
       selectedTab: selectedTab ?? this.selectedTab,
       organizations: organizations ?? this.organizations,
       organizationsSlugByProjectSlug: organizationsSlugByProjectSlug ?? this.organizationsSlugByProjectSlug,

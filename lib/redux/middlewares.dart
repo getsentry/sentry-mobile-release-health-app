@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:package_info/package_info.dart';
 import 'package:redux/redux.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
@@ -209,7 +210,9 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
       } catch (e) {
         await secureStorage.delete(key: 'session');
       }
-      store.dispatch(RehydrateSuccessAction(cookie));
+      final packageInfo = await PackageInfo.fromPlatform();
+      final version = 'Version ${packageInfo.version} (${packageInfo.buildNumber})';
+      store.dispatch(RehydrateSuccessAction(cookie, version));
     }
     if (action is LoginAction) {
       await secureStorage.write(key: 'session', value: action.cookie.toString());

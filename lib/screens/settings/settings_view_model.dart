@@ -23,12 +23,14 @@ class SettingsViewModel {
     } else {
       userInfo = '--';
     }
+    version = store.state.globalState.version;
   }
 
   Store<AppState> _store;
 
   String bookmarkedProjects;
   String userInfo;
+  String version = '--';
 
   void fetchAuthenticatedUserIfNeeded() {
     if (_store.state.globalState.me == null) {
