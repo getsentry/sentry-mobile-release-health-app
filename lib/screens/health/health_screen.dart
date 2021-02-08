@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:sentry_mobile/types/session_status.dart';
+import 'package:sentry_mobile/utils/sentry_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../redux/state/app_state.dart';
@@ -123,18 +124,22 @@ class _HealthScreenState extends State<HealthScreen> {
                           ),
                           SessionsChartRow(
                             title: 'Healthy',
+                            color: SentryColors.meatBrown,
                             sessionState: viewModel.sessionState(_index, SessionStatus.healthy),
                           ),
                           SessionsChartRow(
                             title: 'Errored',
+                            color: SentryColors.cornFlowerBlue,
                             sessionState: viewModel.sessionState(_index, SessionStatus.errored),
                           ),
                           SessionsChartRow(
                             title: 'Abnormal',
+                            color: SentryColors.antiqueFuchsia,
                             sessionState: viewModel.sessionState(_index, SessionStatus.abnormal),
                           ),
                           SessionsChartRow(
                             title: 'Crashed',
+                            color: SentryColors.japonica,
                             sessionState: viewModel.sessionState(_index, SessionStatus.crashed),
                           ),
                           HealthDivider(

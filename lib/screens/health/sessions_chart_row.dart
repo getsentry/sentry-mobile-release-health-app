@@ -8,9 +8,10 @@ import '../../utils/sentry_colors.dart';
 import '../../utils/sentry_icons.dart';
 
 class SessionsChartRow extends StatelessWidget {
-  SessionsChartRow({@required this.title, @required this.sessionState, this.parentPoints});
+  SessionsChartRow({@required this.title, @required this.color, @required this.sessionState, this.parentPoints});
 
   final String title;
+  final Color color;
   final SessionState sessionState;
   final List<LineChartPoint> parentPoints;
 
@@ -57,7 +58,7 @@ class SessionsChartRow extends StatelessWidget {
                         LinearProgressIndicator(
                             minHeight: 2.0,
                             backgroundColor: Colors.white,
-                            valueColor: AlwaysStoppedAnimation<Color>(SentryColors.tapestry)
+                            valueColor: AlwaysStoppedAnimation<Color>(color)
                         )
                       ]
                   ),
@@ -68,9 +69,9 @@ class SessionsChartRow extends StatelessWidget {
                   child: LineChart(
                       data: viewModel.data,
                       lineWidth: 2.0,
-                      lineColor: SentryColors.tapestry,
-                      gradientStart: SentryColors.tapestry.withAlpha(84),
-                      gradientEnd: SentryColors.tapestry.withAlpha(28),
+                      lineColor: color,
+                      gradientStart: color.withAlpha(84),
+                      gradientEnd: color.withAlpha(28),
                       cubicLines: false
                   ),
                   height: 35,

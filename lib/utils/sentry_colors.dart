@@ -32,6 +32,11 @@ class SentryColors {
 
   static const royalBlue = Color(0xff3D74DB);
 
+  static const meatBrown = Color(0xFFE9B942); // Healthy
+  static const cornFlowerBlue = Color(0xFF444671); // Errored
+  static const antiqueFuchsia = Color(0xFF995886); // Abnormal
+  static const japonica = Color(0xFFDF7767); // Crashed
+
   // Util
 
   static MaterialColor createMaterialColor(Color color) {
