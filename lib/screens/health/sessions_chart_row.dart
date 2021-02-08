@@ -8,16 +8,15 @@ import '../../utils/sentry_colors.dart';
 import '../../utils/sentry_icons.dart';
 
 class SessionsChartRow extends StatelessWidget {
-  SessionsChartRow({@required this.title, @required this.color, @required this.sessionState, this.parentPoints});
+  SessionsChartRow({@required this.title, @required this.color, @required this.sessionState});
 
   final String title;
   final Color color;
   final SessionState sessionState;
-  final List<LineChartPoint> parentPoints;
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = SessionsChartRowViewModel.create(sessionState, parentPoints ?? []);
+    final viewModel = SessionsChartRowViewModel.create(sessionState);
     
     return Container(
         padding: EdgeInsets.only(bottom: 22),

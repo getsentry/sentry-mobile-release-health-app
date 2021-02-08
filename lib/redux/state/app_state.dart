@@ -201,10 +201,10 @@ class GlobalState {
       if (sessions != null) {
         sessionStateByProjectId[projectId] = SessionState(
           projectId: projectId,
-          sessionCount: total,
-          previousSessionCount: previousTotal,
-          points: lineChartPoints,
-          previousPoints: previousLineChartPoints
+          numberOfSessions: total,
+          previousNumberOfSessions: previousTotal,
+          sessionPoints: lineChartPoints,
+          previousSessionPoints: previousLineChartPoints
         );
       }
     }

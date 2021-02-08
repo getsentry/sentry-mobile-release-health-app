@@ -88,7 +88,7 @@ class ProjectCard extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: 12),
                         child: LineChart(
-                          data: LineChartData.prepareData(points: sessions.points),
+                          data: LineChartData.prepareData(points: sessions.sessionPoints),
                           lineWidth: 5.0,
                           lineColor: Colors.black.withOpacity(0.05),
                           gradientStart: Colors.transparent,
@@ -99,7 +99,7 @@ class ProjectCard extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 12),
                         child: LineChart(
-                            data: LineChartData.prepareData(points: sessions.points),
+                            data: LineChartData.prepareData(points: sessions.sessionPoints),
                             lineWidth: 5.0,
                             lineColor: Colors.white,
                             gradientStart: Colors.transparent,
