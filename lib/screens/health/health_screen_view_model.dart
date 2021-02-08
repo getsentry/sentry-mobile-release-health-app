@@ -80,6 +80,7 @@ class HealthScreenViewModel {
       case SessionStatus.abnormal:
         return _abnormalSessionsStateByProjectId[project.id];
     }
+    return null;
   }
 
   HealthCardViewModel stabilityScoreForProject(Project project) {
