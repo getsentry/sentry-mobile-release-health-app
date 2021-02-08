@@ -39,7 +39,7 @@ class SessionsChartRow extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
                       ))),
-              Text('Last 12 hours',
+              Text('Last 24 hours',
                   style: TextStyle(
                     color: SentryColors.mamba,
                     fontSize: 12,
