@@ -25,7 +25,7 @@ void main() {
           previousSessionPoints: pointsBefore
       );
 
-      final sut = SessionsChartRowViewModel.create(sessionState, []);
+      final sut = SessionsChartRowViewModel.create(sessionState);
       expect(sut.data.points,
         equals([LineChartPoint(0, 0), LineChartPoint(1, 10)])
       );
@@ -50,7 +50,7 @@ void main() {
           previousSessionPoints: pointsBefore
       );
 
-      final sut = SessionsChartRowViewModel.create(sessionState, []);
+      final sut = SessionsChartRowViewModel.create(sessionState);
       expect(sut.percentChange,
           equals(100.0)
       );
@@ -75,39 +75,9 @@ void main() {
           previousSessionPoints: pointsBefore
       );
 
-      final sut = SessionsChartRowViewModel.create(sessionState, []);
+      final sut = SessionsChartRowViewModel.create(sessionState);
       expect(sut.percentChange,
           equals(-20.0)
-      );
-    });
-
-    test('parentPoints yMax value', () {
-      final pointsBefore = [
-        LineChartPoint(0, 0),
-        LineChartPoint(1, 5),
-      ];
-
-      final points = [
-        LineChartPoint(0, 0),
-        LineChartPoint(1, 10),
-      ];
-
-      final sessionState = SessionState(
-          projectId: 'fixture-projectId',
-          numberOfSessions: 10,
-          previousNumberOfSessions: 5,
-          sessionPoints: points,
-          previousSessionPoints: pointsBefore
-      );
-
-      final parentPoints = [
-        LineChartPoint(0, 0),
-        LineChartPoint(1, 1000)
-      ];
-
-      final sut = SessionsChartRowViewModel.create(sessionState, parentPoints);
-      expect(sut.data.maxY,
-          equals(1000)
       );
     });
 
@@ -120,7 +90,7 @@ void main() {
           previousSessionPoints: []
       );
 
-      final sut = SessionsChartRowViewModel.create(sessionState, []);
+      final sut = SessionsChartRowViewModel.create(sessionState);
       expect(sut.data.points,
           equals([LineChartPoint(0, 0), LineChartPoint(1, 0)])
       );
