@@ -83,6 +83,16 @@ class HealthScreenViewModel {
     return null;
   }
 
+  bool showAbnormalSessions(int index) {
+    final project = projects[index].project;
+    final platform = project?.platform?.toLowerCase();
+    if (platform == null) {
+      return true;
+    } else {
+      return !platform.contains('node') && !platform.contains('javascript');
+    }
+  }
+
   HealthCardViewModel stabilityScoreForProject(Project project) {
     return HealthCardViewModel.stabilityScore(
       _stabilityScoreByProjectId[project.id],
