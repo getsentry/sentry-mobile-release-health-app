@@ -13,7 +13,7 @@ class HealthScreenViewModel {
     : _store = store,
       projects = store.state.globalState.allOrBookmarkedProjectsWithLatestReleases(),
       _totalSessionStateByProjectId = store.state.globalState.sessionStateByProjectId(SessionStatus.values.toSet()),
-      _healthSessionsStateByProjectId = store.state.globalState.sessionStateByProjectId({SessionStatus.healthy}),
+      _healthySessionsStateByProjectId = store.state.globalState.sessionStateByProjectId({SessionStatus.healthy}),
       _erroredSessionsStateByProjectId = store.state.globalState.sessionStateByProjectId({SessionStatus.errored}),
       _abnormalSessionsStateByProjectId = store.state.globalState.sessionStateByProjectId({SessionStatus.abnormal}),
       _crashedSessionStateByProjectId = store.state.globalState.sessionStateByProjectId({SessionStatus.crashed}),
@@ -36,7 +36,7 @@ class HealthScreenViewModel {
   final List<ProjectWithLatestRelease> projects;
 
   final Map<String, SessionState> _totalSessionStateByProjectId;
-  final Map<String, SessionState> _healthSessionsStateByProjectId;
+  final Map<String, SessionState> _healthySessionsStateByProjectId;
   final Map<String, SessionState> _erroredSessionsStateByProjectId;
   final Map<String, SessionState> _abnormalSessionsStateByProjectId;
   final Map<String, SessionState> _crashedSessionStateByProjectId;
@@ -72,7 +72,7 @@ class HealthScreenViewModel {
 
     switch (sessionStatus) {
       case SessionStatus.healthy:
-        return _healthSessionsStateByProjectId[project.id];
+        return _healthySessionsStateByProjectId[project.id];
       case SessionStatus.errored:
         return _erroredSessionsStateByProjectId[project.id];
       case SessionStatus.crashed:
