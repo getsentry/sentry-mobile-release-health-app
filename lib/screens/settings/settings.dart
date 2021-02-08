@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:sentry_mobile/screens/debug/sentry_flutter_screen.dart';
 
 import '../../redux/state/app_state.dart';
 import '../../screens/project_picker/project_picker.dart';
@@ -21,7 +22,7 @@ class _SettingsState extends State<Settings> {
     return StoreConnector<AppState, SettingsViewModel>(
       builder: (_, viewModel) => _content(viewModel),
       converter: (store) => SettingsViewModel.fromStore(store),
-      onInitialBuild: (viewModel) => viewModel.fetchAuthenticatedUserIfNeeded(),
+      onInitialBuild: (viewModel) => viewModel.fetchAuthenticatedUserIfNeeded()
     );
   }
 
@@ -84,7 +85,24 @@ class _SettingsState extends State<Settings> {
                   color: SentryColors.royalBlue,
                 ),
                 onTap: () => Navigator.pop(context, true),
-              )
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 32.0),
+                child: GestureDetector(
+                  onLongPress: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          fullscreenDialog: true,
+                          builder: (context) => SentryFlutterScreen()
+                      ),
+                    );
+                  },
+                  child: Text(
+                    viewModel.version,
+                    style: Theme.of(context).textTheme.caption)
+                  )
+              ),
             ],
           ),
         ),

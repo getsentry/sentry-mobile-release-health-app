@@ -129,7 +129,7 @@ class SentryApi {
     @required String organizationSlug,
     @required String projectId,
     @required String field,
-    String statsPeriod = '12h',
+    String statsPeriod = '24h',
     String interval = '1h',
     String groupBy,
     String statsPeriodStart,

@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:sentry_mobile/types/session_status.dart';
+import 'package:sentry_mobile/utils/sentry_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../redux/state/app_state.dart';
@@ -108,7 +110,7 @@ class _HealthScreenState extends State<HealthScreen> {
                             return ProjectCard(
                                 projectWitLatestRelease.project,
                                 projectWitLatestRelease.release,
-                                viewModel.sessionStateForProject(projectWitLatestRelease.project)
+                                viewModel.totalSessionStateForProject(projectWitLatestRelease.project)
                             );
                           },
                         )),
@@ -118,16 +120,27 @@ class _HealthScreenState extends State<HealthScreen> {
                         children: [
                           HealthDivider(
                             onSeeAll: () {},
-                            title: 'Charts',
+                            title: 'Sessions',
                           ),
                           SessionsChartRow(
-                            title: 'Issues',
-                            sessionState: viewModel.handledAndCrashedSessionStateForProject(viewModel.projects[_index].project),
+                            title: 'Healthy',
+                            color: SentryColors.buttercup,
+                            sessionState: viewModel.sessionState(_index, SessionStatus.healthy),
                           ),
                           SessionsChartRow(
-                            title: 'Crashes',
-                            sessionState: viewModel.crashedSessionStateForProject(viewModel.projects[_index].project),
-                            parentPoints: viewModel.handledAndCrashedSessionStateForProject(viewModel.projects[_index].project)?.points,
+                            title: 'Errored',
+                            color: SentryColors.eastBay,
+                            sessionState: viewModel.sessionState(_index, SessionStatus.errored),
+                          ),
+                          SessionsChartRow(
+                            title: 'Abnormal',
+                            color: SentryColors.tapestry,
+                            sessionState: viewModel.sessionState(_index, SessionStatus.abnormal),
+                          ),
+                          SessionsChartRow(
+                            title: 'Crashed',
+                            color: SentryColors.burntSienna,
+                            sessionState: viewModel.sessionState(_index, SessionStatus.crashed),
                           ),
                           HealthDivider(
                             onSeeAll: () {},

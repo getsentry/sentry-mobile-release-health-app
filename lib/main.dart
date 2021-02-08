@@ -120,9 +120,9 @@ class SentryMobile extends StatelessWidget {
                     color: SentryColors.mamba,
                   ),
                   caption: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
-                    color: Colors.black45,
+                    fontWeight: FontWeight.normal,
+                    fontSize: 12,
+                    color: SentryColors.mamba,
                   )),
             )),
         home: StoreConnector<AppState, AppState>(

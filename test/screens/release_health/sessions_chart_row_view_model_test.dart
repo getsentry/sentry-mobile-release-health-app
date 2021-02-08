@@ -19,13 +19,13 @@ void main() {
 
       final sessionState = SessionState(
           projectId: 'fixture-projectId',
-          sessionCount: 10,
-          previousSessionCount: 5,
-          points: points,
-          previousPoints: pointsBefore
+          numberOfSessions: 10,
+          previousNumberOfSessions: 5,
+          sessionPoints: points,
+          previousSessionPoints: pointsBefore
       );
 
-      final sut = SessionsChartRowViewModel.create(sessionState, []);
+      final sut = SessionsChartRowViewModel.create(sessionState);
       expect(sut.data.points,
         equals([LineChartPoint(0, 0), LineChartPoint(1, 10)])
       );
@@ -44,13 +44,13 @@ void main() {
 
       final sessionState = SessionState(
           projectId: 'fixture-projectId',
-          sessionCount: 10,
-          previousSessionCount: 5,
-          points: points,
-          previousPoints: pointsBefore
+          numberOfSessions: 10,
+          previousNumberOfSessions: 5,
+          sessionPoints: points,
+          previousSessionPoints: pointsBefore
       );
 
-      final sut = SessionsChartRowViewModel.create(sessionState, []);
+      final sut = SessionsChartRowViewModel.create(sessionState);
       expect(sut.percentChange,
           equals(100.0)
       );
@@ -69,58 +69,28 @@ void main() {
 
       final sessionState = SessionState(
           projectId: 'fixture-projectId',
-          sessionCount: 8,
-          previousSessionCount: 10,
-          points: points,
-          previousPoints: pointsBefore
+          numberOfSessions: 8,
+          previousNumberOfSessions: 10,
+          sessionPoints: points,
+          previousSessionPoints: pointsBefore
       );
 
-      final sut = SessionsChartRowViewModel.create(sessionState, []);
+      final sut = SessionsChartRowViewModel.create(sessionState);
       expect(sut.percentChange,
           equals(-20.0)
-      );
-    });
-
-    test('parentPoints yMax value', () {
-      final pointsBefore = [
-        LineChartPoint(0, 0),
-        LineChartPoint(1, 5),
-      ];
-
-      final points = [
-        LineChartPoint(0, 0),
-        LineChartPoint(1, 10),
-      ];
-
-      final sessionState = SessionState(
-          projectId: 'fixture-projectId',
-          sessionCount: 10,
-          previousSessionCount: 5,
-          points: points,
-          previousPoints: pointsBefore
-      );
-
-      final parentPoints = [
-        LineChartPoint(0, 0),
-        LineChartPoint(1, 1000)
-      ];
-
-      final sut = SessionsChartRowViewModel.create(sessionState, parentPoints);
-      expect(sut.data.maxY,
-          equals(1000)
       );
     });
 
     test('fallback no points', () {
       final sessionState = SessionState(
           projectId: 'fixture-projectId',
-          sessionCount: 0,
-          previousSessionCount: 0,
-          points: [],
-          previousPoints: []
+          numberOfSessions: 0,
+          previousNumberOfSessions: 0,
+          sessionPoints: [],
+          previousSessionPoints: []
       );
 
-      final sut = SessionsChartRowViewModel.create(sessionState, []);
+      final sut = SessionsChartRowViewModel.create(sessionState);
       expect(sut.data.points,
           equals([LineChartPoint(0, 0), LineChartPoint(1, 0)])
       );

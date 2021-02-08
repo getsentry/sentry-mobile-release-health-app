@@ -12,8 +12,10 @@ class HealthScreenViewModel {
   HealthScreenViewModel.fromStore(Store<AppState> store)
     : _store = store,
       projects = store.state.globalState.allOrBookmarkedProjectsWithLatestReleases(),
-      _sessionStateByProjectId = store.state.globalState.sessionStateByProjectId(SessionStatus.values.toSet()),
-      _handledAndCrashedSessionStateByProjectId = store.state.globalState.sessionStateByProjectId({SessionStatus.errored, SessionStatus.abnormal, SessionStatus.crashed}),
+      _totalSessionStateByProjectId = store.state.globalState.sessionStateByProjectId(SessionStatus.values.toSet()),
+      _healthySessionsStateByProjectId = store.state.globalState.sessionStateByProjectId({SessionStatus.healthy}),
+      _erroredSessionsStateByProjectId = store.state.globalState.sessionStateByProjectId({SessionStatus.errored}),
+      _abnormalSessionsStateByProjectId = store.state.globalState.sessionStateByProjectId({SessionStatus.abnormal}),
       _crashedSessionStateByProjectId = store.state.globalState.sessionStateByProjectId({SessionStatus.crashed}),
       _stabilityScoreByProjectId = store.state.globalState.stabilityScoreByProjectId,
       _stabilityScoreBeforeByProjectId = store.state.globalState.stabilityScoreBeforeByProjectId,
@@ -33,8 +35,10 @@ class HealthScreenViewModel {
 
   final List<ProjectWithLatestRelease> projects;
 
-  final Map<String, SessionState> _sessionStateByProjectId;
-  final Map<String, SessionState> _handledAndCrashedSessionStateByProjectId;
+  final Map<String, SessionState> _totalSessionStateByProjectId;
+  final Map<String, SessionState> _healthySessionsStateByProjectId;
+  final Map<String, SessionState> _erroredSessionsStateByProjectId;
+  final Map<String, SessionState> _abnormalSessionsStateByProjectId;
   final Map<String, SessionState> _crashedSessionStateByProjectId;
 
   final Map<String, double> _stabilityScoreByProjectId;
@@ -59,18 +63,26 @@ class HealthScreenViewModel {
     _store.dispatch(FetchOrganizationsAndProjectsAction());
   }
 
-  SessionState sessionStateForProject(Project project) {
-    return _sessionStateByProjectId[project.id];
-  }
-
-  SessionState handledAndCrashedSessionStateForProject(Project project) {
-    return _handledAndCrashedSessionStateByProjectId[project.id];
-  }
-
-  SessionState crashedSessionStateForProject(Project project) {
-    return _crashedSessionStateByProjectId[project.id];
+  SessionState totalSessionStateForProject(Project project) {
+    return _totalSessionStateByProjectId[project.id];
   }
   
+  SessionState sessionState(int index, SessionStatus sessionStatus) {
+    final project = projects[index].project;
+
+    switch (sessionStatus) {
+      case SessionStatus.healthy:
+        return _healthySessionsStateByProjectId[project.id];
+      case SessionStatus.errored:
+        return _erroredSessionsStateByProjectId[project.id];
+      case SessionStatus.crashed:
+        return _crashedSessionStateByProjectId[project.id];
+      case SessionStatus.abnormal:
+        return _abnormalSessionsStateByProjectId[project.id];
+    }
+    return null;
+  }
+
   HealthCardViewModel stabilityScoreForProject(Project project) {
     return HealthCardViewModel.stabilityScore(
       _stabilityScoreByProjectId[project.id],

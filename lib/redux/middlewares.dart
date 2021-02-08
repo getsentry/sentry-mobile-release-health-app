@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:package_info/package_info.dart';
 import 'package:redux/redux.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
@@ -138,8 +139,8 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
             projectId: action.projectId,
             field: SessionGroup.sumSessionKey,
             groupBy: SessionGroupBy.sessionStatusKey,
-            statsPeriodStart: '24h',
-            statsPeriodEnd: '12h'
+            statsPeriodStart: '48h',
+            statsPeriodEnd: '24h'
           );
 
           store.dispatch(
@@ -158,14 +159,14 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
         try {
 
           final now = DateTime.now();
-          final twelveHoursAgo = now.add(Duration(hours: -12));
           final twentyFourHoursAgo = now.add(Duration(hours: -24));
+          final fortyEightHoursAgo = now.add(Duration(hours: -48));
 
           final apdex = await api.apdex(
             apdexThreshold: action.apdexThreshold,
             organizationSlug: action.organizationSlug,
             projectId: action.projectId,
-            start: twelveHoursAgo,
+            start: twentyFourHoursAgo,
             end: now
           );
 
@@ -173,8 +174,8 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
               apdexThreshold: action.apdexThreshold,
               organizationSlug: action.organizationSlug,
               projectId: action.projectId,
-              start: twentyFourHoursAgo,
-              end: twelveHoursAgo
+              start: fortyEightHoursAgo,
+              end: twentyFourHoursAgo
           );
 
           store.dispatch(
@@ -209,7 +210,9 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
       } catch (e) {
         await secureStorage.delete(key: 'session');
       }
-      store.dispatch(RehydrateSuccessAction(cookie));
+      final packageInfo = await PackageInfo.fromPlatform();
+      final version = 'Version ${packageInfo.version} (${packageInfo.buildNumber})';
+      store.dispatch(RehydrateSuccessAction(cookie, version));
     }
     if (action is LoginAction) {
       await secureStorage.write(key: 'session', value: action.cookie.toString());

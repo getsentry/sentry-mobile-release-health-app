@@ -19,8 +19,9 @@ class RehydrateAction {
 }
 
 class RehydrateSuccessAction {
-  RehydrateSuccessAction(this.cookie);
+  RehydrateSuccessAction(this.cookie, this.version);
   final Cookie cookie;
+  final String version;
 }
 
 class SwitchTabAction {

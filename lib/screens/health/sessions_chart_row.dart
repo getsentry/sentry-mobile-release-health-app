@@ -2,21 +2,20 @@ import 'package:flutter/material.dart';
 
 import '../../redux/state/session_state.dart';
 import '../../screens/chart/line_chart.dart';
-import '../../screens/chart/line_chart_point.dart';
 import '../../screens/health/sessions_chart_row_view_model.dart';
 import '../../utils/sentry_colors.dart';
 import '../../utils/sentry_icons.dart';
 
 class SessionsChartRow extends StatelessWidget {
-  SessionsChartRow({@required this.title, @required this.sessionState, this.parentPoints});
+  SessionsChartRow({@required this.title, @required this.color, @required this.sessionState});
 
   final String title;
+  final Color color;
   final SessionState sessionState;
-  final List<LineChartPoint> parentPoints;
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = SessionsChartRowViewModel.create(sessionState, parentPoints ?? []);
+    final viewModel = SessionsChartRowViewModel.create(sessionState);
     
     return Container(
         padding: EdgeInsets.only(bottom: 22),
@@ -38,7 +37,7 @@ class SessionsChartRow extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
                       ))),
-              Text('Last 12 hours',
+              Text('Last 24 hours',
                   style: TextStyle(
                     color: SentryColors.mamba,
                     fontSize: 12,
@@ -57,7 +56,7 @@ class SessionsChartRow extends StatelessWidget {
                         LinearProgressIndicator(
                             minHeight: 2.0,
                             backgroundColor: Colors.white,
-                            valueColor: AlwaysStoppedAnimation<Color>(SentryColors.tapestry)
+                            valueColor: AlwaysStoppedAnimation<Color>(color)
                         )
                       ]
                   ),
@@ -68,9 +67,9 @@ class SessionsChartRow extends StatelessWidget {
                   child: LineChart(
                       data: viewModel.data,
                       lineWidth: 2.0,
-                      lineColor: SentryColors.tapestry,
-                      gradientStart: SentryColors.tapestry.withAlpha(84),
-                      gradientEnd: SentryColors.tapestry.withAlpha(28),
+                      lineColor: color,
+                      gradientStart: color.withAlpha(84),
+                      gradientEnd: color.withAlpha(28),
                       cubicLines: false
                   ),
                   height: 35,
