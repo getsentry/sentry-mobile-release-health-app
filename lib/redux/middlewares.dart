@@ -138,8 +138,8 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
             projectId: action.projectId,
             field: SessionGroup.sumSessionKey,
             groupBy: SessionGroupBy.sessionStatusKey,
-            statsPeriodStart: '24h',
-            statsPeriodEnd: '12h'
+            statsPeriodStart: '48h',
+            statsPeriodEnd: '24h'
           );
 
           store.dispatch(
@@ -158,14 +158,14 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
         try {
 
           final now = DateTime.now();
-          final twelveHoursAgo = now.add(Duration(hours: -12));
           final twentyFourHoursAgo = now.add(Duration(hours: -24));
+          final fortyEightHoursAgo = now.add(Duration(hours: -48));
 
           final apdex = await api.apdex(
             apdexThreshold: action.apdexThreshold,
             organizationSlug: action.organizationSlug,
             projectId: action.projectId,
-            start: twelveHoursAgo,
+            start: twentyFourHoursAgo,
             end: now
           );
 
@@ -173,8 +173,8 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
               apdexThreshold: action.apdexThreshold,
               organizationSlug: action.organizationSlug,
               projectId: action.projectId,
-              start: twentyFourHoursAgo,
-              end: twelveHoursAgo
+              start: fortyEightHoursAgo,
+              end: twentyFourHoursAgo
           );
 
           store.dispatch(
