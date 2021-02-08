@@ -124,22 +124,22 @@ class _HealthScreenState extends State<HealthScreen> {
                           ),
                           SessionsChartRow(
                             title: 'Healthy',
-                            color: SentryColors.meatBrown,
+                            color: SentryColors.buttercup,
                             sessionState: viewModel.sessionState(_index, SessionStatus.healthy),
                           ),
                           SessionsChartRow(
                             title: 'Errored',
-                            color: SentryColors.cornFlowerBlue,
+                            color: SentryColors.eastBay,
                             sessionState: viewModel.sessionState(_index, SessionStatus.errored),
                           ),
                           SessionsChartRow(
                             title: 'Abnormal',
-                            color: SentryColors.antiqueFuchsia,
+                            color: SentryColors.tapestry,
                             sessionState: viewModel.sessionState(_index, SessionStatus.abnormal),
                           ),
                           SessionsChartRow(
                             title: 'Crashed',
-                            color: SentryColors.japonica,
+                            color: SentryColors.burntSienna,
                             sessionState: viewModel.sessionState(_index, SessionStatus.crashed),
                           ),
                           HealthDivider(

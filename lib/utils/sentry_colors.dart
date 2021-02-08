@@ -17,8 +17,6 @@ class SentryColors {
   static const lavenderGray = Color(0xffB9C1D9);
   static const silverChalice = Color(0xffA4A4A4);
 
-  static const tapestry = Color(0xffB85586);
-
   static const wildBlueYonder = Color(0xff8492BA);
 
   static const cruise = Color(0xffB6ECDF);
@@ -28,14 +26,13 @@ class SentryColors {
   static const lightningYellow = Color(0xffFFC227);
 
   static const cupid = Color(0xffFCC6C8);
-  static const burntSienna = Color(0xffEE6855);
 
   static const royalBlue = Color(0xff3D74DB);
 
-  static const meatBrown = Color(0xFFE9B942); // Healthy
-  static const cornFlowerBlue = Color(0xFF444671); // Errored
-  static const antiqueFuchsia = Color(0xFF995886); // Abnormal
-  static const japonica = Color(0xFFDF7767); // Crashed
+  static const buttercup = Color(0xfff2b712); // Healthy
+  static const eastBay = Color(0xff444674); // Errored
+  static const tapestry = Color(0xffa35488); // Abnormal
+  static const burntSienna = Color(0xffef7061); // Crashed
 
   // Util
 
