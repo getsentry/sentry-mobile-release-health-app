@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../redux/state/session_state.dart';
 import '../../screens/shared/avatar_stack.dart';
 import '../../screens/shared/bordered_circle_avatar_view_model.dart';
 import '../../types/project.dart';
 import '../../types/release.dart';
+import '../../utils/platform_icons.dart';
 import '../../utils/relative_date_time.dart';
 import '../../utils/sentry_colors.dart';
 import '../chart/line_chart.dart';
@@ -19,6 +21,38 @@ class ProjectCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final titleRowChildren = <Widget>[
+      Expanded(
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: FittedBox(
+            fit: BoxFit.cover,
+            child: Text(
+              project.slug ?? project.name ?? '--',
+              maxLines: 2,
+              style: Theme.of(context).textTheme.headline5,
+            ),
+          ),
+        ),
+      )
+    ];
+
+    final platform = project.platform ?? project.platforms.first;
+    if (platform != null) {
+      final platformImage = PlatformIcons.svgPicture(platform);
+      if (platformImage != null) {
+        titleRowChildren.add(
+            Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(3)),
+                  child: platformImage
+                )
+            )
+        );
+      }
+    }
 
     return Card(
         margin: const EdgeInsets.only(top: 8, bottom: 8, left: 0, right: 16),
@@ -42,17 +76,7 @@ class ProjectCard extends StatelessWidget {
             child: Column(children: [
               Padding(
                 padding: const EdgeInsets.only(left: 16, top: 20, right: 16, bottom: 0),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: FittedBox(
-                    fit: BoxFit.cover,
-                    child: Text(
-                      project.slug ?? project.name ?? '--',
-                      maxLines: 2,
-                      style: Theme.of(context).textTheme.headline5,
-                    ),
-                  ),
-                ),
+                child: Row(children: titleRowChildren)
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 16, top: 0, right: 16, bottom: 4),
