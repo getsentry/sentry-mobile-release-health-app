@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import '../../redux/state/session_state.dart';
 import '../../screens/shared/avatar_stack.dart';
 import '../../screens/shared/bordered_circle_avatar_view_model.dart';
 import '../../types/project.dart';
 import '../../types/release.dart';
+import '../../utils/platform_icons.dart';
 import '../../utils/relative_date_time.dart';
 import '../../utils/sentry_colors.dart';
 import '../chart/line_chart.dart';
@@ -19,6 +21,39 @@ class ProjectCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final titleRowChildren = <Widget>[
+      Expanded(
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: FittedBox(
+            fit: BoxFit.cover,
+            child: Text(
+              project.slug ?? project.name ?? '--',
+              maxLines: 2,
+              style: Theme.of(context).textTheme.headline5,
+            ),
+          ),
+        ),
+      )
+    ];
+
+
+    final platform = project.platform ?? project.platforms.first;
+    if (platform != null) {
+      final platformImage = PlatformIcons.svgPicture(platform);
+      if (platformImage != null) {
+        titleRowChildren.add(
+            Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(3)),
+                  child: platformImage
+                )
+            )
+        );
+      }
+    }
 
     return Card(
         margin: const EdgeInsets.only(top: 8, bottom: 8, left: 0, right: 16),
@@ -41,27 +76,17 @@ class ProjectCard extends StatelessWidget {
             ),
             child: Column(children: [
               Padding(
-                padding: const EdgeInsets.only(left: 16, top: 20, right: 16, bottom: 0),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: FittedBox(
-                    fit: BoxFit.cover,
-                    child: Text(
-                      project.slug ?? project.name ?? '--',
-                      maxLines: 2,
-                      style: Theme.of(context).textTheme.headline5,
-                    ),
-                  ),
-                ),
+                padding: const EdgeInsets.only(left: 16, top: 20, right: 12, bottom: 0),
+                child: Row(children: titleRowChildren)
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 16, top: 0, right: 16, bottom: 4),
+                padding: const EdgeInsets.only(left: 16, top: 0, right: 12, bottom: 4),
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: FittedBox(
                     fit: BoxFit.cover,
                     child: Text(
-                      release?.version ?? project.latestRelease?.version ?? '--',
+                      "Total Sessions: ${sessions?.numberOfSessions ?? '--'} in the last 24h",
                       maxLines: 1,
                       style: Theme.of(context).textTheme.subtitle1,
                     ),
@@ -110,41 +135,74 @@ class ProjectCard extends StatelessWidget {
                     ]
                   )
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, top: 4, right: 16, bottom: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _releaseAndPlatform(context, release),
-                    AvatarStack(
-                        release?.authors
-                          ?.take(5)
-                          ?.map((e) => BorderedCircleAvatarViewModel.from(e))
-                          ?.toList() ?? [],
-                        24,
-                        2
-                    )
-                  ],
-                )
-              ),
+              LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints viewportConstraints) {
+                  return SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minWidth: viewportConstraints.maxWidth
+                      ),
+                      child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 16, top: 4, right: 12, bottom: 16
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              _lastReleaseInfos(context, release),
+                              if (release?.authors?.isNotEmpty == true)
+                                SizedBox(width: 6),
+                              AvatarStack(
+                                release?.authors
+                                  ?.take(5)
+                                  ?.map((e) =>
+                                  BorderedCircleAvatarViewModel.from(e))
+                                  ?.toList() ?? [],
+                                24,
+                                2
+                              )
+                            ],
+                          )
+                      ),
+                    ),
+                  );
+              })
             ]),
           ),
         ));
   }
 
-  Widget _releaseAndPlatform(BuildContext context, Release release) {
+  Widget _lastReleaseInfos(BuildContext context, Release release) {
     final List<Widget> all = [];
+    final List<Widget> infoBoxes = [];
+
+    final version = release?.version;
+    if (version != null) {
+      infoBoxes.add(_infoBox(context, version));
+    }
 
     final date = release?.deploy?.dateFinished ?? release?.dateCreated;
     if (date != null) {
-      all.add(_infoBox(context, date.relativeFromNow()));
-    }
-    final environment = release?.deploy?.environment;
-    if (environment != null) {
-      all.add(_infoBox(context, environment));
+      infoBoxes.add(_infoBox(context, date.relativeFromNow()));
     }
 
-    return Row(children: all);
+    final environment = release?.deploy?.environment;
+    if (environment != null) {
+      infoBoxes.add(_infoBox(context, environment));
+    }
+
+    for (var i = 0; i < infoBoxes.length; i++) {
+      all.add(infoBoxes[i]);
+      if (i < infoBoxes.length - 1) {
+        all.add(SizedBox(width: 4));
+      }
+    }
+
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: all
+    );
   }
 
   Widget _infoBox(BuildContext context, String text) {
