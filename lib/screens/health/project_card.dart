@@ -38,6 +38,7 @@ class ProjectCard extends StatelessWidget {
       )
     ];
 
+
     final platform = project.platform ?? project.platforms.first;
     if (platform != null) {
       final platformImage = PlatformIcons.svgPicture(platform);
@@ -85,7 +86,7 @@ class ProjectCard extends StatelessWidget {
                   child: FittedBox(
                     fit: BoxFit.cover,
                     child: Text(
-                      release?.version ?? project.latestRelease?.version ?? '--',
+                      "Total Sessions: ${sessions.numberOfSessions ?? '--'} in the last 24h",
                       maxLines: 1,
                       style: Theme.of(context).textTheme.subtitle1,
                     ),

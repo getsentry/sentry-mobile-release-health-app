@@ -1,6 +1,4 @@
-
 import 'package:flutter_svg/svg.dart';
-import 'package:sentry_mobile/utils/sentry_colors.dart';
 
 // ignore: avoid_classes_with_only_static_members
 class PlatformIcons {
