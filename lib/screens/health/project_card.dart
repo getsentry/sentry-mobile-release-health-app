@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../redux/state/session_state.dart';
 import '../../screens/shared/avatar_stack.dart';
