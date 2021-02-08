@@ -151,7 +151,8 @@ class ProjectCard extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               _lastReleaseInfos(context, release),
-                              SizedBox(width: release?.authors?.isNotEmpty == true ? 6 : 0),
+                              if (release?.authors?.isNotEmpty == true)
+                                SizedBox(width: 6),
                               AvatarStack(
                                 release?.authors
                                   ?.take(5)
