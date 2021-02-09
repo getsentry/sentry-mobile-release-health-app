@@ -29,7 +29,7 @@ class HealthCard extends StatelessWidget {
                   style: TextStyle(
                     color: viewModel.color,
                     fontWeight: FontWeight.w500,
-                    fontSize: 22,
+                    fontSize: 17,
                   ),
                 ),
               ),
@@ -40,7 +40,7 @@ class HealthCard extends StatelessWidget {
                     style: TextStyle(
                       color: SentryColors.revolver,
                       fontWeight: FontWeight.w500,
-                      fontSize: 17,
+                      fontSize: 14,
                     ),
                   )),
               Padding(
@@ -53,7 +53,7 @@ class HealthCard extends StatelessWidget {
                           viewModel.change,
                           style: TextStyle(
                             color: SentryColors.mamba,
-                            fontSize: 16,
+                            fontSize: 13,
                           ),
                         ),
                         Padding(
