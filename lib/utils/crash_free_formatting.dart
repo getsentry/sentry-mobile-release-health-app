@@ -19,13 +19,7 @@ extension CrashFreeFormatting on double {
 
   // Value expected to be absolute percent values: 100% -> 100
   String formattedPercentChange({double threshold = 1.0}) {
-    final absoluteValue = abs();
     final prefix = this > 0 ? '+' : '';
-
-    if (absoluteValue > 0.0 && absoluteValue < threshold) {
-      return prefix + decimalFormatter.format(this) + '%';
-    } else {
-      return prefix + noDecimalPointFormatter.format(this) + '%';
-    }
+    return prefix + decimalFormatter.format(this) + '%';
   }
 }

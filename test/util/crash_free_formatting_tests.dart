@@ -44,32 +44,20 @@ void main() {
   });
 
   group('formattedPercentChange', () {
-    test('>0 && <1', () {
+    test('positive', () {
       expect(0.9.formattedPercentChange(), equals('+0.9%'));
       expect(0.99.formattedPercentChange(), equals('+0.99%'));
       expect(0.999.formattedPercentChange(), equals('+0.999%'));
       expect(0.001.formattedPercentChange(), equals('+0.001%'));
+      expect(97.1.formattedPercentChange(), equals('+97.1%'));
     });
 
-    test('>-1 && <0', () {
+    test('negative', () {
       expect((-0.9).formattedPercentChange(), equals('-0.9%'));
       expect((-0.99).formattedPercentChange(), equals('-0.99%'));
       expect((-0.999).formattedPercentChange(), equals('-0.999%'));
       expect((-0.001).formattedPercentChange(), equals('-0.001%'));
-    });
-
-    test('rounded', () {
-      expect(97.1.formattedPercentChange(), equals('+97%'));
-      expect(97.9.formattedPercentChange(), equals('+98%'));
-      expect(98.12.formattedPercentChange(), equals('+98%'));
-      expect(400.12.formattedPercentChange(), equals('+400%'));
-      expect(10000.12.formattedPercentChange(), equals('+10000%'));
-
-      expect((-97.1).formattedPercentChange(), equals('-97%'));
-      expect((-97.9).formattedPercentChange(), equals('-98%'));
-      expect((-98.12).formattedPercentChange(), equals('-98%'));
-      expect((-400.12).formattedPercentChange(), equals('-400%'));
-      expect((-10000.12).formattedPercentChange(), equals('-10000%'));
+      expect((-97.1).formattedPercentChange(), equals('-97.1%'));
     });
   });
 }
