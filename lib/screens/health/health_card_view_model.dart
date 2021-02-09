@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sentry_mobile/utils/sentry_colors.dart';
 import 'package:sentry_mobile/utils/sentry_icons.dart';
-import 'package:sentry_mobile/utils/session_formatting.dart';
+import 'package:sentry_mobile/utils/crash_free_formatting.dart';
 
 class HealthCardViewModel {
   HealthCardViewModel(this.value, this.change);
