@@ -146,20 +146,28 @@ GlobalState _fetchSessionsSuccessAction(GlobalState state, FetchSessionsSuccessA
   final sessionsByProjectId = state.sessionsByProjectId;
   sessionsByProjectId[action.projectId] = action.sessions;
 
-  final stabilityScoreByProjectId = state.stabilityScoreByProjectId;
-  stabilityScoreByProjectId[action.projectId] = action.sessions.stabilityScore();
-
   final sessionsBeforeByProjectId = state.sessionsBeforeByProjectId;
   sessionsBeforeByProjectId[action.projectId] = action.sessionsBefore;
+  
+  final crashFreeSessionsByProjectId = state.crashFreeSessionsByProjectId;
+  crashFreeSessionsByProjectId[action.projectId] = action.sessions.crashFreeSessions();
+  
+  final crashFreeSessionsBeforeByProjectId = state.crashFreeSessionsBeforeByProjectId;
+  crashFreeSessionsBeforeByProjectId[action.projectId] = action.sessionsBefore.crashFreeSessions();
 
-  final stabilityScoreBeforeByProjectId = state.stabilityScoreBeforeByProjectId;
-  stabilityScoreBeforeByProjectId[action.projectId] = action.sessionsBefore.stabilityScore();
+  final crashFreeUsersByProjectId = state.crashFreeUsersByProjectId;
+  crashFreeUsersByProjectId[action.projectId] = action.sessions.crashFreeUsers();
 
+  final crashFreeUsersBeforeByProjectId = state.crashFreeUsersBeforeByProjectId;
+  crashFreeUsersBeforeByProjectId[action.projectId] = action.sessionsBefore.crashFreeUsers();
+  
   return state.copyWith(
       sessionsByProjectId: sessionsByProjectId,
-      stabilityScoreByProjectId: stabilityScoreByProjectId,
       sessionsBeforeByProjectId: sessionsBeforeByProjectId,
-      stabilityScoreBeforeByProjectId: stabilityScoreBeforeByProjectId
+      crashFreeSessionsByProjectId: crashFreeSessionsByProjectId,
+      crashFreeSessionsBeforeByProjectId: crashFreeSessionsBeforeByProjectId,
+      crashFreeUsersByProjectId: crashFreeUsersByProjectId,
+      crashFreeUsersBeforeByProjectId: crashFreeUsersBeforeByProjectId
   );
 }
 
