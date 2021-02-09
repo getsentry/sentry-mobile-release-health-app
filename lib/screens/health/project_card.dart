@@ -38,7 +38,7 @@ class ProjectCard extends StatelessWidget {
     ];
 
 
-    final platform = project.platform ?? project.platforms?.first;
+    final platform = project.platform ?? (project.platforms?.isNotEmpty == true ? project.platforms?.first : null);
     if (platform != null) {
       final platformImage = PlatformIcons.svgPicture(platform, 20, 20);
       if (platformImage != null) {
