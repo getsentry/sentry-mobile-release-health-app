@@ -67,6 +67,12 @@ GlobalState _fetchOrganizationsAndProjectsSuccessAction(GlobalState state, Fetch
     }
   }
 
+  projectsWithLatestReleases.sort((ProjectWithLatestRelease a, ProjectWithLatestRelease b) {
+    final valueA = a.project.isBookmarked ? 0 : 1;
+    final valueB = b.project.isBookmarked ? 0 : 1;
+    return valueA.compareTo(valueB);
+  });
+
   return state.copyWith(
     organizations: action.organizations,
     organizationsSlugByProjectSlug: organizationsSlugByProjectSlug,
