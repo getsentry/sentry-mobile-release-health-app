@@ -162,17 +162,17 @@ class ProjectCard extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               _infoBox(context, "${sessions?.numberOfSessions?.formattedNumberOfSession() ?? '--'} sessions in the last 24h"),
-                              if (release?.authors?.isNotEmpty == true)
-                                SizedBox(width: 6),
-                              AvatarStack(
-                                release?.authors
-                                  ?.take(5)
-                                  ?.map((e) =>
-                                  BorderedCircleAvatarViewModel.from(e))
-                                  ?.toList() ?? [],
-                                24,
-                                2
-                              )
+                              // if (release?.authors?.isNotEmpty == true)
+                              //   SizedBox(width: 6),
+                              // AvatarStack(
+                              //   release?.authors
+                              //     ?.take(5)
+                              //     ?.map((e) =>
+                              //     BorderedCircleAvatarViewModel.from(e))
+                              //     ?.toList() ?? [],
+                              //   24,
+                              //   2
+                              // )
                             ],
                           )
                       ),
