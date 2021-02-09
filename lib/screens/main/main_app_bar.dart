@@ -17,7 +17,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
       builder: (_, state) {
-        var title = 'Health';
+        var title = 'Sessions';
         switch (state.globalState.selectedTab) {
           case 1:
             title = 'Issues';
