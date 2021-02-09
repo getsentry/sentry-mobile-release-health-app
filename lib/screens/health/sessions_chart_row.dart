@@ -83,14 +83,15 @@ class SessionsChartRow extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Padding(
+                    padding: EdgeInsets.only(right: viewModel.percentChange == 0.0 ? 0 : 7),
+                    child: _getTrendIcon(viewModel.percentChange, flipDeltaColors),
+                  ),
                   Text(_getTrendPercentage(viewModel.percentChange),
                     style: TextStyle(
                       color: SentryColors.lavenderGray,
                       fontSize: 12,
-                    )),
-                  Padding(
-                    padding: EdgeInsets.only(left: viewModel.percentChange == 0.0 ? 0 : 7),
-                    child: _getTrendIcon(viewModel.percentChange, flipDeltaColors),
+                    )
                   )
                 ]
               )
@@ -101,12 +102,8 @@ class SessionsChartRow extends StatelessWidget {
 
   // Helper
 
-  String _getTrendSign(double change) {
-    return change > 0 ? '+' : '';
-  }
-
   String _getTrendPercentage(double change) {
-    return change == 0 ? '--' : _getTrendSign(change) + change.floor().toString() + '%';
+    return change == 0 ? '--' : change.floor().abs().toString() + '%';
   }
 
   Color _getTrendColor(double change, bool flipDelta) {

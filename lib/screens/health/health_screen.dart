@@ -96,10 +96,10 @@ class _HealthScreenState extends State<HealthScreen> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(left: 22, right: 22),
+                      padding: EdgeInsets.only(left: 16, right: 16),
                       child: HealthDivider(
                         onSeeAll: () {},
-                        title: 'Sessions in the last 24 hours',
+                        title: 'in the last 24 hours',
                       ),
                     ),
                     SizedBox(

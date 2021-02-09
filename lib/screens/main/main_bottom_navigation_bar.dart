@@ -29,7 +29,7 @@ class MainBottomNavigationBar extends StatelessWidget {
                     color: Colors.white,
                     size: 24.0,
                   ),
-                  label: 'Health',
+                  label: 'Sessions',
                 ),
                 BottomNavigationBarItem(
                     icon: Icon(SentryIcons.issues,
@@ -40,7 +40,7 @@ class MainBottomNavigationBar extends StatelessWidget {
                       color: Colors.white,
                       size: 24.0,
                     ),
-                    label: 'Health'
+                    label: 'Issues'
                 )
               ],
               onTap: (int index) {

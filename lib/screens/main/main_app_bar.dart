@@ -26,7 +26,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
             title = 'Settings';
             break;
           default:
-            title = 'Health';
+            title = 'Sessions';
             break;
         }
 

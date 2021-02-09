@@ -50,16 +50,16 @@ class HealthCard extends StatelessWidget {
                   Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        Padding(
+                          padding: EdgeInsets.only(right: 5),
+                          child: viewModel.trendIcon,
+                        ),
                         Text(
                           viewModel.change,
                           style: TextStyle(
                             color: SentryColors.mamba,
                             fontSize: 13,
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 5),
-                          child: viewModel.trendIcon,
                         )
                       ]
                   )

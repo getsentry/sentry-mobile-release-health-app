@@ -159,7 +159,7 @@ class ProjectCard extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              _infoBox(context, "${sessions?.numberOfSessions?.formattedNumberOfSession() ?? '--'} sessions in the last 24h"),
+                              _infoBox(context, "Total: ${sessions?.numberOfSessions?.formattedNumberOfSession() ?? '--'}"),
                               // if (release?.authors?.isNotEmpty == true)
                               //   SizedBox(width: 6),
                               // AvatarStack(
