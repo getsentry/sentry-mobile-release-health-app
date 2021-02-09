@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 import 'package:sentry_mobile/utils/crash_free_formatting.dart';
 
 void main() {
-  group('crash free formatting', () {
+  group('formattedPercent', () {
     test('0', () {
       expect(0.0.formattedPercent(), equals('0%'));
     });
@@ -21,7 +21,6 @@ void main() {
     test('threshold 98', () {
       expect(98.0.formattedPercent(), equals('98%'));
     });
-
 
     test('above threshold 98 one decimal point', () {
       expect(98.1.formattedPercent(), equals('98.1%'));
@@ -41,6 +40,36 @@ void main() {
 
     test('above threshold 100', () {
       expect(100.0.formattedPercent(), equals('100%'));
+    });
+  });
+
+  group('formattedPercentChange', () {
+    test('>0 && <1', () {
+      expect(0.9.formattedPercentChange(), equals('+0.9%'));
+      expect(0.99.formattedPercentChange(), equals('+0.99%'));
+      expect(0.999.formattedPercentChange(), equals('+0.999%'));
+      expect(0.001.formattedPercentChange(), equals('+0.001%'));
+    });
+
+    test('>-1 && <0', () {
+      expect((-0.9).formattedPercentChange(), equals('-0.9%'));
+      expect((-0.99).formattedPercentChange(), equals('-0.99%'));
+      expect((-0.999).formattedPercentChange(), equals('-0.999%'));
+      expect((-0.001).formattedPercentChange(), equals('-0.001%'));
+    });
+
+    test('rounded', () {
+      expect(97.1.formattedPercentChange(), equals('+97%'));
+      expect(97.9.formattedPercentChange(), equals('+98%'));
+      expect(98.12.formattedPercentChange(), equals('+98%'));
+      expect(400.12.formattedPercentChange(), equals('+400%'));
+      expect(10000.12.formattedPercentChange(), equals('+10000%'));
+
+      expect((-97.1).formattedPercentChange(), equals('-97%'));
+      expect((-97.9).formattedPercentChange(), equals('-98%'));
+      expect((-98.12).formattedPercentChange(), equals('-98%'));
+      expect((-400.12).formattedPercentChange(), equals('-400%'));
+      expect((-10000.12).formattedPercentChange(), equals('-10000%'));
     });
   });
 }

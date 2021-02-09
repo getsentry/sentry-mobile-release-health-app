@@ -16,9 +16,8 @@ class HealthCardViewModel {
       this.value = '--';
     }
     if (value != null && valueBefore != null && value != valueBefore) {
-      final changeValue = value - valueBefore;
-      final trendSign = changeValue > 0 ? '+' : '';
-      change = trendSign + changeValue.formattedPercent();
+      final changeValue = 99.9 - 100;//value - valueBefore;
+      change = changeValue.formattedPercentChange();
       trendIcon = getTrendIcon(changeValue);
     } else {
       change = '--';
