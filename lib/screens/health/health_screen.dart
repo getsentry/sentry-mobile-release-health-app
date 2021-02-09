@@ -115,6 +115,7 @@ class _HealthScreenState extends State<HealthScreen> {
                           itemBuilder: (context, index) {
                             final projectWitLatestRelease = viewModel.projects[index];
                             return ProjectCard(
+                                viewModel.organizationName(index),
                                 projectWitLatestRelease.project,
                                 projectWitLatestRelease.release,
                                 viewModel.totalSessionStateForProject(projectWitLatestRelease.project)

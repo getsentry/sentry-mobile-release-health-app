@@ -13,8 +13,9 @@ import '../chart/line_chart.dart';
 import '../chart/line_chart_data.dart';
 
 class ProjectCard extends StatelessWidget {
-  ProjectCard(this.project, this.release, this.sessions);
+  ProjectCard(this.organizationName, this.project, this.release, this.sessions);
 
+  final String organizationName;
   final Project project;
   final Release release; // Nullable
   final SessionState sessions; // Nullable
@@ -86,7 +87,7 @@ class ProjectCard extends StatelessWidget {
                   child: FittedBox(
                     fit: BoxFit.cover,
                     child: Text(
-                      "Total Sessions: ${sessions?.numberOfSessions ?? '--'} in the last 24h",
+                      organizationName ?? "--",
                       maxLines: 1,
                       style: Theme.of(context).textTheme.subtitle1,
                     ),

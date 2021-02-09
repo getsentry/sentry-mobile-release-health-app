@@ -67,6 +67,10 @@ class HealthScreenViewModel {
     _store.dispatch(FetchOrganizationsAndProjectsAction());
   }
 
+  String organizationName(int index) {
+    return _store.state.globalState.organizationForProjectSlug(projects[index].project.slug)?.name;
+  }
+
   SessionState totalSessionStateForProject(Project project) {
     return _totalSessionStateByProjectId[project.id];
   }
