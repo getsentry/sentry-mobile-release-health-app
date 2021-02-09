@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import '../../redux/state/session_state.dart';
-import '../../screens/shared/avatar_stack.dart';
-import '../../screens/shared/bordered_circle_avatar_view_model.dart';
 import '../../types/project.dart';
 import '../../types/release.dart';
 import '../../utils/platform_icons.dart';
