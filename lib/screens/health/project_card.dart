@@ -8,9 +8,9 @@ import '../../types/project.dart';
 import '../../types/release.dart';
 import '../../utils/platform_icons.dart';
 import '../../utils/sentry_colors.dart';
+import '../../utils/session_formatting.dart';
 import '../chart/line_chart.dart';
 import '../chart/line_chart_data.dart';
-import '../../utils/session_formatting.dart';
 
 class ProjectCard extends StatelessWidget {
   ProjectCard(this.organizationName, this.project, this.release, this.sessions);
