@@ -11,7 +11,6 @@ import '../../screens/empty/empty_screen.dart';
 import 'health_card.dart';
 import 'health_divider.dart';
 import 'health_screen_view_model.dart';
-import 'project_card.dart';
 import 'sessions_chart_row.dart';
 
 class HealthScreen extends StatefulWidget {

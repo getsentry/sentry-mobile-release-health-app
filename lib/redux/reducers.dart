@@ -3,7 +3,6 @@ import 'package:sentry_mobile/types/project.dart';
 import 'package:sentry_mobile/types/release.dart';
 
 import '../api/api_errors.dart';
-import '../types/project_with_latest_release.dart';
 import '../utils/stability_score.dart';
 import 'actions.dart';
 import 'state/app_state.dart';

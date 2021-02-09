@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:sentry_mobile/types/latest_release.dart';
 import 'package:sentry_mobile/types/release.dart';
 
 import '../../redux/state/session_state.dart';

@@ -97,7 +97,7 @@ class ProjectCard extends StatelessWidget {
                   child: FittedBox(
                     fit: BoxFit.cover,
                     child: Text(
-                      organizationName ?? "--",
+                      organizationName ?? '--',
                       maxLines: 1,
                       style: Theme.of(context).textTheme.subtitle1,
                     ),

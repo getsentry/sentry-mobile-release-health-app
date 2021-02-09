@@ -180,17 +180,17 @@ class HealthScreenViewModel {
       );
     }
   }
-  void _fetchApdex(ProjectWithLatestRelease projectWithLatestRelease) {
-    final organization = _store.state.globalState.organizationForProjectSlug(projectWithLatestRelease.project.slug);
-    if (organization == null) {
-      return;
-    }
-    _store.dispatch(
-        FetchApdexAction(
-          organization.apdexThreshold,
-          organization.slug,
-          projectWithLatestRelease.project.id,
-        )
-    );
-  }
+  // void _fetchApdex(ProjectWithLatestRelease projectWithLatestRelease) {
+  //   final organization = _store.state.globalState.organizationForProjectSlug(projectWithLatestRelease.project.slug);
+  //   if (organization == null) {
+  //     return;
+  //   }
+  //   _store.dispatch(
+  //       FetchApdexAction(
+  //         organization.apdexThreshold,
+  //         organization.slug,
+  //         projectWithLatestRelease.project.id,
+  //       )
+  //   );
+  // }
 }
