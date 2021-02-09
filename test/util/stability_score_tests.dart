@@ -54,7 +54,7 @@ void main() {
 SessionGroup _givenSessionGroup(SessionStatus status, int num) {
   return SessionGroup(
       SessionGroupBy(status),
-      SessionGroupTotals(num),
-      SessionGroupSeries([])
+      SessionGroupTotals(num, num),
+      SessionGroupSeries([], [])
   );
 }
