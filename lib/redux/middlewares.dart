@@ -130,14 +130,14 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           final sessions = await api.sessions(
             organizationSlug: action.organizationSlug,
             projectId: action.projectId,
-            field: SessionGroup.sumSessionKey,
+            fields: [SessionGroup.sumSessionKey, SessionGroup.countUniqueUsersKey],
             groupBy: SessionGroupBy.sessionStatusKey
           );
 
           final sessionsBefore = await api.sessions(
             organizationSlug: action.organizationSlug,
             projectId: action.projectId,
-            field: SessionGroup.sumSessionKey,
+            fields: [SessionGroup.sumSessionKey, SessionGroup.countUniqueUsersKey],
             groupBy: SessionGroupBy.sessionStatusKey,
             statsPeriodStart: '48h',
             statsPeriodEnd: '24h'
