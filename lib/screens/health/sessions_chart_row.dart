@@ -5,6 +5,7 @@ import '../../screens/chart/line_chart.dart';
 import '../../screens/health/sessions_chart_row_view_model.dart';
 import '../../utils/sentry_colors.dart';
 import '../../utils/sentry_icons.dart';
+import '../../utils/session_formatting.dart';
 
 class SessionsChartRow extends StatelessWidget {
   SessionsChartRow({@required this.title, @required this.color, @required this.sessionState, this.flipDeltaColors = false});
@@ -73,7 +74,7 @@ class SessionsChartRow extends StatelessWidget {
             children: [
               Padding(
                   padding: EdgeInsets.only(bottom: 5),
-                  child: Text('${viewModel.numberOfIssues}',
+                  child: Text(viewModel.numberOfIssues.formattedNumberOfSession(),
                       style: TextStyle(
                         color: SentryColors.woodSmoke,
                         fontWeight: FontWeight.w600,
