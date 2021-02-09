@@ -7,10 +7,10 @@ import '../../screens/shared/bordered_circle_avatar_view_model.dart';
 import '../../types/project.dart';
 import '../../types/release.dart';
 import '../../utils/platform_icons.dart';
-import '../../utils/relative_date_time.dart';
 import '../../utils/sentry_colors.dart';
 import '../chart/line_chart.dart';
 import '../chart/line_chart_data.dart';
+import '../../utils/session_formatting.dart';
 
 class ProjectCard extends StatelessWidget {
   ProjectCard(this.organizationName, this.project, this.release, this.sessions);
@@ -161,7 +161,7 @@ class ProjectCard extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              _lastReleaseInfos(context, release),
+                              _infoBox(context, "${sessions?.numberOfSessions?.formattedNumberOfSession() ?? '--'} sessions in the last 24h"),
                               if (release?.authors?.isNotEmpty == true)
                                 SizedBox(width: 6),
                               AvatarStack(
@@ -182,38 +182,6 @@ class ProjectCard extends StatelessWidget {
             ]),
           ),
         ));
-  }
-
-  Widget _lastReleaseInfos(BuildContext context, Release release) {
-    final List<Widget> all = [];
-    final List<Widget> infoBoxes = [];
-
-    final version = release?.version;
-    if (version != null) {
-      infoBoxes.add(_infoBox(context, version));
-    }
-
-    final date = release?.deploy?.dateFinished ?? release?.dateCreated;
-    if (date != null) {
-      infoBoxes.add(_infoBox(context, date.relativeFromNow()));
-    }
-
-    final environment = release?.deploy?.environment;
-    if (environment != null) {
-      infoBoxes.add(_infoBox(context, environment));
-    }
-
-    for (var i = 0; i < infoBoxes.length; i++) {
-      all.add(infoBoxes[i]);
-      if (i < infoBoxes.length - 1) {
-        all.add(SizedBox(width: 4));
-      }
-    }
-
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: all
-    );
   }
 
   Widget _infoBox(BuildContext context, String text) {
