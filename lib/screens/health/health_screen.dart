@@ -99,11 +99,18 @@ class _HealthScreenState extends State<HealthScreen> {
                 physics: AlwaysScrollableScrollPhysics(),
                 child: Column(
                   children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: 22, right: 22),
+                      child: HealthDivider(
+                        onSeeAll: () {},
+                        title: 'Sessions in the last 24 hours',
+                      ),
+                    ),
                     SizedBox(
                         height: 200,
                         child: PageView.builder(
                           itemCount: viewModel.projects.length,
-                          controller: PageController(viewportFraction: 0.9),
+                          controller: PageController(viewportFraction: (MediaQuery.of(context).size.width - 44) / MediaQuery.of(context).size.width),
                           onPageChanged: (int index) => setState(() => updateIndex(index)),
                           itemBuilder: (context, index) {
                             final projectWitLatestRelease = viewModel.projects[index];
@@ -118,9 +125,22 @@ class _HealthScreenState extends State<HealthScreen> {
                       padding: EdgeInsets.only(top: 22, left: 22, right: 22),
                       child: Column(
                         children: [
-                          HealthDivider(
-                            onSeeAll: () {},
-                            title: 'Sessions',
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 22.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                HealthCard(
+                                  title: 'Crash Free Sessions',
+                                  viewModel: viewModel.crashFreeSessionsForProject(viewModel.projects[_index]?.project),
+                                ),
+                                SizedBox(width: 8),
+                                HealthCard(
+                                  title: 'Crash Free Users',
+                                  viewModel: viewModel.crashFreeUsersForProject(viewModel.projects[_index]?.project),
+                                ),
+                              ],
+                            ),
                           ),
                           SessionsChartRow(
                             title: 'Healthy',
@@ -144,22 +164,6 @@ class _HealthScreenState extends State<HealthScreen> {
                             color: SentryColors.burntSienna,
                             sessionState: viewModel.sessionState(_index, SessionStatus.crashed),
                           ),
-                          HealthDivider(
-                            onSeeAll: () {},
-                            title: 'Statistics',
-                          ),
-                          Row(
-                            children: [
-                              HealthCard(
-                                title: 'Crash Free Sessions',
-                                viewModel: viewModel.crashFreeSessionsForProject(viewModel.projects[_index]?.project),
-                              ),
-                              HealthCard(
-                                title: 'Crash Free Users',
-                                viewModel: viewModel.crashFreeUsersForProject(viewModel.projects[_index]?.project),
-                              ),
-                            ],
-                          )
                         ],
                       ),
                     ),

@@ -15,15 +15,16 @@ class HealthCard extends StatelessWidget {
     return Expanded(
         child: Card(
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(15))),
+              side: BorderSide(color: Color(0x33B9C1D9), width: 1),
+              borderRadius: BorderRadius.all(Radius.circular(15))
+          ),
           elevation: 4,
           shadowColor: SentryColors.silverChalice.withAlpha((256 * 0.2).toInt()),
-          margin: EdgeInsets.only(left: 7, right: 7, top: 0, bottom: 22),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
-                padding: EdgeInsets.only(top: 12),
+                padding: EdgeInsets.only(top: 16),
                 child: Text(
                   viewModel.value,
                   style: TextStyle(
@@ -44,7 +45,7 @@ class HealthCard extends StatelessWidget {
                     ),
                   )),
               Padding(
-                  padding: EdgeInsets.only(bottom: 12),
+                  padding: EdgeInsets.only(bottom: 16),
                   child:
                   Row(
                       mainAxisAlignment: MainAxisAlignment.center,

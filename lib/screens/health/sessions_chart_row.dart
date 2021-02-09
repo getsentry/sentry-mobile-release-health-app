@@ -27,23 +27,15 @@ class SessionsChartRow extends StatelessWidget {
         ),
         child:
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                  padding: EdgeInsets.only(bottom: 5),
-                  child: Text(title,
-                      style: TextStyle(
-                        color: SentryColors.revolver,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ))),
-              Text('Last 24 hours',
-                  style: TextStyle(
-                    color: SentryColors.mamba,
-                    fontSize: 12,
-                  ))
-            ],
+          Padding(
+            padding: EdgeInsets.only(bottom: 5),
+            child: Text(title,
+              style: TextStyle(
+                color: SentryColors.revolver,
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+              )
+            )
           ),
           Expanded(
               child:
