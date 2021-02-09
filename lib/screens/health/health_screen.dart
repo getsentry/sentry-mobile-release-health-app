@@ -126,6 +126,7 @@ class _HealthScreenState extends State<HealthScreen> {
                             title: 'Healthy',
                             color: SentryColors.buttercup,
                             sessionState: viewModel.sessionState(_index, SessionStatus.healthy),
+                            flipDeltaColors: true,
                           ),
                           SessionsChartRow(
                             title: 'Errored',
