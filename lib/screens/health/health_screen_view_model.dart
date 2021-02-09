@@ -17,8 +17,10 @@ class HealthScreenViewModel {
       _erroredSessionsStateByProjectId = store.state.globalState.sessionStateByProjectId({SessionStatus.errored}),
       _abnormalSessionsStateByProjectId = store.state.globalState.sessionStateByProjectId({SessionStatus.abnormal}),
       _crashedSessionStateByProjectId = store.state.globalState.sessionStateByProjectId({SessionStatus.crashed}),
-      _stabilityScoreByProjectId = store.state.globalState.stabilityScoreByProjectId,
-      _stabilityScoreBeforeByProjectId = store.state.globalState.stabilityScoreBeforeByProjectId,
+      _crashFreeSessionsByProjectId = store.state.globalState.crashFreeSessionsByProjectId,
+      _crashFreeSessionsBeforeByProjectId = store.state.globalState.crashFreeSessionsBeforeByProjectId,
+      _crashFreeUsersByProjectId = store.state.globalState.crashFreeUsersByProjectId,
+      _crashFreeUsersBeforeByProjectId = store.state.globalState.crashFreeUsersBeforeByProjectId,
       _apdexByProjectId = store.state.globalState.apdexByProjectId,
       _apdexBeforeByProjectId = store.state.globalState.apdexBeforeByProjectId,
       _fetchProjectsNeeded = !store.state.globalState.projectsFetchedOnce &&
@@ -41,8 +43,10 @@ class HealthScreenViewModel {
   final Map<String, SessionState> _abnormalSessionsStateByProjectId;
   final Map<String, SessionState> _crashedSessionStateByProjectId;
 
-  final Map<String, double> _stabilityScoreByProjectId;
-  final Map<String, double> _stabilityScoreBeforeByProjectId;
+  final Map<String, double> _crashFreeSessionsByProjectId;
+  final Map<String, double> _crashFreeSessionsBeforeByProjectId;
+  final Map<String, double> _crashFreeUsersByProjectId;
+  final Map<String, double> _crashFreeUsersBeforeByProjectId;
 
   final Map<String, double> _apdexByProjectId;
   final Map<String, double> _apdexBeforeByProjectId;
@@ -93,10 +97,17 @@ class HealthScreenViewModel {
     }
   }
 
-  HealthCardViewModel stabilityScoreForProject(Project project) {
-    return HealthCardViewModel.stabilityScore(
-      _stabilityScoreByProjectId[project.id],
-      _stabilityScoreBeforeByProjectId[project.id],
+  HealthCardViewModel crashFreeSessionsForProject(Project project) {
+    return HealthCardViewModel.crashFreeSessions(
+      _crashFreeSessionsByProjectId[project.id],
+      _crashFreeSessionsBeforeByProjectId[project.id],
+    );
+  }
+
+  HealthCardViewModel crashFreeUsersForProject(Project project) {
+    return HealthCardViewModel.crashFreeSessions(
+      _crashFreeUsersByProjectId[project.id],
+      _crashFreeUsersBeforeByProjectId[project.id],
     );
   }
 

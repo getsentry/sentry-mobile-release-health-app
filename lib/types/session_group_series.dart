@@ -7,11 +7,14 @@ part 'session_group_series.g.dart';
 
 @JsonSerializable()
 class SessionGroupSeries {
-  SessionGroupSeries(this.sumSession);
+  SessionGroupSeries(this.sumSession, this.countUniqueUsers);
   factory SessionGroupSeries.fromJson(Map<String, dynamic> json) => _$SessionGroupSeriesFromJson(json);
 
   @JsonKey(name: SessionGroup.sumSessionKey)
   final List<int> sumSession;
+
+  @JsonKey(name: SessionGroup.countUniqueUsersKey)
+  final List<int> countUniqueUsers;
 
   Map<String, dynamic> toJson() => _$SessionGroupSeriesToJson(this);
 }

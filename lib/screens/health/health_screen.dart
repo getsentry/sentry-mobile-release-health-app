@@ -126,6 +126,7 @@ class _HealthScreenState extends State<HealthScreen> {
                             title: 'Healthy',
                             color: SentryColors.buttercup,
                             sessionState: viewModel.sessionState(_index, SessionStatus.healthy),
+                            flipDeltaColors: true,
                           ),
                           SessionsChartRow(
                             title: 'Errored',
@@ -150,12 +151,12 @@ class _HealthScreenState extends State<HealthScreen> {
                           Row(
                             children: [
                               HealthCard(
-                                  title: 'Crash Free',
-                                  viewModel: viewModel.stabilityScoreForProject(viewModel.projects[_index]?.project),
+                                title: 'Crash Free Sessions',
+                                viewModel: viewModel.crashFreeSessionsForProject(viewModel.projects[_index]?.project),
                               ),
                               HealthCard(
-                                title: 'Apdex',
-                                viewModel: viewModel.apdexForProject(viewModel.projects[_index]?.project),
+                                title: 'Crash Free Users',
+                                viewModel: viewModel.crashFreeUsersForProject(viewModel.projects[_index]?.project),
                               ),
                             ],
                           )

@@ -44,8 +44,10 @@ class GlobalState {
       this.releasesLoading,
       this.sessionsByProjectId,
       this.sessionsBeforeByProjectId,
-      this.stabilityScoreByProjectId,
-      this.stabilityScoreBeforeByProjectId,
+      this.crashFreeSessionsByProjectId,
+      this.crashFreeSessionsBeforeByProjectId,
+      this.crashFreeUsersByProjectId,
+      this.crashFreeUsersBeforeByProjectId,
       this.apdexByProjectId,
       this.apdexBeforeByProjectId,
       this.issuesByProjectSlug,
@@ -70,8 +72,10 @@ class GlobalState {
       sessionsByProjectId: {},
       sessionsBeforeByProjectId: {},
       issuesByProjectSlug: {},
-      stabilityScoreByProjectId: {},
-      stabilityScoreBeforeByProjectId: {},
+      crashFreeSessionsByProjectId: {},
+      crashFreeSessionsBeforeByProjectId: {},
+      crashFreeUsersByProjectId: {},
+      crashFreeUsersBeforeByProjectId: {},
       apdexByProjectId: {},
       apdexBeforeByProjectId: {},
       selectedOrganization: null,
@@ -97,8 +101,10 @@ class GlobalState {
 
   final Map<String, Sessions> sessionsByProjectId;
   final Map<String, Sessions> sessionsBeforeByProjectId; // Interval before sessionsByProjectId
-  final Map<String, double> stabilityScoreByProjectId;
-  final Map<String, double> stabilityScoreBeforeByProjectId; // Interval before stabilityScoreByProjectId
+  final Map<String, double> crashFreeSessionsByProjectId;
+  final Map<String, double> crashFreeSessionsBeforeByProjectId; // Interval before stabilityScoreByProjectId
+  final Map<String, double> crashFreeUsersByProjectId;
+  final Map<String, double> crashFreeUsersBeforeByProjectId; // Interval before stabilityScoreByProjectId
   final Map<String, double> apdexByProjectId;
   final Map<String, double> apdexBeforeByProjectId; // Interval before apdexByProjectId
 
@@ -125,8 +131,10 @@ class GlobalState {
     bool releasesLoading,
     Map<String, Sessions> sessionsByProjectId,
     Map<String, Sessions> sessionsBeforeByProjectId,
-    Map<String, double> stabilityScoreByProjectId,
-    Map<String, double> stabilityScoreBeforeByProjectId,
+    Map<String, double> crashFreeSessionsByProjectId,
+    Map<String, double> crashFreeSessionsBeforeByProjectId,
+    Map<String, double> crashFreeUsersByProjectId,
+    Map<String, double> crashFreeUsersBeforeByProjectId,
     Map<String, double> apdexByProjectId,
     Map<String, double> apdexBeforeByProjectId,
     Map<String, List<Group>> issuesByProjectSlug,
@@ -149,8 +157,10 @@ class GlobalState {
       releasesLoading: releasesLoading ?? this.releasesLoading,
       sessionsByProjectId: sessionsByProjectId ?? this.sessionsByProjectId,
       sessionsBeforeByProjectId: sessionsBeforeByProjectId ?? this.sessionsBeforeByProjectId,
-      stabilityScoreByProjectId: stabilityScoreByProjectId ?? this.stabilityScoreByProjectId,
-      stabilityScoreBeforeByProjectId: stabilityScoreBeforeByProjectId ?? this.stabilityScoreBeforeByProjectId,
+      crashFreeSessionsByProjectId: crashFreeSessionsByProjectId ?? this.crashFreeSessionsByProjectId,
+      crashFreeSessionsBeforeByProjectId: crashFreeSessionsBeforeByProjectId ?? this.crashFreeSessionsBeforeByProjectId,
+      crashFreeUsersByProjectId: crashFreeUsersByProjectId ?? this.crashFreeUsersByProjectId,
+      crashFreeUsersBeforeByProjectId: crashFreeUsersBeforeByProjectId ?? this.crashFreeUsersBeforeByProjectId,
       apdexByProjectId: apdexByProjectId ?? this.apdexByProjectId,
       apdexBeforeByProjectId: apdexBeforeByProjectId ?? this.apdexBeforeByProjectId,
       issuesByProjectSlug: issuesByProjectSlug ?? this.issuesByProjectSlug,

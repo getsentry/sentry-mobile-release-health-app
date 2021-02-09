@@ -1,21 +1,36 @@
+import 'package:sentry_mobile/types/session_group.dart';
+
 import '../types/session_status.dart';
 import '../types/sessions.dart';
 
 extension StabilityScore on Sessions {
-  double stabilityScore() {
+  double crashFreeSessions() {
+    return _crashFree((SessionGroup group) {
+      return group?.totals?.sumSession;
+    });
+  }
+
+  double crashFreeUsers() {
+    return _crashFree((SessionGroup group) {
+      return group?.totals?.countUniqueUsers;
+    });
+  }
+
+  // Higher order function to calculate crash free value
+  double _crashFree(int Function(SessionGroup group) valueFromGroup) {
     int healthy;
     int errored;
     int abnormal;
     int crashed;
     for (final group in groups) {
       if (group?.by?.sessionStatus == SessionStatus.healthy) {
-        healthy = group?.totals?.sumSession;
+        healthy = valueFromGroup(group);
       } else if (group?.by?.sessionStatus == SessionStatus.errored) {
-        errored = group?.totals?.sumSession;
+        errored = valueFromGroup(group);
       } else if (group?.by?.sessionStatus == SessionStatus.abnormal) {
-        abnormal = group?.totals?.sumSession;
+        abnormal = valueFromGroup(group);
       } else if (group?.by?.sessionStatus == SessionStatus.crashed) {
-        crashed = group?.totals?.sumSession;
+        crashed = valueFromGroup(group);
       }
     }
     if (healthy == null || errored == null || abnormal == null || crashed == null) {

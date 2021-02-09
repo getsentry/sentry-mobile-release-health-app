@@ -13,6 +13,7 @@ class SessionGroup {
   factory SessionGroup.fromJson(Map<String, dynamic> json) => _$SessionGroupFromJson(json);
 
   static const sumSessionKey = 'sum(session)';
+  static const countUniqueUsersKey = 'count_unique(user)';
 
   final SessionGroupBy by;
   final SessionGroupTotals totals;

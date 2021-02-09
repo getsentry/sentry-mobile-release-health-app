@@ -8,7 +8,7 @@ import 'package:sentry_mobile/utils/crash_free_formatting.dart';
 class HealthCardViewModel {
   HealthCardViewModel(this.value, this.change);
 
-  HealthCardViewModel.stabilityScore(double value, double valueBefore) {
+  HealthCardViewModel.crashFreeSessions(double value, double valueBefore) {
     color = colorForValue(value);
     if (value != null) {
       this.value = value.formattedPercent();
@@ -17,8 +17,23 @@ class HealthCardViewModel {
     }
     if (value != null && valueBefore != null && value != valueBefore) {
       final changeValue = value - valueBefore;
-      final trendSign = changeValue > 0 ? '+' : '';
-      change = trendSign + changeValue.formattedPercent();
+      change = changeValue.formattedPercentChange();
+      trendIcon = getTrendIcon(changeValue);
+    } else {
+      change = '--';
+    }
+  }
+
+  HealthCardViewModel.crashFreeUsers(double value, double valueBefore) {
+    color = colorForValue(value);
+    if (value != null) {
+      this.value = value.formattedPercent();
+    } else {
+      this.value = '--';
+    }
+    if (value != null && valueBefore != null && value != valueBefore) {
+      final changeValue = value - valueBefore;
+      change = changeValue.formattedPercentChange();
       trendIcon = getTrendIcon(changeValue);
     } else {
       change = '--';

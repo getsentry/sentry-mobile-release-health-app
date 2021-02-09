@@ -16,16 +16,16 @@ void main() {
       final crashed = _givenSessionGroup(SessionStatus.crashed, 1);
 
       var sessions = Sessions([], [healthy]);
-      expect(sessions.stabilityScore(), isNull);
+      expect(sessions.crashFreeSessions(), isNull);
 
       sessions = Sessions([], [healthy, errored]);
-      expect(sessions.stabilityScore(), isNull);
+      expect(sessions.crashFreeSessions(), isNull);
 
       sessions = Sessions([], [healthy, errored, abnormal]);
-      expect(sessions.stabilityScore(), isNull);
+      expect(sessions.crashFreeSessions(), isNull);
 
       sessions = Sessions([], [errored, abnormal, crashed]);
-      expect(sessions.stabilityScore(), isNull);
+      expect(sessions.crashFreeSessions(), isNull);
     });
 
     test('stability score', () {
@@ -35,7 +35,7 @@ void main() {
       final crashed = _givenSessionGroup(SessionStatus.crashed, 1);
 
       final sessions = Sessions([], [healthy, errored, abnormal, crashed]);
-      expect(sessions.stabilityScore(), equals(75.0));
+      expect(sessions.crashFreeSessions(), equals(75.0));
     });
 
     test('all zero equals null', () {
@@ -45,7 +45,7 @@ void main() {
       final crashed = _givenSessionGroup(SessionStatus.crashed, 0);
 
       final sessions = Sessions([], [healthy, errored, abnormal, crashed]);
-      expect(sessions.stabilityScore(), isNull);
+      expect(sessions.crashFreeSessions(), isNull);
     });
 
   });
@@ -54,7 +54,7 @@ void main() {
 SessionGroup _givenSessionGroup(SessionStatus status, int num) {
   return SessionGroup(
       SessionGroupBy(status),
-      SessionGroupTotals(num),
-      SessionGroupSeries([])
+      SessionGroupTotals(num, num),
+      SessionGroupSeries([], [])
   );
 }

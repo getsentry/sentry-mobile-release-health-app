@@ -7,11 +7,12 @@ import '../../utils/sentry_colors.dart';
 import '../../utils/sentry_icons.dart';
 
 class SessionsChartRow extends StatelessWidget {
-  SessionsChartRow({@required this.title, @required this.color, @required this.sessionState});
+  SessionsChartRow({@required this.title, @required this.color, @required this.sessionState, this.flipDeltaColors = false});
 
   final String title;
   final Color color;
   final SessionState sessionState;
+  final bool flipDeltaColors;
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +97,7 @@ class SessionsChartRow extends StatelessWidget {
                     )),
                   Padding(
                     padding: EdgeInsets.only(left: viewModel.percentChange == 0.0 ? 0 : 7),
-                    child: _getTrendIcon(viewModel.percentChange),
+                    child: _getTrendIcon(viewModel.percentChange, flipDeltaColors),
                   )
                 ]
               )
@@ -115,12 +116,19 @@ class SessionsChartRow extends StatelessWidget {
     return change == 0 ? '--' : _getTrendSign(change) + change.floor().toString() + '%';
   }
 
-  Icon _getTrendIcon(double change) {
+  Color _getTrendColor(double change, bool flipDelta) {
+    return change > 0
+        ? !flipDelta ? Color(0xffEE6855) : Color(0xff23B480)
+        : !flipDelta ? Color(0xff23B480) : Color(0xffEE6855);
+  }
+
+  Icon _getTrendIcon(double change, bool flipDeltaColor) {
     if (change == 0) {
       return null;
     }
+    final trendColor = _getTrendColor(change, flipDeltaColor);
     return change > 0
-        ? Icon(SentryIcons.trend_up, color: Color(0xffEE6855), size: 8.0)
-        : Icon(SentryIcons.trend_down, color: Color(0xff23B480), size: 8.0);
+        ? Icon(SentryIcons.trend_up, color: trendColor, size: 8.0)
+        : Icon(SentryIcons.trend_down, color: trendColor, size: 8.0);
   }
 }
