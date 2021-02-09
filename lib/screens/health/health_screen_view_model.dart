@@ -11,7 +11,7 @@ import '../../types/session_status.dart';
 class HealthScreenViewModel {
   HealthScreenViewModel.fromStore(Store<AppState> store)
     : _store = store,
-      projects = store.state.globalState.allOrBookmarkedProjectsWithLatestReleases(),
+      projects = store.state.globalState.projectsWithLatestReleases,
       _totalSessionStateByProjectId = store.state.globalState.sessionStateByProjectId(SessionStatus.values.toSet()),
       _healthySessionsStateByProjectId = store.state.globalState.sessionStateByProjectId({SessionStatus.healthy}),
       _erroredSessionsStateByProjectId = store.state.globalState.sessionStateByProjectId({SessionStatus.errored}),

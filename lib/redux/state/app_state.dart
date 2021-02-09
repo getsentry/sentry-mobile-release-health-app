@@ -170,24 +170,6 @@ class GlobalState {
     );
   }
 
-  // When there are no bookmarked projects, we return all of them.
-  List<ProjectWithLatestRelease> allOrBookmarkedProjectsWithLatestReleases() {
-    final List<ProjectWithLatestRelease> allProjectsWithLatestReleases = [];
-    final List<ProjectWithLatestRelease> bookmarkedProjectsWithLatestReleases = [];
-
-    for (final projectWithLatestRelease in projectsWithLatestReleases) {
-      allProjectsWithLatestReleases.add(projectWithLatestRelease);
-      if (projectWithLatestRelease.project.isBookmarked) {
-        bookmarkedProjectsWithLatestReleases.add(projectWithLatestRelease);
-      }
-    }
-    if (bookmarkedProjectsWithLatestReleases.isEmpty) {
-      return allProjectsWithLatestReleases;
-    } else {
-      return bookmarkedProjectsWithLatestReleases;
-    }
-  }
-
   Map<String, SessionState> sessionStateByProjectId(Set<SessionStatus> sessionStatus) {
     final sessionStateByProjectId = <String, SessionState>{};
 
