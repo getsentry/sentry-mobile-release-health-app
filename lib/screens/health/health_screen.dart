@@ -37,15 +37,12 @@ class _HealthScreenState extends State<HealthScreen> {
   Widget _content(HealthScreenViewModel viewModel) {
     viewModel.fetchProjectsIfNeeded();
 
-    if (viewModel.showProjectEmptyScreen || viewModel.showReleaseEmptyScreen) {
+    if (viewModel.showProjectEmptyScreen) {
       _index = 0;
 
       String text = '';
       if (viewModel.showProjectEmptyScreen) {
         text = 'You need at least one project to use this view.';
-      }
-      if (viewModel.showReleaseEmptyScreen) {
-        text = 'You need at least one release in you projects to use this view.';
       }
       return EmptyScreen(
         title: 'Remain Calm',
@@ -113,13 +110,7 @@ class _HealthScreenState extends State<HealthScreen> {
                           controller: PageController(viewportFraction: (MediaQuery.of(context).size.width - 44) / MediaQuery.of(context).size.width),
                           onPageChanged: (int index) => setState(() => updateIndex(index)),
                           itemBuilder: (context, index) {
-                            final projectWitLatestRelease = viewModel.projects[index];
-                            return ProjectCard(
-                                viewModel.organizationName(index),
-                                projectWitLatestRelease.project,
-                                projectWitLatestRelease.release,
-                                viewModel.totalSessionStateForProject(projectWitLatestRelease.project)
-                            );
+                            return viewModel.projectCard(index);
                           },
                         )),
                     Container(
