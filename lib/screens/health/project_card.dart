@@ -42,14 +42,24 @@ class ProjectCard extends StatelessWidget {
 
     final platform = project.platform ?? project.platforms.first;
     if (platform != null) {
-      final platformImage = PlatformIcons.svgPicture(platform);
+      final platformImage = PlatformIcons.svgPicture(platform, 20, 20);
       if (platformImage != null) {
         titleRowChildren.add(
             Padding(
                 padding: const EdgeInsets.only(left: 8),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(3)),
-                  child: platformImage
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(3),
+                    border: Border.all(
+                      width: 2,
+                      color: Colors.white
+                    ),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(2)),
+                    child: platformImage
+                  ),
                 )
             )
         );
