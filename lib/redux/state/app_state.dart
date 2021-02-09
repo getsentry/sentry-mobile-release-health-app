@@ -1,13 +1,12 @@
 import 'dart:io';
 
-import 'package:sentry_mobile/types/release.dart';
-
 import '../../redux/state/session_state.dart';
 import '../../screens/chart/line_chart_point.dart';
 import '../../types/group.dart';
 import '../../types/organization.dart';
 import '../../types/project.dart';
 import '../../types/project_with_latest_release.dart';
+import '../../types/release.dart';
 import '../../types/session_status.dart';
 import '../../types/sessions.dart';
 import '../../types/user.dart';

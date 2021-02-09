@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:sentry_mobile/types/session_status.dart';
-import 'package:sentry_mobile/utils/sentry_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../redux/state/app_state.dart';
 import '../../screens/empty/empty_screen.dart';
+import '../../types/session_status.dart';
+import '../../utils/sentry_colors.dart';
 import 'health_card.dart';
 import 'health_divider.dart';
 import 'health_screen_view_model.dart';

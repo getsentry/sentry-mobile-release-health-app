@@ -1,10 +1,10 @@
 import 'package:redux/redux.dart';
-import 'package:sentry_mobile/screens/health/health_card_view_model.dart';
-import 'package:sentry_mobile/screens/health/project_card.dart';
 
 import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
 import '../../redux/state/session_state.dart';
+import '../../screens/health/health_card_view_model.dart';
+import '../../screens/health/project_card.dart';
 import '../../types/project.dart';
 import '../../types/project_with_latest_release.dart';
 import '../../types/session_status.dart';
