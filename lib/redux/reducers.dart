@@ -1,7 +1,8 @@
 import 'package:redux/redux.dart';
 
 import '../api/api_errors.dart';
-import '../types/project_with_latest_release.dart';
+import '../types/project.dart';
+import '../types/release.dart';
 import '../utils/stability_score.dart';
 import 'actions.dart';
 import 'state/app_state.dart';
@@ -56,20 +57,20 @@ GlobalState _fetchOrganizationsAndProjectsAction(GlobalState state, FetchOrganiz
 
 GlobalState _fetchOrganizationsAndProjectsSuccessAction(GlobalState state, FetchOrganizationsAndProjectsSuccessAction action) {
   final organizationsSlugByProjectSlug = <String, String>{};
-  final projectsWithLatestReleases = <ProjectWithLatestRelease>[];
+  final projects = <Project>[];
 
   for (final organizationSlug in action.projectsByOrganizationSlug.keys) {
     for (final project in action.projectsByOrganizationSlug[organizationSlug]) {
       organizationsSlugByProjectSlug[project.slug] = organizationSlug;
       if (project.latestRelease != null) {
-        projectsWithLatestReleases.add(ProjectWithLatestRelease(project, null));
+        projects.add(project);
       }
     }
   }
 
-  projectsWithLatestReleases.sort((ProjectWithLatestRelease a, ProjectWithLatestRelease b) {
-    final valueA = a.project.isBookmarked ? 0 : 1;
-    final valueB = b.project.isBookmarked ? 0 : 1;
+  projects.sort((Project a, Project b) {
+    final valueA = a.isBookmarked ? 0 : 1;
+    final valueB = b.isBookmarked ? 0 : 1;
     return valueA.compareTo(valueB);
   });
 
@@ -77,10 +78,9 @@ GlobalState _fetchOrganizationsAndProjectsSuccessAction(GlobalState state, Fetch
     organizations: action.organizations,
     organizationsSlugByProjectSlug: organizationsSlugByProjectSlug,
     projectsByOrganizationSlug: action.projectsByOrganizationSlug,
-    projectsWithLatestReleases: projectsWithLatestReleases,
+    projects: projects,
     projectsFetchedOnce: true,
     projectsLoading: false,
-    releasesLoading: false
   );
 }
 
@@ -97,39 +97,37 @@ GlobalState _selectProjectAction(GlobalState state, SelectProjectAction action) 
 }
 
 GlobalState _fetchLatestReleasesAction(GlobalState state, FetchLatestReleasesAction action) {
-  return state.copyWith(releasesLoading: true);
+  return state.copyWith();
 }
 
 GlobalState _fetchLatestReleasesSuccessAction(GlobalState state, FetchLatestReleasesSuccessAction action) {
+  final projects = <Project>[];
+  final latestReleasesByProjectId = <String, Release>{};
+
+  for (final projectsWithLatestRelease in action.projectsWithLatestReleases) {
+    projects.add(projectsWithLatestRelease.project);
+    latestReleasesByProjectId[projectsWithLatestRelease.project.id] = projectsWithLatestRelease.release;
+  }
+
   return state.copyWith(
-    projectsWithLatestReleases: action.projectsWithLatestReleases,
-    releasesFetchedOnce: true,
-    releasesLoading: false
+    projects: projects,
+    latestReleasesByProjectId: latestReleasesByProjectId
   );
 }
 
 GlobalState _fetchLatestReleasesFailureAction(GlobalState state, FetchLatestReleasesFailureAction action) {
-  return state.copyWith(releasesLoading: false);
+  return state.copyWith();
 }
 
 GlobalState _fetchLatestReleaseSuccessAction(GlobalState state, FetchLatestReleaseSuccessAction action) {
-  final projectsWithLatestReleases = state.projectsWithLatestReleases;
   final organizationSlug = state.organizationsSlugByProjectSlug[action.projectSlug];
   final project = state.projectsByOrganizationSlug[organizationSlug].where((element) => element.slug == action.projectSlug).first;
 
-  if (project != null) {
-    final index = projectsWithLatestReleases.indexWhere((element) => element.project.id == project.id);
-    if (index != -1) {
-      projectsWithLatestReleases.removeAt(index);
-      projectsWithLatestReleases.insert(index, ProjectWithLatestRelease(project, action.latestRelease));
-    } else {
-      projectsWithLatestReleases.add(ProjectWithLatestRelease(project, action.latestRelease));
-    }
-  }
+  final latestReleasesByProjectId = state.latestReleasesByProjectId;
+  latestReleasesByProjectId[project.id] = action.latestRelease;
+
   return state.copyWith(
-      projectsWithLatestReleases: projectsWithLatestReleases,
-      releasesFetchedOnce: true,
-      releasesLoading: false
+      latestReleasesByProjectId: latestReleasesByProjectId,
   );
 }
 

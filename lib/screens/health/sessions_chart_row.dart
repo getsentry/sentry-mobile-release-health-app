@@ -5,6 +5,7 @@ import '../../screens/chart/line_chart.dart';
 import '../../screens/health/sessions_chart_row_view_model.dart';
 import '../../utils/sentry_colors.dart';
 import '../../utils/sentry_icons.dart';
+import '../../utils/session_formatting.dart';
 
 class SessionsChartRow extends StatelessWidget {
   SessionsChartRow({@required this.title, @required this.color, @required this.sessionState, this.flipDeltaColors = false});
@@ -27,23 +28,15 @@ class SessionsChartRow extends StatelessWidget {
         ),
         child:
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                  padding: EdgeInsets.only(bottom: 5),
-                  child: Text(title,
-                      style: TextStyle(
-                        color: SentryColors.revolver,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ))),
-              Text('Last 24 hours',
-                  style: TextStyle(
-                    color: SentryColors.mamba,
-                    fontSize: 12,
-                  ))
-            ],
+          Padding(
+            padding: EdgeInsets.only(bottom: 5),
+            child: Text(title,
+              style: TextStyle(
+                color: SentryColors.revolver,
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+              )
+            )
           ),
           Expanded(
               child:
@@ -81,7 +74,7 @@ class SessionsChartRow extends StatelessWidget {
             children: [
               Padding(
                   padding: EdgeInsets.only(bottom: 5),
-                  child: Text('${viewModel.numberOfIssues}',
+                  child: Text(viewModel.numberOfIssues.formattedNumberOfSession(),
                       style: TextStyle(
                         color: SentryColors.woodSmoke,
                         fontWeight: FontWeight.w600,
@@ -90,14 +83,15 @@ class SessionsChartRow extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Padding(
+                    padding: EdgeInsets.only(right: viewModel.percentChange == 0.0 ? 0 : 7),
+                    child: _getTrendIcon(viewModel.percentChange, flipDeltaColors),
+                  ),
                   Text(_getTrendPercentage(viewModel.percentChange),
                     style: TextStyle(
                       color: SentryColors.lavenderGray,
                       fontSize: 12,
-                    )),
-                  Padding(
-                    padding: EdgeInsets.only(left: viewModel.percentChange == 0.0 ? 0 : 7),
-                    child: _getTrendIcon(viewModel.percentChange, flipDeltaColors),
+                    )
                   )
                 ]
               )
@@ -108,12 +102,8 @@ class SessionsChartRow extends StatelessWidget {
 
   // Helper
 
-  String _getTrendSign(double change) {
-    return change > 0 ? '+' : '';
-  }
-
   String _getTrendPercentage(double change) {
-    return change == 0 ? '--' : _getTrendSign(change) + change.floor().toString() + '%';
+    return change == 0 ? '--' : change.floor().abs().toString() + '%';
   }
 
   Color _getTrendColor(double change, bool flipDelta) {

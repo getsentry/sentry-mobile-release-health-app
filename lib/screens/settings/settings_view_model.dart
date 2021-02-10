@@ -14,15 +14,7 @@ class SettingsViewModel {
         .map((e) => e.slug)
         .join(', ');
     bookmarkedProjects = projects.isNotEmpty ? projects : '--';
-
-    final me = store.state.globalState.me;
-    final username = me?.username;
-    final email = me?.email;
-    if (username != null && email != null) {
-      userInfo  = username != email ? '$username $email' : username;
-    } else {
-      userInfo = '--';
-    }
+    userInfo = store.state.globalState.me?.email ?? '--';
     version = store.state.globalState.version;
   }
 

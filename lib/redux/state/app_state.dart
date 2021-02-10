@@ -6,6 +6,7 @@ import '../../types/group.dart';
 import '../../types/organization.dart';
 import '../../types/project.dart';
 import '../../types/project_with_latest_release.dart';
+import '../../types/release.dart';
 import '../../types/session_status.dart';
 import '../../types/sessions.dart';
 import '../../types/user.dart';
@@ -39,9 +40,8 @@ class GlobalState {
       this.projectsByOrganizationSlug,
       this.projectsFetchedOnce,
       this.projectsLoading,
-      this.projectsWithLatestReleases,
-      this.releasesFetchedOnce,
-      this.releasesLoading,
+      this.projects,
+      this.latestReleasesByProjectId,
       this.sessionsByProjectId,
       this.sessionsBeforeByProjectId,
       this.crashFreeSessionsByProjectId,
@@ -66,9 +66,8 @@ class GlobalState {
       projectsByOrganizationSlug: {},
       projectsFetchedOnce: false,
       projectsLoading: false,
-      projectsWithLatestReleases: [],
-      releasesFetchedOnce: false,
-      releasesLoading: false,
+      projects: [],
+      latestReleasesByProjectId: {},
       sessionsByProjectId: {},
       sessionsBeforeByProjectId: {},
       issuesByProjectSlug: {},
@@ -95,9 +94,8 @@ class GlobalState {
   final bool projectsFetchedOnce;
   final bool projectsLoading;
 
-  final List<ProjectWithLatestRelease> projectsWithLatestReleases;
-  final bool releasesFetchedOnce;
-  final bool releasesLoading;
+  final List<Project> projects;
+  final Map<String, Release> latestReleasesByProjectId;
 
   final Map<String, Sessions> sessionsByProjectId;
   final Map<String, Sessions> sessionsBeforeByProjectId; // Interval before sessionsByProjectId
@@ -126,9 +124,8 @@ class GlobalState {
     final Map<String, List<Project>> projectsByOrganizationSlug,
     bool projectsFetchedOnce,
     bool projectsLoading,
-    List<ProjectWithLatestRelease> projectsWithLatestReleases,
-    bool releasesFetchedOnce,
-    bool releasesLoading,
+    List<Project> projects,
+    Map<String, Release> latestReleasesByProjectId,
     Map<String, Sessions> sessionsByProjectId,
     Map<String, Sessions> sessionsBeforeByProjectId,
     Map<String, double> crashFreeSessionsByProjectId,
@@ -152,9 +149,8 @@ class GlobalState {
       projectsByOrganizationSlug: projectsByOrganizationSlug ?? this.projectsByOrganizationSlug,
       projectsFetchedOnce: projectsFetchedOnce ?? this.projectsFetchedOnce,
       projectsLoading: projectsLoading ?? this.projectsLoading,
-      projectsWithLatestReleases: projectsWithLatestReleases ?? this.projectsWithLatestReleases,
-      releasesFetchedOnce: releasesFetchedOnce ?? this.releasesFetchedOnce,
-      releasesLoading: releasesLoading ?? this.releasesLoading,
+      projects: projects ?? this.projects,
+      latestReleasesByProjectId: latestReleasesByProjectId ?? this.latestReleasesByProjectId,
       sessionsByProjectId: sessionsByProjectId ?? this.sessionsByProjectId,
       sessionsBeforeByProjectId: sessionsBeforeByProjectId ?? this.sessionsBeforeByProjectId,
       crashFreeSessionsByProjectId: crashFreeSessionsByProjectId ?? this.crashFreeSessionsByProjectId,
@@ -238,11 +234,15 @@ class GlobalState {
   }
 
   Organization organizationForProjectSlug(String projectSlug) {
-    final organziationSlug = organizationsSlugByProjectSlug[projectSlug];
-    if (organziationSlug != null) {
-      return organizations.firstWhere((element) => element.slug == organziationSlug);
+    final organizationSlug = organizationsSlugByProjectSlug[projectSlug];
+    if (organizationSlug != null) {
+      return organizations.firstWhere((element) => element.slug == organizationSlug);
     } else {
       return null;
     }
+  }
+
+  List<ProjectWithLatestRelease> projectsWithLatestReleases() {
+    return projects.map((project) => ProjectWithLatestRelease(project, latestReleasesByProjectId[project.id])).toList();
   }
 }

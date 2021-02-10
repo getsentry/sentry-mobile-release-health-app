@@ -2,16 +2,15 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:sentry_mobile/types/session_status.dart';
-import 'package:sentry_mobile/utils/sentry_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../redux/state/app_state.dart';
 import '../../screens/empty/empty_screen.dart';
+import '../../types/session_status.dart';
+import '../../utils/sentry_colors.dart';
 import 'health_card.dart';
 import 'health_divider.dart';
 import 'health_screen_view_model.dart';
-import 'project_card.dart';
 import 'sessions_chart_row.dart';
 
 class HealthScreen extends StatefulWidget {
@@ -37,15 +36,12 @@ class _HealthScreenState extends State<HealthScreen> {
   Widget _content(HealthScreenViewModel viewModel) {
     viewModel.fetchProjectsIfNeeded();
 
-    if (viewModel.showProjectEmptyScreen || viewModel.showReleaseEmptyScreen) {
+    if (viewModel.showProjectEmptyScreen) {
       _index = 0;
 
       String text = '';
       if (viewModel.showProjectEmptyScreen) {
         text = 'You need at least one project to use this view.';
-      }
-      if (viewModel.showReleaseEmptyScreen) {
-        text = 'You need at least one release in you projects to use this view.';
       }
       return EmptyScreen(
         title: 'Remain Calm',
@@ -99,28 +95,43 @@ class _HealthScreenState extends State<HealthScreen> {
                 physics: AlwaysScrollableScrollPhysics(),
                 child: Column(
                   children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: 16, right: 16),
+                      child: HealthDivider(
+                        onSeeAll: () {},
+                        title: 'in the last 24 hours',
+                      ),
+                    ),
                     SizedBox(
                         height: 200,
                         child: PageView.builder(
                           itemCount: viewModel.projects.length,
-                          controller: PageController(viewportFraction: 0.9),
+                          controller: PageController(viewportFraction: (MediaQuery.of(context).size.width - 44) / MediaQuery.of(context).size.width),
                           onPageChanged: (int index) => setState(() => updateIndex(index)),
                           itemBuilder: (context, index) {
-                            final projectWitLatestRelease = viewModel.projects[index];
-                            return ProjectCard(
-                                projectWitLatestRelease.project,
-                                projectWitLatestRelease.release,
-                                viewModel.totalSessionStateForProject(projectWitLatestRelease.project)
-                            );
+                            return viewModel.projectCard(index);
                           },
                         )),
                     Container(
                       padding: EdgeInsets.only(top: 22, left: 22, right: 22),
                       child: Column(
                         children: [
-                          HealthDivider(
-                            onSeeAll: () {},
-                            title: 'Sessions',
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 22.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                HealthCard(
+                                  title: 'Crash Free Sessions',
+                                  viewModel: viewModel.crashFreeSessionsForProject(viewModel.projects[_index]?.project),
+                                ),
+                                SizedBox(width: 8),
+                                HealthCard(
+                                  title: 'Crash Free Users',
+                                  viewModel: viewModel.crashFreeUsersForProject(viewModel.projects[_index]?.project),
+                                ),
+                              ],
+                            ),
                           ),
                           SessionsChartRow(
                             title: 'Healthy',
@@ -144,22 +155,6 @@ class _HealthScreenState extends State<HealthScreen> {
                             color: SentryColors.burntSienna,
                             sessionState: viewModel.sessionState(_index, SessionStatus.crashed),
                           ),
-                          HealthDivider(
-                            onSeeAll: () {},
-                            title: 'Statistics',
-                          ),
-                          Row(
-                            children: [
-                              HealthCard(
-                                title: 'Crash Free Sessions',
-                                viewModel: viewModel.crashFreeSessionsForProject(viewModel.projects[_index]?.project),
-                              ),
-                              HealthCard(
-                                title: 'Crash Free Users',
-                                viewModel: viewModel.crashFreeUsersForProject(viewModel.projects[_index]?.project),
-                              ),
-                            ],
-                          )
                         ],
                       ),
                     ),

@@ -2,19 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import '../../redux/state/session_state.dart';
-import '../../screens/shared/avatar_stack.dart';
-import '../../screens/shared/bordered_circle_avatar_view_model.dart';
 import '../../types/project.dart';
 import '../../types/release.dart';
 import '../../utils/platform_icons.dart';
-import '../../utils/relative_date_time.dart';
 import '../../utils/sentry_colors.dart';
+import '../../utils/session_formatting.dart';
 import '../chart/line_chart.dart';
 import '../chart/line_chart_data.dart';
 
 class ProjectCard extends StatelessWidget {
-  ProjectCard(this.project, this.release, this.sessions);
+  ProjectCard(this.organizationName, this.project, this.release, this.sessions);
 
+  final String organizationName;
   final Project project;
   final Release release; // Nullable
   final SessionState sessions; // Nullable
@@ -39,16 +38,26 @@ class ProjectCard extends StatelessWidget {
     ];
 
 
-    final platform = project.platform ?? project.platforms.first;
+    final platform = project.platform ?? (project.platforms?.isNotEmpty == true ? project.platforms?.first : null);
     if (platform != null) {
-      final platformImage = PlatformIcons.svgPicture(platform);
+      final platformImage = PlatformIcons.svgPicture(platform, 20, 20);
       if (platformImage != null) {
         titleRowChildren.add(
             Padding(
                 padding: const EdgeInsets.only(left: 8),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(3)),
-                  child: platformImage
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(3),
+                    border: Border.all(
+                      width: 2,
+                      color: Colors.white
+                    ),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(2)),
+                    child: platformImage
+                  ),
                 )
             )
         );
@@ -86,7 +95,7 @@ class ProjectCard extends StatelessWidget {
                   child: FittedBox(
                     fit: BoxFit.cover,
                     child: Text(
-                      "Total Sessions: ${sessions?.numberOfSessions ?? '--'} in the last 24h",
+                      organizationName ?? '--',
                       maxLines: 1,
                       style: Theme.of(context).textTheme.subtitle1,
                     ),
@@ -150,18 +159,18 @@ class ProjectCard extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              _lastReleaseInfos(context, release),
-                              if (release?.authors?.isNotEmpty == true)
-                                SizedBox(width: 6),
-                              AvatarStack(
-                                release?.authors
-                                  ?.take(5)
-                                  ?.map((e) =>
-                                  BorderedCircleAvatarViewModel.from(e))
-                                  ?.toList() ?? [],
-                                24,
-                                2
-                              )
+                              _infoBox(context, "Total: ${sessions?.numberOfSessions?.formattedNumberOfSession() ?? '--'}"),
+                              // if (release?.authors?.isNotEmpty == true)
+                              //   SizedBox(width: 6),
+                              // AvatarStack(
+                              //   release?.authors
+                              //     ?.take(5)
+                              //     ?.map((e) =>
+                              //     BorderedCircleAvatarViewModel.from(e))
+                              //     ?.toList() ?? [],
+                              //   24,
+                              //   2
+                              // )
                             ],
                           )
                       ),
@@ -171,38 +180,6 @@ class ProjectCard extends StatelessWidget {
             ]),
           ),
         ));
-  }
-
-  Widget _lastReleaseInfos(BuildContext context, Release release) {
-    final List<Widget> all = [];
-    final List<Widget> infoBoxes = [];
-
-    final version = release?.version;
-    if (version != null) {
-      infoBoxes.add(_infoBox(context, version));
-    }
-
-    final date = release?.deploy?.dateFinished ?? release?.dateCreated;
-    if (date != null) {
-      infoBoxes.add(_infoBox(context, date.relativeFromNow()));
-    }
-
-    final environment = release?.deploy?.environment;
-    if (environment != null) {
-      infoBoxes.add(_infoBox(context, environment));
-    }
-
-    for (var i = 0; i < infoBoxes.length; i++) {
-      all.add(infoBoxes[i]);
-      if (i < infoBoxes.length - 1) {
-        all.add(SizedBox(width: 4));
-      }
-    }
-
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: all
-    );
   }
 
   Widget _infoBox(BuildContext context, String text) {

@@ -106,10 +106,10 @@ class PlatformIcons {
     // Please add them where they belong alphabetically
   };
 
-  static SvgPicture svgPicture(String platform) {
+  static SvgPicture svgPicture(String platform, double width, double height) {
     final filename = platformToFileName[platform];
     if (filename != null) {
-      return SvgPicture.asset('assets/platformicons/$filename.svg', width: 24, height: 24
+      return SvgPicture.asset('assets/platformicons/$filename.svg', width: width, height: height
       );
     } else {
       return null;

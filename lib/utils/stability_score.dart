@@ -1,5 +1,4 @@
-import 'package:sentry_mobile/types/session_group.dart';
-
+import '../types/session_group.dart';
 import '../types/session_status.dart';
 import '../types/sessions.dart';
 
