@@ -20,84 +20,101 @@ class SessionsChartRow extends StatelessWidget {
     final viewModel = SessionsChartRowViewModel.create(sessionState);
     
     return Container(
-        padding: EdgeInsets.only(bottom: 22),
-        margin: EdgeInsets.only(bottom: 22),
-        decoration: BoxDecoration(
-          border:
-          Border(bottom: BorderSide(width: 1, color: Color(0x33B9C1D9))),
-        ),
-        child:
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Padding(
-            padding: EdgeInsets.only(bottom: 5),
-            child: Text(title,
-              style: TextStyle(
-                color: SentryColors.revolver,
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
-              )
-            )
-          ),
-          Expanded(
-              child:
-                viewModel.data == null
-                ? Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        LinearProgressIndicator(
-                            minHeight: 2.0,
-                            backgroundColor: Colors.white,
-                            valueColor: AlwaysStoppedAnimation<Color>(color)
-                        )
-                      ]
-                  ),
-                  height: 35,
+      padding: EdgeInsets.only(bottom: 22),
+      margin: EdgeInsets.only(bottom: 22),
+      decoration: BoxDecoration(
+        border:
+        Border(bottom: BorderSide(width: 1, color: Color(0x33B9C1D9))),
+      ),
+      child: Container(
+        height: 38,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              width: 72,
+              child: Padding(
+                padding: EdgeInsets.only(bottom: 5),
+                child: Text(title,
+                  style: TextStyle(
+                    color: SentryColors.revolver,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  )
                 )
-                : Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20),
-                  child: LineChart(
-                      data: viewModel.data,
-                      lineWidth: 2.0,
-                      lineColor: color,
-                      gradientStart: color.withAlpha(84),
-                      gradientEnd: color.withAlpha(28),
-                      cubicLines: false
-                  ),
-                  height: 35,
-                )
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Padding(
-                  padding: EdgeInsets.only(bottom: 5),
-                  child: Text(viewModel.numberOfIssues.formattedNumberOfSession(),
+              ),
+            ),
+            Expanded(
+                child:
+                  viewModel.data == null
+                  ? Container(
+                    margin: EdgeInsets.symmetric(horizontal: 12),
+                    child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          LinearProgressIndicator(
+                              minHeight: 2.0,
+                              backgroundColor: Colors.white,
+                              valueColor: AlwaysStoppedAnimation<Color>(color)
+                          )
+                        ]
+                    ),
+                    height: 35,
+                  )
+                  : Container(
+                    margin: EdgeInsets.symmetric(horizontal: 12),
+                    child: LineChart(
+                        data: viewModel.data,
+                        lineWidth: 2.0,
+                        lineColor: color,
+                        gradientStart: color.withAlpha(84),
+                        gradientEnd: color.withAlpha(28),
+                        cubicLines: false
+                    ),
+                    height: 35,
+                  )
+            ),
+            Container(
+              width: 44,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 4),
+                    child: Text(viewModel.numberOfIssues.formattedNumberOfSession(),
                       style: TextStyle(
                         color: SentryColors.woodSmoke,
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
-                      ))),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(right: viewModel.percentChange == 0.0 ? 0 : 7),
-                    child: _getTrendIcon(viewModel.percentChange, flipDeltaColors),
-                  ),
-                  Text(_getTrendPercentage(viewModel.percentChange),
-                    style: TextStyle(
-                      color: SentryColors.lavenderGray,
-                      fontSize: 12,
+                      )
                     )
+                  ),
+                  FittedBox(
+                    fit: BoxFit.fitWidth,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(right: viewModel.percentChange == 0.0 ? 0 : 7),
+                          child: _getTrendIcon(viewModel.percentChange, flipDeltaColors),
+                        ),
+                        Text(_getTrendPercentage(viewModel.percentChange),
+                          style: TextStyle(
+                            color: SentryColors.lavenderGray,
+                            fontSize: 12,
+                          )
+                        )
+                      ]
+                    ),
                   )
-                ]
-              )
-            ],
-          ),
-        ]));
+                ],
+              ),
+            ),
+          ]
+        ),
+      )
+    );
   }
 
   // Helper

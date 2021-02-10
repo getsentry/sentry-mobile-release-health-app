@@ -117,7 +117,7 @@ class _HealthScreenState extends State<HealthScreen> {
                       child: Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(bottom: 22.0),
+                            padding: const EdgeInsets.only(bottom: 16.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
