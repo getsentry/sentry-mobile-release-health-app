@@ -65,7 +65,7 @@ class ProjectCard extends StatelessWidget {
     }
 
     return Card(
-        margin: const EdgeInsets.only(top: 8, bottom: 8, left: 0, right: 16),
+        margin: const EdgeInsets.only(top: 8, bottom: 8, left: 6, right: 6),
         elevation: 4,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(16))),
