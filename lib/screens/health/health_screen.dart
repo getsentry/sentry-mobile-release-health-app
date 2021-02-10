@@ -96,28 +96,28 @@ class _HealthScreenState extends State<HealthScreen> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(left: 16, right: 16),
+                      padding: EdgeInsets.only(left: 22, right: 22),
                       child: HealthDivider(
                         onSeeAll: () {},
                         title: 'in the last 24 hours',
                       ),
                     ),
                     SizedBox(
-                        height: 200,
+                        height: 208,
                         child: PageView.builder(
                           itemCount: viewModel.projects.length,
-                          controller: PageController(viewportFraction: (MediaQuery.of(context).size.width - 44) / MediaQuery.of(context).size.width),
+                          controller: PageController(viewportFraction: (MediaQuery.of(context).size.width - 32) / MediaQuery.of(context).size.width),
                           onPageChanged: (int index) => setState(() => updateIndex(index)),
                           itemBuilder: (context, index) {
                             return viewModel.projectCard(index);
                           },
                         )),
                     Container(
-                      padding: EdgeInsets.only(top: 22, left: 22, right: 22),
+                      padding: EdgeInsets.only(top: 16, left: 22, right: 22),
                       child: Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(bottom: 22.0),
+                            padding: const EdgeInsets.only(bottom: 16.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
