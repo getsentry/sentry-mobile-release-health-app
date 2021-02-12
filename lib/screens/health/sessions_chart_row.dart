@@ -80,15 +80,18 @@ class SessionsChartRow extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 4),
-                    child: Text(viewModel.numberOfIssues.formattedNumberOfSession(),
-                      style: TextStyle(
-                        color: SentryColors.woodSmoke,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
+                  FittedBox(
+                    fit: BoxFit.fitWidth,
+                    child: Padding(
+                      padding: EdgeInsets.only(bottom: 4),
+                      child: Text(viewModel.numberOfIssues.formattedNumberOfSession(),
+                        style: TextStyle(
+                          color: SentryColors.woodSmoke,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                        )
                       )
-                    )
+                    ),
                   ),
                   FittedBox(
                     fit: BoxFit.fitWidth,
