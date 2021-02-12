@@ -23,7 +23,7 @@ extension SessionFormatting on int {
       return '${noDecimalPointFormatter.format(thousandth)}k';
     } else {
       final million = this / 1000000.0;
-      return '${twoDecimalPointsFormatter.format(million)}m';
+      return '${oneDecimalPointFormatter.format(million)}m';
     }
   }
 }
