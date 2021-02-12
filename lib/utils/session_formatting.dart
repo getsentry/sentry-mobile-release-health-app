@@ -18,9 +18,12 @@ extension SessionFormatting on int {
       final hundreth = tenth / 10.0;
       final thousandth = hundreth.floor() / 10.0;
       return '${oneDecimalPointFormatter.format(thousandth)}k';
-    } else {
-      final thousandth = this / 100.0;
+    } else if (this < 1000000) {
+      final thousandth = this / 1000.0;
       return '${noDecimalPointFormatter.format(thousandth)}k';
+    } else {
+      final million = this / 1000000.0;
+      return '${oneDecimalPointFormatter.format(million)}m';
     }
   }
 }
