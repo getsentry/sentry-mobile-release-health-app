@@ -27,5 +27,11 @@ void main() {
       expect(100400.formattedNumberOfSession(), equals('100k'));
       expect(100500.formattedNumberOfSession(), equals('101k'));
     });
+
+    test('1m and above', () {
+      expect(1000000.formattedNumberOfSession(), equals('1m'));
+      expect(1550000.formattedNumberOfSession(), equals('1.55m'));
+      expect(900000000.formattedNumberOfSession(), equals('900m'));
+    });
   });
 }
