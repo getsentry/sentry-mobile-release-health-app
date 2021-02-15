@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 
 import '../api/sentry_api.dart';
+import '../types/cursor.dart';
 import '../types/group.dart';
 import '../types/organization.dart';
 import '../types/project.dart';
@@ -30,7 +31,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           for (final organization in organizations) {
             final individualOrganization = await api.organization(organization.slug);
             individualOrganizations.add(individualOrganization ?? organization);
-            final projects = await api.projects(organization.slug);
+            final projects = await api.projects(organization.slug, Cursor(10, 0, 0));
             if (projects.isNotEmpty) {
               projectsByOrganizationId[organization.slug] = projects;
             }
