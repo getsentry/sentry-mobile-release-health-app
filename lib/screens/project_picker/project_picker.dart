@@ -22,7 +22,7 @@ class _ProjectPickerState extends State<ProjectPicker> {
        child: StoreConnector<AppState, ProjectPickerViewModel>(
           converter: (appState) => ProjectPickerViewModel.fromStore(appState),
           builder: (context, viewModel) => _content(viewModel),
-         onInitialBuild: (viewModel) => StoreProvider.of<AppState>(context)
+          onInitialBuild: (viewModel) => StoreProvider.of<AppState>(context)
              .dispatch(FetchOrganizationsAndProjectsAction(false, false)),
        ),
      );
