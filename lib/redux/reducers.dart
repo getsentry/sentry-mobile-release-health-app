@@ -54,8 +54,7 @@ GlobalState _fetchOrganizationsAndProjectsAction(GlobalState state, FetchOrganiz
   if (action.reload) {
     return state.copyWith(
       sessionsByProjectId: {},
-      sessionsBeforeByProjectId: {},
-      projectsFetchedOnce: true,
+      sessionsBeforeByProjectId: {}
     );
   } else {
     return state;
