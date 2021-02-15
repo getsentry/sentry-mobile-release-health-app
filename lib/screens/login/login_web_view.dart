@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_user_agent/flutter_user_agent.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 
 import '../../api/api_errors.dart';
@@ -71,13 +72,14 @@ class _LoginWebViewState extends State<LoginWebView> {
   }
 
   Future<String> _asyncUserAgent() async {
-    try { // Platform messages may fail, so we use a try/catch PlatformException.
+    try { // Platform messages may fail
       return await FlutterUserAgent.getPropertyAsync('userAgent') as String;
-    } on PlatformException {
-      // Google won't let you login with the default user-agent so setting something known as fallback
-      return Platform.isAndroid != null
-        ? 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Mobile Safari/537.36'
-        : 'Mozilla/5.0 (iPhone; CPU OS 13_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/23.0 Mobile/15E148 Safari/605.1.15';
+    } catch (exception, stackTrace) {
+      await Sentry.captureException(
+        exception,
+        stackTrace: stackTrace,
+      );
+      return null;
     }
   }
 
