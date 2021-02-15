@@ -29,7 +29,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           final Map<String, Cursor> projectCursorsByOrganizationSlug = {};
           final Map<String, List<Project>> projectsByOrganizationId = {};
 
-          for (final organization in organizations.where((element) => element.slug == 'sentry-sdks')) {
+          for (final organization in organizations) {
             final individualOrganization = await api.organization(organization.slug);
             individualOrganizations.add(individualOrganization ?? organization);
             final currentCursor = store.state.globalState.projectCursorsByOrganizationSlug != null && !action.reload
