@@ -32,7 +32,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           for (final organization in organizations.where((element) => element.slug == 'sentry-sdks')) {
             final individualOrganization = await api.organization(organization.slug);
             individualOrganizations.add(individualOrganization ?? organization);
-            final currentCursor = store.state.globalState.projectCursorsByOrganizationSlug != null
+            final currentCursor = store.state.globalState.projectCursorsByOrganizationSlug != null && !action.reload
                 ? store.state.globalState.projectCursorsByOrganizationSlug[organization.slug]
                 : null;
 
@@ -53,7 +53,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
               projectCursorsByOrganizationSlug[organization.slug] = nextCursor;
             }
           }
-          store.dispatch(FetchOrganizationsAndProjectsSuccessAction(individualOrganizations, projectsByOrganizationId, projectCursorsByOrganizationSlug));
+          store.dispatch(FetchOrganizationsAndProjectsSuccessAction(individualOrganizations, projectsByOrganizationId, projectCursorsByOrganizationSlug, action.reload));
         } catch (e) {
           store.dispatch(FetchOrganizationsAndProjectsFailureAction(e));
         }

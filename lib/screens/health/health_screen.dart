@@ -24,6 +24,7 @@ class _HealthScreenState extends State<HealthScreen> {
   int _index;
 
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
+  PageController _pageController;
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +81,8 @@ class _HealthScreenState extends State<HealthScreen> {
         color: Color(0xff81B4FE),
         child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints viewportConstraints) {
+            _pageController = PageController(viewportFraction: (MediaQuery.of(context).size.width - 32) / MediaQuery.of(context).size.width);
+
             return ConstrainedBox(
               constraints: BoxConstraints(
                 minHeight: viewportConstraints.maxHeight,
@@ -99,7 +102,7 @@ class _HealthScreenState extends State<HealthScreen> {
                         height: 208,
                         child: PageView.builder(
                           itemCount: viewModel.projects.length,
-                          controller: PageController(viewportFraction: (MediaQuery.of(context).size.width - 32) / MediaQuery.of(context).size.width),
+                          controller: _pageController,
                           onPageChanged: (int index) {
                             setState(() {
                               updateIndex(index);
@@ -167,7 +170,13 @@ class _HealthScreenState extends State<HealthScreen> {
         ),
         onRefresh: () => Future.delayed(
           Duration(microseconds: 100),
-          () { viewModel.fetchProjects(); }
+          () {
+            viewModel.reloadProjects();
+            setState(() {
+              updateIndex(0);
+              _pageController.jumpToPage(0);
+            });
+          }
         ),
       );
     }

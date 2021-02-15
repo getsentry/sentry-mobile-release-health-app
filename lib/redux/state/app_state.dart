@@ -41,7 +41,6 @@ class GlobalState {
       this.projectCursorsByOrganizationSlug,
       this.projectsByOrganizationSlug,
       this.projectsFetchedOnce,
-      this.projectsLoading,
       this.projects,
       this.latestReleasesByProjectId,
       this.sessionsByProjectId,
@@ -68,7 +67,6 @@ class GlobalState {
       projectCursorsByOrganizationSlug: {},
       projectsByOrganizationSlug: {},
       projectsFetchedOnce: false,
-      projectsLoading: false,
       projects: [],
       latestReleasesByProjectId: {},
       sessionsByProjectId: {},
@@ -96,7 +94,6 @@ class GlobalState {
   final Map<String, Cursor> projectCursorsByOrganizationSlug;
   final Map<String, List<Project>> projectsByOrganizationSlug;
   final bool projectsFetchedOnce;
-  final bool projectsLoading;
 
   final List<Project> projects;
   final Map<String, Release> latestReleasesByProjectId;
@@ -154,7 +151,6 @@ class GlobalState {
       projectCursorsByOrganizationSlug: projectCursorsByOrganizationSlug ?? this.projectCursorsByOrganizationSlug,
       projectsByOrganizationSlug: projectsByOrganizationSlug ?? this.projectsByOrganizationSlug,
       projectsFetchedOnce: projectsFetchedOnce ?? this.projectsFetchedOnce,
-      projectsLoading: projectsLoading ?? this.projectsLoading,
       projects: projects ?? this.projects,
       latestReleasesByProjectId: latestReleasesByProjectId ?? this.latestReleasesByProjectId,
       sessionsByProjectId: sessionsByProjectId ?? this.sessionsByProjectId,

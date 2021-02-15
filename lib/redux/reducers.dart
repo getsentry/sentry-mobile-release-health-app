@@ -19,7 +19,6 @@ final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, LogoutAction>(_logoutAction),
   TypedReducer<GlobalState, FetchOrganizationsAndProjectsAction>(_fetchOrganizationsAndProjectsAction),
   TypedReducer<GlobalState, FetchOrganizationsAndProjectsSuccessAction>(_fetchOrganizationsAndProjectsSuccessAction),
-  TypedReducer<GlobalState, FetchOrganizationsAndProjectsFailureAction>(_fetchOrganizationsAndProjectsFailureAction),
   TypedReducer<GlobalState, FetchLatestReleasesAction>(_fetchLatestReleasesAction),
   TypedReducer<GlobalState, FetchLatestReleasesSuccessAction>(_fetchLatestReleasesSuccessAction),
   TypedReducer<GlobalState, FetchLatestReleasesFailureAction>(_fetchLatestReleasesFailureAction),
@@ -52,16 +51,30 @@ GlobalState _logoutAction(GlobalState state, LogoutAction action) {
 }
 
 GlobalState _fetchOrganizationsAndProjectsAction(GlobalState state, FetchOrganizationsAndProjectsAction action) {
-  return state.copyWith(projectsLoading: true);
+  if (action.reload) {
+    return state.copyWith(
+      sessionsByProjectId: {},
+      sessionsBeforeByProjectId: {},
+      projectsFetchedOnce: true,
+    );
+  } else {
+    return state;
+  }
 }
 
 GlobalState _fetchOrganizationsAndProjectsSuccessAction(GlobalState state, FetchOrganizationsAndProjectsSuccessAction action) {
-  final organizationsSlugByProjectSlug = state.organizationsSlugByProjectSlug;
+  final organizationsSlugByProjectSlug = action.reload
+      ? <String, String>{}
+      : state.organizationsSlugByProjectSlug;
 
   final projectsById = <String, Project>{};
-  for (final project in state.projects) {
-    projectsById[project.id] = project;
+
+  if (!action.reload) {
+    for (final project in state.projects) {
+      projectsById[project.id] = project;
+    }
   }
+
   for (final organizationSlug in action.projectsByOrganizationSlug.keys) {
     for (final project in action.projectsByOrganizationSlug[organizationSlug]) {
       if (project.latestRelease != null) {
@@ -85,12 +98,7 @@ GlobalState _fetchOrganizationsAndProjectsSuccessAction(GlobalState state, Fetch
     projectsByOrganizationSlug: action.projectsByOrganizationSlug,
     projects: projects,
     projectsFetchedOnce: true,
-    projectsLoading: false,
   );
-}
-
-GlobalState _fetchOrganizationsAndProjectsFailureAction(GlobalState state, FetchOrganizationsAndProjectsFailureAction action) {
-  return state.copyWith(projectsLoading: false);
 }
 
 GlobalState _selectOrganizationAction(GlobalState state, SelectOrganizationAction action) {

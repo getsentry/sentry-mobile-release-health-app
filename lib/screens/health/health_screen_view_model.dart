@@ -1,12 +1,10 @@
 import 'package:redux/redux.dart';
-import 'package:sentry_mobile/types/cursor.dart';
 
 import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
 import '../../redux/state/session_state.dart';
 import '../../screens/health/health_card_view_model.dart';
 import '../../screens/health/project_card.dart';
-import '../../types/project.dart';
 import '../../types/project_with_latest_release.dart';
 import '../../types/session_status.dart';
 
@@ -25,10 +23,10 @@ class HealthScreenViewModel {
       _crashFreeUsersBeforeByProjectId = store.state.globalState.crashFreeUsersBeforeByProjectId,
       _apdexByProjectId = store.state.globalState.apdexByProjectId,
       _apdexBeforeByProjectId = store.state.globalState.apdexBeforeByProjectId,
-      showProjectEmptyScreen = !store.state.globalState.projectsLoading &&
-        store.state.globalState.projectsFetchedOnce &&
+      showProjectEmptyScreen = store.state.globalState.projectsFetchedOnce &&
         store.state.globalState.projectsByOrganizationSlug.keys.isEmpty,
-      showLoadingScreen = !store.state.globalState.projectsFetchedOnce && store.state.globalState.projectsLoading;
+      showLoadingScreen = !store.state.globalState.projectsFetchedOnce &&
+          store.state.globalState.projectsByOrganizationSlug.keys.isEmpty;
 
   final Store<AppState> _store;
 
@@ -52,7 +50,11 @@ class HealthScreenViewModel {
   final bool showLoadingScreen;
 
   void fetchProjects() {
-    _store.dispatch(FetchOrganizationsAndProjectsAction(true));
+    _store.dispatch(FetchOrganizationsAndProjectsAction(true, false));
+  }
+
+  void reloadProjects() {
+    _store.dispatch(FetchOrganizationsAndProjectsAction(true, true));
   }
 
   ProjectCard projectCard(int index) {
@@ -61,27 +63,23 @@ class HealthScreenViewModel {
         _store.state.globalState.organizationForProjectSlug(projectWitLatestRelease.project.slug)?.name,
         projectWitLatestRelease.project,
         projectWitLatestRelease.release,
-        /*_store.state.globalState.projectsLoading ? null : */_totalSessionStateByProjectId[projectWitLatestRelease.project.id]
+        _totalSessionStateByProjectId[projectWitLatestRelease.project.id]
     );
   }
 
   SessionState sessionState(int index, SessionStatus sessionStatus) {
-    if (_store.state.globalState.projectsLoading) {
-      return null;
-    } else {
-      final project = projects[index].project;
-      switch (sessionStatus) {
-        case SessionStatus.healthy:
-          return _healthySessionsStateByProjectId[project.id];
-        case SessionStatus.errored:
-          return _erroredSessionsStateByProjectId[project.id];
-        case SessionStatus.crashed:
-          return _crashedSessionStateByProjectId[project.id];
-        case SessionStatus.abnormal:
-          return _abnormalSessionsStateByProjectId[project.id];
-      }
-      return null;
+    final project = projects[index].project;
+    switch (sessionStatus) {
+      case SessionStatus.healthy:
+        return _healthySessionsStateByProjectId[project.id];
+      case SessionStatus.errored:
+        return _erroredSessionsStateByProjectId[project.id];
+      case SessionStatus.crashed:
+        return _crashedSessionStateByProjectId[project.id];
+      case SessionStatus.abnormal:
+        return _abnormalSessionsStateByProjectId[project.id];
     }
+    return null;
   }
 
   bool showAbnormalSessions(int index) {
@@ -133,23 +131,20 @@ class HealthScreenViewModel {
     }
   }
 
-  void _fetchLatestRelease(ProjectWithLatestRelease projectWithLatestRelease) {
-    final organizationSlug = _store.state.globalState.organizationsSlugByProjectSlug[projectWithLatestRelease.project.slug];
-    if (organizationSlug == null) {
-      return;
-    }
-    if (_store.state.globalState.projectsLoading) {
-      return;
-    }
-    _store.dispatch(
-      FetchLatestReleaseAction(
-          organizationSlug,
-          projectWithLatestRelease.project.slug,
-          projectWithLatestRelease.project.id,
-          projectWithLatestRelease.project.latestRelease.version
-      )
-    );
-  }
+  // void _fetchLatestRelease(ProjectWithLatestRelease projectWithLatestRelease) {
+  //   final organizationSlug = _store.state.globalState.organizationsSlugByProjectSlug[projectWithLatestRelease.project.slug];
+  //   if (organizationSlug == null) {
+  //     return;
+  //   }
+  //   _store.dispatch(
+  //     FetchLatestReleaseAction(
+  //         organizationSlug,
+  //         projectWithLatestRelease.project.slug,
+  //         projectWithLatestRelease.project.id,
+  //         projectWithLatestRelease.project.latestRelease.version
+  //     )
+  //   );
+  // }
 
   void _fetchSessions(ProjectWithLatestRelease projectWithLatestRelease) {
     final organizationSlug = _store.state.globalState.organizationsSlugByProjectSlug[projectWithLatestRelease.project.slug];

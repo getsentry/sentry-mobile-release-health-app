@@ -42,15 +42,17 @@ class ApiFailureAction {
 // FetchOrganizationsAndProjects
 
 class FetchOrganizationsAndProjectsAction {
-  FetchOrganizationsAndProjectsAction(this.pagination);
+  FetchOrganizationsAndProjectsAction(this.pagination, this.reload);
   final bool pagination;
+  final bool reload;
 }
 
 class FetchOrganizationsAndProjectsSuccessAction {
-  FetchOrganizationsAndProjectsSuccessAction(this.organizations, this.projectsByOrganizationSlug, this.projectCursorsByOrganizationSlug);
+  FetchOrganizationsAndProjectsSuccessAction(this.organizations, this.projectsByOrganizationSlug, this.projectCursorsByOrganizationSlug, this.reload);
   final List<Organization> organizations;
   final Map<String, List<Project>> projectsByOrganizationSlug;
   final Map<String, Cursor> projectCursorsByOrganizationSlug;
+  final bool reload;
 }
 
 class FetchOrganizationsAndProjectsFailureAction extends ApiFailureAction {
