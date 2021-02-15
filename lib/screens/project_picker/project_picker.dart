@@ -14,9 +14,7 @@ class ProjectPicker extends StatefulWidget {
 }
 
 class _ProjectPickerState extends State<ProjectPicker> {
-
-  var _fetchedOrganizationsAndProjects = false;
-
+  
   @override
   Widget build(BuildContext context) {
      return StoreProvider<AppState>(
