@@ -36,8 +36,6 @@ class _HealthScreenState extends State<HealthScreen> {
 
   Widget _content(HealthScreenViewModel viewModel) {
     if (viewModel.showProjectEmptyScreen) {
-      _index = 0;
-
       String text = '';
       if (viewModel.showProjectEmptyScreen) {
         text = 'You need at least one project to use this view.';
@@ -54,8 +52,6 @@ class _HealthScreenState extends State<HealthScreen> {
         }
       );
     } else if (viewModel.showLoadingScreen || viewModel.projects.isEmpty) {
-      _index = 0;
-
       return Center(
         child: CircularProgressIndicator(),
       );
@@ -76,8 +72,6 @@ class _HealthScreenState extends State<HealthScreen> {
 
       if (_index == null) {
         updateIndex(0);
-      } else {
-        updateIndex(_index);
       }
 
       return RefreshIndicator(
@@ -130,12 +124,12 @@ class _HealthScreenState extends State<HealthScreen> {
                               children: [
                                 HealthCard(
                                   title: 'Crash Free Sessions',
-                                  viewModel: viewModel.crashFreeSessionsForProject(viewModel.projects[_index]?.project),
+                                  viewModel: viewModel.crashFreeSessionsForProject(_index),
                                 ),
                                 SizedBox(width: 8),
                                 HealthCard(
                                   title: 'Crash Free Users',
-                                  viewModel: viewModel.crashFreeUsersForProject(viewModel.projects[_index]?.project),
+                                  viewModel: viewModel.crashFreeUsersForProject(_index),
                                 ),
                               ],
                             ),

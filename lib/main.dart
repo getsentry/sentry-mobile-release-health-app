@@ -25,7 +25,6 @@ Future<Store<AppState>> createStore() async {
     appReducer,
     initialState: AppState.initial(),
     middleware: [
-      ActionThrottlingMiddleware(),
       SentryApiMiddleware(),
       LocalStorageMiddleware(prefs, secStorage),
 //      ValidationMiddleware(),

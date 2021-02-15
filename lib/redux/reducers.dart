@@ -57,18 +57,21 @@ GlobalState _fetchOrganizationsAndProjectsAction(GlobalState state, FetchOrganiz
 
 GlobalState _fetchOrganizationsAndProjectsSuccessAction(GlobalState state, FetchOrganizationsAndProjectsSuccessAction action) {
   final organizationsSlugByProjectSlug = state.organizationsSlugByProjectSlug;
-  final projectIds = state.projects.map((project) => project.id);
-  final projects = state.projects;
 
+  final projectsById = <String, Project>{};
+  for (final project in state.projects) {
+    projectsById[project.id] = project;
+  }
   for (final organizationSlug in action.projectsByOrganizationSlug.keys) {
     for (final project in action.projectsByOrganizationSlug[organizationSlug]) {
-      if (!projectIds.contains(project.id) && project.latestRelease != null) {
+      if (project.latestRelease != null) {
         organizationsSlugByProjectSlug[project.slug] = organizationSlug;
-        projects.add(project);
+        projectsById[project.id] = project;
       }
     }
   }
 
+  final projects = projectsById.values.toList();
   projects.sort((Project a, Project b) {
     final valueA = a.isBookmarked ? 0 : 1;
     final valueB = b.isBookmarked ? 0 : 1;

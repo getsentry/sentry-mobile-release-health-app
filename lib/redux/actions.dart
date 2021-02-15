@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:equatable/equatable.dart';
 import 'package:sentry_mobile/types/cursor.dart';
 
 import '../types/group.dart';
@@ -10,10 +9,6 @@ import '../types/project_with_latest_release.dart';
 import '../types/release.dart';
 import '../types/sessions.dart';
 import '../types/user.dart';
-
-abstract class ThrottledAction extends Equatable {
-  
-}
 
 class RehydrateAction {
   RehydrateAction();
@@ -46,15 +41,9 @@ class ApiFailureAction {
 
 // FetchOrganizationsAndProjects
 
-class FetchOrganizationsAndProjectsAction extends ThrottledAction {
+class FetchOrganizationsAndProjectsAction {
   FetchOrganizationsAndProjectsAction(this.pagination);
   final bool pagination;
-
-  @override
-  List<Object> get props => [pagination];
-
-  @override
-  bool get stringify => false;
 }
 
 class FetchOrganizationsAndProjectsSuccessAction {
@@ -70,18 +59,12 @@ class FetchOrganizationsAndProjectsFailureAction extends ApiFailureAction {
 
 // FetchLatestRelease
 
-class FetchLatestReleaseAction extends ThrottledAction {
+class FetchLatestReleaseAction {
   FetchLatestReleaseAction(this.organizationSlug, this.projectSlug, this.projectId, this.releaseId);
   final String organizationSlug;
   final String projectSlug;
   final String projectId;
   final String releaseId;
-
-  @override
-  List<Object> get props => [organizationSlug, projectSlug, projectId, releaseId];
-
-  @override
-  bool get stringify => false;
 }
 
 class FetchLatestReleaseSuccessAction {
@@ -112,16 +95,10 @@ class FetchLatestReleasesFailureAction extends ApiFailureAction {
 
 // FetchIssues
 
-class FetchIssuesAction extends ThrottledAction {
+class FetchIssuesAction {
   FetchIssuesAction(this.organizationSlug, this.projectSlug);
   final String organizationSlug;
   final String projectSlug;
-
-  @override
-  List<Object> get props => [organizationSlug, projectSlug];
-
-  @override
-  bool get stringify => false;
 }
 
 class FetchIssuesSuccessAction {
@@ -171,18 +148,12 @@ class FetchSessionsFailureAction extends ApiFailureAction {
 
 // FetchApDex
 
-class FetchApdexAction extends ThrottledAction {
+class FetchApdexAction {
   FetchApdexAction(this.apdexThreshold, this.organizationSlug, this.projectId);
 
   final int apdexThreshold;
   final String organizationSlug;
   final String projectId;
-
-  @override
-  List<Object> get props => [apdexThreshold, organizationSlug, projectId];
-
-  @override
-  bool get stringify => false;
 }
 
 class FetchApdexSuccessAction {

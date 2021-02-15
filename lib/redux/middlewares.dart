@@ -30,7 +30,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           final Map<String, Cursor> projectCursorsByOrganizationSlug = {};
           final Map<String, List<Project>> projectsByOrganizationId = {};
 
-          for (final organization in organizations) {
+          for (final organization in organizations.where((element) => element.slug == 'sentry-sdks')) {
             final individualOrganization = await api.organization(organization.slug);
             individualOrganizations.add(individualOrganization ?? organization);
             final currentCursor = store.state.globalState.projectCursorsByOrganizationSlug != null
@@ -41,11 +41,17 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
               ? Cursor(10, 0, 0)
               : Cursor(10, currentCursor.offset + 1, 0);
 
-            projectCursorsByOrganizationSlug[organization.slug] = nextCursor;
-
             final projects = await api.projects(organization.slug, nextCursor);
+
             if (projects.isNotEmpty) {
               projectsByOrganizationId[organization.slug] = projects;
+            }
+
+            // Keep cursor if there are less than value projects
+            if (projects.length < nextCursor.value) {
+              projectCursorsByOrganizationSlug[organization.slug] = currentCursor;
+            } else {
+              projectCursorsByOrganizationSlug[organization.slug] = nextCursor;
             }
           }
           store.dispatch(FetchOrganizationsAndProjectsSuccessAction(individualOrganizations, projectsByOrganizationId, projectCursorsByOrganizationSlug));
@@ -237,32 +243,5 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
       await WebviewCookieManager().clearCookies();
     }
     next(action);
-  }
-}
-
-// Some actions should not be run multiple times.
-class ActionThrottlingMiddleware extends MiddlewareClass<AppState> {
-
-  final _actions = ThrottledActionCollection();
-  
-  @override
-  dynamic call(Store<AppState> store, action, next) {
-    if (action is LoginAction ||
-        action is LogoutAction ||
-        action is FetchOrganizationsAndProjectsAction ||
-        action is FetchLatestReleaseFailureAction ||
-        action is FetchIssuesFailureAction) {
-      // Not super elegant to clear everything on one release/issue failure,
-      // but it should be enough for now.
-      _actions.clear();
-      next(action);
-    } else if (action is ThrottledAction) {
-      if (!_actions.contains(action)) {
-        _actions.insert(action);
-        next(action);
-      }
-    } else {
-      next(action);
-    }
   }
 }
