@@ -56,13 +56,14 @@ GlobalState _fetchOrganizationsAndProjectsAction(GlobalState state, FetchOrganiz
 }
 
 GlobalState _fetchOrganizationsAndProjectsSuccessAction(GlobalState state, FetchOrganizationsAndProjectsSuccessAction action) {
-  final organizationsSlugByProjectSlug = <String, String>{};
-  final projects = <Project>[];
+  final organizationsSlugByProjectSlug = state.organizationsSlugByProjectSlug;
+  final projectIds = state.projects.map((project) => project.id);
+  final projects = state.projects;
 
   for (final organizationSlug in action.projectsByOrganizationSlug.keys) {
     for (final project in action.projectsByOrganizationSlug[organizationSlug]) {
-      organizationsSlugByProjectSlug[project.slug] = organizationSlug;
-      if (project.latestRelease != null) {
+      if (!projectIds.contains(project.id) && project.latestRelease != null) {
+        organizationsSlugByProjectSlug[project.slug] = organizationSlug;
         projects.add(project);
       }
     }
@@ -77,6 +78,7 @@ GlobalState _fetchOrganizationsAndProjectsSuccessAction(GlobalState state, Fetch
   return state.copyWith(
     organizations: action.organizations,
     organizationsSlugByProjectSlug: organizationsSlugByProjectSlug,
+    projectCursorsByOrganizationSlug: action.projectCursorsByOrganizationSlug,
     projectsByOrganizationSlug: action.projectsByOrganizationSlug,
     projects: projects,
     projectsFetchedOnce: true,

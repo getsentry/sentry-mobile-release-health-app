@@ -30,12 +30,11 @@ class _HealthScreenState extends State<HealthScreen> {
     return StoreConnector<AppState, HealthScreenViewModel>(
       builder: (_, viewModel) => _content(viewModel),
       converter: (store) => HealthScreenViewModel.fromStore(store),
+      onInitialBuild: (viewModel) => viewModel.fetchProjects(),
     );
   }
 
   Widget _content(HealthScreenViewModel viewModel) {
-    viewModel.fetchProjectsIfNeeded();
-
     if (viewModel.showProjectEmptyScreen) {
       _index = 0;
 
@@ -107,7 +106,15 @@ class _HealthScreenState extends State<HealthScreen> {
                         child: PageView.builder(
                           itemCount: viewModel.projects.length,
                           controller: PageController(viewportFraction: (MediaQuery.of(context).size.width - 32) / MediaQuery.of(context).size.width),
-                          onPageChanged: (int index) => setState(() => updateIndex(index)),
+                          onPageChanged: (int index) {
+                            setState(() {
+                              updateIndex(index);
+                              // Fetch next projects at end
+                              if (index == viewModel.projects.length - 1) {
+                                viewModel.fetchProjects();
+                              }
+                            });
+                          },
                           itemBuilder: (context, index) {
                             return viewModel.projectCard(index);
                           },

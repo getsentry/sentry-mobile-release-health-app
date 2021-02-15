@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
+import 'package:sentry_mobile/types/cursor.dart';
 
 import '../types/group.dart';
 import '../types/organization.dart';
@@ -45,14 +46,22 @@ class ApiFailureAction {
 
 // FetchOrganizationsAndProjects
 
-class FetchOrganizationsAndProjectsAction {
-  FetchOrganizationsAndProjectsAction();
+class FetchOrganizationsAndProjectsAction extends ThrottledAction {
+  FetchOrganizationsAndProjectsAction(this.pagination);
+  final bool pagination;
+
+  @override
+  List<Object> get props => [pagination];
+
+  @override
+  bool get stringify => false;
 }
 
 class FetchOrganizationsAndProjectsSuccessAction {
-  FetchOrganizationsAndProjectsSuccessAction(this.organizations, this.projectsByOrganizationSlug);
+  FetchOrganizationsAndProjectsSuccessAction(this.organizations, this.projectsByOrganizationSlug, this.projectCursorsByOrganizationSlug);
   final List<Organization> organizations;
   final Map<String, List<Project>> projectsByOrganizationSlug;
+  final Map<String, Cursor> projectCursorsByOrganizationSlug;
 }
 
 class FetchOrganizationsAndProjectsFailureAction extends ApiFailureAction {

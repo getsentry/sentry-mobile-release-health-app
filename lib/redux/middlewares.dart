@@ -27,16 +27,28 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
         try {
           final organizations = await api.organizations();
           final individualOrganizations = <Organization>[];
+          final Map<String, Cursor> projectCursorsByOrganizationSlug = {};
           final Map<String, List<Project>> projectsByOrganizationId = {};
+
           for (final organization in organizations) {
             final individualOrganization = await api.organization(organization.slug);
             individualOrganizations.add(individualOrganization ?? organization);
-            final projects = await api.projects(organization.slug, Cursor(10, 0, 0));
+            final currentCursor = store.state.globalState.projectCursorsByOrganizationSlug != null
+                ? store.state.globalState.projectCursorsByOrganizationSlug[organization.slug]
+                : null;
+
+            final nextCursor = currentCursor == null
+              ? Cursor(10, 0, 0)
+              : Cursor(10, currentCursor.offset + 1, 0);
+
+            projectCursorsByOrganizationSlug[organization.slug] = nextCursor;
+
+            final projects = await api.projects(organization.slug, nextCursor);
             if (projects.isNotEmpty) {
               projectsByOrganizationId[organization.slug] = projects;
             }
           }
-          store.dispatch(FetchOrganizationsAndProjectsSuccessAction(individualOrganizations, projectsByOrganizationId));
+          store.dispatch(FetchOrganizationsAndProjectsSuccessAction(individualOrganizations, projectsByOrganizationId, projectCursorsByOrganizationSlug));
         } catch (e) {
           store.dispatch(FetchOrganizationsAndProjectsFailureAction(e));
         }

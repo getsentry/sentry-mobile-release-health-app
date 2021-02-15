@@ -1,4 +1,5 @@
 import 'package:redux/redux.dart';
+import 'package:sentry_mobile/types/cursor.dart';
 
 import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
@@ -24,8 +25,6 @@ class HealthScreenViewModel {
       _crashFreeUsersBeforeByProjectId = store.state.globalState.crashFreeUsersBeforeByProjectId,
       _apdexByProjectId = store.state.globalState.apdexByProjectId,
       _apdexBeforeByProjectId = store.state.globalState.apdexBeforeByProjectId,
-      _fetchProjectsNeeded = !store.state.globalState.projectsFetchedOnce &&
-        !store.state.globalState.projectsLoading,
       showProjectEmptyScreen = !store.state.globalState.projectsLoading &&
         store.state.globalState.projectsFetchedOnce &&
         store.state.globalState.projectsByOrganizationSlug.keys.isEmpty,
@@ -48,20 +47,12 @@ class HealthScreenViewModel {
 
   final Map<String, double> _apdexByProjectId;
   final Map<String, double> _apdexBeforeByProjectId;
-  
-  final bool _fetchProjectsNeeded;
 
   final bool showProjectEmptyScreen;
   final bool showLoadingScreen;
 
-  void fetchProjectsIfNeeded() {
-    if (_fetchProjectsNeeded) {
-      fetchProjects();
-    }
-  }
-
   void fetchProjects() {
-    _store.dispatch(FetchOrganizationsAndProjectsAction());
+    _store.dispatch(FetchOrganizationsAndProjectsAction(true));
   }
 
   ProjectCard projectCard(int index) {
