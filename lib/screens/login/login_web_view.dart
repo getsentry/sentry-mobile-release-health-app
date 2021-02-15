@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_user_agent/flutter_user_agent.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 
@@ -22,7 +24,7 @@ class _LoginWebViewState extends State<LoginWebView> {
   final _flutterWebviewPlugin = FlutterWebviewPlugin();
   final _cookieManager = WebviewCookieManager();
   var _popped = false;
-
+  
   StreamSubscription<String> _onUrlChanged;
 
   @override
@@ -43,31 +45,40 @@ class _LoginWebViewState extends State<LoginWebView> {
 
   @override
   Widget build(BuildContext context) {
-    const loginUrl = 'https://sentry.io/auth/login/';
-    // Google won't let you login with the default user-agent so setting something known
-    final userAgent = Platform.isAndroid != null
-        ? 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Mobile Safari/537.36'
-        : 'Mozilla/5.0 (iPhone; CPU OS 13_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/23.0 Mobile/15E148 Safari/605.1.15';
-
-    return WillPopScope(
-      onWillPop: _onWillPop,
-      child: WebviewScaffold(
-        url: loginUrl,
-        userAgent: userAgent,
-        clearCookies: true,
-        withZoom: false,
-        hidden: true,
-        appBar: AppBar(
-          title: Text('Login'),
-        ),
-      ),
-    );
+    return FutureBuilder(
+      future: _asyncUserAgent(),
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        return WillPopScope(
+          onWillPop: _onWillPop,
+          child: WebviewScaffold(
+            url: 'https://sentry.io/auth/login/',
+            userAgent: snapshot.data,
+            clearCookies: true,
+            withZoom: false,
+            hidden: true,
+            appBar: AppBar(
+              title: Text('Login'),
+            ),
+          ),
+        );
+      });
   }
 
   Future<bool> _onWillPop() async {
     // Needed for animated dismiss
     await _flutterWebviewPlugin.hide();
     return Future.value(true);
+  }
+
+  Future<String> _asyncUserAgent() async {
+    try { // Platform messages may fail, so we use a try/catch PlatformException.
+      return await FlutterUserAgent.getPropertyAsync('userAgent') as String;
+    } on PlatformException {
+      // Google won't let you login with the default user-agent so setting something known as fallback
+      return Platform.isAndroid != null
+        ? 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Mobile Safari/537.36'
+        : 'Mozilla/5.0 (iPhone; CPU OS 13_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/23.0 Mobile/15E148 Safari/605.1.15';
+    }
   }
 
   Future<void> _asyncInit() async {
