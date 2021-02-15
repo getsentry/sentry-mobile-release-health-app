@@ -14,7 +14,6 @@ import '../types/project.dart';
 import '../types/project_with_latest_release.dart';
 import '../types/session_group.dart';
 import '../types/session_group_by.dart';
-import '../utils/throttled_action_collection.dart';
 import 'actions.dart';
 import 'state/app_state.dart';
 
