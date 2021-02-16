@@ -69,7 +69,7 @@ fastlane build_ios_and_upload_ipa
 
 # Build Android and Upload to Google Play Internal
 
-Add keystore files `upload-keystore.jks`, `upload-keystore.properties` and JSON key file `upload-key.json` to andoroid folder.
+Add keystore files `upload-keystore.jks`, `upload-keystore.properties` and JSON key file `upload-key.json` to android folder.
 
 Change working directory to 'android' and run 'fastlane build_android_and_upload_aab'.
 
