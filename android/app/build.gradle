@@ -44,25 +44,22 @@ android {
         versionName flutterVersionName
     }
 
-    buildTypes {
-        debug {
-            debuggable true
-        }
-        release {
-            shrinkResources true
-        }
-    }
-
     signingConfigs {
         release {
             def propsFile = file('./../upload-keystore.properties')
             def props = new Properties()
             props.load(new FileInputStream(propsFile))
 
-            storeFile rootProject.file('./../upload-keystore.jks')
+            storeFile file('./../upload-keystore.jks')
             keyAlias props['keyAlias']
             keyPassword props['keyPassword']
             storePassword props['storePassword']
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
         }
     }
 }
