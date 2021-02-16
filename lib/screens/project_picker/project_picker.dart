@@ -14,28 +14,21 @@ class ProjectPicker extends StatefulWidget {
 }
 
 class _ProjectPickerState extends State<ProjectPicker> {
-
-  var _fetchedOrganizationsAndProjects = false;
-
+  
   @override
   Widget build(BuildContext context) {
      return StoreProvider<AppState>(
        store: StoreProvider.of(context),
        child: StoreConnector<AppState, ProjectPickerViewModel>(
           converter: (appState) => ProjectPickerViewModel.fromStore(appState),
-          builder: (context, viewModel) => _content(viewModel)
+          builder: (context, viewModel) => _content(viewModel),
+          onInitialBuild: (viewModel) => StoreProvider.of<AppState>(context)
+             .dispatch(FetchOrganizationsAndProjectsAction(false, false)),
        ),
      );
   }
 
   Widget _content(ProjectPickerViewModel viewModel) {
-
-    if (!_fetchedOrganizationsAndProjects) {
-      _fetchedOrganizationsAndProjects = true;
-      final store = StoreProvider.of<AppState>(context);
-      store.dispatch(FetchOrganizationsAndProjectsAction());
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Bookmarked Projects')

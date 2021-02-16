@@ -7,13 +7,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 
 import '../api/sentry_api.dart';
+import '../types/cursor.dart';
 import '../types/group.dart';
 import '../types/organization.dart';
 import '../types/project.dart';
 import '../types/project_with_latest_release.dart';
 import '../types/session_group.dart';
 import '../types/session_group_by.dart';
-import '../utils/throttled_action_collection.dart';
 import 'actions.dart';
 import 'state/app_state.dart';
 
@@ -26,16 +26,34 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
         try {
           final organizations = await api.organizations();
           final individualOrganizations = <Organization>[];
+          final Map<String, Cursor> projectCursorsByOrganizationSlug = {};
           final Map<String, List<Project>> projectsByOrganizationId = {};
+
           for (final organization in organizations) {
             final individualOrganization = await api.organization(organization.slug);
             individualOrganizations.add(individualOrganization ?? organization);
-            final projects = await api.projects(organization.slug);
+            final currentCursor = store.state.globalState.projectCursorsByOrganizationSlug != null && !action.reload
+                ? store.state.globalState.projectCursorsByOrganizationSlug[organization.slug]
+                : null;
+
+            final nextCursor = currentCursor == null
+              ? Cursor(10, 0, 0)
+              : Cursor(10, currentCursor.offset + 1, 0);
+
+            final projects = await api.projects(organization.slug, nextCursor);
+
             if (projects.isNotEmpty) {
               projectsByOrganizationId[organization.slug] = projects;
             }
+
+            // Keep cursor if there are less than value projects
+            if (projects.length < nextCursor.value) {
+              projectCursorsByOrganizationSlug[organization.slug] = currentCursor;
+            } else {
+              projectCursorsByOrganizationSlug[organization.slug] = nextCursor;
+            }
           }
-          store.dispatch(FetchOrganizationsAndProjectsSuccessAction(individualOrganizations, projectsByOrganizationId));
+          store.dispatch(FetchOrganizationsAndProjectsSuccessAction(individualOrganizations, projectsByOrganizationId, projectCursorsByOrganizationSlug, action.reload));
         } catch (e) {
           store.dispatch(FetchOrganizationsAndProjectsFailureAction(e));
         }
@@ -224,32 +242,5 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
       await WebviewCookieManager().clearCookies();
     }
     next(action);
-  }
-}
-
-// Some actions should not be run multiple times.
-class ActionThrottlingMiddleware extends MiddlewareClass<AppState> {
-
-  final _actions = ThrottledActionCollection();
-  
-  @override
-  dynamic call(Store<AppState> store, action, next) {
-    if (action is LoginAction ||
-        action is LogoutAction ||
-        action is FetchOrganizationsAndProjectsAction ||
-        action is FetchLatestReleaseFailureAction ||
-        action is FetchIssuesFailureAction) {
-      // Not super elegant to clear everything on one release/issue failure,
-      // but it should be enough for now.
-      _actions.clear();
-      next(action);
-    } else if (action is ThrottledAction) {
-      if (!_actions.contains(action)) {
-        _actions.insert(action);
-        next(action);
-      }
-    } else {
-      next(action);
-    }
   }
 }

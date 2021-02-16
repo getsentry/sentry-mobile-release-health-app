@@ -24,21 +24,19 @@ class _HealthScreenState extends State<HealthScreen> {
   int _index;
 
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
+  PageController _pageController;
 
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, HealthScreenViewModel>(
       builder: (_, viewModel) => _content(viewModel),
       converter: (store) => HealthScreenViewModel.fromStore(store),
+      onInitialBuild: (viewModel) => viewModel.fetchProjects(),
     );
   }
 
   Widget _content(HealthScreenViewModel viewModel) {
-    viewModel.fetchProjectsIfNeeded();
-
     if (viewModel.showProjectEmptyScreen) {
-      _index = 0;
-
       String text = '';
       if (viewModel.showProjectEmptyScreen) {
         text = 'You need at least one project to use this view.';
@@ -55,8 +53,6 @@ class _HealthScreenState extends State<HealthScreen> {
         }
       );
     } else if (viewModel.showLoadingScreen || viewModel.projects.isEmpty) {
-      _index = 0;
-
       return Center(
         child: CircularProgressIndicator(),
       );
@@ -77,8 +73,6 @@ class _HealthScreenState extends State<HealthScreen> {
 
       if (_index == null) {
         updateIndex(0);
-      } else {
-        updateIndex(_index);
       }
 
       return RefreshIndicator(
@@ -87,6 +81,8 @@ class _HealthScreenState extends State<HealthScreen> {
         color: Color(0xff81B4FE),
         child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints viewportConstraints) {
+            _pageController = PageController(viewportFraction: (MediaQuery.of(context).size.width - 32) / MediaQuery.of(context).size.width);
+
             return ConstrainedBox(
               constraints: BoxConstraints(
                 minHeight: viewportConstraints.maxHeight,
@@ -106,8 +102,16 @@ class _HealthScreenState extends State<HealthScreen> {
                         height: 208,
                         child: PageView.builder(
                           itemCount: viewModel.projects.length,
-                          controller: PageController(viewportFraction: (MediaQuery.of(context).size.width - 32) / MediaQuery.of(context).size.width),
-                          onPageChanged: (int index) => setState(() => updateIndex(index)),
+                          controller: _pageController,
+                          onPageChanged: (int index) {
+                            setState(() {
+                              updateIndex(index);
+                              // Fetch next projects at end
+                              if (index == viewModel.projects.length - 1) {
+                                viewModel.fetchProjects();
+                              }
+                            });
+                          },
                           itemBuilder: (context, index) {
                             return viewModel.projectCard(index);
                           },
@@ -123,12 +127,12 @@ class _HealthScreenState extends State<HealthScreen> {
                               children: [
                                 HealthCard(
                                   title: 'Crash Free Sessions',
-                                  viewModel: viewModel.crashFreeSessionsForProject(viewModel.projects[_index]?.project),
+                                  viewModel: viewModel.crashFreeSessionsForProject(_index),
                                 ),
                                 SizedBox(width: 8),
                                 HealthCard(
                                   title: 'Crash Free Users',
-                                  viewModel: viewModel.crashFreeUsersForProject(viewModel.projects[_index]?.project),
+                                  viewModel: viewModel.crashFreeUsersForProject(_index),
                                 ),
                               ],
                             ),
@@ -166,7 +170,13 @@ class _HealthScreenState extends State<HealthScreen> {
         ),
         onRefresh: () => Future.delayed(
           Duration(microseconds: 100),
-          () { viewModel.fetchProjects(); }
+          () {
+            viewModel.reloadProjects();
+            setState(() {
+              updateIndex(0);
+              _pageController.jumpToPage(0);
+            });
+          }
         ),
       );
     }

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import '../../redux/state/session_state.dart';
 import '../../screens/chart/line_chart_point.dart';
+import '../../types/cursor.dart';
 import '../../types/group.dart';
 import '../../types/organization.dart';
 import '../../types/project.dart';
@@ -37,9 +38,9 @@ class GlobalState {
       this.selectedTab,
       this.organizations,
       this.organizationsSlugByProjectSlug,
+      this.projectCursorsByOrganizationSlug,
       this.projectsByOrganizationSlug,
       this.projectsFetchedOnce,
-      this.projectsLoading,
       this.projects,
       this.latestReleasesByProjectId,
       this.sessionsByProjectId,
@@ -63,9 +64,9 @@ class GlobalState {
       selectedTab: 0,
       organizations: [],
       organizationsSlugByProjectSlug: {},
+      projectCursorsByOrganizationSlug: {},
       projectsByOrganizationSlug: {},
       projectsFetchedOnce: false,
-      projectsLoading: false,
       projects: [],
       latestReleasesByProjectId: {},
       sessionsByProjectId: {},
@@ -90,9 +91,9 @@ class GlobalState {
 
   final List<Organization> organizations;
   final Map<String, String> organizationsSlugByProjectSlug;
+  final Map<String, Cursor> projectCursorsByOrganizationSlug;
   final Map<String, List<Project>> projectsByOrganizationSlug;
   final bool projectsFetchedOnce;
-  final bool projectsLoading;
 
   final List<Project> projects;
   final Map<String, Release> latestReleasesByProjectId;
@@ -120,8 +121,9 @@ class GlobalState {
     int selectedTab,
     bool setSessionNull = false,
     List<Organization> organizations,
-    final Map<String, String> organizationsSlugByProjectSlug,
-    final Map<String, List<Project>> projectsByOrganizationSlug,
+    Map<String, String> organizationsSlugByProjectSlug,
+    Map<String, Cursor> projectCursorsByOrganizationSlug,
+    Map<String, List<Project>> projectsByOrganizationSlug,
     bool projectsFetchedOnce,
     bool projectsLoading,
     List<Project> projects,
@@ -146,9 +148,9 @@ class GlobalState {
       selectedTab: selectedTab ?? this.selectedTab,
       organizations: organizations ?? this.organizations,
       organizationsSlugByProjectSlug: organizationsSlugByProjectSlug ?? this.organizationsSlugByProjectSlug,
+      projectCursorsByOrganizationSlug: projectCursorsByOrganizationSlug ?? this.projectCursorsByOrganizationSlug,
       projectsByOrganizationSlug: projectsByOrganizationSlug ?? this.projectsByOrganizationSlug,
       projectsFetchedOnce: projectsFetchedOnce ?? this.projectsFetchedOnce,
-      projectsLoading: projectsLoading ?? this.projectsLoading,
       projects: projects ?? this.projects,
       latestReleasesByProjectId: latestReleasesByProjectId ?? this.latestReleasesByProjectId,
       sessionsByProjectId: sessionsByProjectId ?? this.sessionsByProjectId,
