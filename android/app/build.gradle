@@ -26,7 +26,7 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -39,16 +39,30 @@ android {
     defaultConfig {
         applicationId "io.sentry.mobile.app"
         minSdkVersion 23
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
 
     buildTypes {
+        debug {
+            debuggable true
+        }
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            shrinkResources true
+        }
+    }
+
+    signingConfigs {
+        release {
+            def propsFile = file('./../upload-keystore.properties')
+            def props = new Properties()
+            props.load(new FileInputStream(propsFile))
+
+            storeFile rootProject.file('./../upload-keystore.jks')
+            keyAlias props['keyAlias']
+            keyPassword props['keyPassword']
+            storePassword props['storePassword']
         }
     }
 }
