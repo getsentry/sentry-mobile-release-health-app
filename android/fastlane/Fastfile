@@ -1,0 +1,27 @@
+default_platform(:android)
+
+platform :android do
+
+  # Defined in Appfile
+  app_identifier = CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier)
+
+  desc "Runs all the tests"
+  lane :test do
+    gradle(task: "test")
+  end
+
+  desc "Deploy a new build to Google Play Internal"
+  lane :internal do
+    Dir.chdir("../") do
+      sh("flutter", "clean")
+      sh("flutter", "build", "appbundle")
+    end
+    upload_to_play_store(
+      package_name: app_identifier,
+      json_key: "./upload-key.json",
+      aab: "./../build/app/outputs/bundle/release/app-release.aab",
+      track: "internal",
+      release_status: "draft"
+    )
+  end
+end

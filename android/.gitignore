@@ -11,3 +11,6 @@ GeneratedPluginRegistrant.java
 upload-keystore.jks
 upload-keystore.properties
 upload-key.json
+
+#fastlane
+fastlane/report.xml
