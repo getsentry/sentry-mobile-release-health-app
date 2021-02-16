@@ -11,7 +11,7 @@ platform :android do
   end
 
   desc "Deploy a new build to Google Play Internal"
-  lane :internal do
+  lane :build_android_and_upload_aab do
     Dir.chdir("../") do
       sh("flutter", "clean")
       sh("flutter", "build", "appbundle")
