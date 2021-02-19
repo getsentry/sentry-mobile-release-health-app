@@ -18,17 +18,33 @@ class ConnectViewModel {
 
   Store<AppState> store;
 
-  Future<void> onScanned(String encoded) async {
+  Future<void> onTokenEncoded(String encoded) async {
+    if (encoded == null) {
+      return;
+    }
     try {
       final decoded = utf8.decode(base64.decode(encoded));
       final json = jsonDecode(decoded) as Map<String, dynamic>;
       final authTokenCode = AuthTokenCode.fromJson(json);
-      final sentryApi = SentryApi(authTokenCode.authToken);
-      await sentryApi.organizations();
-
-      store.dispatch(LoginAction(authTokenCode.authToken));
+      return onToken(authTokenCode.authToken);
     } catch (exception, stackTrace) {
       Sentry.captureException(exception, stackTrace: stackTrace);
+      rethrow;
+    }
+  }
+
+  Future<void> onToken(String token) async {
+    if (token == null) {
+      return;
+    }
+    try {
+      final sentryApi = SentryApi(token);
+      await sentryApi.organizations(); // Do a sample call
+      sentryApi.close();
+      store.dispatch(LoginAction(token));
+    } catch (exception, stackTrace) {
+      Sentry.captureException(exception, stackTrace: stackTrace);
+      rethrow;
     }
   }
 }

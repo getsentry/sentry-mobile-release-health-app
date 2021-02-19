@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sentry_mobile/screens/scanner/scanner_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -55,7 +56,7 @@ class _ConnectScreenState extends State<ConnectScreen> {
                     ButtonTheme(
                       minWidth: 144,
                       child: RaisedButton.icon(
-                        label: Text('Scan Code'),
+                        label: Text('Scan Token'),
                         icon: Icon(
                             Icons.qr_code,
                             color: Colors.white
@@ -63,9 +64,11 @@ class _ConnectScreenState extends State<ConnectScreen> {
                         textColor: Colors.white,
                         color: SentryColors.rum,
                         onPressed: () async {
-                          final payload = await _presentScannerScreen();
-                          if (payload != null) {
-                            viewModel.onScanned(payload);
+                          try {
+                            final encodedToken = await _presentScannerScreen();
+                            await viewModel.onTokenEncoded(encodedToken);
+                          } catch (_) {
+                            _handleTokenFailure();
                           }
                         }
                       ),
@@ -76,21 +79,25 @@ class _ConnectScreenState extends State<ConnectScreen> {
                     ButtonTheme(
                       minWidth: 144,
                       child: RaisedButton.icon(
-                        label: Text('Enter Code'),
+                        label: Text('Enter Token'),
                         icon: Icon(
                             Icons.content_paste_rounded,
                             color: Colors.white
                         ),
                         textColor: Colors.white,
                         color: SentryColors.rum,
-                        onPressed: () {
-                          _showDialog();
+                        onPressed: () async {
+                          try {
+                            final enteredToken = await _showDialog();
+                            await viewModel.onToken(enteredToken);
+                          } catch (_) {
+                            _handleTokenFailure();
+                          }
                         },
                       ),
                     ),
                   ],
                 )
-
               ],
             )
         )
@@ -98,7 +105,7 @@ class _ConnectScreenState extends State<ConnectScreen> {
   }
 
   Future<void> _openAccountSettings() async {
-    const url = 'https://sentry.io/settings/account/details/';
+    const url = 'https://sentry.io/settings/account/api/mobile-app/';
     if (await canLaunch(url)) {
       await launch(url);
     }
@@ -112,7 +119,43 @@ class _ConnectScreenState extends State<ConnectScreen> {
     ) as String;
   }
 
-  void _handleLoginFailure(Object error) {
+  Future<String> _showDialog() async {
+    String enteredToken;
+    return showDialog<String>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          contentPadding: const EdgeInsets.all(16.0),
+          title: Text('Enter Token'),
+          content: TextField(
+            autofocus: true,
+            decoration: InputDecoration(
+                labelText: 'Auth Token',
+                hintText: 'Enter your auth token here'
+            ),
+            onChanged: (value) {
+              enteredToken = value;
+            },
+          ),
+          actions: <Widget>[
+            FlatButton(
+                child: const Text('Cancel'),
+                onPressed: () {
+                  Navigator.of(context).pop(null);
+                }),
+            FlatButton(
+                child: const Text('Ok'),
+                onPressed: () {
+                  Navigator.of(context).pop(enteredToken);
+                })
+          ],
+        );
+      },
+    );
+  }
+
+  void _handleTokenFailure() {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -123,7 +166,7 @@ class _ConnectScreenState extends State<ConnectScreen> {
               style: Theme.of(context).textTheme.headline1
           ),
           content: Text(
-              'Oops, there is a problem. Please try again later.',
+              'Something went wrong. Please try it again.',
               style: Theme.of(context).textTheme.bodyText1
           ),
           actions: [
