@@ -106,13 +106,10 @@ class _ScannerScreenState extends State<ScannerScreen> {
     });
   }
 
-  Future<void> _popIfPossible(String result) async {
+  void _popIfPossible(String result) {
     if (mounted && !_popped) {
       _popped = true; // Don't dismiss multiple times.
-      await _controller?.stopCamera();
       Navigator.pop(context, result);
     }
   }
-
-
 }
