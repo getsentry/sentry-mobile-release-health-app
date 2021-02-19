@@ -48,7 +48,7 @@ or run
 flutter run 
 ```
 
-6. Build iOS and upload to testflight
+# Build iOS and Upload to TestFlight
 
 Provide environment variables needed for fastlane. For example by updating your `~/.bash_profile`
 
@@ -58,11 +58,26 @@ export FASTLANE_ITC_TEAM_ID="12345678" # The identifier of the iTunes Connect (A
 export FASTLANE_PROVISIONING_PROFILE_NAME="Profile For Appstore" # The name of the provisioning profile
 ```
 
-Change working directory to 'ios' and run 'fastlane build_ios_and_upload_ipa'
+Change working directory to 'ios' and run 'fastlane build_ios_and_upload_ipa'.
+
+The build number from the current TestFlight build will be read and incremented by one.
 
 ```
 cd ios
 fastlane build_ios_and_upload_ipa
+```
+
+# Build Android and Upload to Google Play Internal
+
+Add keystore files `upload-keystore.jks`, `upload-keystore.properties` and JSON key file `upload-key.json` to android folder.
+
+Change working directory to 'android' and run 'fastlane build_android_and_upload_aab'.
+
+The current build number from `pubspec.yaml` will be used. So if you ran the iOS upload before, they match each other.
+
+```
+cd android
+fastlane build_android_and_upload_aab
 ```
 
 This will also read the current build number from TestFlight and increment it in `pubspec.yaml`
