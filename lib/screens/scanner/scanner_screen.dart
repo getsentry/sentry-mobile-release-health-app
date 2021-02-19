@@ -59,22 +59,6 @@ class _ScannerScreenState extends State<ScannerScreen> {
                         }
                     );
                   }
-                ),
-                FutureBuilder(
-                    future: _controller?.getFlashStatus(),
-                    builder: (context, snapshot) {
-                      return IconButton(
-                          icon: Icon(
-                            snapshot.data == false ? Icons.lightbulb_outline : Icons.lightbulb,
-                            color: snapshot.data == false ? Colors.white : SentryColors.buttercup,
-                            size: 24.0,
-                          ),
-                          onPressed: () async {
-                            await _controller?.toggleFlash();
-                            setState(() {});
-                          }
-                      );
-                    }
                 )
               ],
             ),
