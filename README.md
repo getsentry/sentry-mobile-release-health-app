@@ -76,7 +76,7 @@ Change working directory to 'android' and run 'fastlane build_android_and_upload
 The current build number from `pubspec.yaml` will be used. So if you ran the iOS upload before, they match each other.
 
 ```
-cd ios
+cd android
 fastlane build_android_and_upload_aab
 ```
 
