@@ -15,6 +15,8 @@ class ConnectScreen extends StatefulWidget {
 
 class _ConnectScreenState extends State<ConnectScreen> {
 
+  var _loading = false;
+
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ConnectViewModel>(
@@ -50,7 +52,7 @@ class _ConnectScreenState extends State<ConnectScreen> {
                     )
                   ],
                 ),
-                Column(
+                if (_loading) CircularProgressIndicator() else Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     ButtonTheme(
@@ -64,10 +66,16 @@ class _ConnectScreenState extends State<ConnectScreen> {
                         textColor: Colors.white,
                         color: SentryColors.rum,
                         onPressed: () async {
+                          final encodedToken = await _presentScannerScreen();
+                          setState(() {
+                            _loading = encodedToken != null;
+                          });
                           try {
-                            final encodedToken = await _presentScannerScreen();
                             await viewModel.onTokenEncoded(encodedToken);
                           } catch (_) {
+                            setState(() {
+                              _loading = false;
+                            });
                             _handleTokenFailure();
                           }
                         }
@@ -87,10 +95,16 @@ class _ConnectScreenState extends State<ConnectScreen> {
                         textColor: Colors.white,
                         color: SentryColors.rum,
                         onPressed: () async {
+                          final enteredToken = await _showDialog();
+                          setState(() {
+                            _loading = enteredToken != null;
+                          });
                           try {
-                            final enteredToken = await _showDialog();
                             await viewModel.onToken(enteredToken);
                           } catch (_) {
+                            setState(() {
+                              _loading = false;
+                            });
                             _handleTokenFailure();
                           }
                         },
