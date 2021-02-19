@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:sentry_mobile/screens/scanner/scanner_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../redux/state/app_state.dart';
@@ -44,7 +46,7 @@ class _ConnectScreenState extends State<ConnectScreen> {
                     FlatButton(
                       textColor: SentryColors.royalBlue,
                       child: Text('Open Account Settings'),
-                      onPressed: () => _openAccountSettings()
+                      onPressed: _openAccountSettings
                     )
                   ],
                 ),
@@ -61,9 +63,12 @@ class _ConnectScreenState extends State<ConnectScreen> {
                         ),
                         textColor: Colors.white,
                         color: SentryColors.rum,
-                        onPressed: () {
-                          // TODO @denis
-                        },
+                        onPressed: () async {
+                          final code = await _presentScannerScreen();
+                          if (code != null) {
+                            viewModel.onConnect(code);
+                          }
+                        }
                       ),
                     ),
                     SizedBox(height: 12),
@@ -98,6 +103,14 @@ class _ConnectScreenState extends State<ConnectScreen> {
     if (await canLaunch(url)) {
       await launch(url);
     }
+  }
+
+  Future<String> _presentScannerScreen() async {
+    return await Navigator.of(context).push(
+      MaterialPageRoute(
+          builder: (BuildContext context) => ScannerScreen()
+      ),
+    ) as String;
   }
 
   void _handleLoginFailure(Object error) {

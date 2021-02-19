@@ -25,6 +25,11 @@ class SwitchTabAction {
   final int selectedTab;
 }
 
+class ConnectAction {
+  ConnectAction(this.authToken);
+  final String authToken;
+}
+
 class LoginAction {
   LoginAction(this.cookie);
   final Cookie cookie;

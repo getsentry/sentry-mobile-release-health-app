@@ -15,4 +15,8 @@ class ConnectViewModel {
   void onLogin(Cookie session) {
     store.dispatch(LoginAction(session));
   }
+
+  void onConnect(String data) {
+    store.dispatch(ConnectAction(data));
+  }
 }
