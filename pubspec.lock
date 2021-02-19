@@ -256,25 +256,11 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_user_agent:
-    dependency: "direct main"
-    description:
-      name: flutter_user_agent
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.2.2"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_webview_plugin:
-    dependency: "direct main"
-    description:
-      name: flutter_webview_plugin
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.11"
   glob:
     dependency: transitive
     description:
@@ -833,13 +819,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.7.4"
-  webview_cookie_manager:
-    dependency: "direct main"
-    description:
-      name: webview_cookie_manager
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.5"
   win32:
     dependency: transitive
     description:

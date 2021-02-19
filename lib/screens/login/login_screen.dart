@@ -1,13 +1,9 @@
-import 'dart:io';
-
-import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
 import '../../redux/state/app_state.dart';
 import '../../utils/sentry_colors.dart';
 import 'login_view_model.dart';
-import 'login_web_view.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -47,14 +43,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
                 RaisedButton(
-                  child: Text('Login'),
+                  child: Text('Connect'),
                   textColor: Colors.white,
                   color: SentryColors.rum,
                   onPressed: () {
                     setState(() {
-                      _navigateAndWaitForSession()
-                          .then(viewModel.onLogin)
-                          .catchError(_handleLoginFailure);
+                      // TODO @denis
                     });
                   },
                 )
@@ -87,17 +81,5 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       }
     );
-  }
-
-  Future<Cookie> _navigateAndWaitForSession() async {
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        fullscreenDialog: true,
-        builder: (context) => LoginWebView()
-      ),
-    ) as Result<Cookie>;
-
-    return result != null ? result.asFuture : null;
   }
 }

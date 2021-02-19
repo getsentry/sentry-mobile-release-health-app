@@ -23,9 +23,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_webview_plugin: ^0.3.11
-  webview_cookie_manager: ^1.0.1
-  flutter_user_agent: ^1.2.2
   http: ^0.12.2
   flutter_secure_storage: ^3.3.3
   redux: ^4.0.0
