@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sentry_mobile/screens/scanner/scanner_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
