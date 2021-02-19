@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:package_info/package_info.dart';
 import 'package:redux/redux.dart';
@@ -221,15 +219,9 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
   dynamic call(Store<AppState> store, dynamic action, NextDispatcher next) async {
     if (action is RehydrateAction) {
       final String authToken = await secureStorage.read(key: 'authToken');
-      Cookie cookie;
-      try {
-        cookie = authToken != null ? Cookie.fromSetCookieValue(authToken) : null;
-      } catch (e) {
-        await secureStorage.delete(key: 'session');
-      }
       final packageInfo = await PackageInfo.fromPlatform();
       final version = 'Version ${packageInfo.version} (${packageInfo.buildNumber})';
-      store.dispatch(RehydrateSuccessAction(cookie, version));
+      store.dispatch(RehydrateSuccessAction(authToken, version));
     }
     if (action is LoginAction) {
       await secureStorage.write(key: 'authToken', value: action.authToken);

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:sentry_mobile/types/cursor.dart';
 
 import '../types/group.dart';
@@ -15,8 +13,8 @@ class RehydrateAction {
 }
 
 class RehydrateSuccessAction {
-  RehydrateSuccessAction(this.cookie, this.version);
-  final Cookie cookie;
+  RehydrateSuccessAction(this.authToken, this.version);
+  final String authToken;
   final String version;
 }
 

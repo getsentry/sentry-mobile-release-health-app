@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import '../../redux/state/session_state.dart';
 import '../../screens/chart/line_chart_point.dart';
 import '../../types/cursor.dart';
@@ -115,12 +113,11 @@ class GlobalState {
   final User me;
 
   GlobalState copyWith({
-    Cookie session,
     String authToken,
     bool hydrated,
     String version,
     int selectedTab,
-    bool setSessionNull = false,
+    bool setTokenNull = false,
     List<Organization> organizations,
     Map<String, String> organizationsSlugByProjectSlug,
     Map<String, Cursor> projectCursorsByOrganizationSlug,
@@ -143,7 +140,7 @@ class GlobalState {
     User me,
   }) {
     return GlobalState(
-      authToken: setSessionNull ? null : (authToken ?? this.authToken),
+      authToken: setTokenNull ? null : (authToken ?? this.authToken),
       hydrated: hydrated ?? this.hydrated,
       version: version ?? this.version,
       selectedTab: selectedTab ?? this.selectedTab,
