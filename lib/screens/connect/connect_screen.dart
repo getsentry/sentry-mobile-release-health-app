@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../redux/state/app_state.dart';
 import '../../utils/sentry_colors.dart';
@@ -43,7 +44,7 @@ class _ConnectScreenState extends State<ConnectScreen> {
                     FlatButton(
                       textColor: SentryColors.royalBlue,
                       child: Text('Open Account Settings'),
-                      onPressed: () {}
+                      onPressed: () => _openAccountSettings()
                     )
                   ],
                 ),
@@ -90,6 +91,13 @@ class _ConnectScreenState extends State<ConnectScreen> {
             )
         )
     );
+  }
+
+  Future<void> _openAccountSettings() async {
+    const url = 'https://sentry.io/settings/account/details/';
+    if (await canLaunch(url)) {
+      await launch(url);
+    }
   }
 
   void _handleLoginFailure(Object error) {
