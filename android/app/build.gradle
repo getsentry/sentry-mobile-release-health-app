@@ -21,6 +21,9 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+def keystoreFile = file('./../upload-keystore.jks')
+def propsFile = file('./../upload-keystore.properties')
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
@@ -46,20 +49,26 @@ android {
 
     signingConfigs {
         release {
-            def propsFile = file('./../upload-keystore.properties')
-            def props = new Properties()
-            props.load(new FileInputStream(propsFile))
+            if (keystoreFile.exists() && propsFile.exists()) {
+                def props = new Properties()
+                props.load(new FileInputStream(propsFile))
 
-            storeFile file('./../upload-keystore.jks')
-            keyAlias props['keyAlias']
-            keyPassword props['keyPassword']
-            storePassword props['storePassword']
+                storeFile file('./../upload-keystore.jks')
+                keyAlias props['keyAlias']
+                keyPassword props['keyPassword']
+                storePassword props['storePassword']
+            }
         }
     }
 
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            if (keystoreFile.exists() && propsFile.exists()) {
+                signingConfig signingConfigs.release
+            } else {
+                // Signing with the debug keys for now, so `flutter run --release` works.
+                signingConfig signingConfigs.debug
+            }
         }
     }
 }
