@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:sentry_mobile/screens/scanner/scanner_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -64,9 +63,9 @@ class _ConnectScreenState extends State<ConnectScreen> {
                         textColor: Colors.white,
                         color: SentryColors.rum,
                         onPressed: () async {
-                          final code = await _presentScannerScreen();
-                          if (code != null) {
-                            viewModel.onConnect(code);
+                          final payload = await _presentScannerScreen();
+                          if (payload != null) {
+                            viewModel.onScanned(payload);
                           }
                         }
                       ),
@@ -85,7 +84,7 @@ class _ConnectScreenState extends State<ConnectScreen> {
                         textColor: Colors.white,
                         color: SentryColors.rum,
                         onPressed: () {
-                          // TODO @denis
+                          _showDialog();
                         },
                       ),
                     ),

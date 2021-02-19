@@ -128,7 +128,7 @@ class SentryMobile extends StatelessWidget {
           converter: (store) => store.state,
           builder: (_, state) {
             if (state.globalState.hydrated) {
-              if (state.globalState.session == null) {
+              if (state.globalState.authToken == null) {
                 return OnboardingScreen();
               } else {
                 return MainScreen();

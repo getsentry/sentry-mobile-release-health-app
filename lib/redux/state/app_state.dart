@@ -32,7 +32,7 @@ class AppState {
 
 class GlobalState {
   GlobalState(
-      {this.session,
+      {this.authToken,
       this.hydrated,
       this.version,
       this.selectedTab,
@@ -58,7 +58,7 @@ class GlobalState {
 
   factory GlobalState.initial() {
     return GlobalState(
-      session: null,
+      authToken: null,
       hydrated: false,
       version: '--',
       selectedTab: 0,
@@ -84,7 +84,7 @@ class GlobalState {
     );
   }
 
-  final Cookie session;
+  final String authToken;
   final bool hydrated;
   final String version;
   final int selectedTab;
@@ -116,6 +116,7 @@ class GlobalState {
 
   GlobalState copyWith({
     Cookie session,
+    String authToken,
     bool hydrated,
     String version,
     int selectedTab,
@@ -142,7 +143,7 @@ class GlobalState {
     User me,
   }) {
     return GlobalState(
-      session: setSessionNull ? null : (session ?? this.session),
+      authToken: setSessionNull ? null : (authToken ?? this.authToken),
       hydrated: hydrated ?? this.hydrated,
       version: version ?? this.version,
       selectedTab: selectedTab ?? this.selectedTab,

@@ -17,9 +17,10 @@ import '../types/user.dart';
 import '../utils/date_time_format.dart';
 
 class SentryApi {
-  SentryApi(this.session);
+  SentryApi(this.authToken);
 
-  final Cookie session;
+  final String authToken;
+
   final client = sentry.SentryHttpClient(client: Client());
   final baseUrlScheme = 'https://';
   final baseUrlName = 'sentry.io';
@@ -178,7 +179,11 @@ class SentryApi {
   }
 
   Map<String, String> _defaultHeader() {
-    return {'Cookie': session.toString()};
+    final headers = <String, String>{};
+    if (authToken != null) {
+      headers['Authorization'] = 'Bearer $authToken';
+    }
+    return headers;
   }
 
   Result<List<T>> _parseResponseList<T>(Response response, T Function(Map<String, dynamic> r) map) {

@@ -41,7 +41,7 @@ GlobalState _rehydrateSuccessAction(GlobalState state, RehydrateSuccessAction ac
 }
 
 GlobalState _loginAction(GlobalState state, LoginAction action) {
-  return state.copyWith(session: action.cookie);
+  return state.copyWith(authToken: action.authToken);
 }
 
 GlobalState _logoutAction(GlobalState state, LogoutAction action) {
