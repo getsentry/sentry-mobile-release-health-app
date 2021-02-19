@@ -2,11 +2,11 @@ import 'dart:convert';
 
 import 'package:redux/redux.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:sentry_mobile/api/sentry_api.dart';
-import 'package:sentry_mobile/types/auth_token_code.dart';
 
+import '../../api/sentry_api.dart';
 import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
+import '../../types/auth_token_code.dart';
 
 class ConnectViewModel {
   ConnectViewModel(this.store);

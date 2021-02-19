@@ -3,7 +3,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:sentry_mobile/utils/sentry_colors.dart';
+
+import '../../utils/sentry_colors.dart';
 
 class ScannerScreen extends StatefulWidget {
   const ScannerScreen({

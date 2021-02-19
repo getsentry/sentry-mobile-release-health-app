@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:sentry_mobile/screens/scanner/scanner_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../redux/state/app_state.dart';
+import '../../screens/scanner/scanner_screen.dart';
 import '../../utils/sentry_colors.dart';
 import 'connect_view_model.dart';
 
