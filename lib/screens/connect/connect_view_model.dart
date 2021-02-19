@@ -4,10 +4,10 @@ import 'package:redux/redux.dart';
 import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
 
-class LoginViewModel {
-  LoginViewModel(this.store);
-  factory LoginViewModel.fromStore(Store<AppState> store) {
-    return LoginViewModel(store);
+class ConnectViewModel {
+  ConnectViewModel(this.store);
+  factory ConnectViewModel.fromStore(Store<AppState> store) {
+    return ConnectViewModel(store);
   }
 
   Store<AppState> store;
