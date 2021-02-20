@@ -145,8 +145,7 @@ class FetchSessionsFailureAction extends ApiFailureAction {
   FetchSessionsFailureAction(error) : super(error);
 }
 
-<<<<<<< HEAD
-// FetchSessions
+// BookmarkProject
 
 class BookmarkProjectAction {
   BookmarkProjectAction(this.organizationSlug, this.projectSlug, this.bookmarked);
@@ -165,6 +164,7 @@ class BookmarkProjectSuccessAction {
 
 class BookmarkProjectFailureAction extends ApiFailureAction {
   BookmarkProjectFailureAction(error) : super(error);
+}
 
 // FetchApDex
 
