@@ -84,6 +84,10 @@ GlobalState _fetchOrganizationsAndProjectsSuccessAction(GlobalState state, Fetch
   }
 
   final projects = projectsById.values.toList();
+
+  projects.sort((Project a, Project b) {
+    return (a.slug ?? a.name).toLowerCase().compareTo((b.slug ?? b.name).toLowerCase());
+  });
   projects.sort((Project a, Project b) {
     final valueA = a.isBookmarked ? 0 : 1;
     final valueB = b.isBookmarked ? 0 : 1;
@@ -219,6 +223,15 @@ GlobalState _bookmarkProjectSuccessAction(GlobalState state, BookmarkProjectSucc
     }
     projectsByOrganizationSlug[organizationSlug] = projects;
   }
+
+  projects.sort((Project a, Project b) {
+    return (a.slug ?? a.name).toLowerCase().compareTo((b.slug ?? b.name).toLowerCase());
+  });
+  projects.sort((Project a, Project b) {
+    final valueA = a.isBookmarked ? 0 : 1;
+    final valueB = b.isBookmarked ? 0 : 1;
+    return valueA.compareTo(valueB);
+  });
 
   return state.copyWith(
       projectsByOrganizationSlug: projectsByOrganizationSlug,

@@ -11,7 +11,12 @@ class ProjectPickerViewModel {
     final List<ProjectPickerItem> items = [];
     for (final Organization organization in store.state.globalState.organizations) {
         final organizationProjects = store.state.globalState.projectsByOrganizationSlug[organization.slug]
-            .where((element) => element.latestRelease != null) ?? [];
+            .where((element) => element.latestRelease != null).toList()
+            ?? [];
+        organizationProjects.sort((Project a, Project b) {
+          return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+        });
+
         if (organizationProjects.isNotEmpty) {
           items.add(
               ProjectPickerOrganizationItem(

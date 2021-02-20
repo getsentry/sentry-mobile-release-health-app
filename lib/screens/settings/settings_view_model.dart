@@ -13,6 +13,7 @@ class SettingsViewModel {
         .where((element) => element.latestRelease != null && element.isBookmarked)
         .map((e) => e.slug)
         .join(', ');
+
     bookmarkedProjects = projects.isNotEmpty ? projects : '--';
     userInfo = store.state.globalState.me?.email ?? '--';
     version = store.state.globalState.version;
