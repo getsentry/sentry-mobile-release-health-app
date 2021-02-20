@@ -28,6 +28,7 @@ final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, FetchAuthenticatedUserSuccessAction>(_fetchAuthenticatedUserSuccessAction),
   TypedReducer<GlobalState, FetchSessionsSuccessAction>(_fetchSessionsSuccessAction),
   TypedReducer<GlobalState, FetchApdexSuccessAction>(_fetchApdexSuccessAction),
+  TypedReducer<GlobalState, BookmarkProjectSuccessAction>(_bookmarkProjectSuccessAction),
   TypedReducer<GlobalState, ApiFailureAction>(_apiFailureAction),
 ]);
 
@@ -192,6 +193,13 @@ GlobalState _fetchApdexSuccessAction(GlobalState state, FetchApdexSuccessAction 
   return state.copyWith(
     apdexByProjectId: apdexByProjectId,
     apdexBeforeByProjectId: apdexBeforeByProjectId
+  );
+}
+
+GlobalState _bookmarkProjectSuccessAction(GlobalState state, BookmarkProjectSuccessAction action) {
+
+
+  return state.copyWith(
   );
 }
 

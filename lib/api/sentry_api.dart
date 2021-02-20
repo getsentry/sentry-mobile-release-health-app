@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
@@ -61,11 +62,13 @@ class SentryApi {
   }
 
   Future<Project> bookmarkProject(String organizationSlug, String projectSlug, bool bookmark) async {
-    final queryParameters = <String, String>{
+    final bodyParameters = <String, String>{
       'isBookmarked': bookmark ? 'true' : 'false',
     };
-    final response = await client.put(Uri.https(baseUrlName, '${_baseUrl()}/projects/$organizationSlug/$projectSlug/', queryParameters),
-        headers: _defaultHeader()
+
+    final response = await client.put('${_baseUrl()}/projects/$organizationSlug/$projectSlug/',
+        headers: _defaultHeader(),
+        body: json.encode(bodyParameters)
     );
     return _parseResponse(response, (jsonMap) => Project.fromJson(jsonMap)).asFuture;
   }
@@ -188,7 +191,9 @@ class SentryApi {
   }
 
   Map<String, String> _defaultHeader() {
-    final headers = <String, String>{};
+    final headers = <String, String>{
+      HttpHeaders.contentTypeHeader: 'application/json'
+    };
     if (authToken != null) {
       headers['Authorization'] = 'Bearer $authToken';
     }
