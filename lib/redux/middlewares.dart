@@ -1,10 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:package_info/package_info.dart';
 import 'package:redux/redux.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 
 import '../api/sentry_api.dart';
 import '../types/cursor.dart';
@@ -22,7 +19,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
   dynamic call(Store<AppState> store, action, next) {
     if (action is FetchOrganizationsAndProjectsAction) {
       final thunkAction = (Store<AppState> store) async {
-        final api = SentryApi(store.state.globalState.session);
+        final api = SentryApi(store.state.globalState.authToken);
         try {
           final organizations = await api.organizations();
           final individualOrganizations = <Organization>[];
@@ -63,7 +60,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
       store.dispatch(thunkAction);
     } else if (action is FetchLatestReleasesAction) {
       final thunkAction = (Store<AppState> store) async {
-        final api = SentryApi(store.state.globalState.session);
+        final api = SentryApi(store.state.globalState.authToken);
         try {
           final List<ProjectWithLatestRelease> projectsWithLatestRelease = [];
 
@@ -93,7 +90,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
       store.dispatch(thunkAction);
     } else if (action is FetchLatestReleaseAction) {
       final thunkAction = (Store<AppState> store) async {
-        final api = SentryApi(store.state.globalState.session);
+        final api = SentryApi(store.state.globalState.authToken);
         try {
           final latestRelease = await api.release(
               organizationSlug: action.organizationSlug,
@@ -110,7 +107,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
       store.dispatch(thunkAction);
     } else if (action is FetchIssuesAction) {
       final thunkAction = (Store<AppState> store) async {
-        final api = SentryApi(store.state.globalState.session);
+        final api = SentryApi(store.state.globalState.authToken);
         try {
           final List<Group> issues = await api.issues(
               organizationSlug: action.organizationSlug,
@@ -128,7 +125,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
       store.dispatch(thunkAction);
     } else if (action is FetchAuthenticatedUserAction) {
       final thunkAction = (Store<AppState> store) async {
-        final api = SentryApi(store.state.globalState.session);
+        final api = SentryApi(store.state.globalState.authToken);
         try {
           final me = await api.authenticatedUser();
           store.dispatch(
@@ -143,7 +140,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
       store.dispatch(thunkAction);
     } else if (action is FetchSessionsAction) {
       final thunkAction = (Store<AppState> store) async {
-        final api = SentryApi(store.state.globalState.session);
+        final api = SentryApi(store.state.globalState.authToken);
         try {
           final sessions = await api.sessions(
             organizationSlug: action.organizationSlug,
@@ -173,7 +170,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
       store.dispatch(thunkAction);
     } else if (action is FetchApdexAction) {
       final thunkAction = (Store<AppState> store) async {
-        final api = SentryApi(store.state.globalState.session);
+        final api = SentryApi(store.state.globalState.authToken);
         try {
 
           final now = DateTime.now();
@@ -221,25 +218,17 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
   @override
   dynamic call(Store<AppState> store, dynamic action, NextDispatcher next) async {
     if (action is RehydrateAction) {
-      final String session = await secureStorage.read(key: 'session');
-      Cookie cookie;
-      try {
-        cookie = session != null ? Cookie.fromSetCookieValue(session) : null;
-      } catch (e) {
-        await secureStorage.delete(key: 'session');
-      }
+      final String authToken = await secureStorage.read(key: 'authToken');
       final packageInfo = await PackageInfo.fromPlatform();
       final version = 'Version ${packageInfo.version} (${packageInfo.buildNumber})';
-      store.dispatch(RehydrateSuccessAction(cookie, version));
+      store.dispatch(RehydrateSuccessAction(authToken, version));
     }
     if (action is LoginAction) {
-      await secureStorage.write(key: 'session', value: action.cookie.toString());
+      await secureStorage.write(key: 'authToken', value: action.authToken);
     }
     if (action is LogoutAction) {
-      await secureStorage.delete(key: 'session');
+      await secureStorage.delete(key: 'authToken');
       await preferences.clear();
-      
-      await WebviewCookieManager().clearCookies();
     }
     next(action);
   }

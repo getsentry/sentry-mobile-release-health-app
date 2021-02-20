@@ -1,7 +1,4 @@
-import 'dart:io';
-
-import 'package:sentry_mobile/types/cursor.dart';
-
+import '../types/cursor.dart';
 import '../types/group.dart';
 import '../types/organization.dart';
 import '../types/project.dart';
@@ -15,8 +12,8 @@ class RehydrateAction {
 }
 
 class RehydrateSuccessAction {
-  RehydrateSuccessAction(this.cookie, this.version);
-  final Cookie cookie;
+  RehydrateSuccessAction(this.authToken, this.version);
+  final String authToken;
   final String version;
 }
 
@@ -26,8 +23,8 @@ class SwitchTabAction {
 }
 
 class LoginAction {
-  LoginAction(this.cookie);
-  final Cookie cookie;
+  LoginAction(this.authToken);
+  final String authToken;
 }
 
 class LogoutAction {
