@@ -62,8 +62,8 @@ class SentryApi {
   }
 
   Future<Project> bookmarkProject(String organizationSlug, String projectSlug, bool bookmark) async {
-    final bodyParameters = <String, String>{
-      'isBookmarked': bookmark ? 'true' : 'false',
+    final bodyParameters = <String, dynamic>{
+      'isBookmarked': bookmark,
     };
 
     final response = await client.put('${_baseUrl()}/projects/$organizationSlug/$projectSlug/',
@@ -192,7 +192,7 @@ class SentryApi {
 
   Map<String, String> _defaultHeader() {
     final headers = <String, String>{
-      HttpHeaders.contentTypeHeader: 'application/json'
+      HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'
     };
     if (authToken != null) {
       headers['Authorization'] = 'Bearer $authToken';
