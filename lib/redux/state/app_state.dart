@@ -1,11 +1,11 @@
-import 'dart:io';
-
 import '../../redux/state/session_state.dart';
 import '../../screens/chart/line_chart_point.dart';
+import '../../types/cursor.dart';
 import '../../types/group.dart';
 import '../../types/organization.dart';
 import '../../types/project.dart';
 import '../../types/project_with_latest_release.dart';
+import '../../types/release.dart';
 import '../../types/session_status.dart';
 import '../../types/sessions.dart';
 import '../../types/user.dart';
@@ -30,20 +30,25 @@ class AppState {
 
 class GlobalState {
   GlobalState(
-      {this.session,
-      this.sc,
+      {this.authToken,
       this.hydrated,
+      this.version,
       this.selectedTab,
       this.organizations,
       this.organizationsSlugByProjectSlug,
+      this.projectCursorsByOrganizationSlug,
       this.projectsByOrganizationSlug,
       this.projectsFetchedOnce,
-      this.projectsLoading,
-      this.projectsWithLatestReleases,
-      this.releasesFetchedOnce,
-      this.releasesLoading,
+      this.projects,
+      this.latestReleasesByProjectId,
       this.sessionsByProjectId,
       this.sessionsBeforeByProjectId,
+      this.crashFreeSessionsByProjectId,
+      this.crashFreeSessionsBeforeByProjectId,
+      this.crashFreeUsersByProjectId,
+      this.crashFreeUsersBeforeByProjectId,
+      this.apdexByProjectId,
+      this.apdexBeforeByProjectId,
       this.issuesByProjectSlug,
       this.selectedOrganization,
       this.selectedProject,
@@ -51,45 +56,54 @@ class GlobalState {
 
   factory GlobalState.initial() {
     return GlobalState(
-      session: null,
-      sc: null,
+      authToken: null,
       hydrated: false,
+      version: '--',
       selectedTab: 0,
       organizations: [],
       organizationsSlugByProjectSlug: {},
+      projectCursorsByOrganizationSlug: {},
       projectsByOrganizationSlug: {},
       projectsFetchedOnce: false,
-      projectsLoading: false,
-      projectsWithLatestReleases: [],
-      releasesFetchedOnce: false,
-      releasesLoading: false,
+      projects: [],
+      latestReleasesByProjectId: {},
       sessionsByProjectId: {},
       sessionsBeforeByProjectId: {},
       issuesByProjectSlug: {},
+      crashFreeSessionsByProjectId: {},
+      crashFreeSessionsBeforeByProjectId: {},
+      crashFreeUsersByProjectId: {},
+      crashFreeUsersBeforeByProjectId: {},
+      apdexByProjectId: {},
+      apdexBeforeByProjectId: {},
       selectedOrganization: null,
       selectedProject: null,
       me: null
     );
   }
 
-  final Cookie session;
-  final Cookie sc;
-
+  final String authToken;
   final bool hydrated;
+  final String version;
   final int selectedTab;
 
   final List<Organization> organizations;
   final Map<String, String> organizationsSlugByProjectSlug;
+  final Map<String, Cursor> projectCursorsByOrganizationSlug;
   final Map<String, List<Project>> projectsByOrganizationSlug;
   final bool projectsFetchedOnce;
-  final bool projectsLoading;
 
-  final List<ProjectWithLatestRelease> projectsWithLatestReleases;
-  final bool releasesFetchedOnce;
-  final bool releasesLoading;
+  final List<Project> projects;
+  final Map<String, Release> latestReleasesByProjectId;
 
   final Map<String, Sessions> sessionsByProjectId;
   final Map<String, Sessions> sessionsBeforeByProjectId; // Interval before sessionsByProjectId
+  final Map<String, double> crashFreeSessionsByProjectId;
+  final Map<String, double> crashFreeSessionsBeforeByProjectId; // Interval before stabilityScoreByProjectId
+  final Map<String, double> crashFreeUsersByProjectId;
+  final Map<String, double> crashFreeUsersBeforeByProjectId; // Interval before stabilityScoreByProjectId
+  final Map<String, double> apdexByProjectId;
+  final Map<String, double> apdexBeforeByProjectId; // Interval before apdexByProjectId
 
   final Map<String, List<Group>> issuesByProjectSlug;
 
@@ -99,64 +113,57 @@ class GlobalState {
   final User me;
 
   GlobalState copyWith({
-    Cookie session,
-    Cookie sc,
+    String authToken,
     bool hydrated,
+    String version,
     int selectedTab,
-    bool setSessionNull = false,
+    bool setTokenNull = false,
     List<Organization> organizations,
-    final Map<String, String> organizationsSlugByProjectSlug,
-    final Map<String, List<Project>> projectsByOrganizationSlug,
+    Map<String, String> organizationsSlugByProjectSlug,
+    Map<String, Cursor> projectCursorsByOrganizationSlug,
+    Map<String, List<Project>> projectsByOrganizationSlug,
     bool projectsFetchedOnce,
     bool projectsLoading,
-    List<ProjectWithLatestRelease> projectsWithLatestReleases,
-    bool releasesFetchedOnce,
-    bool releasesLoading,
+    List<Project> projects,
+    Map<String, Release> latestReleasesByProjectId,
     Map<String, Sessions> sessionsByProjectId,
     Map<String, Sessions> sessionsBeforeByProjectId,
+    Map<String, double> crashFreeSessionsByProjectId,
+    Map<String, double> crashFreeSessionsBeforeByProjectId,
+    Map<String, double> crashFreeUsersByProjectId,
+    Map<String, double> crashFreeUsersBeforeByProjectId,
+    Map<String, double> apdexByProjectId,
+    Map<String, double> apdexBeforeByProjectId,
     Map<String, List<Group>> issuesByProjectSlug,
     Organization selectedOrganization,
     Project selectedProject,
     User me,
   }) {
     return GlobalState(
-      session: setSessionNull ? null : (session ?? this.session),
-      sc: setSessionNull ? null : (sc ?? this.sc),
+      authToken: setTokenNull ? null : (authToken ?? this.authToken),
       hydrated: hydrated ?? this.hydrated,
+      version: version ?? this.version,
       selectedTab: selectedTab ?? this.selectedTab,
       organizations: organizations ?? this.organizations,
       organizationsSlugByProjectSlug: organizationsSlugByProjectSlug ?? this.organizationsSlugByProjectSlug,
+      projectCursorsByOrganizationSlug: projectCursorsByOrganizationSlug ?? this.projectCursorsByOrganizationSlug,
       projectsByOrganizationSlug: projectsByOrganizationSlug ?? this.projectsByOrganizationSlug,
       projectsFetchedOnce: projectsFetchedOnce ?? this.projectsFetchedOnce,
-      projectsLoading: projectsLoading ?? this.projectsLoading,
-      projectsWithLatestReleases: projectsWithLatestReleases ?? this.projectsWithLatestReleases,
-      releasesFetchedOnce: releasesFetchedOnce ?? this.releasesFetchedOnce,
-      releasesLoading: releasesLoading ?? this.releasesLoading,
+      projects: projects ?? this.projects,
+      latestReleasesByProjectId: latestReleasesByProjectId ?? this.latestReleasesByProjectId,
       sessionsByProjectId: sessionsByProjectId ?? this.sessionsByProjectId,
       sessionsBeforeByProjectId: sessionsBeforeByProjectId ?? this.sessionsBeforeByProjectId,
+      crashFreeSessionsByProjectId: crashFreeSessionsByProjectId ?? this.crashFreeSessionsByProjectId,
+      crashFreeSessionsBeforeByProjectId: crashFreeSessionsBeforeByProjectId ?? this.crashFreeSessionsBeforeByProjectId,
+      crashFreeUsersByProjectId: crashFreeUsersByProjectId ?? this.crashFreeUsersByProjectId,
+      crashFreeUsersBeforeByProjectId: crashFreeUsersBeforeByProjectId ?? this.crashFreeUsersBeforeByProjectId,
+      apdexByProjectId: apdexByProjectId ?? this.apdexByProjectId,
+      apdexBeforeByProjectId: apdexBeforeByProjectId ?? this.apdexBeforeByProjectId,
       issuesByProjectSlug: issuesByProjectSlug ?? this.issuesByProjectSlug,
       selectedOrganization: selectedOrganization ?? this.selectedOrganization,
       selectedProject: selectedProject ?? this.selectedProject,
       me: me ?? this.me
     );
-  }
-
-  // When there are no bookmarked projects, we return all of them.
-  List<ProjectWithLatestRelease> allOrBookmarkedProjectsWithLatestReleases() {
-    final List<ProjectWithLatestRelease> allProjectsWithLatestReleases = [];
-    final List<ProjectWithLatestRelease> bookmarkedProjectsWithLatestReleases = [];
-
-    for (final projectWithLatestRelease in projectsWithLatestReleases) {
-      allProjectsWithLatestReleases.add(projectWithLatestRelease);
-      if (projectWithLatestRelease.project.isBookmarked) {
-        bookmarkedProjectsWithLatestReleases.add(projectWithLatestRelease);
-      }
-    }
-    if (bookmarkedProjectsWithLatestReleases.isEmpty) {
-      return allProjectsWithLatestReleases;
-    } else {
-      return bookmarkedProjectsWithLatestReleases;
-    }
   }
 
   Map<String, SessionState> sessionStateByProjectId(Set<SessionStatus> sessionStatus) {
@@ -187,10 +194,10 @@ class GlobalState {
       if (sessions != null) {
         sessionStateByProjectId[projectId] = SessionState(
           projectId: projectId,
-          sessionCount: total,
-          previousSessionCount: previousTotal,
-          points: lineChartPoints,
-          previousPoints: previousLineChartPoints
+          numberOfSessions: total,
+          previousNumberOfSessions: previousTotal,
+          sessionPoints: lineChartPoints,
+          previousSessionPoints: previousLineChartPoints
         );
       }
     }
@@ -224,5 +231,18 @@ class GlobalState {
       );
     }
     return [total, lineChartPoints];
+  }
+
+  Organization organizationForProjectSlug(String projectSlug) {
+    final organizationSlug = organizationsSlugByProjectSlug[projectSlug];
+    if (organizationSlug != null) {
+      return organizations.firstWhere((element) => element.slug == organizationSlug);
+    } else {
+      return null;
+    }
+  }
+
+  List<ProjectWithLatestRelease> projectsWithLatestReleases() {
+    return projects.map((project) => ProjectWithLatestRelease(project, latestReleasesByProjectId[project.id])).toList();
   }
 }

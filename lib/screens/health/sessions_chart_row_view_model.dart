@@ -4,12 +4,12 @@ import '../../screens/chart/line_chart_point.dart';
 
 class SessionsChartRowViewModel {
 
-  SessionsChartRowViewModel.create(SessionState sessionState, List<LineChartPoint> parentPoints) {
-    if (sessionState == null || sessionState.points == null) {
+  SessionsChartRowViewModel.create(SessionState sessionState) {
+    if (sessionState == null || sessionState.sessionPoints == null) {
       data = null;
       percentChange = 0.0;
       numberOfIssues = 0;
-    } else if (sessionState.points.length < 2) {
+    } else if (sessionState.sessionPoints.length < 2) {
       data = LineChartData.prepareData(
           points: [
             LineChartPoint(0, 0),
@@ -19,16 +19,11 @@ class SessionsChartRowViewModel {
       percentChange = 0.0;
       numberOfIssues = data.countY.toInt();
     } else {
-
-      if (parentPoints != null && parentPoints.isNotEmpty) {
-        final parent = LineChartData.prepareData(points: parentPoints);
-        data = LineChartData.prepareData(points: sessionState.points, preferredMinY: parent.minY, preferredMaxY: parent.maxY);
-      } else {
-        data = LineChartData.prepareData(points: sessionState.points);
-      }
-
-      if (sessionState.previousSessionCount != null) {
-        percentChange = _percentChange(sessionState.previousSessionCount.toDouble(), sessionState.sessionCount.toDouble());
+      data = LineChartData.prepareData(
+          points: sessionState.sessionPoints
+      );
+      if (sessionState.previousNumberOfSessions != null) {
+        percentChange = _percentChange(sessionState.previousNumberOfSessions.toDouble(), sessionState.numberOfSessions.toDouble());
       } else {
         percentChange = 0.0;
       }

@@ -3,112 +3,176 @@ import 'package:redux/redux.dart';
 import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
 import '../../redux/state/session_state.dart';
-import '../../types/project.dart';
+import '../../screens/health/health_card_view_model.dart';
+import '../../screens/health/project_card.dart';
 import '../../types/project_with_latest_release.dart';
 import '../../types/session_status.dart';
 
 class HealthScreenViewModel {
   HealthScreenViewModel.fromStore(Store<AppState> store)
     : _store = store,
-      projects = store.state.globalState.allOrBookmarkedProjectsWithLatestReleases(),
-      _sessionStateByProjectId = store.state.globalState.sessionStateByProjectId(SessionStatus.values.toSet()),
-      _handledAndCrashedSessionStateByProjectId = store.state.globalState.sessionStateByProjectId({SessionStatus.errored, SessionStatus.abnormal, SessionStatus.crashed}),
+      projects = store.state.globalState.projectsWithLatestReleases(),
+      _totalSessionStateByProjectId = store.state.globalState.sessionStateByProjectId(SessionStatus.values.toSet()),
+      _healthySessionsStateByProjectId = store.state.globalState.sessionStateByProjectId({SessionStatus.healthy}),
+      _erroredSessionsStateByProjectId = store.state.globalState.sessionStateByProjectId({SessionStatus.errored}),
+      _abnormalSessionsStateByProjectId = store.state.globalState.sessionStateByProjectId({SessionStatus.abnormal}),
       _crashedSessionStateByProjectId = store.state.globalState.sessionStateByProjectId({SessionStatus.crashed}),
-      _fetchProjectsNeeded = !store.state.globalState.projectsFetchedOnce &&
-        !store.state.globalState.projectsLoading,
-      showProjectEmptyScreen = !store.state.globalState.projectsLoading &&
-        store.state.globalState.projectsFetchedOnce &&
+      _crashFreeSessionsByProjectId = store.state.globalState.crashFreeSessionsByProjectId,
+      _crashFreeSessionsBeforeByProjectId = store.state.globalState.crashFreeSessionsBeforeByProjectId,
+      _crashFreeUsersByProjectId = store.state.globalState.crashFreeUsersByProjectId,
+      _crashFreeUsersBeforeByProjectId = store.state.globalState.crashFreeUsersBeforeByProjectId,
+      _apdexByProjectId = store.state.globalState.apdexByProjectId,
+      _apdexBeforeByProjectId = store.state.globalState.apdexBeforeByProjectId,
+      showProjectEmptyScreen = store.state.globalState.projectsFetchedOnce &&
         store.state.globalState.projectsByOrganizationSlug.keys.isEmpty,
-      showReleaseEmptyScreen = !store.state.globalState.releasesLoading &&
-        store.state.globalState.releasesFetchedOnce &&
-        store.state.globalState.projectsWithLatestReleases.isEmpty,
-      showLoadingScreen = store.state.globalState.projectsLoading || store.state.globalState.releasesLoading;
+      showLoadingScreen = !store.state.globalState.projectsFetchedOnce &&
+          store.state.globalState.projectsByOrganizationSlug.keys.isEmpty;
 
   final Store<AppState> _store;
 
   final List<ProjectWithLatestRelease> projects;
 
-  final Map<String, SessionState> _sessionStateByProjectId;
-  final Map<String, SessionState> _handledAndCrashedSessionStateByProjectId;
+  final Map<String, SessionState> _totalSessionStateByProjectId;
+  final Map<String, SessionState> _healthySessionsStateByProjectId;
+  final Map<String, SessionState> _erroredSessionsStateByProjectId;
+  final Map<String, SessionState> _abnormalSessionsStateByProjectId;
   final Map<String, SessionState> _crashedSessionStateByProjectId;
 
-  final bool _fetchProjectsNeeded;
+  final Map<String, double> _crashFreeSessionsByProjectId;
+  final Map<String, double> _crashFreeSessionsBeforeByProjectId;
+  final Map<String, double> _crashFreeUsersByProjectId;
+  final Map<String, double> _crashFreeUsersBeforeByProjectId;
+
+  final Map<String, double> _apdexByProjectId;
+  final Map<String, double> _apdexBeforeByProjectId;
 
   final bool showProjectEmptyScreen;
-  final bool showReleaseEmptyScreen;
   final bool showLoadingScreen;
 
-  void fetchProjectsIfNeeded() {
-    if (_fetchProjectsNeeded) {
-      fetchProjects();
-    }
-  }
-
   void fetchProjects() {
-    _store.dispatch(FetchOrganizationsAndProjectsAction());
+    _store.dispatch(FetchOrganizationsAndProjectsAction(true, false));
   }
 
-  SessionState sessionStateForProject(Project project) {
-    return _sessionStateByProjectId[project.id];
+  void reloadProjects() {
+    _store.dispatch(FetchOrganizationsAndProjectsAction(true, true));
   }
 
-  SessionState handledAndCrashedSessionStateForProject(Project project) {
-    return _handledAndCrashedSessionStateByProjectId[project.id];
-  }
-
-  SessionState crashedSessionStateForProject(Project project) {
-    return _crashedSessionStateByProjectId[project.id];
-  }
-  
-  void fetchLatestReleaseOrIssues(int index) {
-    if (index < projects.length) {
-      final projectWithLatestRelease = projects[index];
-      if (projectWithLatestRelease != null) {
-        _fetchLatestRelease(projectWithLatestRelease);
-        _fetchSessions(projectWithLatestRelease);
-      }
-    }
-    if (index + 1 < projects.length) {
-      final nextProjectWithLatestRelease = projects[index + 1];
-      if (nextProjectWithLatestRelease != null) {
-        _fetchLatestRelease(nextProjectWithLatestRelease);
-        _fetchSessions(nextProjectWithLatestRelease);
-      }
-    }
-  }
-
-  void _fetchLatestRelease(ProjectWithLatestRelease projectWithLatestRelease) {
-    final organizationSlug = _store.state.globalState.organizationsSlugByProjectSlug[projectWithLatestRelease.project.slug];
-    if (organizationSlug == null) {
-      return;
-    }
-    _store.dispatch(
-      FetchLatestReleaseAction(
-          organizationSlug,
-          projectWithLatestRelease.project.slug,
-          projectWithLatestRelease.project.id,
-          projectWithLatestRelease.project.latestRelease.version
-      )
+  ProjectCard projectCard(int index) {
+    final projectWitLatestRelease = projects[index];
+    return ProjectCard(
+        _store.state.globalState.organizationForProjectSlug(projectWitLatestRelease.project.slug)?.name,
+        projectWitLatestRelease.project,
+        projectWitLatestRelease.release,
+        _totalSessionStateByProjectId[projectWitLatestRelease.project.id]
     );
   }
 
-  void _fetchSessions(ProjectWithLatestRelease projectWithLatestRelease) {
-    if (projectWithLatestRelease.release == null) {
-      return;
+  SessionState sessionState(int index, SessionStatus sessionStatus) {
+    final project = projects[index].project;
+    switch (sessionStatus) {
+      case SessionStatus.healthy:
+        return _healthySessionsStateByProjectId[project.id];
+      case SessionStatus.errored:
+        return _erroredSessionsStateByProjectId[project.id];
+      case SessionStatus.crashed:
+        return _crashedSessionStateByProjectId[project.id];
+      case SessionStatus.abnormal:
+        return _abnormalSessionsStateByProjectId[project.id];
     }
+    return null;
+  }
+
+  bool showAbnormalSessions(int index) {
+    final project = projects[index].project;
+    final platform = project?.platform?.toLowerCase();
+    if (platform == null) {
+      return true;
+    } else {
+      return !platform.contains('node') && !platform.contains('javascript');
+    }
+  }
+
+  HealthCardViewModel crashFreeSessionsForProject(int index) {
+    final project = projects[index].project;
+    return HealthCardViewModel.crashFreeSessions(
+      _crashFreeSessionsByProjectId[project.id],
+      _crashFreeSessionsBeforeByProjectId[project.id],
+    );
+  }
+
+  HealthCardViewModel crashFreeUsersForProject(int index) {
+    final project = projects[index].project;
+    return HealthCardViewModel.crashFreeSessions(
+      _crashFreeUsersByProjectId[project.id],
+      _crashFreeUsersBeforeByProjectId[project.id],
+    );
+  }
+
+  HealthCardViewModel apdexForProject(int index) {
+    final project = projects[index].project;
+    return HealthCardViewModel.apdex(
+      _apdexByProjectId[project.id],
+      _apdexBeforeByProjectId[project.id],
+    );
+  }
+  
+  void fetchDataForProject(int index) {
+    final projectWithLatestRelease = projects[index];
+    //_fetchLatestRelease(projectWithLatestRelease);
+    _fetchSessions(projectWithLatestRelease);
+    //_fetchApdex(projectWithLatestRelease);
+    if (index + 1 < projects.length) {
+      final nextProjectWithLatestRelease = projects[index + 1];
+      if (nextProjectWithLatestRelease != null) {
+        //_fetchLatestRelease(nextProjectWithLatestRelease);
+        _fetchSessions(nextProjectWithLatestRelease);
+        //_fetchApdex(nextProjectWithLatestRelease);
+      }
+    }
+  }
+
+  // void _fetchLatestRelease(ProjectWithLatestRelease projectWithLatestRelease) {
+  //   final organizationSlug = _store.state.globalState.organizationsSlugByProjectSlug[projectWithLatestRelease.project.slug];
+  //   if (organizationSlug == null) {
+  //     return;
+  //   }
+  //   _store.dispatch(
+  //     FetchLatestReleaseAction(
+  //         organizationSlug,
+  //         projectWithLatestRelease.project.slug,
+  //         projectWithLatestRelease.project.id,
+  //         projectWithLatestRelease.project.latestRelease.version
+  //     )
+  //   );
+  // }
+
+  void _fetchSessions(ProjectWithLatestRelease projectWithLatestRelease) {
     final organizationSlug = _store.state.globalState.organizationsSlugByProjectSlug[projectWithLatestRelease.project.slug];
     if (organizationSlug == null) {
       return;
     }
-
-    // Only fetch when there is no data available yet
-    if (_store.state.globalState.sessionsByProjectId[projectWithLatestRelease.project.id] == null) {
-      _store.dispatch(
-          FetchSessionsAction(
-              organizationSlug,
-              projectWithLatestRelease.project.id
-          )
-      );
+    if (_store.state.globalState.sessionsByProjectId[projectWithLatestRelease.project.id] != null) {
+      return; // Only fetch when there is no data available yet
     }
+    _store.dispatch(
+        FetchSessionsAction(
+            organizationSlug,
+            projectWithLatestRelease.project.id
+        )
+    );
   }
+
+  // void _fetchApdex(ProjectWithLatestRelease projectWithLatestRelease) {
+  //   final organization = _store.state.globalState.organizationForProjectSlug(projectWithLatestRelease.project.slug);
+  //   if (organization == null) {
+  //     return;
+  //   }
+  //   _store.dispatch(
+  //       FetchApdexAction(
+  //         organization.apdexThreshold,
+  //         organization.slug,
+  //         projectWithLatestRelease.project.id,
+  //       )
+  //   );
+  // }
 }

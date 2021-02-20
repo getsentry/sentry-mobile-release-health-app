@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
@@ -7,18 +6,19 @@ import 'package:http/http.dart';
 import 'package:sentry_flutter/sentry_flutter.dart' as sentry;
 
 import '../api/api_errors.dart';
+import '../types/cursor.dart';
 import '../types/group.dart';
 import '../types/organization.dart';
 import '../types/project.dart';
 import '../types/release.dart';
 import '../types/sessions.dart';
 import '../types/user.dart';
+import '../utils/date_time_format.dart';
 
 class SentryApi {
-  SentryApi(this.session, this.sc);
+  SentryApi(this.authToken);
 
-  final Cookie session;
-  final Cookie sc;
+  final String authToken;
 
   final client = sentry.SentryHttpClient(client: Client());
   final baseUrlScheme = 'https://';
@@ -32,8 +32,22 @@ class SentryApi {
     return _parseResponseList(response, (jsonMap) => Organization.fromJson(jsonMap)).asFuture;
   }
 
-  Future<List<Project>> projects(String slug) async {
-    final response = await client.get('${_baseUrl()}/organizations/$slug/projects/',
+  Future<Organization> organization(String organizationSlug) async {
+    final response = await client.get('${_baseUrl()}/organizations/$organizationSlug/',
+        headers: _defaultHeader()
+    );
+    return _parseResponse(response, (jsonMap) => Organization.fromJson(jsonMap)).asFuture;
+  }
+
+  Future<List<Project>> projects(String slug, Cursor cursor) async {
+    final queryParameters = <String, String>{
+    };
+
+    if (cursor != null) {
+      queryParameters[cursor.queryKey()] = cursor.queryValue();
+    }
+
+    final response = await client.get(Uri.https(baseUrlName, '$baseUrlPath/organizations/$slug/projects/', queryParameters),
         headers: _defaultHeader()
     );
     return _parseResponseList(response, (jsonMap) => Project.fromJson(jsonMap)).asFuture;
@@ -92,6 +106,36 @@ class SentryApi {
     return _parseResponseList(response, (jsonMap) => Group.fromJson(jsonMap)).asFuture;
   }
 
+  Future<double> apdex({@required int apdexThreshold, @required String organizationSlug, @required String projectId, @required DateTime start, @required DateTime end}) async {
+    final queryParameters = {
+      'field': 'apdex($apdexThreshold)',
+      'project': projectId,
+      'query': 'event.type:transaction count():>0',
+      'start': start.utcDateTime(),
+      'end': end.utcDateTime(),
+    };
+    final response = await client.get(Uri.https(baseUrlName, '$baseUrlPath/organizations/$organizationSlug/eventsv2/', queryParameters),
+        headers: _defaultHeader()
+    );
+    if (response.statusCode == 200) {
+      try {
+        final responseJson = json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
+        final data = responseJson['data'] as List<dynamic>;
+        if (data.isNotEmpty) {
+          final apdexData = data.first as Map<String, dynamic>;
+          final apDex = apdexData['apdex_$apdexThreshold'] as double;
+          return Result.value(apDex).asFuture;
+        } else {
+          return Result.value(null).asFuture;
+        }
+      } catch (e) {
+        throw JsonError(e);
+      }
+    } else {
+      throw ApiError(response.statusCode, response.body);
+    }
+  }
+
   Future<User> authenticatedUser() async {
     final response = await client.get(Uri.https(baseUrlName, '$baseUrlPath/'),
         headers: _defaultHeader()
@@ -102,17 +146,18 @@ class SentryApi {
   Future<Sessions> sessions({
     @required String organizationSlug,
     @required String projectId,
-    @required String field,
-    String statsPeriod = '12h',
+    @required Iterable<String> fields,
+    String statsPeriod = '24h',
     String interval = '1h',
     String groupBy,
     String statsPeriodStart,
     String statsPeriodEnd}) async {
-    final queryParameters = <String, String>{
+    final queryParameters = <String, dynamic>{ /*String|Iterable<String>*/
       'project': projectId,
       'interval': interval,
-      'field': field
+      'field': fields
     };
+
     if (groupBy != null) {
       queryParameters['groupBy'] = groupBy;
     }
@@ -122,7 +167,11 @@ class SentryApi {
     } else {
       queryParameters['statsPeriod'] = statsPeriod;
     }
-    final response = await client.get(Uri.https(baseUrlName, '$baseUrlPath/organizations/$organizationSlug/sessions/', queryParameters),
+
+    final request = Uri.https(baseUrlName, '$baseUrlPath/organizations/$organizationSlug/sessions/')
+        .resolveUri(Uri(queryParameters: queryParameters));
+
+    final response = await client.get(request,
         headers: _defaultHeader()
     );
     return _parseResponse(response, (jsonMap) => Sessions.fromJson(jsonMap)).asFuture;
@@ -139,14 +188,11 @@ class SentryApi {
   }
 
   Map<String, String> _defaultHeader() {
-    final headerFields = <String, String>{};
-    var cookie = 'session=${session.value};';
-    if (sc != null) {
-      cookie += ' sc=${sc.value};';
-      headerFields['X-CSRFToken'] = sc.value;
+    final headers = <String, String>{};
+    if (authToken != null) {
+      headers['Authorization'] = 'Bearer $authToken';
     }
-    headerFields['Cookie'] = cookie;
-    return headerFields;
+    return headers;
   }
 
   Result<List<T>> _parseResponseList<T>(Response response, T Function(Map<String, dynamic> r) map) {

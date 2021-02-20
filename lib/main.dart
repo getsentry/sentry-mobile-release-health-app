@@ -25,7 +25,6 @@ Future<Store<AppState>> createStore() async {
     appReducer,
     initialState: AppState.initial(),
     middleware: [
-      ActionThrottlingMiddleware(),
       SentryApiMiddleware(),
       LocalStorageMiddleware(prefs, secStorage),
 //      ValidationMiddleware(),
@@ -120,16 +119,16 @@ class SentryMobile extends StatelessWidget {
                     color: SentryColors.mamba,
                   ),
                   caption: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
-                    color: Colors.black45,
+                    fontWeight: FontWeight.normal,
+                    fontSize: 12,
+                    color: SentryColors.mamba,
                   )),
             )),
         home: StoreConnector<AppState, AppState>(
           converter: (store) => store.state,
           builder: (_, state) {
             if (state.globalState.hydrated) {
-              if (state.globalState.session == null) {
+              if (state.globalState.authToken == null) {
                 return OnboardingScreen();
               } else {
                 return MainScreen();

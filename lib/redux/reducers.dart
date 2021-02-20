@@ -1,7 +1,9 @@
 import 'package:redux/redux.dart';
 
 import '../api/api_errors.dart';
-import '../types/project_with_latest_release.dart';
+import '../types/project.dart';
+import '../types/release.dart';
+import '../utils/stability_score.dart';
 import 'actions.dart';
 import 'state/app_state.dart';
 
@@ -17,7 +19,6 @@ final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, LogoutAction>(_logoutAction),
   TypedReducer<GlobalState, FetchOrganizationsAndProjectsAction>(_fetchOrganizationsAndProjectsAction),
   TypedReducer<GlobalState, FetchOrganizationsAndProjectsSuccessAction>(_fetchOrganizationsAndProjectsSuccessAction),
-  TypedReducer<GlobalState, FetchOrganizationsAndProjectsFailureAction>(_fetchOrganizationsAndProjectsFailureAction),
   TypedReducer<GlobalState, FetchLatestReleasesAction>(_fetchLatestReleasesAction),
   TypedReducer<GlobalState, FetchLatestReleasesSuccessAction>(_fetchLatestReleasesSuccessAction),
   TypedReducer<GlobalState, FetchLatestReleasesFailureAction>(_fetchLatestReleasesFailureAction),
@@ -27,6 +28,7 @@ final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, SelectProjectAction>(_selectProjectAction),
   TypedReducer<GlobalState, FetchAuthenticatedUserSuccessAction>(_fetchAuthenticatedUserSuccessAction),
   TypedReducer<GlobalState, FetchSessionsSuccessAction>(_fetchSessionsSuccessAction),
+  TypedReducer<GlobalState, FetchApdexSuccessAction>(_fetchApdexSuccessAction),
   TypedReducer<GlobalState, ApiFailureAction>(_apiFailureAction),
 ]);
 
@@ -35,11 +37,11 @@ GlobalState _switchTabAction(GlobalState state, SwitchTabAction action) {
 }
 
 GlobalState _rehydrateSuccessAction(GlobalState state, RehydrateSuccessAction action) {
-  return state.copyWith(hydrated: true, session: action.sessionCookie, sc: action.scCookie);
+  return state.copyWith(hydrated: true, authToken: action.authToken, version: action.version);
 }
 
 GlobalState _loginAction(GlobalState state, LoginAction action) {
-  return state.copyWith(session: action.sessionCookie, sc: action.scCookie);
+  return state.copyWith(authToken: action.authToken);
 }
 
 GlobalState _logoutAction(GlobalState state, LogoutAction action) {
@@ -49,35 +51,53 @@ GlobalState _logoutAction(GlobalState state, LogoutAction action) {
 }
 
 GlobalState _fetchOrganizationsAndProjectsAction(GlobalState state, FetchOrganizationsAndProjectsAction action) {
-  return state.copyWith(projectsLoading: true);
+  if (action.reload) {
+    return state.copyWith(
+      sessionsByProjectId: {},
+      sessionsBeforeByProjectId: {}
+    );
+  } else {
+    return state;
+  }
 }
 
 GlobalState _fetchOrganizationsAndProjectsSuccessAction(GlobalState state, FetchOrganizationsAndProjectsSuccessAction action) {
-  final organizationsSlugByProjectSlug = <String, String>{};
-  final projectsWithLatestReleases = <ProjectWithLatestRelease>[];
+  final organizationsSlugByProjectSlug = action.reload
+      ? <String, String>{}
+      : state.organizationsSlugByProjectSlug;
+
+  final projectsById = <String, Project>{};
+
+  if (!action.reload) {
+    for (final project in state.projects) {
+      projectsById[project.id] = project;
+    }
+  }
 
   for (final organizationSlug in action.projectsByOrganizationSlug.keys) {
     for (final project in action.projectsByOrganizationSlug[organizationSlug]) {
-      organizationsSlugByProjectSlug[project.slug] = organizationSlug;
       if (project.latestRelease != null) {
-        projectsWithLatestReleases.add(ProjectWithLatestRelease(project, null));
+        organizationsSlugByProjectSlug[project.slug] = organizationSlug;
+        projectsById[project.id] = project;
       }
     }
   }
 
+  final projects = projectsById.values.toList();
+  projects.sort((Project a, Project b) {
+    final valueA = a.isBookmarked ? 0 : 1;
+    final valueB = b.isBookmarked ? 0 : 1;
+    return valueA.compareTo(valueB);
+  });
+
   return state.copyWith(
     organizations: action.organizations,
     organizationsSlugByProjectSlug: organizationsSlugByProjectSlug,
+    projectCursorsByOrganizationSlug: action.projectCursorsByOrganizationSlug,
     projectsByOrganizationSlug: action.projectsByOrganizationSlug,
-    projectsWithLatestReleases: projectsWithLatestReleases,
+    projects: projects,
     projectsFetchedOnce: true,
-    projectsLoading: false,
-    releasesLoading: false
   );
-}
-
-GlobalState _fetchOrganizationsAndProjectsFailureAction(GlobalState state, FetchOrganizationsAndProjectsFailureAction action) {
-  return state.copyWith(projectsLoading: false);
 }
 
 GlobalState _selectOrganizationAction(GlobalState state, SelectOrganizationAction action) {
@@ -89,39 +109,37 @@ GlobalState _selectProjectAction(GlobalState state, SelectProjectAction action) 
 }
 
 GlobalState _fetchLatestReleasesAction(GlobalState state, FetchLatestReleasesAction action) {
-  return state.copyWith(releasesLoading: true);
+  return state.copyWith();
 }
 
 GlobalState _fetchLatestReleasesSuccessAction(GlobalState state, FetchLatestReleasesSuccessAction action) {
+  final projects = <Project>[];
+  final latestReleasesByProjectId = <String, Release>{};
+
+  for (final projectsWithLatestRelease in action.projectsWithLatestReleases) {
+    projects.add(projectsWithLatestRelease.project);
+    latestReleasesByProjectId[projectsWithLatestRelease.project.id] = projectsWithLatestRelease.release;
+  }
+
   return state.copyWith(
-    projectsWithLatestReleases: action.projectsWithLatestReleases,
-    releasesFetchedOnce: true,
-    releasesLoading: false
+    projects: projects,
+    latestReleasesByProjectId: latestReleasesByProjectId
   );
 }
 
 GlobalState _fetchLatestReleasesFailureAction(GlobalState state, FetchLatestReleasesFailureAction action) {
-  return state.copyWith(releasesLoading: false);
+  return state.copyWith();
 }
 
 GlobalState _fetchLatestReleaseSuccessAction(GlobalState state, FetchLatestReleaseSuccessAction action) {
-  final projectsWithLatestReleases = state.projectsWithLatestReleases;
   final organizationSlug = state.organizationsSlugByProjectSlug[action.projectSlug];
   final project = state.projectsByOrganizationSlug[organizationSlug].where((element) => element.slug == action.projectSlug).first;
 
-  if (project != null) {
-    final index = projectsWithLatestReleases.indexWhere((element) => element.project.id == project.id);
-    if (index != -1) {
-      projectsWithLatestReleases.removeAt(index);
-      projectsWithLatestReleases.insert(index, ProjectWithLatestRelease(project, action.latestRelease));
-    } else {
-      projectsWithLatestReleases.add(ProjectWithLatestRelease(project, action.latestRelease));
-    }
-  }
+  final latestReleasesByProjectId = state.latestReleasesByProjectId;
+  latestReleasesByProjectId[project.id] = action.latestRelease;
+
   return state.copyWith(
-      projectsWithLatestReleases: projectsWithLatestReleases,
-      releasesFetchedOnce: true,
-      releasesLoading: false
+      latestReleasesByProjectId: latestReleasesByProjectId,
   );
 }
 
@@ -147,9 +165,38 @@ GlobalState _fetchSessionsSuccessAction(GlobalState state, FetchSessionsSuccessA
   final sessionsBeforeByProjectId = state.sessionsBeforeByProjectId;
   sessionsBeforeByProjectId[action.projectId] = action.sessionsBefore;
   
+  final crashFreeSessionsByProjectId = state.crashFreeSessionsByProjectId;
+  crashFreeSessionsByProjectId[action.projectId] = action.sessions.crashFreeSessions();
+  
+  final crashFreeSessionsBeforeByProjectId = state.crashFreeSessionsBeforeByProjectId;
+  crashFreeSessionsBeforeByProjectId[action.projectId] = action.sessionsBefore.crashFreeSessions();
+
+  final crashFreeUsersByProjectId = state.crashFreeUsersByProjectId;
+  crashFreeUsersByProjectId[action.projectId] = action.sessions.crashFreeUsers();
+
+  final crashFreeUsersBeforeByProjectId = state.crashFreeUsersBeforeByProjectId;
+  crashFreeUsersBeforeByProjectId[action.projectId] = action.sessionsBefore.crashFreeUsers();
+  
   return state.copyWith(
       sessionsByProjectId: sessionsByProjectId,
-      sessionsBeforeByProjectId: sessionsBeforeByProjectId
+      sessionsBeforeByProjectId: sessionsBeforeByProjectId,
+      crashFreeSessionsByProjectId: crashFreeSessionsByProjectId,
+      crashFreeSessionsBeforeByProjectId: crashFreeSessionsBeforeByProjectId,
+      crashFreeUsersByProjectId: crashFreeUsersByProjectId,
+      crashFreeUsersBeforeByProjectId: crashFreeUsersBeforeByProjectId
+  );
+}
+
+GlobalState _fetchApdexSuccessAction(GlobalState state, FetchApdexSuccessAction action) {
+  final apdexByProjectId = state.apdexByProjectId;
+  apdexByProjectId[action.projectId] = action.apdex;
+
+  final apdexBeforeByProjectId = state.apdexBeforeByProjectId;
+  apdexBeforeByProjectId[action.projectId] = action.apdexBefore;
+
+  return state.copyWith(
+    apdexByProjectId: apdexByProjectId,
+    apdexBeforeByProjectId: apdexBeforeByProjectId
   );
 }
 

@@ -15,7 +15,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+1
+version: 0.1.0+10
 
 environment:
   sdk: ">=2.8.0 <3.0.0"
@@ -23,8 +23,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_webview_plugin: ^0.3.11
-  webview_cookie_manager: ^1.0.1
   http: ^0.12.2
   flutter_secure_storage: ^3.3.3
   redux: ^4.0.0
@@ -38,6 +36,8 @@ dependencies:
   sentry_flutter: ^4.0.0
   equatable: ^1.2.3
   intl: ^0.16.1
+  flutter_svg: ^0.18.1
+  qr_code_scanner: ^0.3.5
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -46,9 +46,14 @@ dependencies:
 dev_dependencies:
   build_runner: ^1.0.0
   json_serializable: ^3.2.0
+  flutter_launcher_icons: "^0.8.0"
   test: ^1.15.4
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  ios: true
+  image_path: "assets/logo.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -92,3 +97,80 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  assets:
+    - assets/platformicons/HTML5.svg
+    - assets/platformicons/backbone.svg
+    - assets/platformicons/csharp.svg
+    - assets/platformicons/express.svg
+    - assets/platformicons/java.svg
+    - assets/platformicons/php.svg
+    - assets/platformicons/scala.svg
+    - assets/platformicons/tryton.svg
+    - assets/platformicons/actix.svg
+    - assets/platformicons/blazor.svg
+    - assets/platformicons/dart.svg
+    - assets/platformicons/falcon.svg
+    - assets/platformicons/javascript.svg
+    - assets/platformicons/pyramid.svg
+    - assets/platformicons/sentry.svg
+    - assets/platformicons/unity.svg
+    - assets/platformicons/aiohttp.svg
+    - assets/platformicons/bootstrap.svg
+    - assets/platformicons/default.svg
+    - assets/platformicons/flask.svg
+    - assets/platformicons/koa.svg
+    - assets/platformicons/python.svg
+    - assets/platformicons/serverless.svg
+    - assets/platformicons/uno.svg
+    - assets/platformicons/android.svg
+    - assets/platformicons/bottle.svg
+    - assets/platformicons/django.svg
+    - assets/platformicons/flutter.svg
+    - assets/platformicons/kotlin.svg
+    - assets/platformicons/qt.svg
+    - assets/platformicons/sinatra.svg
+    - assets/platformicons/unreal.svg
+    - assets/platformicons/angularjs.svg
+    - assets/platformicons/celery.svg
+    - assets/platformicons/dotnet.svg
+    - assets/platformicons/fsharp.svg
+    - assets/platformicons/laravel.svg
+    - assets/platformicons/rails.svg
+    - assets/platformicons/spring.svg
+    - assets/platformicons/vue.svg
+    - assets/platformicons/app-engine.svg
+    - assets/platformicons/chalice.svg
+    - assets/platformicons/dotnetcore.svg
+    - assets/platformicons/gatsby.svg
+    - assets/platformicons/logback.svg
+    - assets/platformicons/react.svg
+    - assets/platformicons/springboot.svg
+    - assets/platformicons/xamarin.svg
+    - assets/platformicons/apple.svg
+    - assets/platformicons/clojure.svg
+    - assets/platformicons/dotnetfx.svg
+    - assets/platformicons/gcp.svg
+    - assets/platformicons/nativec.svg
+    - assets/platformicons/redis.svg
+    - assets/platformicons/stride3d.svg
+    - assets/platformicons/aws.svg
+    - assets/platformicons/connect.svg
+    - assets/platformicons/electron.svg
+    - assets/platformicons/go.svg
+    - assets/platformicons/nextjs.svg
+    - assets/platformicons/redux.svg
+    - assets/platformicons/swift.svg
+    - assets/platformicons/awslamda.svg
+    - assets/platformicons/cordova.svg
+    - assets/platformicons/elixir.svg
+    - assets/platformicons/godot.svg
+    - assets/platformicons/nodejs.svg
+    - assets/platformicons/ruby.svg
+    - assets/platformicons/symfony.svg
+    - assets/platformicons/azure.svg
+    - assets/platformicons/cryengine.svg
+    - assets/platformicons/ember.svg
+    - assets/platformicons/google.svg
+    - assets/platformicons/perl.svg
+    - assets/platformicons/rust.svg
+    - assets/platformicons/tornado.svg

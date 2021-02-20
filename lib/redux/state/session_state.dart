@@ -5,17 +5,17 @@ import '../../screens/chart/line_chart_point.dart';
 class SessionState {
   SessionState({
     @required this.projectId,
-    @required this.sessionCount,
-    @required this.previousSessionCount,
-    @required this.points,
-    @required this.previousPoints
+    @required this.numberOfSessions,
+    @required this.previousNumberOfSessions,
+    @required this.sessionPoints,
+    @required this.previousSessionPoints
   });
 
   final String projectId;
 
-  final int sessionCount;
-  final int previousSessionCount;
+  final int numberOfSessions;
+  final int previousNumberOfSessions;
 
-  final List<LineChartPoint> points;
-  final List<LineChartPoint> previousPoints;
+  final List<LineChartPoint> sessionPoints;
+  final List<LineChartPoint> previousSessionPoints;
 }

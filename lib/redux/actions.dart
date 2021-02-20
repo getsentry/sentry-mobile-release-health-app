@@ -1,7 +1,4 @@
-import 'dart:io';
-
-import 'package:equatable/equatable.dart';
-
+import '../types/cursor.dart';
 import '../types/group.dart';
 import '../types/organization.dart';
 import '../types/project.dart';
@@ -10,18 +7,14 @@ import '../types/release.dart';
 import '../types/sessions.dart';
 import '../types/user.dart';
 
-abstract class ThrottledAction extends Equatable {
-  
-}
-
 class RehydrateAction {
   RehydrateAction();
 }
 
 class RehydrateSuccessAction {
-  RehydrateSuccessAction(this.sessionCookie, this.scCookie);
-  final Cookie sessionCookie;
-  final Cookie scCookie;
+  RehydrateSuccessAction(this.authToken, this.version);
+  final String authToken;
+  final String version;
 }
 
 class SwitchTabAction {
@@ -30,9 +23,8 @@ class SwitchTabAction {
 }
 
 class LoginAction {
-  LoginAction(this.sessionCookie, this.scCookie);
-  final Cookie sessionCookie;
-  final Cookie scCookie;
+  LoginAction(this.authToken);
+  final String authToken;
 }
 
 class LogoutAction {
@@ -47,13 +39,17 @@ class ApiFailureAction {
 // FetchOrganizationsAndProjects
 
 class FetchOrganizationsAndProjectsAction {
-  FetchOrganizationsAndProjectsAction();
+  FetchOrganizationsAndProjectsAction(this.pagination, this.reload);
+  final bool pagination;
+  final bool reload;
 }
 
 class FetchOrganizationsAndProjectsSuccessAction {
-  FetchOrganizationsAndProjectsSuccessAction(this.organizations, this.projectsByOrganizationSlug);
+  FetchOrganizationsAndProjectsSuccessAction(this.organizations, this.projectsByOrganizationSlug, this.projectCursorsByOrganizationSlug, this.reload);
   final List<Organization> organizations;
   final Map<String, List<Project>> projectsByOrganizationSlug;
+  final Map<String, Cursor> projectCursorsByOrganizationSlug;
+  final bool reload;
 }
 
 class FetchOrganizationsAndProjectsFailureAction extends ApiFailureAction {
@@ -62,18 +58,12 @@ class FetchOrganizationsAndProjectsFailureAction extends ApiFailureAction {
 
 // FetchLatestRelease
 
-class FetchLatestReleaseAction extends ThrottledAction {
+class FetchLatestReleaseAction {
   FetchLatestReleaseAction(this.organizationSlug, this.projectSlug, this.projectId, this.releaseId);
   final String organizationSlug;
   final String projectSlug;
   final String projectId;
   final String releaseId;
-
-  @override
-  List<Object> get props => [organizationSlug, projectSlug, projectId, releaseId];
-
-  @override
-  bool get stringify => false;
 }
 
 class FetchLatestReleaseSuccessAction {
@@ -104,16 +94,10 @@ class FetchLatestReleasesFailureAction extends ApiFailureAction {
 
 // FetchIssues
 
-class FetchIssuesAction extends ThrottledAction {
+class FetchIssuesAction {
   FetchIssuesAction(this.organizationSlug, this.projectSlug);
   final String organizationSlug;
   final String projectSlug;
-
-  @override
-  List<Object> get props => [organizationSlug, projectSlug];
-
-  @override
-  bool get stringify => false;
 }
 
 class FetchIssuesSuccessAction {
@@ -161,6 +145,7 @@ class FetchSessionsFailureAction extends ApiFailureAction {
   FetchSessionsFailureAction(error) : super(error);
 }
 
+<<<<<<< HEAD
 // FetchSessions
 
 class BookmarkProjectAction {
@@ -180,6 +165,27 @@ class BookmarkProjectSuccessAction {
 
 class BookmarkProjectFailureAction extends ApiFailureAction {
   BookmarkProjectFailureAction(error) : super(error);
+
+// FetchApDex
+
+class FetchApdexAction {
+  FetchApdexAction(this.apdexThreshold, this.organizationSlug, this.projectId);
+
+  final int apdexThreshold;
+  final String organizationSlug;
+  final String projectId;
+}
+
+class FetchApdexSuccessAction {
+  FetchApdexSuccessAction(this.projectId, this.apdex, this.apdexBefore);
+
+  final String projectId;
+  final double apdex;
+  final double apdexBefore;
+}
+
+class FetchApdexFailureAction extends ApiFailureAction {
+  FetchApdexFailureAction(error) : super(error);
 }
 
 // SelectOrganization

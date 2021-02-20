@@ -21,12 +21,15 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+def keystoreFile = file('./../upload-keystore.jks')
+def propsFile = file('./../upload-keystore.properties')
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -37,19 +40,35 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "io.sentrymobile.app"
-        minSdkVersion 18
-        targetSdkVersion 28
+        applicationId "io.sentry.mobile.app"
+        minSdkVersion 23
+        targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
 
+    signingConfigs {
+        release {
+            if (keystoreFile.exists() && propsFile.exists()) {
+                def props = new Properties()
+                props.load(new FileInputStream(propsFile))
+
+                storeFile file('./../upload-keystore.jks')
+                keyAlias props['keyAlias']
+                keyPassword props['keyPassword']
+                storePassword props['storePassword']
+            }
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            if (keystoreFile.exists() && propsFile.exists()) {
+                signingConfig signingConfigs.release
+            } else {
+                // Signing with the debug keys for now, so `flutter run --release` works.
+                signingConfig signingConfigs.debug
+            }
         }
     }
 }

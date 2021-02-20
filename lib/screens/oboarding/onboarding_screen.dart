@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../screens/login/login_screen.dart';
+import '../../screens/connect/connect_screen.dart';
 import '../../utils/sentry_colors.dart';
 import 'onboarding_detail_screen.dart';
 
@@ -17,7 +17,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     OnboardingDetailScreen('Lorem Ipsum', 'At vero eos et accusam et justo duo dolores et ea rebum.'),
     OnboardingDetailScreen('Lorem Ipsum', 'At vero eos et accusam et justo duo dolores et ea rebum.'),
     OnboardingDetailScreen('Lorem Ipsum', 'At vero eos et accusam et justo duo dolores et ea rebum.'),
-    LoginScreen()
+    ConnectScreen()
   ];
 
   var _currentPage = 0;

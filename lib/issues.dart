@@ -14,7 +14,7 @@ import 'types/organization.dart';
 import 'types/project.dart';
 
 Future<List<Group>> fetchGroups(String orgSlug, String projSlug, Cookie cookie) async {
-  final api = SentryApi(cookie);
+  final api = SentryApi(null);
   try {
     return await api.issues(organizationSlug: orgSlug, projectSlug: projSlug);
   } catch (exception) {
@@ -74,7 +74,7 @@ class IssuesViewModel {
   static IssuesViewModel fromStore(Store<AppState> store) => IssuesViewModel(
       selectedOrganization: store.state.globalState.selectedOrganization,
       selectedProject: store.state.globalState.selectedProject,
-      sessionCookie: store.state.globalState.session
+      sessionCookie: null
   );
 }
 
