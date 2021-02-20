@@ -181,7 +181,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
               BookmarkProjectSuccessAction(action.organizationSlug, project)
           );
         } catch (e) {
-          store.dispatch(FetchSessionsFailureAction(e));
+          store.dispatch(BookmarkProjectFailureAction(e));
         }
         api.close();
       };
