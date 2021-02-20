@@ -10,7 +10,8 @@ class ProjectPickerViewModel {
   ProjectPickerViewModel.fromStore(Store<AppState> store) {
     final List<ProjectPickerItem> items = [];
     for (final Organization organization in store.state.globalState.organizations) {
-        final organizationProjects = store.state.globalState.projectsByOrganizationSlug[organization.slug] ?? [];
+        final organizationProjects = store.state.globalState.projectsByOrganizationSlug[organization.slug]
+            .where((element) => element.latestRelease != null) ?? [];
         if (organizationProjects.isNotEmpty) {
           items.add(
               ProjectPickerOrganizationItem(

@@ -197,9 +197,32 @@ GlobalState _fetchApdexSuccessAction(GlobalState state, FetchApdexSuccessAction 
 }
 
 GlobalState _bookmarkProjectSuccessAction(GlobalState state, BookmarkProjectSuccessAction action) {
+  final projectsByOrganizationSlug = <String, List<Project>>{};
+  final projects = <Project>[];
 
+  for (final project in state.projects) {
+    if (project.id == action.project.id) {
+      projects.add(action.project);
+    } else {
+      projects.add(project);
+    }
+  }
+
+  for (final organizationSlug in state.projectsByOrganizationSlug.keys) {
+    final projects = <Project>[];
+    for (final project in state.projectsByOrganizationSlug[organizationSlug]) {
+      if (project.id == action.project.id) {
+        projects.add(action.project);
+      } else {
+        projects.add(project);
+      }
+    }
+    projectsByOrganizationSlug[organizationSlug] = projects;
+  }
 
   return state.copyWith(
+      projectsByOrganizationSlug: projectsByOrganizationSlug,
+      projects: projects
   );
 }
 
