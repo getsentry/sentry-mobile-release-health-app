@@ -10,7 +10,7 @@ class SettingsViewModel {
     final projects = store.state.globalState
         .projectsByOrganizationSlug
         .values.expand((element) => element)
-        .where((element) => element.isBookmarked)
+        .where((element) => element.latestRelease != null && element.isBookmarked)
         .map((e) => e.slug)
         .join(', ');
     bookmarkedProjects = projects.isNotEmpty ? projects : '--';
