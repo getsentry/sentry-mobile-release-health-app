@@ -8,7 +8,7 @@ import android.os.AsyncTask
 import io.sentry.mobile.app.NativeCrashJava
 
 class MainActivity: FlutterActivity() {
-    private val CHANNEL = "app.sentrymobile.io/nativeCrash"
+    private val CHANNEL = "app.mobile.sentry.io/nativeCrash"
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
