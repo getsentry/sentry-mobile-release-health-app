@@ -69,26 +69,27 @@ GlobalState _fetchOrganizationsAndProjectsSuccessAction(GlobalState state, Fetch
   final projectsById = <String, Project>{};
 
   if (!action.reload) {
-    for (final project in state.projects) {
+    for (final project in state.projectsWithSessions) {
       projectsById[project.id] = project;
     }
   }
 
   for (final organizationSlug in action.projectsByOrganizationSlug.keys) {
     for (final project in action.projectsByOrganizationSlug[organizationSlug]) {
-      if (project.latestRelease != null) {
-        organizationsSlugByProjectSlug[project.slug] = organizationSlug;
+      organizationsSlugByProjectSlug[project.slug] = organizationSlug;
+
+      if (action.projectIdsWithSessions.contains(project.id)) {
         projectsById[project.id] = project;
       }
     }
   }
 
-  final projects = projectsById.values.toList();
+  final projectsWithSessions = projectsById.values.toList();
 
-  projects.sort((Project a, Project b) {
+  projectsWithSessions.sort((Project a, Project b) {
     return (a.slug ?? a.name).toLowerCase().compareTo((b.slug ?? b.name).toLowerCase());
   });
-  projects.sort((Project a, Project b) {
+  projectsWithSessions.sort((Project a, Project b) {
     final valueA = a.isBookmarked ? 0 : 1;
     final valueB = b.isBookmarked ? 0 : 1;
     return valueA.compareTo(valueB);
@@ -99,7 +100,7 @@ GlobalState _fetchOrganizationsAndProjectsSuccessAction(GlobalState state, Fetch
     organizationsSlugByProjectSlug: organizationsSlugByProjectSlug,
     projectCursorsByOrganizationSlug: action.projectCursorsByOrganizationSlug,
     projectsByOrganizationSlug: action.projectsByOrganizationSlug,
-    projects: projects,
+    projectsWithSessions: projectsWithSessions,
     projectsFetchedOnce: true,
   );
 }
@@ -117,16 +118,13 @@ GlobalState _fetchLatestReleasesAction(GlobalState state, FetchLatestReleasesAct
 }
 
 GlobalState _fetchLatestReleasesSuccessAction(GlobalState state, FetchLatestReleasesSuccessAction action) {
-  final projects = <Project>[];
   final latestReleasesByProjectId = <String, Release>{};
 
   for (final projectsWithLatestRelease in action.projectsWithLatestReleases) {
-    projects.add(projectsWithLatestRelease.project);
     latestReleasesByProjectId[projectsWithLatestRelease.project.id] = projectsWithLatestRelease.release;
   }
 
   return state.copyWith(
-    projects: projects,
     latestReleasesByProjectId: latestReleasesByProjectId
   );
 }
@@ -204,7 +202,7 @@ GlobalState _bookmarkProjectSuccessAction(GlobalState state, BookmarkProjectSucc
   final projectsByOrganizationSlug = <String, List<Project>>{};
   final projects = <Project>[];
 
-  for (final project in state.projects) {
+  for (final project in state.projectsWithSessions) {
     if (project.id == action.project.id) {
       projects.add(action.project);
     } else {
@@ -235,7 +233,7 @@ GlobalState _bookmarkProjectSuccessAction(GlobalState state, BookmarkProjectSucc
 
   return state.copyWith(
       projectsByOrganizationSlug: projectsByOrganizationSlug,
-      projects: projects
+      projectsWithSessions: projects
   );
 }
 

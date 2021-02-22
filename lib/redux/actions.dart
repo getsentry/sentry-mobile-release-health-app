@@ -45,10 +45,11 @@ class FetchOrganizationsAndProjectsAction {
 }
 
 class FetchOrganizationsAndProjectsSuccessAction {
-  FetchOrganizationsAndProjectsSuccessAction(this.organizations, this.projectsByOrganizationSlug, this.projectCursorsByOrganizationSlug, this.reload);
+  FetchOrganizationsAndProjectsSuccessAction(this.organizations, this.projectsByOrganizationSlug, this.projectCursorsByOrganizationSlug, this.projectIdsWithSessions, this.reload);
   final List<Organization> organizations;
   final Map<String, List<Project>> projectsByOrganizationSlug;
   final Map<String, Cursor> projectCursorsByOrganizationSlug;
+  final Set<String> projectIdsWithSessions;
   final bool reload;
 }
 

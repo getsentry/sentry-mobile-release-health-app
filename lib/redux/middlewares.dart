@@ -25,6 +25,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           final individualOrganizations = <Organization>[];
           final Map<String, Cursor> projectCursorsByOrganizationSlug = {};
           final Map<String, List<Project>> projectsByOrganizationId = {};
+          final Set<String> projectsWithSessions = {};
 
           for (final organization in organizations) {
             final individualOrganization = await api.organization(organization.slug);
@@ -40,10 +41,12 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
                 : null;
 
             final projects = await api.projects(organization.slug, nextCursor);
-
             if (projects.isNotEmpty) {
               projectsByOrganizationId[organization.slug] = projects;
             }
+
+            final projectsWithSessionsForOrganization = await api.projectsWithSessions(organization.slug);
+            projectsWithSessions.addAll(projectsWithSessionsForOrganization);
 
             if (action.pagination) {
               // Keep cursor if there are less than value projects
@@ -54,7 +57,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
               }
             }
           }
-          store.dispatch(FetchOrganizationsAndProjectsSuccessAction(individualOrganizations, projectsByOrganizationId, projectCursorsByOrganizationSlug, action.reload));
+          store.dispatch(FetchOrganizationsAndProjectsSuccessAction(individualOrganizations, projectsByOrganizationId, projectCursorsByOrganizationSlug, projectsWithSessions, action.reload));
         } catch (e) {
           store.dispatch(FetchOrganizationsAndProjectsFailureAction(e));
         }

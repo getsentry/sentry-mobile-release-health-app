@@ -39,7 +39,7 @@ class GlobalState {
       this.projectCursorsByOrganizationSlug,
       this.projectsByOrganizationSlug,
       this.projectsFetchedOnce,
-      this.projects,
+      this.projectsWithSessions,
       this.latestReleasesByProjectId,
       this.sessionsByProjectId,
       this.sessionsBeforeByProjectId,
@@ -65,7 +65,7 @@ class GlobalState {
       projectCursorsByOrganizationSlug: {},
       projectsByOrganizationSlug: {},
       projectsFetchedOnce: false,
-      projects: [],
+      projectsWithSessions: [],
       latestReleasesByProjectId: {},
       sessionsByProjectId: {},
       sessionsBeforeByProjectId: {},
@@ -93,7 +93,7 @@ class GlobalState {
   final Map<String, List<Project>> projectsByOrganizationSlug;
   final bool projectsFetchedOnce;
 
-  final List<Project> projects;
+  final List<Project> projectsWithSessions;
   final Map<String, Release> latestReleasesByProjectId;
 
   final Map<String, Sessions> sessionsByProjectId;
@@ -124,7 +124,7 @@ class GlobalState {
     Map<String, List<Project>> projectsByOrganizationSlug,
     bool projectsFetchedOnce,
     bool projectsLoading,
-    List<Project> projects,
+    List<Project> projectsWithSessions,
     Map<String, Release> latestReleasesByProjectId,
     Map<String, Sessions> sessionsByProjectId,
     Map<String, Sessions> sessionsBeforeByProjectId,
@@ -149,7 +149,7 @@ class GlobalState {
       projectCursorsByOrganizationSlug: projectCursorsByOrganizationSlug ?? this.projectCursorsByOrganizationSlug,
       projectsByOrganizationSlug: projectsByOrganizationSlug ?? this.projectsByOrganizationSlug,
       projectsFetchedOnce: projectsFetchedOnce ?? this.projectsFetchedOnce,
-      projects: projects ?? this.projects,
+      projectsWithSessions: projectsWithSessions ?? this.projectsWithSessions,
       latestReleasesByProjectId: latestReleasesByProjectId ?? this.latestReleasesByProjectId,
       sessionsByProjectId: sessionsByProjectId ?? this.sessionsByProjectId,
       sessionsBeforeByProjectId: sessionsBeforeByProjectId ?? this.sessionsBeforeByProjectId,
@@ -243,6 +243,6 @@ class GlobalState {
   }
 
   List<ProjectWithLatestRelease> projectsWithLatestReleases() {
-    return projects.map((project) => ProjectWithLatestRelease(project, latestReleasesByProjectId[project.id])).toList();
+    return projectsWithSessions.map((project) => ProjectWithLatestRelease(project, latestReleasesByProjectId[project.id])).toList();
   }
 }
