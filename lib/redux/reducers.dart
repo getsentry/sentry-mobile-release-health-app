@@ -100,6 +100,7 @@ GlobalState _fetchOrganizationsAndProjectsSuccessAction(GlobalState state, Fetch
     organizationsSlugByProjectSlug: organizationsSlugByProjectSlug,
     projectCursorsByOrganizationSlug: action.projectCursorsByOrganizationSlug,
     projectsByOrganizationSlug: action.projectsByOrganizationSlug,
+    projectIdsWithSessions: action.projectIdsWithSessions,
     projectsWithSessions: projectsWithSessions,
     projectsFetchedOnce: true,
   );

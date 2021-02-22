@@ -9,11 +9,12 @@ class ProjectPickerOrganizationItem extends ProjectPickerItem {
 }
 
 class ProjectPickerProjectItem extends ProjectPickerItem {
-  ProjectPickerProjectItem(this.organizationSlug, this.projectSlug, this.title, this.isBookmarked);
+  ProjectPickerProjectItem(this.organizationSlug, this.projectSlug, this.title, this.isBookmarked, this.hasSessions);
 
   final String organizationSlug;
   final String projectSlug;
 
   String title;
   bool isBookmarked;
+  bool hasSessions;
 }
