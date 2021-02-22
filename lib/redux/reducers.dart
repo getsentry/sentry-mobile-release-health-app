@@ -21,7 +21,6 @@ final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, FetchOrganizationsAndProjectsSuccessAction>(_fetchOrganizationsAndProjectsSuccessAction),
   TypedReducer<GlobalState, FetchLatestReleasesAction>(_fetchLatestReleasesAction),
   TypedReducer<GlobalState, FetchLatestReleasesSuccessAction>(_fetchLatestReleasesSuccessAction),
-  TypedReducer<GlobalState, FetchLatestReleasesFailureAction>(_fetchLatestReleasesFailureAction),
   TypedReducer<GlobalState, FetchLatestReleaseSuccessAction>(_fetchLatestReleaseSuccessAction),
   TypedReducer<GlobalState, FetchIssuesSuccessAction>(_fetchIssuesSuccessAction),
   TypedReducer<GlobalState, SelectOrganizationAction>(_selectOrganizationAction),
@@ -29,6 +28,7 @@ final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, FetchAuthenticatedUserSuccessAction>(_fetchAuthenticatedUserSuccessAction),
   TypedReducer<GlobalState, FetchSessionsSuccessAction>(_fetchSessionsSuccessAction),
   TypedReducer<GlobalState, FetchApdexSuccessAction>(_fetchApdexSuccessAction),
+  TypedReducer<GlobalState, BookmarkProjectSuccessAction>(_bookmarkProjectSuccessAction),
   TypedReducer<GlobalState, ApiFailureAction>(_apiFailureAction),
 ]);
 
@@ -84,6 +84,10 @@ GlobalState _fetchOrganizationsAndProjectsSuccessAction(GlobalState state, Fetch
   }
 
   final projects = projectsById.values.toList();
+
+  projects.sort((Project a, Project b) {
+    return (a.slug ?? a.name).toLowerCase().compareTo((b.slug ?? b.name).toLowerCase());
+  });
   projects.sort((Project a, Project b) {
     final valueA = a.isBookmarked ? 0 : 1;
     final valueB = b.isBookmarked ? 0 : 1;
@@ -125,10 +129,6 @@ GlobalState _fetchLatestReleasesSuccessAction(GlobalState state, FetchLatestRele
     projects: projects,
     latestReleasesByProjectId: latestReleasesByProjectId
   );
-}
-
-GlobalState _fetchLatestReleasesFailureAction(GlobalState state, FetchLatestReleasesFailureAction action) {
-  return state.copyWith();
 }
 
 GlobalState _fetchLatestReleaseSuccessAction(GlobalState state, FetchLatestReleaseSuccessAction action) {
@@ -197,6 +197,45 @@ GlobalState _fetchApdexSuccessAction(GlobalState state, FetchApdexSuccessAction 
   return state.copyWith(
     apdexByProjectId: apdexByProjectId,
     apdexBeforeByProjectId: apdexBeforeByProjectId
+  );
+}
+
+GlobalState _bookmarkProjectSuccessAction(GlobalState state, BookmarkProjectSuccessAction action) {
+  final projectsByOrganizationSlug = <String, List<Project>>{};
+  final projects = <Project>[];
+
+  for (final project in state.projects) {
+    if (project.id == action.project.id) {
+      projects.add(action.project);
+    } else {
+      projects.add(project);
+    }
+  }
+
+  for (final organizationSlug in state.projectsByOrganizationSlug.keys) {
+    final projects = <Project>[];
+    for (final project in state.projectsByOrganizationSlug[organizationSlug]) {
+      if (project.id == action.project.id) {
+        projects.add(action.project);
+      } else {
+        projects.add(project);
+      }
+    }
+    projectsByOrganizationSlug[organizationSlug] = projects;
+  }
+
+  projects.sort((Project a, Project b) {
+    return (a.slug ?? a.name).toLowerCase().compareTo((b.slug ?? b.name).toLowerCase());
+  });
+  projects.sort((Project a, Project b) {
+    final valueA = a.isBookmarked ? 0 : 1;
+    final valueB = b.isBookmarked ? 0 : 1;
+    return valueA.compareTo(valueB);
+  });
+
+  return state.copyWith(
+      projectsByOrganizationSlug: projectsByOrganizationSlug,
+      projects: projects
   );
 }
 

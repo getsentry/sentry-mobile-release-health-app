@@ -33,9 +33,11 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
                 ? store.state.globalState.projectCursorsByOrganizationSlug[organization.slug]
                 : null;
 
-            final nextCursor = currentCursor == null
-              ? Cursor(10, 0, 0)
-              : Cursor(10, currentCursor.offset + 1, 0);
+            final nextCursor = action.pagination
+                ? currentCursor == null
+                  ? Cursor(10, 0, 0)
+                  : Cursor(10, currentCursor.offset + 1, 0)
+                : null;
 
             final projects = await api.projects(organization.slug, nextCursor);
 
@@ -43,11 +45,13 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
               projectsByOrganizationId[organization.slug] = projects;
             }
 
-            // Keep cursor if there are less than value projects
-            if (projects.length < nextCursor.value) {
-              projectCursorsByOrganizationSlug[organization.slug] = currentCursor;
-            } else {
-              projectCursorsByOrganizationSlug[organization.slug] = nextCursor;
+            if (action.pagination) {
+              // Keep cursor if there are less than value projects
+              if (projects.length < nextCursor.value) {
+                projectCursorsByOrganizationSlug[organization.slug] = currentCursor;
+              } else {
+                projectCursorsByOrganizationSlug[organization.slug] = nextCursor;
+              }
             }
           }
           store.dispatch(FetchOrganizationsAndProjectsSuccessAction(individualOrganizations, projectsByOrganizationId, projectCursorsByOrganizationSlug, action.reload));
@@ -163,6 +167,21 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           );
         } catch (e) {
           store.dispatch(FetchSessionsFailureAction(e));
+        }
+        api.close();
+      };
+      next(action);
+      store.dispatch(thunkAction);
+    } else if (action is BookmarkProjectAction) {
+      final thunkAction = (Store<AppState> store) async {
+        final api = SentryApi(store.state.globalState.authToken);
+        try {
+          final project = await api.bookmarkProject(action.organizationSlug, action.projectSlug, action.bookmarked);
+          store.dispatch(
+              BookmarkProjectSuccessAction(action.organizationSlug, project)
+          );
+        } catch (e) {
+          store.dispatch(BookmarkProjectFailureAction(e));
         }
         api.close();
       };

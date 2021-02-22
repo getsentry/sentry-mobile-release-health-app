@@ -56,7 +56,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
           builder: (BuildContext context) => Settings()
       ),
     );
-    if (logout) {
+    if (logout == true) {
       StoreProvider.of<AppState>(context).dispatch(LogoutAction());
     }
   }
