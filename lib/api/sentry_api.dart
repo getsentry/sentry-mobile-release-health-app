@@ -63,7 +63,7 @@ class SentryApi {
     return _parseResponse(response, (jsonMap) => Project.fromJson(jsonMap)).asFuture;
   }
 
-  Future<Set<String>>projectsWithSessions(String organizationSlug) async {
+  Future<Set<String>>projectIdsWithSessions(String organizationSlug) async {
     final queryParameters = <String, dynamic>{ /*String|Iterable<String>*/
       'project': '-1',
       'interval': '90d',
