@@ -1,11 +1,11 @@
-package io.sentrymobile.app
+package io.sentry.mobile.app
 
 import androidx.annotation.NonNull
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import android.os.AsyncTask
-import io.sentrymobile.app.NativeCrashJava
+import io.sentry.mobile.app.NativeCrashJava
 
 class MainActivity: FlutterActivity() {
     private val CHANNEL = "app.sentrymobile.io/nativeCrash"
