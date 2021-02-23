@@ -34,16 +34,26 @@ class _ProjectPickerState extends State<ProjectPicker> {
         title: Text('Bookmarked Projects')
       ),
       body: ListView.builder(
-          itemCount: viewModel.items.length,
+          itemCount: viewModel.items.length + 1,
           itemBuilder: (context, index) {
-            final item = viewModel.items[index];
-            if (item is ProjectPickerOrganizationItem) {
+            if (index == 0) {
               return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: SettingsHeader(item.title)
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+                  child: Text(
+                    'Bookmarked project are shown before others on the main screen. '
+                    'Additionally, only projects with sessions in the last 90 days are shown.',
+                    style: Theme.of(context).textTheme.caption,
+                  )
               );
-            } else if (item is ProjectPickerProjectItem) {
-              return ListTile(
+            } else {
+              final item = viewModel.items[index - 1];
+              if (item is ProjectPickerOrganizationItem) {
+                return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: SettingsHeader(item.title)
+                );
+              } else if (item is ProjectPickerProjectItem) {
+                return ListTile(
                   contentPadding: EdgeInsets.only(right: 16, top: 0, left: 16, bottom: 0),
                   title: Text(
                     item.title,
@@ -51,16 +61,18 @@ class _ProjectPickerState extends State<ProjectPicker> {
                         color: SentryColors.revolver
                     ),
                   ),
+                  subtitle: !item.hasSessions ? Text('No recent sessions.') : null,
                   trailing: Icon(
                     item.isBookmarked ? Icons.star : Icons.star_border,
                     color: item.isBookmarked ? SentryColors.lightningYellow : SentryColors.graySuit,
                   ),
-                onTap: () {
-                  viewModel.toggleBookmark(index);
-                },
-              );
-            } else {
-              throw Exception('Unknown list item type.');
+                  onTap: () {
+                    viewModel.toggleBookmark(index);
+                  },
+                );
+              } else {
+                throw Exception('Unknown list item type.');
+              }
             }
           }
       ),

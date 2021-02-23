@@ -9,12 +9,14 @@ part of 'session_group_by.dart';
 SessionGroupBy _$SessionGroupByFromJson(Map<String, dynamic> json) {
   return SessionGroupBy(
     _$enumDecodeNullable(_$SessionStatusEnumMap, json['session.status']),
+    json['project'] as int,
   );
 }
 
 Map<String, dynamic> _$SessionGroupByToJson(SessionGroupBy instance) =>
     <String, dynamic>{
       'session.status': _$SessionStatusEnumMap[instance.sessionStatus],
+      'project': instance.project,
     };
 
 T _$enumDecode<T>(

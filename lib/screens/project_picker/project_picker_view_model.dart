@@ -1,5 +1,5 @@
 import 'package:redux/redux.dart';
-import 'package:sentry_mobile/redux/actions.dart';
+import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
 import '../../types/organization.dart';
 import '../../types/project.dart';
@@ -29,7 +29,8 @@ class ProjectPickerViewModel {
                 organization.slug,
                 organizationProject.slug,
                 organizationProject.slug,
-                organizationProject.isBookmarked
+                organizationProject.isBookmarked,
+                store.state.globalState.projectIdsWithSessions.contains(organizationProject.id)
               )
             );
           }
