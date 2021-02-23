@@ -32,8 +32,9 @@ class LogoutAction {
 }
 
 class ApiFailureAction {
-  ApiFailureAction(this.error);
+  ApiFailureAction(this.error, this.stackTrace);
   final dynamic error;
+  final StackTrace stackTrace;
 }
 
 // FetchOrganizationsAndProjects
@@ -54,7 +55,7 @@ class FetchOrganizationsAndProjectsSuccessAction {
 }
 
 class FetchOrganizationsAndProjectsFailureAction extends ApiFailureAction {
-  FetchOrganizationsAndProjectsFailureAction(error) : super(error);
+  FetchOrganizationsAndProjectsFailureAction(error, StackTrace stackTrace) : super(error, stackTrace);
 }
 
 // FetchLatestRelease
@@ -74,7 +75,7 @@ class FetchLatestReleaseSuccessAction {
 }
 
 class FetchLatestReleaseFailureAction extends ApiFailureAction {
-  FetchLatestReleaseFailureAction(error) : super(error);
+  FetchLatestReleaseFailureAction(error, StackTrace stackTrace) : super(error, stackTrace);
 }
 
 // FetchLatestReleases
@@ -90,7 +91,7 @@ class FetchLatestReleasesSuccessAction {
 }
 
 class FetchLatestReleasesFailureAction extends ApiFailureAction {
-  FetchLatestReleasesFailureAction(error) : super(error);
+  FetchLatestReleasesFailureAction(error, StackTrace stackTrace) : super(error, stackTrace);
 }
 
 // FetchIssues
@@ -108,7 +109,7 @@ class FetchIssuesSuccessAction {
 }
 
 class FetchIssuesFailureAction extends ApiFailureAction {
-  FetchIssuesFailureAction(error) : super(error);
+  FetchIssuesFailureAction(error, StackTrace stackTrace) : super(error, stackTrace);
 }
 
 // FetchAuthenticatedUser
@@ -123,7 +124,7 @@ class FetchAuthenticatedUserSuccessAction {
 }
 
 class FetchAuthenticatedUserFailureAction extends ApiFailureAction {
-  FetchAuthenticatedUserFailureAction(error) : super(error);
+  FetchAuthenticatedUserFailureAction(error, StackTrace stackTrace) : super(error, stackTrace);
 }
 
 // FetchSessions
@@ -143,7 +144,7 @@ class FetchSessionsSuccessAction {
 }
 
 class FetchSessionsFailureAction extends ApiFailureAction {
-  FetchSessionsFailureAction(error) : super(error);
+  FetchSessionsFailureAction(error, StackTrace stackTrace) : super(error, stackTrace);
 }
 
 // BookmarkProject
@@ -164,7 +165,7 @@ class BookmarkProjectSuccessAction {
 }
 
 class BookmarkProjectFailureAction extends ApiFailureAction {
-  BookmarkProjectFailureAction(error) : super(error);
+  BookmarkProjectFailureAction(error, StackTrace stackTrace) : super(error, stackTrace);
 }
 
 // FetchApDex
@@ -186,7 +187,7 @@ class FetchApdexSuccessAction {
 }
 
 class FetchApdexFailureAction extends ApiFailureAction {
-  FetchApdexFailureAction(error) : super(error);
+  FetchApdexFailureAction(error, StackTrace stackTrace) : super(error, stackTrace);
 }
 
 // SelectOrganization

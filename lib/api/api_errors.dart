@@ -11,16 +11,3 @@ class ApiError extends Error {
         : 'Unknown json error';
   }
 }
-
-class JsonError extends Error {
-  JsonError(this.message);
-
-  final Object message;
-
-  @override
-  String toString() {
-    return message != null
-      ? 'json error: ${Error.safeToString(message)}'
-      : 'Unknown json error';
-  }
-}

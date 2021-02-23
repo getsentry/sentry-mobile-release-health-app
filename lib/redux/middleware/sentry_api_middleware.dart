@@ -55,8 +55,8 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
             }
           }
           store.dispatch(FetchOrganizationsAndProjectsSuccessAction(individualOrganizations, projectsByOrganizationId, projectCursorsByOrganizationSlug, projectIdsWithSessions, action.reload));
-        } catch (e) {
-          store.dispatch(FetchOrganizationsAndProjectsFailureAction(e));
+        } catch (e, s) {
+          store.dispatch(FetchOrganizationsAndProjectsFailureAction(e, s));
         }
         api.close();
       };
@@ -85,8 +85,8 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
             }
           }
           store.dispatch(FetchLatestReleasesSuccessAction(projectsWithLatestRelease));
-        } catch (e) {
-          store.dispatch(FetchLatestReleasesFailureAction(e));
+        } catch (e, s) {
+          store.dispatch(FetchLatestReleasesFailureAction(e, s));
         }
         api.close();
       };
@@ -102,8 +102,8 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
               releaseId: action.releaseId
           );
           store.dispatch(FetchLatestReleaseSuccessAction(action.projectSlug, latestRelease));
-        } catch (e) {
-          store.dispatch(FetchLatestReleaseFailureAction(e));
+        } catch (e, s) {
+          store.dispatch(FetchLatestReleaseFailureAction(e, s));
         }
         api.close();
       };
@@ -120,8 +120,8 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           store.dispatch(
               FetchIssuesSuccessAction(action.projectSlug, issues)
           );
-        } catch (e) {
-          store.dispatch(FetchIssuesFailureAction(e));
+        } catch (e, s) {
+          store.dispatch(FetchIssuesFailureAction(e, s));
         }
         api.close();
       };
@@ -135,8 +135,8 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           store.dispatch(
               FetchAuthenticatedUserSuccessAction(me)
           );
-        } catch (e) {
-          store.dispatch(FetchAuthenticatedUserFailureAction(e));
+        } catch (e, s) {
+          store.dispatch(FetchAuthenticatedUserFailureAction(e, s));
         }
         api.close();
       };
@@ -165,8 +165,8 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           store.dispatch(
               FetchSessionsSuccessAction(action.projectId, sessions, sessionsBefore)
           );
-        } catch (e) {
-          store.dispatch(FetchSessionsFailureAction(e));
+        } catch (e, s) {
+          store.dispatch(FetchSessionsFailureAction(e, s));
         }
         api.close();
       };
@@ -180,8 +180,8 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           store.dispatch(
               BookmarkProjectSuccessAction(action.organizationSlug, project)
           );
-        } catch (e) {
-          store.dispatch(BookmarkProjectFailureAction(e));
+        } catch (e, s) {
+          store.dispatch(BookmarkProjectFailureAction(e, s));
         }
         api.close();
       };
@@ -215,8 +215,8 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           store.dispatch(
               FetchApdexSuccessAction(action.projectId, apdex, apdexBefore)
           );
-        } catch (e) {
-          store.dispatch(FetchApdexFailureAction(e));
+        } catch (e, s) {
+          store.dispatch(FetchApdexFailureAction(e, s));
         }
         api.close();
       };

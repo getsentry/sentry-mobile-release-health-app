@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:sentry_flutter/sentry_flutter.dart' as sentry;
@@ -32,14 +31,14 @@ class SentryApi {
     final response = await client.get('${_baseUrl()}/organizations/?member=1',
         headers: _defaultHeader()
     );
-    return _parseResponseList(response, (jsonMap) => Organization.fromJson(jsonMap)).asFuture;
+    return _parseResponseList(response, (jsonMap) => Organization.fromJson(jsonMap));
   }
 
   Future<Organization> organization(String organizationSlug) async {
     final response = await client.get('${_baseUrl()}/organizations/$organizationSlug/',
         headers: _defaultHeader()
     );
-    return _parseResponse(response, (jsonMap) => Organization.fromJson(jsonMap)).asFuture;
+    return _parseResponse(response, (jsonMap) => Organization.fromJson(jsonMap));
   }
 
   Future<List<Project>> projects(String slug, Cursor cursor) async {
@@ -53,14 +52,14 @@ class SentryApi {
     final response = await client.get(Uri.https(baseUrlName, '$baseUrlPath/organizations/$slug/projects/', queryParameters),
         headers: _defaultHeader()
     );
-    return _parseResponseList(response, (jsonMap) => Project.fromJson(jsonMap)).asFuture;
+    return _parseResponseList(response, (jsonMap) => Project.fromJson(jsonMap));
   }
 
   Future<Project> project(String organizationSlug, String projectSlug) async {
     final response = await client.get('${_baseUrl()}/projects/$organizationSlug/$projectSlug/',
         headers: _defaultHeader()
     );
-    return _parseResponse(response, (jsonMap) => Project.fromJson(jsonMap)).asFuture;
+    return _parseResponse(response, (jsonMap) => Project.fromJson(jsonMap));
   }
 
   Future<Set<String>>projectIdsWithSessions(String organizationSlug) async {
@@ -79,16 +78,12 @@ class SentryApi {
         headers: _defaultHeader()
     );
 
-    final result = _parseResponse(response, (jsonMap) => Sessions.fromJson(jsonMap));
-    if (result.isError) {
-      throw result;
-    } else {
-      final projectIds = <String>{};
-      for (final group in result.asValue.value.groups) {
-        projectIds.add(group.by.project.toString());
-      }
-      return projectIds;
+    final sessions = _parseResponse(response, (jsonMap) => Sessions.fromJson(jsonMap));
+    final projectIds = <String>{};
+    for (final group in sessions.groups) {
+      projectIds.add(group.by.project.toString());
     }
+    return projectIds;
   }
 
   Future<Project> bookmarkProject(String organizationSlug, String projectSlug, bool bookmark) async {
@@ -100,7 +95,7 @@ class SentryApi {
         headers: _defaultHeader(),
         body: json.encode(bodyParameters)
     );
-    return _parseResponse(response, (jsonMap) => Project.fromJson(jsonMap)).asFuture;
+    return _parseResponse(response, (jsonMap) => Project.fromJson(jsonMap));
   }
 
   Future<List<Release>> releases({@required String organizationSlug, @required String projectId, int perPage = 25, int health = 1, int flatten = 0, String summaryStatsPeriod = '24h'}) async {
@@ -114,7 +109,7 @@ class SentryApi {
     final response = await client.get(Uri.https(baseUrlName, '$baseUrlPath/organizations/$organizationSlug/releases/', queryParameters),
         headers: _defaultHeader()
     );
-    return _parseResponseList(response, (jsonMap) => Release.fromJson(jsonMap)).asFuture;
+    return _parseResponseList(response, (jsonMap) => Release.fromJson(jsonMap));
   }
 
   Future<Release> release({@required String organizationSlug, @required String projectId, @required String releaseId, int health = 1, String summaryStatsPeriod = '24h'}) async {
@@ -126,7 +121,7 @@ class SentryApi {
     final response = await client.get(Uri.https(baseUrlName, '$baseUrlPath/organizations/$organizationSlug/releases/$releaseId/', queryParameters),
         headers: _defaultHeader()
     );
-    return _parseResponse(response, (jsonMap) => Release.fromJson(jsonMap)).asFuture;
+    return _parseResponse(response, (jsonMap) => Release.fromJson(jsonMap));
   }
 
   Future<List<Group>> issues({@required String organizationSlug, @required String projectSlug}) async {
@@ -136,7 +131,7 @@ class SentryApi {
     final response = await client.get(Uri.https(baseUrlName, '$baseUrlPath/projects/$organizationSlug/$projectSlug/issues/', queryParameters),
         headers: _defaultHeader()
     );
-    return _parseResponseList(response, (jsonMap) => Group.fromJson(jsonMap)).asFuture;
+    return _parseResponseList(response, (jsonMap) => Group.fromJson(jsonMap));
   }
 
   Future<double> apdex({@required int apdexThreshold, @required String organizationSlug, @required String projectId, @required DateTime start, @required DateTime end}) async {
@@ -151,18 +146,13 @@ class SentryApi {
         headers: _defaultHeader()
     );
     if (response.statusCode == 200) {
-      try {
-        final responseJson = json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
-        final data = responseJson['data'] as List<dynamic>;
-        if (data.isNotEmpty) {
-          final apdexData = data.first as Map<String, dynamic>;
-          final apDex = apdexData['apdex_$apdexThreshold'] as double;
-          return Result.value(apDex).asFuture;
-        } else {
-          return Result.value(null).asFuture;
-        }
-      } catch (e) {
-        throw JsonError(e);
+      final responseJson = json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
+      final data = responseJson['data'] as List<dynamic>;
+      if (data.isNotEmpty) {
+        final apdexData = data.first as Map<String, dynamic>;
+        return apdexData['apdex_$apdexThreshold'] as double;
+      } else {
+        return null;
       }
     } else {
       throw ApiError(response.statusCode, response.body);
@@ -173,7 +163,7 @@ class SentryApi {
     final response = await client.get(Uri.https(baseUrlName, '$baseUrlPath/'),
         headers: _defaultHeader()
     );
-    return _parseResponse(response, (jsonMap) => User.fromJson(jsonMap['user'] as Map<String, dynamic>)).asFuture;
+    return _parseResponse(response, (jsonMap) => User.fromJson(jsonMap['user'] as Map<String, dynamic>));
   }
 
   Future<Sessions> sessions({
@@ -207,7 +197,7 @@ class SentryApi {
     final response = await client.get(request,
         headers: _defaultHeader()
     );
-    return _parseResponse(response, (jsonMap) => Sessions.fromJson(jsonMap)).asFuture;
+    return _parseResponse(response, (jsonMap) => Sessions.fromJson(jsonMap));
   }
 
   void close() {
@@ -230,30 +220,22 @@ class SentryApi {
     return headers;
   }
 
-  Result<List<T>> _parseResponseList<T>(Response response, T Function(Map<String, dynamic> r) map) {
+  List<T> _parseResponseList<T>(Response response, T Function(Map<String, dynamic> r) map) {
     if (response.statusCode == 200) {
-      try {
-        final responseJson = json.decode(utf8.decode(response.bodyBytes)) as List;
-        final orgList = List<Map<String, dynamic>>.from(responseJson);
-        return Result.value(orgList.map((Map<String, dynamic> r) => map(r)).toList());
-      } catch (e) {
-        return Result.error(JsonError(e));
-      }
+      final responseJson = json.decode(utf8.decode(response.bodyBytes)) as List;
+      final orgList = List<Map<String, dynamic>>.from(responseJson);
+      return orgList.map((Map<String, dynamic> r) => map(r)).toList();
     } else {
-      return Result.error(ApiError(response.statusCode, response.body));
+      throw ApiError(response.statusCode, response.body);
     }
   }
 
-  Result<T> _parseResponse<T>(Response response, T Function(Map<String, dynamic> r) map) {
+  T _parseResponse<T>(Response response, T Function(Map<String, dynamic> r) map) {
     if (response.statusCode == 200) {
-      try {
-        final responseJson = json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
-        return Result.value(map(responseJson));
-      } catch (e) {
-        return Result.error(JsonError(e));
-      }
+      final responseJson = json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
+      return map(responseJson);
     } else {
-      return Result.error(ApiError(response.statusCode, response.body));
+      throw ApiError(response.statusCode, response.body);
     }
   }
 }
