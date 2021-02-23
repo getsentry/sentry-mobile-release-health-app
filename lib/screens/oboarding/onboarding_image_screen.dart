@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sentry_mobile/utils/sentry_colors.dart';
+
+import '../../utils/sentry_colors.dart';
 
 class OnboardingDetailScreen extends StatefulWidget {
   OnboardingDetailScreen(this._firstImage, this._secondImage, this._subtitle);
@@ -57,7 +58,7 @@ class _OnboardingDetailScreenState extends State<OnboardingDetailScreen> {
               child: Text(
                 _subtitle,
                 style: TextStyle(
-                    fontFamily: Theme.of(context).textTheme.headline3.fontFamily,
+                    fontFamily: Theme.of(context).textTheme.subtitle1.fontFamily,
                     fontSize: Theme.of(context).textTheme.headline3.fontSize,
                     color: SentryColors.revolver
                 ),

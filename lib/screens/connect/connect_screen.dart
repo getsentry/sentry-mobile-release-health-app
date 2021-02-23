@@ -26,58 +26,68 @@ class _ConnectScreenState extends State<ConnectScreen> {
 
   Widget _content(ConnectViewModel viewModel) {
     return Container(
-        margin: EdgeInsets.all(32.0),
-        child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Column(
-                  children: [
-                    Text(
-                      'Lets get started!',
-                      style: Theme.of(context).textTheme.headline1,
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(height: 12),
-                    Text(
-                      'Connect in your account settings\nto see your session data.',
-                      style: Theme.of(context).textTheme.subtitle1,
-                      textAlign: TextAlign.center,
-                    ),
-                    FlatButton(
-                      textColor: SentryColors.royalBlue,
-                      child: Text('Open Account Settings'),
-                      onPressed: _openAccountSettings
-                    )
-                  ],
-                ),
-                if (_loading) CircularProgressIndicator() else Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+        margin: EdgeInsets.symmetric(horizontal: 32, vertical: 32),
+        child: Column(
+          children: [
+            Expanded(
+              flex: 4,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'Ok, lets go!',
+                    style: Theme.of(context).textTheme.headline1,
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 12),
+                  Text(
+                    'Connect in your account settings\nto see your session data.',
+                    style: Theme.of(context).textTheme.subtitle1,
+                    textAlign: TextAlign.center,
+                  ),
+                  FlatButton(
+                    textColor: SentryColors.royalBlue,
+                    child: Text('Open Account Settings'),
+                    onPressed: _openAccountSettings
+                  )
+                ],
+              ),
+            ),
+            if (_loading)
+              Expanded(
+                flex: 3,
+                child: CircularProgressIndicator()
+              )
+            else
+              Expanded(
+                flex: 3,
+                child: Column(
                   children: [
                     ButtonTheme(
                       minWidth: 144,
                       child: RaisedButton.icon(
-                        label: Text('Scan Token'),
-                        icon: Icon(
-                            Icons.qr_code,
-                            color: Colors.white
-                        ),
-                        textColor: Colors.white,
-                        color: SentryColors.rum,
-                        onPressed: () async {
-                          final encodedToken = await _presentScannerScreen();
-                          setState(() {
-                            _loading = encodedToken != null;
-                          });
-                          try {
-                            await viewModel.onTokenEncoded(encodedToken);
-                          } catch (_) {
+                          label: Text('Scan Token'),
+                          icon: Icon(
+                              Icons.qr_code,
+                              color: Colors.white
+                          ),
+                          textColor: Colors.white,
+                          color: SentryColors.rum,
+                          onPressed: () async {
+                            final encodedToken = await _presentScannerScreen();
                             setState(() {
-                              _loading = false;
+                              _loading = encodedToken != null;
                             });
-                            _handleTokenFailure();
+                            try {
+                              await viewModel.onTokenEncoded(encodedToken);
+                            } catch (_) {
+                              setState(() {
+                                _loading = false;
+                              });
+                              _handleTokenFailure();
+                            }
                           }
-                        }
                       ),
                     ),
                     SizedBox(height: 12),
@@ -111,8 +121,8 @@ class _ConnectScreenState extends State<ConnectScreen> {
                     ),
                   ],
                 )
-              ],
-            )
+              )
+          ],
         )
     );
   }
