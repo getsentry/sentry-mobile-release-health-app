@@ -15,15 +15,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final _pageController = PageController();
   final _onboardingDetailScreens = <Widget>[
     OnboardingDetailScreen(
-      AssetImage('assets/onboarding_1_a.png'),
+      'assets/onboarding_1_a.png',
+      'assets/onboarding_1_b.png',
       'Start your day with Sentry. We\'re sorry in advance.'
     ),
     OnboardingDetailScreen(
-      AssetImage('assets/onboarding_2.png'),
+      'assets/onboarding_2.png',
+      null,
       'Hey, there\'s a chance things are going well. If so, go back to bed!'
     ),
     OnboardingDetailScreen(
-      AssetImage('assets/onboarding_3.png'),
+      'assets/onboarding_3.png',
+      null,
       'Really though, Sentry will show you everything that is on fire. You\'re welcome!'
     ),
     ConnectScreen()
