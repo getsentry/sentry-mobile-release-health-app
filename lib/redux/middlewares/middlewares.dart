@@ -3,16 +3,16 @@ import 'package:package_info/package_info.dart';
 import 'package:redux/redux.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../api/sentry_api.dart';
-import '../types/cursor.dart';
-import '../types/group.dart';
-import '../types/organization.dart';
-import '../types/project.dart';
-import '../types/project_with_latest_release.dart';
-import '../types/session_group.dart';
-import '../types/session_group_by.dart';
-import 'actions.dart';
-import 'state/app_state.dart';
+import '../../api/sentry_api.dart';
+import '../../types/cursor.dart';
+import '../../types/group.dart';
+import '../../types/organization.dart';
+import '../../types/project.dart';
+import '../../types/project_with_latest_release.dart';
+import '../../types/session_group.dart';
+import '../../types/session_group_by.dart';
+import '../actions.dart';
+import '../state/app_state.dart';
 
 class SentryApiMiddleware extends MiddlewareClass<AppState> {
   @override

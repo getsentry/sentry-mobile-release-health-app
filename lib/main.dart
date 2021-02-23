@@ -10,7 +10,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'redux/actions.dart';
-import 'redux/middlewares.dart';
+import 'redux/middlewares/middlewares.dart';
 import 'redux/reducers.dart';
 import 'redux/state/app_state.dart';
 import 'screens/main/main_screen.dart';
