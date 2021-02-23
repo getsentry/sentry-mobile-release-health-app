@@ -12,6 +12,8 @@ import '../types/group.dart';
 import '../types/organization.dart';
 import '../types/project.dart';
 import '../types/release.dart';
+import '../types/session_group.dart';
+import '../types/session_group_by.dart';
 import '../types/sessions.dart';
 import '../types/user.dart';
 import '../utils/date_time_format.dart';
@@ -59,6 +61,34 @@ class SentryApi {
         headers: _defaultHeader()
     );
     return _parseResponse(response, (jsonMap) => Project.fromJson(jsonMap)).asFuture;
+  }
+
+  Future<Set<String>>projectIdsWithSessions(String organizationSlug) async {
+    final queryParameters = <String, dynamic>{ /*String|Iterable<String>*/
+      'project': '-1',
+      'interval': '90d',
+      'statsPeriod': '90d',
+      'field': SessionGroup.sumSessionKey,
+      'groupBy': SessionGroupBy.projectKey
+    };
+
+    final request = Uri.https(baseUrlName, '$baseUrlPath/organizations/$organizationSlug/sessions/')
+        .resolveUri(Uri(queryParameters: queryParameters));
+
+    final response = await client.get(request,
+        headers: _defaultHeader()
+    );
+
+    final result = _parseResponse(response, (jsonMap) => Sessions.fromJson(jsonMap));
+    if (result.isError) {
+      throw result;
+    } else {
+      final projectIds = <String>{};
+      for (final group in result.asValue.value.groups) {
+        projectIds.add(group.by.project.toString());
+      }
+      return projectIds;
+    }
   }
 
   Future<Project> bookmarkProject(String organizationSlug, String projectSlug, bool bookmark) async {

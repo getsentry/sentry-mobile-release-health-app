@@ -30,7 +30,8 @@ class ProjectPickerViewModel {
                 organization.slug,
                 organizationProject.slug,
                 organizationProject.slug,
-                organizationProject.isBookmarked
+                organizationProject.isBookmarked,
+                store.state.globalState.projectIdsWithSessions.contains(organizationProject.id)
               )
             );
           }
