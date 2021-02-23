@@ -57,7 +57,7 @@ class _ConnectScreenState extends State<ConnectScreen> {
             if (_loading)
               Expanded(
                 flex: 3,
-                child: CircularProgressIndicator()
+                child: Center(child: CircularProgressIndicator())
               )
             else
               Expanded(
