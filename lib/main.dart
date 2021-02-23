@@ -16,7 +16,7 @@ import 'redux/middleware/sentry_sdk_middleware.dart';
 import 'redux/reducers.dart';
 import 'redux/state/app_state.dart';
 import 'screens/main/main_screen.dart';
-import 'screens/oboarding/onboarding_screen.dart'; // TODO(denis): Fix typo when onboarding PR is merged
+import 'screens/onboarding/onboarding_screen.dart';
 import 'screens/splash/splash_screen.dart';
 import 'utils/sentry_colors.dart';
 
