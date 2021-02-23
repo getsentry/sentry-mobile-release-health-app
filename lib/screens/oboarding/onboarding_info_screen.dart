@@ -13,11 +13,11 @@ class OnboardingInfoScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Expanded(
-            flex: 1,
+            flex: 3,
             child: Image.asset('assets/sitting-logo.jpg')
           ),
           Expanded(
-            flex: 1,
+            flex: 2,
             child: Column(
               children: [
                 Text(
