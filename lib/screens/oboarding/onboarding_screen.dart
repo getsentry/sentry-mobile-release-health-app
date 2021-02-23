@@ -14,9 +14,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   final _pageController = PageController();
   final _onboardingDetailScreens = <Widget>[
-    OnboardingDetailScreen('Lorem Ipsum', 'At vero eos et accusam et justo duo dolores et ea rebum.'),
-    OnboardingDetailScreen('Lorem Ipsum', 'At vero eos et accusam et justo duo dolores et ea rebum.'),
-    OnboardingDetailScreen('Lorem Ipsum', 'At vero eos et accusam et justo duo dolores et ea rebum.'),
+    OnboardingDetailScreen(
+      AssetImage('assets/onboarding_1_a.png'),
+      'Start your day with Sentry. We\'re sorry in advance.'
+    ),
+    OnboardingDetailScreen(
+      AssetImage('assets/onboarding_2.png'),
+      'Hey, there\'s a chance things are going well. If so, go back to bed!'
+    ),
+    OnboardingDetailScreen(
+      AssetImage('assets/onboarding_3.png'),
+      'Really though, Sentry will show you everything that is on fire. You\'re welcome!'
+    ),
     ConnectScreen()
   ];
 
@@ -30,6 +39,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
