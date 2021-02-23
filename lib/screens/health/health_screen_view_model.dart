@@ -26,7 +26,9 @@ class HealthScreenViewModel {
       showProjectEmptyScreen = store.state.globalState.projectsFetchedOnce &&
         store.state.globalState.projectsByOrganizationSlug.keys.isEmpty,
       showLoadingScreen = !store.state.globalState.projectsFetchedOnce &&
-          store.state.globalState.projectsByOrganizationSlug.keys.isEmpty;
+          store.state.globalState.projectsByOrganizationSlug.keys.isEmpty &&
+          !store.state.globalState.projectsFetchedError,
+      showErrorScreen = store.state.globalState.projectsFetchedError;
 
   final Store<AppState> _store;
 
@@ -48,6 +50,7 @@ class HealthScreenViewModel {
 
   final bool showProjectEmptyScreen;
   final bool showLoadingScreen;
+  final bool showErrorScreen;
 
   void fetchProjects() {
     _store.dispatch(FetchOrganizationsAndProjectsAction(true, false));

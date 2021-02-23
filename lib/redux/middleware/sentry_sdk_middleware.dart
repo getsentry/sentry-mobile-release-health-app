@@ -7,11 +7,10 @@ import '../../redux/state/app_state.dart';
 class SentrySdkMiddleware extends MiddlewareClass<AppState> {
 
   @override
-  dynamic call(Store<AppState> store, action, next) {
+  dynamic call(Store<AppState> store, dynamic action, NextDispatcher next) async {
     if (action is ApiFailureAction) {
       Sentry.captureException(action.error);
     }
     next(action);
   }
-  
 }

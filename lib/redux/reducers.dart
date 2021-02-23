@@ -19,6 +19,7 @@ final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, LogoutAction>(_logoutAction),
   TypedReducer<GlobalState, FetchOrganizationsAndProjectsAction>(_fetchOrganizationsAndProjectsAction),
   TypedReducer<GlobalState, FetchOrganizationsAndProjectsSuccessAction>(_fetchOrganizationsAndProjectsSuccessAction),
+  TypedReducer<GlobalState, FetchOrganizationsAndProjectsFailureAction>(_fetchOrganizationsAndProjectsFailure),
   TypedReducer<GlobalState, FetchLatestReleasesAction>(_fetchLatestReleasesAction),
   TypedReducer<GlobalState, FetchLatestReleasesSuccessAction>(_fetchLatestReleasesSuccessAction),
   TypedReducer<GlobalState, FetchLatestReleaseSuccessAction>(_fetchLatestReleaseSuccessAction),
@@ -54,10 +55,13 @@ GlobalState _fetchOrganizationsAndProjectsAction(GlobalState state, FetchOrganiz
   if (action.reload) {
     return state.copyWith(
       sessionsByProjectId: {},
-      sessionsBeforeByProjectId: {}
+      sessionsBeforeByProjectId: {},
+      projectsFetchedError: false
     );
   } else {
-    return state;
+    return state.copyWith(
+      projectsFetchedError: false
+    );
   }
 }
 
@@ -103,6 +107,12 @@ GlobalState _fetchOrganizationsAndProjectsSuccessAction(GlobalState state, Fetch
     projectIdsWithSessions: action.projectIdsWithSessions,
     projectsWithSessions: projectsWithSessions,
     projectsFetchedOnce: true,
+  );
+}
+
+GlobalState _fetchOrganizationsAndProjectsFailure(GlobalState state, FetchOrganizationsAndProjectsFailureAction action) {
+  return state.copyWith(
+    projectsFetchedError: true,
   );
 }
 

@@ -39,6 +39,7 @@ class GlobalState {
       this.projectCursorsByOrganizationSlug,
       this.projectsByOrganizationSlug,
       this.projectsFetchedOnce,
+      this.projectsFetchedError,
       this.projectIdsWithSessions,
       this.projectsWithSessions,
       this.latestReleasesByProjectId,
@@ -66,6 +67,7 @@ class GlobalState {
       projectCursorsByOrganizationSlug: {},
       projectsByOrganizationSlug: {},
       projectsFetchedOnce: false,
+      projectsFetchedError: false,
       projectIdsWithSessions: {},
       projectsWithSessions: [],
       latestReleasesByProjectId: {},
@@ -94,6 +96,7 @@ class GlobalState {
   final Map<String, Cursor> projectCursorsByOrganizationSlug;
   final Map<String, List<Project>> projectsByOrganizationSlug;
   final bool projectsFetchedOnce;
+  final bool projectsFetchedError;
 
   final Set<String> projectIdsWithSessions;
   final List<Project> projectsWithSessions;
@@ -126,7 +129,7 @@ class GlobalState {
     Map<String, Cursor> projectCursorsByOrganizationSlug,
     Map<String, List<Project>> projectsByOrganizationSlug,
     bool projectsFetchedOnce,
-    bool projectsLoading,
+    bool projectsFetchedError,
     Set<String> projectIdsWithSessions,
     List<Project> projectsWithSessions,
     Map<String, Release> latestReleasesByProjectId,
@@ -153,6 +156,7 @@ class GlobalState {
       projectCursorsByOrganizationSlug: projectCursorsByOrganizationSlug ?? this.projectCursorsByOrganizationSlug,
       projectsByOrganizationSlug: projectsByOrganizationSlug ?? this.projectsByOrganizationSlug,
       projectsFetchedOnce: projectsFetchedOnce ?? this.projectsFetchedOnce,
+      projectsFetchedError: projectsFetchedError ?? this.projectsFetchedError,
       projectIdsWithSessions: projectIdsWithSessions ?? this.projectIdsWithSessions,
       projectsWithSessions: projectsWithSessions ?? this.projectsWithSessions,
       latestReleasesByProjectId: latestReleasesByProjectId ?? this.latestReleasesByProjectId,
