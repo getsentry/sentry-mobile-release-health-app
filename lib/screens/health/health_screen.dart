@@ -51,7 +51,7 @@ class _HealthScreenState extends State<HealthScreen> {
     } else if (viewModel.showErrorScreen) {
       return EmptyScreen(
           title: 'Error',
-          text: 'Something went wrong. Please try it again.',
+          text: 'Something went wrong. Please try again.',
           button: 'Retry',
           action: viewModel.reloadProjects
       );

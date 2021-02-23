@@ -189,7 +189,7 @@ class _ConnectScreenState extends State<ConnectScreen> {
               style: Theme.of(context).textTheme.headline1
           ),
           content: Text(
-              'Something went wrong. Please try it again.',
+              'Something went wrong. Please try again.',
               style: Theme.of(context).textTheme.bodyText1
           ),
           actions: [
