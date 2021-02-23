@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../screens/connect/connect_screen.dart';
+import '../../screens/oboarding/onboarding_text_screen.dart';
 import '../../utils/sentry_colors.dart';
-import 'onboarding_detail_screen.dart';
+import 'onboarding_image_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   @override
@@ -14,9 +15,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   final _pageController = PageController();
   final _onboardingDetailScreens = <Widget>[
-    OnboardingDetailScreen('Lorem Ipsum', 'At vero eos et accusam et justo duo dolores et ea rebum.'),
-    OnboardingDetailScreen('Lorem Ipsum', 'At vero eos et accusam et justo duo dolores et ea rebum.'),
-    OnboardingDetailScreen('Lorem Ipsum', 'At vero eos et accusam et justo duo dolores et ea rebum.'),
+    OnboardingDetailScreen(
+      'assets/onboarding_1_a.png',
+      'assets/onboarding_1_b.png',
+      'Start your day with Sentry. We\'re sorry in advance.'
+    ),
+    OnboardingDetailScreen(
+      'assets/onboarding_2.png',
+      null,
+      'Hey, there\'s a chance things are going well. If so, go back to bed!'
+    ),
+    OnboardingDetailScreen(
+      'assets/onboarding_3.png',
+      null,
+      'Really though, Sentry will show you everything that is on fire. You\'re welcome!'
+    ),
+    OnboardingInfoScreen(),
     ConnectScreen()
   ];
 
@@ -30,6 +44,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,

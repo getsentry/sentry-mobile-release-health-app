@@ -98,6 +98,10 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
   assets:
+    - assets/onboarding_1_a.png
+    - assets/onboarding_1_b.png
+    - assets/onboarding_2.png
+    - assets/onboarding_3.png
     - assets/platformicons/HTML5.svg
     - assets/platformicons/backbone.svg
     - assets/platformicons/csharp.svg

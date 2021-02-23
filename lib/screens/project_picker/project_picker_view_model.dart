@@ -1,4 +1,5 @@
 import 'package:redux/redux.dart';
+
 import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
 import '../../types/organization.dart';
