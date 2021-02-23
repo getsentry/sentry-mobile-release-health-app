@@ -98,6 +98,8 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
   assets:
+    - assets/user-menu.png
+    - assets/sitting-logo.jpg
     - assets/onboarding_1_a.png
     - assets/onboarding_1_b.png
     - assets/onboarding_2.png

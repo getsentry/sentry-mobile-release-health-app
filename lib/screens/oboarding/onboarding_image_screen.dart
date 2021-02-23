@@ -30,43 +30,46 @@ class _OnboardingDetailScreenState extends State<OnboardingDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-        children: [
-          Expanded(
-              flex: 2,
-              child: Stack(
-                children: [
-                  Container(
-                    alignment: Alignment.center,
-                    child: Image.asset(_firstImage)
-                  ),
-                  if (_secondImage != null) AnimatedOpacity(
-                    opacity: _secondImageVisible ? 1.0 : 0.0,
-                    duration: Duration(seconds: 3),
-                    child: Container(
+    return Container(
+      margin: EdgeInsets.only(bottom: 32),
+      child: Column(
+          children: [
+            Expanded(
+                flex: 2,
+                child: Stack(
+                  children: [
+                    Container(
                       alignment: Alignment.center,
-                      child: Image.asset(_secondImage)
+                      child: Image.asset(_firstImage)
                     ),
-                  )
-                ],
-              )
-          ),
-          Expanded(
-            flex: 1,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 32),
-              child: Text(
-                _subtitle,
-                style: TextStyle(
-                    fontFamily: Theme.of(context).textTheme.subtitle1.fontFamily,
-                    fontSize: Theme.of(context).textTheme.headline3.fontSize,
-                    color: SentryColors.revolver
+                    if (_secondImage != null) AnimatedOpacity(
+                      opacity: _secondImageVisible ? 1.0 : 0.0,
+                      duration: Duration(seconds: 3),
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: Image.asset(_secondImage)
+                      ),
+                    )
+                  ],
+                )
+            ),
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 32),
+                child: Text(
+                  _subtitle,
+                  style: TextStyle(
+                      fontFamily: Theme.of(context).textTheme.subtitle1.fontFamily,
+                      fontSize: Theme.of(context).textTheme.headline3.fontSize,
+                      color: SentryColors.revolver
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
               ),
             ),
-          ),
-        ]
+          ]
+      ),
     );
   }
   
