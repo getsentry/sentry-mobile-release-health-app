@@ -37,6 +37,13 @@ class ProjectPickerViewModel {
           }
         }
     }
+
+    if (items.isNotEmpty) {
+      items.insert(0, ProjectPickerHeadlineItem(
+        'Bookmarked project are shown before others on the main screen. '
+        'Additionally, only projects with sessions in the last 90 days are shown.')
+      );
+    }
     _store = store;
     this.items = items;
   }

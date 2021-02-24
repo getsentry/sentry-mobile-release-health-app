@@ -26,44 +26,50 @@ class _ConnectScreenState extends State<ConnectScreen> {
 
   Widget _content(ConnectViewModel viewModel) {
     return Container(
-        margin: EdgeInsets.symmetric(horizontal: 32, vertical: 32),
+        margin: EdgeInsets.only(bottom: 32),
         child: Column(
           children: [
-            Expanded(
-              flex: 4,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'Ok, lets go!',
-                    style: Theme.of(context).textTheme.headline1,
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 12),
-                  Text(
-                    'Connect in your account settings\nto see your session data.',
-                    style: Theme.of(context).textTheme.subtitle1,
-                    textAlign: TextAlign.center,
-                  ),
-                  FlatButton(
-                    textColor: SentryColors.royalBlue,
-                    child: Text('Open Account Settings'),
-                    onPressed: _openAccountSettings
-                  )
-                ],
-              ),
-            ),
             if (_loading)
               Expanded(
-                flex: 3,
                 child: Center(child: CircularProgressIndicator())
               )
             else
               Expanded(
-                flex: 3,
                 child: Column(
                   children: [
+                    Text(
+                      'Ok, lets go!',
+                      style: Theme.of(context).textTheme.headline1,
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 32),
+                    Text(
+                      'Navigate to "Mobile app" in settings...',
+                      style: Theme.of(context).textTheme.bodyText1,
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 12),
+                    DecoratedBox(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                        boxShadow: [
+                          BoxShadow(
+                            spreadRadius: 4,
+                            color: Colors.black.withAlpha(50),
+                            offset: Offset(2, 2),
+                            blurRadius: 6,
+                          )
+                        ],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(4.0),
+                        child: Image.asset(
+                          'assets/user-menu.png',
+                          height: 192,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 22),
                     ButtonTheme(
                       minWidth: 144,
                       child: RaisedButton.icon(
@@ -90,13 +96,18 @@ class _ConnectScreenState extends State<ConnectScreen> {
                           }
                       ),
                     ),
-                    SizedBox(height: 12),
+                    SizedBox(height: 22),
                     Text('OR'),
                     SizedBox(height: 12),
+                    FlatButton(
+                        textColor: SentryColors.royalBlue,
+                        child: Text('Open "Mobile app" in settings'),
+                        onPressed: _openAccountSettings
+                    ),
                     ButtonTheme(
                       minWidth: 144,
                       child: RaisedButton.icon(
-                        label: Text('Enter Token'),
+                        label: Text('Paste Token'),
                         icon: Icon(
                             Icons.content_paste_rounded,
                             color: Colors.white
@@ -119,6 +130,7 @@ class _ConnectScreenState extends State<ConnectScreen> {
                         },
                       ),
                     ),
+
                   ],
                 )
               )
@@ -150,12 +162,11 @@ class _ConnectScreenState extends State<ConnectScreen> {
       builder: (context) {
         return AlertDialog(
           contentPadding: const EdgeInsets.all(16.0),
-          title: Text('Enter Token'),
+          title: Text('Paste Token'),
           content: TextField(
             autofocus: true,
             decoration: InputDecoration(
-                labelText: 'Auth Token',
-                hintText: 'Enter your auth token here'
+                hintText: 'Paste your token here'
             ),
             onChanged: (value) {
               enteredToken = value;
