@@ -10,11 +10,13 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'redux/actions.dart';
-import 'redux/middlewares.dart';
+import 'redux/middleware/local_storage_middleware.dart';
+import 'redux/middleware/sentry_api_middleware.dart';
+import 'redux/middleware/sentry_sdk_middleware.dart';
 import 'redux/reducers.dart';
 import 'redux/state/app_state.dart';
 import 'screens/main/main_screen.dart';
-import 'screens/oboarding/onboarding_screen.dart';
+import 'screens/onboarding/onboarding_screen.dart';
 import 'screens/splash/splash_screen.dart';
 import 'utils/sentry_colors.dart';
 
@@ -27,7 +29,9 @@ Future<Store<AppState>> createStore() async {
     initialState: AppState.initial(),
     middleware: [
       SentryApiMiddleware(),
+      SentrySdkMiddleware(),
       LocalStorageMiddleware(prefs, secStorage),
+
 //      ValidationMiddleware(),
 //      LoggingMiddleware.printer(),
 //      LocalStorageMiddleware(prefs),

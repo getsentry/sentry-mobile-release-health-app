@@ -1,18 +1,15 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:package_info/package_info.dart';
 import 'package:redux/redux.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../api/sentry_api.dart';
-import '../types/cursor.dart';
-import '../types/group.dart';
-import '../types/organization.dart';
-import '../types/project.dart';
-import '../types/project_with_latest_release.dart';
-import '../types/session_group.dart';
-import '../types/session_group_by.dart';
-import 'actions.dart';
-import 'state/app_state.dart';
+import '../../api/sentry_api.dart';
+import '../../types/cursor.dart';
+import '../../types/group.dart';
+import '../../types/organization.dart';
+import '../../types/project.dart';
+import '../../types/project_with_latest_release.dart';
+import '../../types/session_group.dart';
+import '../../types/session_group_by.dart';
+import '../actions.dart';
+import '../state/app_state.dart';
 
 class SentryApiMiddleware extends MiddlewareClass<AppState> {
   @override
@@ -36,8 +33,8 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
 
             final nextCursor = action.pagination
                 ? currentCursor == null
-                  ? Cursor(10, 0, 0)
-                  : Cursor(10, currentCursor.offset + 1, 0)
+                ? Cursor(10, 0, 0)
+                : Cursor(10, currentCursor.offset + 1, 0)
                 : null;
 
             final projects = await api.projects(organization.slug, nextCursor);
@@ -58,8 +55,8 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
             }
           }
           store.dispatch(FetchOrganizationsAndProjectsSuccessAction(individualOrganizations, projectsByOrganizationId, projectCursorsByOrganizationSlug, projectIdsWithSessions, action.reload));
-        } catch (e) {
-          store.dispatch(FetchOrganizationsAndProjectsFailureAction(e));
+        } catch (e, s) {
+          store.dispatch(FetchOrganizationsAndProjectsFailureAction(e, s));
         }
         api.close();
       };
@@ -73,7 +70,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
 
           for (final organizationSlug in action.projectsByOrganizationSlug.keys) {
             final projectsToFetch = (action.projectsByOrganizationSlug[organizationSlug] ?? [])
-              .where((element) => element.latestRelease != null); // Only fetch when there is a release
+                .where((element) => element.latestRelease != null); // Only fetch when there is a release
 
             for (final projectToFetch in projectsToFetch) {
               final project = await api.project(
@@ -88,8 +85,8 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
             }
           }
           store.dispatch(FetchLatestReleasesSuccessAction(projectsWithLatestRelease));
-        } catch (e) {
-          store.dispatch(FetchLatestReleasesFailureAction(e));
+        } catch (e, s) {
+          store.dispatch(FetchLatestReleasesFailureAction(e, s));
         }
         api.close();
       };
@@ -105,8 +102,8 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
               releaseId: action.releaseId
           );
           store.dispatch(FetchLatestReleaseSuccessAction(action.projectSlug, latestRelease));
-        } catch (e) {
-          store.dispatch(FetchLatestReleaseFailureAction(e));
+        } catch (e, s) {
+          store.dispatch(FetchLatestReleaseFailureAction(e, s));
         }
         api.close();
       };
@@ -117,14 +114,14 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
         final api = SentryApi(store.state.globalState.authToken);
         try {
           final List<Group> issues = await api.issues(
-              organizationSlug: action.organizationSlug,
-              projectSlug: action.projectSlug,
+            organizationSlug: action.organizationSlug,
+            projectSlug: action.projectSlug,
           );
           store.dispatch(
               FetchIssuesSuccessAction(action.projectSlug, issues)
           );
-        } catch (e) {
-          store.dispatch(FetchIssuesFailureAction(e));
+        } catch (e, s) {
+          store.dispatch(FetchIssuesFailureAction(e, s));
         }
         api.close();
       };
@@ -138,8 +135,8 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           store.dispatch(
               FetchAuthenticatedUserSuccessAction(me)
           );
-        } catch (e) {
-          store.dispatch(FetchAuthenticatedUserFailureAction(e));
+        } catch (e, s) {
+          store.dispatch(FetchAuthenticatedUserFailureAction(e, s));
         }
         api.close();
       };
@@ -150,26 +147,26 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
         final api = SentryApi(store.state.globalState.authToken);
         try {
           final sessions = await api.sessions(
-            organizationSlug: action.organizationSlug,
-            projectId: action.projectId,
-            fields: [SessionGroup.sumSessionKey, SessionGroup.countUniqueUsersKey],
-            groupBy: SessionGroupBy.sessionStatusKey
+              organizationSlug: action.organizationSlug,
+              projectId: action.projectId,
+              fields: [SessionGroup.sumSessionKey, SessionGroup.countUniqueUsersKey],
+              groupBy: SessionGroupBy.sessionStatusKey
           );
 
           final sessionsBefore = await api.sessions(
-            organizationSlug: action.organizationSlug,
-            projectId: action.projectId,
-            fields: [SessionGroup.sumSessionKey, SessionGroup.countUniqueUsersKey],
-            groupBy: SessionGroupBy.sessionStatusKey,
-            statsPeriodStart: '48h',
-            statsPeriodEnd: '24h'
+              organizationSlug: action.organizationSlug,
+              projectId: action.projectId,
+              fields: [SessionGroup.sumSessionKey, SessionGroup.countUniqueUsersKey],
+              groupBy: SessionGroupBy.sessionStatusKey,
+              statsPeriodStart: '48h',
+              statsPeriodEnd: '24h'
           );
 
           store.dispatch(
               FetchSessionsSuccessAction(action.projectId, sessions, sessionsBefore)
           );
-        } catch (e) {
-          store.dispatch(FetchSessionsFailureAction(e));
+        } catch (e, s) {
+          store.dispatch(FetchSessionsFailureAction(e, s));
         }
         api.close();
       };
@@ -183,8 +180,8 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           store.dispatch(
               BookmarkProjectSuccessAction(action.organizationSlug, project)
           );
-        } catch (e) {
-          store.dispatch(BookmarkProjectFailureAction(e));
+        } catch (e, s) {
+          store.dispatch(BookmarkProjectFailureAction(e, s));
         }
         api.close();
       };
@@ -200,11 +197,11 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           final fortyEightHoursAgo = now.add(Duration(hours: -48));
 
           final apdex = await api.apdex(
-            apdexThreshold: action.apdexThreshold,
-            organizationSlug: action.organizationSlug,
-            projectId: action.projectId,
-            start: twentyFourHoursAgo,
-            end: now
+              apdexThreshold: action.apdexThreshold,
+              organizationSlug: action.organizationSlug,
+              projectId: action.projectId,
+              start: twentyFourHoursAgo,
+              end: now
           );
 
           final apdexBefore = await api.apdex(
@@ -218,8 +215,8 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           store.dispatch(
               FetchApdexSuccessAction(action.projectId, apdex, apdexBefore)
           );
-        } catch (e) {
-          store.dispatch(FetchApdexFailureAction(e));
+        } catch (e, s) {
+          store.dispatch(FetchApdexFailureAction(e, s));
         }
         api.close();
       };
@@ -228,30 +225,5 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
     } else {
       next(action);
     }
-  }
-}
-
-class LocalStorageMiddleware extends MiddlewareClass<AppState> {
-  LocalStorageMiddleware(this.preferences, this.secureStorage);
-
-  final SharedPreferences preferences;
-  final FlutterSecureStorage secureStorage;
-
-  @override
-  dynamic call(Store<AppState> store, dynamic action, NextDispatcher next) async {
-    if (action is RehydrateAction) {
-      final String authToken = await secureStorage.read(key: 'authToken');
-      final packageInfo = await PackageInfo.fromPlatform();
-      final version = 'Version ${packageInfo.version} (${packageInfo.buildNumber})';
-      store.dispatch(RehydrateSuccessAction(authToken, version));
-    }
-    if (action is LoginAction) {
-      await secureStorage.write(key: 'authToken', value: action.authToken);
-    }
-    if (action is LogoutAction) {
-      await secureStorage.delete(key: 'authToken');
-      await preferences.clear();
-    }
-    next(action);
   }
 }

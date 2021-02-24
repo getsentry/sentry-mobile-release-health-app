@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../screens/connect/connect_screen.dart';
-import '../../screens/oboarding/onboarding_info_screen.dart';
+import '../../screens/onboarding/onboarding_info_screen.dart';
 import '../../utils/sentry_colors.dart';
 import 'onboarding_image_screen.dart';
 
