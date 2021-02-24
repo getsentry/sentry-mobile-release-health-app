@@ -35,7 +35,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Scan Code'),
+        title: Text('Scan Token'),
       ),
       body: Stack(
         children: [
