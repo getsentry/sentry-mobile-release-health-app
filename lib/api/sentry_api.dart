@@ -41,13 +41,8 @@ class SentryApi {
     return _parseResponse(response, (jsonMap) => Organization.fromJson(jsonMap));
   }
 
-  Future<List<Project>> projects(String slug, Cursor cursor) async {
-    final queryParameters = <String, String>{
-    };
-
-    if (cursor != null) {
-      queryParameters[cursor.queryKey()] = cursor.queryValue();
-    }
+  Future<List<Project>> projects(String slug) async {
+    final queryParameters = <String, String>{};
 
     final response = await client.get(Uri.https(baseUrlName, '$baseUrlPath/organizations/$slug/projects/', queryParameters),
         headers: _defaultHeader()

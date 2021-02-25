@@ -14,7 +14,7 @@ class ProjectCard extends StatelessWidget {
   ProjectCard(this.organizationName, this.project, this.release, this.sessions);
 
   final String organizationName;
-  final Project project;
+  final Project project; // Nullable
   final Release release; // Nullable
   final SessionState sessions; // Nullable
 

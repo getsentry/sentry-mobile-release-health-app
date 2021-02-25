@@ -31,6 +31,11 @@ class LogoutAction {
   LogoutAction();
 }
 
+class LoadingAction {
+  LoadingAction(this.loading);
+  final bool loading;
+}
+
 class ApiFailureAction {
   ApiFailureAction(this.error, this.stackTrace);
   final dynamic error;
@@ -40,18 +45,15 @@ class ApiFailureAction {
 // FetchOrganizationsAndProjects
 
 class FetchOrganizationsAndProjectsAction {
-  FetchOrganizationsAndProjectsAction(this.pagination, this.reload);
-  final bool pagination;
+  FetchOrganizationsAndProjectsAction(this.reload);
   final bool reload;
 }
 
 class FetchOrganizationsAndProjectsSuccessAction {
-  FetchOrganizationsAndProjectsSuccessAction(this.organizations, this.projectsByOrganizationSlug, this.projectCursorsByOrganizationSlug, this.projectIdsWithSessions, this.reload);
+  FetchOrganizationsAndProjectsSuccessAction(this.organizations, this.projectsByOrganizationSlug, this.projectIdsWithSessions);
   final List<Organization> organizations;
   final Map<String, List<Project>> projectsByOrganizationSlug;
-  final Map<String, Cursor> projectCursorsByOrganizationSlug;
   final Set<String> projectIdsWithSessions;
-  final bool reload;
 }
 
 class FetchOrganizationsAndProjectsFailureAction extends ApiFailureAction {

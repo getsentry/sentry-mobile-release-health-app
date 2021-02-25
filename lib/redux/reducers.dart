@@ -31,7 +31,12 @@ final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, FetchApdexSuccessAction>(_fetchApdexSuccessAction),
   TypedReducer<GlobalState, BookmarkProjectSuccessAction>(_bookmarkProjectSuccessAction),
   TypedReducer<GlobalState, ApiFailureAction>(_apiFailureAction),
+  TypedReducer<GlobalState, LoadingAction>(_loadingAction),
 ]);
+
+GlobalState _loadingAction(GlobalState state, LoadingAction action) {
+  return state.copyWith(isLoading: action.loading);
+}
 
 GlobalState _switchTabAction(GlobalState state, SwitchTabAction action) {
   return state.copyWith(selectedTab: action.selectedTab);
@@ -66,16 +71,11 @@ GlobalState _fetchOrganizationsAndProjectsAction(GlobalState state, FetchOrganiz
 }
 
 GlobalState _fetchOrganizationsAndProjectsSuccessAction(GlobalState state, FetchOrganizationsAndProjectsSuccessAction action) {
-  final organizationsSlugByProjectSlug = action.reload
-      ? <String, String>{}
-      : state.organizationsSlugByProjectSlug;
-
+  final organizationsSlugByProjectSlug = <String, String>{};
   final projectsById = <String, Project>{};
 
-  if (!action.reload) {
-    for (final project in state.projectsWithSessions) {
-      projectsById[project.id] = project;
-    }
+  for (final project in state.projectsWithSessions) {
+    projectsById[project.id] = project;
   }
 
   for (final organizationSlug in action.projectsByOrganizationSlug.keys) {
@@ -102,11 +102,9 @@ GlobalState _fetchOrganizationsAndProjectsSuccessAction(GlobalState state, Fetch
   return state.copyWith(
     organizations: action.organizations,
     organizationsSlugByProjectSlug: organizationsSlugByProjectSlug,
-    projectCursorsByOrganizationSlug: action.projectCursorsByOrganizationSlug,
-    projectsByOrganizationSlug: action.projectsByOrganizationSlug,
     projectIdsWithSessions: action.projectIdsWithSessions,
     projectsWithSessions: projectsWithSessions,
-    projectsFetchedOnce: true,
+    projectsByOrganizationSlug: action.projectsByOrganizationSlug,
   );
 }
 

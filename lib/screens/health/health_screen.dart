@@ -36,28 +36,24 @@ class _HealthScreenState extends State<HealthScreen> {
   }
 
   Widget _content(HealthScreenViewModel viewModel) {
-    if (viewModel.showProjectEmptyScreen) {
-      return EmptyScreen(
-        title: 'Remain Calm',
-        text: 'You need at least one project to use this view.',
-        button: 'Visit sentry.io',
-        action: () async {
-          const url = 'https://sentry.io';
-          if (await canLaunch(url)) {
-            await launch(url);
-          }
-        }
+    if (viewModel.showLoadingScreen) {
+      return Center(
+        child: CircularProgressIndicator(),
       );
-    } else if (viewModel.showErrorScreen) {
+    } else if (viewModel.showProjectEmptyScreen) {
+      return EmptyScreen(
+        title: 'No projects found',
+        text: 'You need at least one project with session data to use this view.',
+        button: 'Refresh',
+        action: viewModel.fetchProjects
+      );
+    } else
+      if (viewModel.showErrorScreen) {
       return EmptyScreen(
           title: 'Error',
           text: 'Something went wrong. Please try again.',
           button: 'Retry',
-          action: viewModel.reloadProjects
-      );
-    } else if (viewModel.showLoadingScreen || viewModel.projects.isEmpty) {
-      return Center(
-        child: CircularProgressIndicator(),
+          action: viewModel.fetchProjects
       );
     } else {
 

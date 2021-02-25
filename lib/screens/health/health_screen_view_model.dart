@@ -23,11 +23,8 @@ class HealthScreenViewModel {
       _crashFreeUsersBeforeByProjectId = store.state.globalState.crashFreeUsersBeforeByProjectId,
       _apdexByProjectId = store.state.globalState.apdexByProjectId,
       _apdexBeforeByProjectId = store.state.globalState.apdexBeforeByProjectId,
-      showProjectEmptyScreen = store.state.globalState.projectsFetchedOnce &&
-        store.state.globalState.projectsByOrganizationSlug.keys.isEmpty,
-      showLoadingScreen = !store.state.globalState.projectsFetchedOnce &&
-          store.state.globalState.projectsByOrganizationSlug.keys.isEmpty &&
-          !store.state.globalState.projectsFetchedError,
+      showProjectEmptyScreen = store.state.globalState.projectsByOrganizationSlug.keys.isEmpty && !store.state.globalState.isLoading,
+      showLoadingScreen = store.state.globalState.projectsByOrganizationSlug.keys.isEmpty && store.state.globalState.isLoading,
       showErrorScreen = store.state.globalState.projectsFetchedError;
 
   final Store<AppState> _store;
@@ -53,11 +50,11 @@ class HealthScreenViewModel {
   final bool showErrorScreen;
 
   void fetchProjects() {
-    _store.dispatch(FetchOrganizationsAndProjectsAction(true, false));
+    _store.dispatch(FetchOrganizationsAndProjectsAction(false));
   }
 
   void reloadProjects() {
-    _store.dispatch(FetchOrganizationsAndProjectsAction(true, true));
+    _store.dispatch(FetchOrganizationsAndProjectsAction(true));
   }
 
   ProjectCard projectCard(int index) {

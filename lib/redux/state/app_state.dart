@@ -38,8 +38,8 @@ class GlobalState {
       this.organizationsSlugByProjectSlug,
       this.projectCursorsByOrganizationSlug,
       this.projectsByOrganizationSlug,
-      this.projectsFetchedOnce,
       this.projectsFetchedError,
+      this.isLoading,
       this.projectIdsWithSessions,
       this.projectsWithSessions,
       this.latestReleasesByProjectId,
@@ -66,7 +66,6 @@ class GlobalState {
       organizationsSlugByProjectSlug: {},
       projectCursorsByOrganizationSlug: {},
       projectsByOrganizationSlug: {},
-      projectsFetchedOnce: false,
       projectsFetchedError: false,
       projectIdsWithSessions: {},
       projectsWithSessions: [],
@@ -81,6 +80,7 @@ class GlobalState {
       apdexByProjectId: {},
       apdexBeforeByProjectId: {},
       selectedOrganization: null,
+      isLoading: true,
       selectedProject: null,
       me: null
     );
@@ -95,7 +95,7 @@ class GlobalState {
   final Map<String, String> organizationsSlugByProjectSlug;
   final Map<String, Cursor> projectCursorsByOrganizationSlug;
   final Map<String, List<Project>> projectsByOrganizationSlug;
-  final bool projectsFetchedOnce;
+  final bool isLoading;
   final bool projectsFetchedError;
 
   final Set<String> projectIdsWithSessions;
@@ -128,7 +128,7 @@ class GlobalState {
     Map<String, String> organizationsSlugByProjectSlug,
     Map<String, Cursor> projectCursorsByOrganizationSlug,
     Map<String, List<Project>> projectsByOrganizationSlug,
-    bool projectsFetchedOnce,
+    bool isLoading,
     bool projectsFetchedError,
     Set<String> projectIdsWithSessions,
     List<Project> projectsWithSessions,
@@ -155,8 +155,8 @@ class GlobalState {
       organizationsSlugByProjectSlug: organizationsSlugByProjectSlug ?? this.organizationsSlugByProjectSlug,
       projectCursorsByOrganizationSlug: projectCursorsByOrganizationSlug ?? this.projectCursorsByOrganizationSlug,
       projectsByOrganizationSlug: projectsByOrganizationSlug ?? this.projectsByOrganizationSlug,
-      projectsFetchedOnce: projectsFetchedOnce ?? this.projectsFetchedOnce,
       projectsFetchedError: projectsFetchedError ?? this.projectsFetchedError,
+      isLoading: isLoading ?? this.isLoading,
       projectIdsWithSessions: projectIdsWithSessions ?? this.projectIdsWithSessions,
       projectsWithSessions: projectsWithSessions ?? this.projectsWithSessions,
       latestReleasesByProjectId: latestReleasesByProjectId ?? this.latestReleasesByProjectId,
