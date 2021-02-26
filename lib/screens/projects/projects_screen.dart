@@ -67,7 +67,6 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                       color: SentryColors.revolver
                   ),
                 ),
-                subtitle: !item.hasSessions ? Text('No recent sessions.') : null,
                 trailing: Icon(
                   item.isBookmarked ? Icons.star : Icons.star_border,
                   color: item.isBookmarked ? SentryColors.lightningYellow : SentryColors.graySuit,
