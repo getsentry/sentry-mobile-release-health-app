@@ -12,7 +12,7 @@ class SentrySdkMiddleware extends MiddlewareClass<AppState> {
       Sentry.captureException(action.error, stackTrace: action.stackTrace);
     }
     if (action is FetchAuthenticatedUserSuccessAction) {
-      Sentry.configureScope((scope) => scope.user = User(email: action.me.email, id: action.me.id, ipAddress: "{{auto}}"));
+      Sentry.configureScope((scope) => scope.user = User(email: action.me.email, id: action.me.id, ipAddress: '{{auto}}'));
     }
     if (action is LogoutAction) {
       Sentry.configureScope((scope) => scope.user = null);
