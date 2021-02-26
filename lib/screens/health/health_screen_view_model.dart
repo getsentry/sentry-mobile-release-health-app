@@ -122,6 +122,9 @@ class HealthScreenViewModel {
   }
   
   void fetchDataForProject(int index) {
+    if (index < 0 || index >= projects.length) {
+      return;
+    }
     final projectWithLatestRelease = projects[index];
     //_fetchLatestRelease(projectWithLatestRelease);
     _fetchSessions(projectWithLatestRelease);

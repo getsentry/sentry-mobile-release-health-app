@@ -40,8 +40,8 @@ class ApiFailureAction {
 // FetchOrganizationsAndProjects
 
 class FetchOrgsAndProjectsAction {
-  FetchOrgsAndProjectsAction(this.reload);
-  final bool reload;
+  FetchOrgsAndProjectsAction(this.resetSessionData);
+  final bool resetSessionData;
 }
 
 class FetchOrgsAndProjectsProgressAction {
