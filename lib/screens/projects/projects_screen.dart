@@ -19,16 +19,16 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
   Widget build(BuildContext context) {
      return StoreProvider<AppState>(
        store: StoreProvider.of(context),
-       child: StoreConnector<AppState, ProjectPickerViewModel>(
-          converter: (appState) => ProjectPickerViewModel.fromStore(appState),
+       child: StoreConnector<AppState, ProjectsScreenViewModel>(
+          converter: (appState) => ProjectsScreenViewModel.fromStore(appState),
           builder: (context, viewModel) => _content(viewModel),
           onInitialBuild: (viewModel) => StoreProvider.of<AppState>(context)
-             .dispatch(FetchOrganizationsAndProjectsAction(false, false)),
+             .dispatch(FetchOrgsAndProjectsAction(false)),
        ),
      );
   }
 
-  Widget _content(ProjectPickerViewModel viewModel) {
+  Widget _content(ProjectsScreenViewModel viewModel) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Bookmarked Projects')
@@ -62,7 +62,7 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
               return ListTile(
                 contentPadding: EdgeInsets.only(right: 16, top: 0, left: 16, bottom: 0),
                 title: Text(
-                  item.title,
+                  item.projectSlug,
                   style: Theme.of(context).textTheme.bodyText1.apply(
                       color: SentryColors.revolver
                   ),

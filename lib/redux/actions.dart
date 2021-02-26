@@ -1,4 +1,3 @@
-import '../types/cursor.dart';
 import '../types/group.dart';
 import '../types/organization.dart';
 import '../types/project.dart';
@@ -31,6 +30,7 @@ class LogoutAction {
   LogoutAction();
 }
 
+
 class ApiFailureAction {
   ApiFailureAction(this.error, this.stackTrace);
   final dynamic error;
@@ -39,23 +39,26 @@ class ApiFailureAction {
 
 // FetchOrganizationsAndProjects
 
-class FetchOrganizationsAndProjectsAction {
-  FetchOrganizationsAndProjectsAction(this.pagination, this.reload);
-  final bool pagination;
+class FetchOrgsAndProjectsAction {
+  FetchOrgsAndProjectsAction(this.reload);
   final bool reload;
 }
 
-class FetchOrganizationsAndProjectsSuccessAction {
-  FetchOrganizationsAndProjectsSuccessAction(this.organizations, this.projectsByOrganizationSlug, this.projectCursorsByOrganizationSlug, this.projectIdsWithSessions, this.reload);
+class FetchOrgsAndProjectsProgressAction {
+  FetchOrgsAndProjectsProgressAction(this.text, this.progress);
+  final String text;
+  final double progress;
+}
+
+class FetchOrgsAndProjectsSuccessAction {
+  FetchOrgsAndProjectsSuccessAction(this.organizations, this.projectsByOrganizationSlug, this.projectIdsWithSessions);
   final List<Organization> organizations;
   final Map<String, List<Project>> projectsByOrganizationSlug;
-  final Map<String, Cursor> projectCursorsByOrganizationSlug;
   final Set<String> projectIdsWithSessions;
-  final bool reload;
 }
 
-class FetchOrganizationsAndProjectsFailureAction extends ApiFailureAction {
-  FetchOrganizationsAndProjectsFailureAction(error, StackTrace stackTrace) : super(error, stackTrace);
+class FetchOrgsAndProjectsFailureAction extends ApiFailureAction {
+  FetchOrgsAndProjectsFailureAction(error, StackTrace stackTrace) : super(error, stackTrace);
 }
 
 // FetchLatestRelease

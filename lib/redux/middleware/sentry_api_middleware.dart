@@ -1,7 +1,7 @@
 import 'package:redux/redux.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import '../../api/sentry_api.dart';
-import '../../types/cursor.dart';
 import '../../types/group.dart';
 import '../../types/organization.dart';
 import '../../types/project.dart';
@@ -14,49 +14,40 @@ import '../state/app_state.dart';
 class SentryApiMiddleware extends MiddlewareClass<AppState> {
   @override
   dynamic call(Store<AppState> store, action, next) {
-    if (action is FetchOrganizationsAndProjectsAction) {
+    if (action is FetchOrgsAndProjectsAction) {
       final thunkAction = (Store<AppState> store) async {
         final api = SentryApi(store.state.globalState.authToken);
         try {
+          store.dispatch(FetchOrgsAndProjectsProgressAction('Fetching organizations...', null));
           final organizations = await api.organizations();
           final individualOrganizations = <Organization>[];
-          final Map<String, Cursor> projectCursorsByOrganizationSlug = {};
-          final Map<String, List<Project>> projectsByOrganizationId = {};
           final Set<String> projectIdsWithSessions = {};
+          final Map<String, List<Project>> projectsByOrganizationId = {};
+
+          final fullProgress = organizations.length * 2;
+          var currentProgress = 0;
 
           for (final organization in organizations) {
             final individualOrganization = await api.organization(organization.slug);
             individualOrganizations.add(individualOrganization ?? organization);
-            final currentCursor = store.state.globalState.projectCursorsByOrganizationSlug != null && !action.reload
-                ? store.state.globalState.projectCursorsByOrganizationSlug[organization.slug]
-                : null;
 
-            final nextCursor = action.pagination
-                ? currentCursor == null
-                ? Cursor(10, 0, 0)
-                : Cursor(10, currentCursor.offset + 1, 0)
-                : null;
-
-            final projects = await api.projects(organization.slug, nextCursor);
+            store.dispatch(FetchOrgsAndProjectsProgressAction('${organization.name}: Fetching projects...', ++currentProgress / fullProgress));
+            final projects = await api.projects(organization.slug);
             if (projects.isNotEmpty) {
               projectsByOrganizationId[organization.slug] = projects;
             }
 
-            final projectsWithSessionsForOrganization = await api.projectIdsWithSessions(organization.slug);
-            projectIdsWithSessions.addAll(projectsWithSessionsForOrganization);
-
-            if (action.pagination) {
-              // Keep cursor if there are less than value projects
-              if (projects.length < nextCursor.value) {
-                projectCursorsByOrganizationSlug[organization.slug] = currentCursor;
-              } else {
-                projectCursorsByOrganizationSlug[organization.slug] = nextCursor;
-              }
+            store.dispatch(FetchOrgsAndProjectsProgressAction('${organization.name}: Checking for sessions...', ++currentProgress / fullProgress));
+            try {
+              final projectsWithSessionsForOrganization = await api.projectIdsWithSessions(organization.slug);
+              projectIdsWithSessions.addAll(projectsWithSessionsForOrganization);
+            } catch (e) {
+              Sentry.addBreadcrumb(Breadcrumb(message: 'Org has no projects -> $e', level: SentryLevel.error));
             }
           }
-          store.dispatch(FetchOrganizationsAndProjectsSuccessAction(individualOrganizations, projectsByOrganizationId, projectCursorsByOrganizationSlug, projectIdsWithSessions, action.reload));
+          store.dispatch(FetchOrgsAndProjectsSuccessAction(individualOrganizations, projectsByOrganizationId, projectIdsWithSessions));
         } catch (e, s) {
-          store.dispatch(FetchOrganizationsAndProjectsFailureAction(e, s));
+          store.dispatch(FetchOrgsAndProjectsFailureAction(e, s));
         }
         api.close();
       };

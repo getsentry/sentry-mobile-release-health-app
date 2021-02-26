@@ -4,20 +4,18 @@ class ProjectPickerItem {
 
 class ProjectPickerHeadlineItem extends ProjectPickerItem {
   ProjectPickerHeadlineItem(this.text);
-  String text;
+  final String text;
 }
 
 class ProjectPickerOrganizationItem extends ProjectPickerItem {
   ProjectPickerOrganizationItem(this.title);
-  String title;
+  final String title;
 }
 
 class ProjectPickerProjectItem extends ProjectPickerItem {
-  ProjectPickerProjectItem(this.organizationSlug, this.projectSlug, this.title, this.isBookmarked);
+  ProjectPickerProjectItem(this.organizationSlug, this.projectSlug, this.isBookmarked);
 
   final String organizationSlug;
   final String projectSlug;
-
-  String title;
-  bool isBookmarked;
+  final bool isBookmarked;
 }

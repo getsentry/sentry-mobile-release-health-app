@@ -1,6 +1,5 @@
 import '../../redux/state/session_state.dart';
 import '../../screens/chart/line_chart_point.dart';
-import '../../types/cursor.dart';
 import '../../types/group.dart';
 import '../../types/organization.dart';
 import '../../types/project.dart';
@@ -36,10 +35,11 @@ class GlobalState {
       this.selectedTab,
       this.organizations,
       this.organizationsSlugByProjectSlug,
-      this.projectCursorsByOrganizationSlug,
       this.projectsByOrganizationSlug,
-      this.projectsFetchedOnce,
-      this.projectsFetchedError,
+      this.orgsAndProjectsLoading,
+      this.orgsAndProjectsProgress,
+      this.orgsAndProjectsProgressText,
+      this.orgsAndProjectsError,
       this.projectIdsWithSessions,
       this.projectsWithSessions,
       this.latestReleasesByProjectId,
@@ -64,10 +64,11 @@ class GlobalState {
       selectedTab: 0,
       organizations: [],
       organizationsSlugByProjectSlug: {},
-      projectCursorsByOrganizationSlug: {},
       projectsByOrganizationSlug: {},
-      projectsFetchedOnce: false,
-      projectsFetchedError: false,
+      orgsAndProjectsLoading: true,
+      orgsAndProjectsProgress: null,
+      orgsAndProjectsProgressText: null,
+      orgsAndProjectsError: false,
       projectIdsWithSessions: {},
       projectsWithSessions: [],
       latestReleasesByProjectId: {},
@@ -93,10 +94,12 @@ class GlobalState {
 
   final List<Organization> organizations;
   final Map<String, String> organizationsSlugByProjectSlug;
-  final Map<String, Cursor> projectCursorsByOrganizationSlug;
   final Map<String, List<Project>> projectsByOrganizationSlug;
-  final bool projectsFetchedOnce;
-  final bool projectsFetchedError;
+
+  final bool orgsAndProjectsLoading;
+  final double orgsAndProjectsProgress;
+  final String orgsAndProjectsProgressText;
+  final bool orgsAndProjectsError;
 
   final Set<String> projectIdsWithSessions;
   final List<Project> projectsWithSessions;
@@ -126,10 +129,11 @@ class GlobalState {
     bool setTokenNull = false,
     List<Organization> organizations,
     Map<String, String> organizationsSlugByProjectSlug,
-    Map<String, Cursor> projectCursorsByOrganizationSlug,
     Map<String, List<Project>> projectsByOrganizationSlug,
-    bool projectsFetchedOnce,
-    bool projectsFetchedError,
+    bool orgsAndProjectsLoading,
+    double orgsAndProjectsProgress,
+    String orgsAndProjectsProgressText,
+    bool orgsAndProjectsError,
     Set<String> projectIdsWithSessions,
     List<Project> projectsWithSessions,
     Map<String, Release> latestReleasesByProjectId,
@@ -153,10 +157,15 @@ class GlobalState {
       selectedTab: selectedTab ?? this.selectedTab,
       organizations: organizations ?? this.organizations,
       organizationsSlugByProjectSlug: organizationsSlugByProjectSlug ?? this.organizationsSlugByProjectSlug,
-      projectCursorsByOrganizationSlug: projectCursorsByOrganizationSlug ?? this.projectCursorsByOrganizationSlug,
       projectsByOrganizationSlug: projectsByOrganizationSlug ?? this.projectsByOrganizationSlug,
-      projectsFetchedOnce: projectsFetchedOnce ?? this.projectsFetchedOnce,
-      projectsFetchedError: projectsFetchedError ?? this.projectsFetchedError,
+      orgsAndProjectsLoading: orgsAndProjectsLoading ?? this.orgsAndProjectsLoading,
+      orgsAndProjectsProgress: (orgsAndProjectsLoading ?? this.orgsAndProjectsLoading)
+        ? orgsAndProjectsProgress ?? this.orgsAndProjectsProgress
+        : null,
+      orgsAndProjectsProgressText: (orgsAndProjectsLoading ?? this.orgsAndProjectsLoading)
+          ? orgsAndProjectsProgressText ?? this.orgsAndProjectsProgressText
+          : null,
+      orgsAndProjectsError: orgsAndProjectsError ?? this.orgsAndProjectsError,
       projectIdsWithSessions: projectIdsWithSessions ?? this.projectIdsWithSessions,
       projectsWithSessions: projectsWithSessions ?? this.projectsWithSessions,
       latestReleasesByProjectId: latestReleasesByProjectId ?? this.latestReleasesByProjectId,
