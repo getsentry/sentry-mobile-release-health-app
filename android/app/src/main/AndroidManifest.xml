@@ -20,8 +20,8 @@
     <!-- END HERE -->
 
     <application
-        android:name="Sentry Mobile"
-        android:label="io.sentrymobile.app"
+        android:name="io.flutter.app.FlutterApplication"
+        android:label="Sentry Mobile"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
