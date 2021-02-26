@@ -1,3 +1,4 @@
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -155,7 +156,8 @@ class _ConnectScreenState extends State<ConnectScreen> {
   }
 
   Future<String> _showDialog() async {
-    String enteredToken;
+    final textEditingController = TextEditingController();
+
     return showDialog<String>(
       context: context,
       barrierDismissible: false,
@@ -163,14 +165,25 @@ class _ConnectScreenState extends State<ConnectScreen> {
         return AlertDialog(
           contentPadding: const EdgeInsets.all(16.0),
           title: Text('Paste Token'),
-          content: TextField(
-            autofocus: true,
-            decoration: InputDecoration(
-                hintText: 'Paste your token here'
-            ),
-            onChanged: (value) {
-              enteredToken = value;
-            },
+          content: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: textEditingController,
+                  autofocus: true,
+                  decoration: InputDecoration(
+                      hintText: 'Paste your token here'
+                  )
+                ),
+              ),
+              IconButton(
+                  icon: Icon(Icons.content_paste_rounded),
+                  color: SentryColors.rum,
+                  onPressed: () async {
+                    textEditingController.text = await FlutterClipboard.paste();
+                  }
+              )
+            ]
           ),
           actions: <Widget>[
             FlatButton(
@@ -181,7 +194,7 @@ class _ConnectScreenState extends State<ConnectScreen> {
             FlatButton(
                 child: const Text('Ok'),
                 onPressed: () {
-                  Navigator.of(context).pop(enteredToken);
+                  Navigator.of(context).pop(textEditingController.text);
                 })
           ],
         );
