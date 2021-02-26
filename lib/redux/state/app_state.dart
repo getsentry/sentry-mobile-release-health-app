@@ -159,8 +159,12 @@ class GlobalState {
       organizationsSlugByProjectSlug: organizationsSlugByProjectSlug ?? this.organizationsSlugByProjectSlug,
       projectsByOrganizationSlug: projectsByOrganizationSlug ?? this.projectsByOrganizationSlug,
       orgsAndProjectsLoading: orgsAndProjectsLoading ?? this.orgsAndProjectsLoading,
-      orgsAndProjectsProgress: orgsAndProjectsProgress ?? this.orgsAndProjectsProgress,
-      orgsAndProjectsProgressText: orgsAndProjectsProgressText ?? this.orgsAndProjectsProgressText,
+      orgsAndProjectsProgress: (orgsAndProjectsLoading ?? this.orgsAndProjectsLoading)
+        ? orgsAndProjectsProgress ?? this.orgsAndProjectsProgress
+        : null,
+      orgsAndProjectsProgressText: (orgsAndProjectsLoading ?? this.orgsAndProjectsLoading)
+          ? orgsAndProjectsProgressText ?? this.orgsAndProjectsProgressText
+          : null,
       orgsAndProjectsError: orgsAndProjectsError ?? this.orgsAndProjectsError,
       projectIdsWithSessions: projectIdsWithSessions ?? this.projectIdsWithSessions,
       projectsWithSessions: projectsWithSessions ?? this.projectsWithSessions,
