@@ -1,4 +1,5 @@
 import 'package:redux/redux.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import '../../api/sentry_api.dart';
 import '../../types/cursor.dart';
@@ -39,8 +40,8 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
             try {
               final projectsWithSessionsForOrganization = await api.projectIdsWithSessions(organization.slug);
               projectIdsWithSessions.addAll(projectsWithSessionsForOrganization);
-            } catch (_) {
-              // We skip this org since it has no projects
+            } catch (e) {
+              Sentry.addBreadcrumb(Breadcrumb(message: 'Org has no projects -> $e', level: SentryLevel.error));
             }
           }
           store.dispatch(LoadingAction(true, 'Almost there'));
