@@ -31,10 +31,10 @@ final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, FetchApdexSuccessAction>(_fetchApdexSuccessAction),
   TypedReducer<GlobalState, BookmarkProjectSuccessAction>(_bookmarkProjectSuccessAction),
   TypedReducer<GlobalState, ApiFailureAction>(_apiFailureAction),
-  TypedReducer<GlobalState, LoadingAction>(_loadingAction),
+  TypedReducer<GlobalState, OrgsAndProjectsLoadingAction>(_loadingAction),
 ]);
 
-GlobalState _loadingAction(GlobalState state, LoadingAction action) {
+GlobalState _loadingAction(GlobalState state, OrgsAndProjectsLoadingAction action) {
   return state.copyWith(isLoading: action.loading, loadingText: action.text, loadingProgress: action.progress);
 }
 

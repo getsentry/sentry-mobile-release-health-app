@@ -44,7 +44,7 @@ class _HealthScreenState extends State<HealthScreen> {
             children: [
               CircularProgressIndicator(value: viewModel.loadingProgress),
               Container(
-                  padding: EdgeInsets.only(top: 16, left: 22, right: 22),
+                  padding: EdgeInsets.symmetric(vertical: 16, horizontal: 22),
                   child: Text(viewModel.loadingText ?? 'Loading ...')
               )
         ])

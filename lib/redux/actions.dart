@@ -30,8 +30,8 @@ class LogoutAction {
   LogoutAction();
 }
 
-class LoadingAction {
-  LoadingAction(this.loading, [this.text = '', this.progress]);
+class OrgsAndProjectsLoadingAction {
+  OrgsAndProjectsLoadingAction(this.loading, [this.text = '', this.progress]);
   final bool loading;
   final String text;
   final double progress;

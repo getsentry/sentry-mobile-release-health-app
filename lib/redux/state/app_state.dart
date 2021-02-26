@@ -1,6 +1,5 @@
 import '../../redux/state/session_state.dart';
 import '../../screens/chart/line_chart_point.dart';
-import '../../types/cursor.dart';
 import '../../types/group.dart';
 import '../../types/organization.dart';
 import '../../types/project.dart';
@@ -36,7 +35,6 @@ class GlobalState {
       this.selectedTab,
       this.organizations,
       this.organizationsSlugByProjectSlug,
-      this.projectCursorsByOrganizationSlug,
       this.projectsByOrganizationSlug,
       this.projectsFetchedError,
       this.projectIdsWithSessions,
@@ -66,7 +64,6 @@ class GlobalState {
       selectedTab: 0,
       organizations: [],
       organizationsSlugByProjectSlug: {},
-      projectCursorsByOrganizationSlug: {},
       projectsByOrganizationSlug: {},
       projectsFetchedError: false,
       projectIdsWithSessions: {},
@@ -96,7 +93,6 @@ class GlobalState {
 
   final List<Organization> organizations;
   final Map<String, String> organizationsSlugByProjectSlug;
-  final Map<String, Cursor> projectCursorsByOrganizationSlug;
   final Map<String, List<Project>> projectsByOrganizationSlug;
   final bool isLoading;
   final String loadingText;
@@ -131,7 +127,6 @@ class GlobalState {
     bool setTokenNull = false,
     List<Organization> organizations,
     Map<String, String> organizationsSlugByProjectSlug,
-    Map<String, Cursor> projectCursorsByOrganizationSlug,
     Map<String, List<Project>> projectsByOrganizationSlug,
     bool projectsFetchedError,
     Set<String> projectIdsWithSessions,
@@ -160,7 +155,6 @@ class GlobalState {
       selectedTab: selectedTab ?? this.selectedTab,
       organizations: organizations ?? this.organizations,
       organizationsSlugByProjectSlug: organizationsSlugByProjectSlug ?? this.organizationsSlugByProjectSlug,
-      projectCursorsByOrganizationSlug: projectCursorsByOrganizationSlug ?? this.projectCursorsByOrganizationSlug,
       projectsByOrganizationSlug: projectsByOrganizationSlug ?? this.projectsByOrganizationSlug,
       projectsFetchedError: projectsFetchedError ?? this.projectsFetchedError,
       projectIdsWithSessions: projectIdsWithSessions ?? this.projectIdsWithSessions,
