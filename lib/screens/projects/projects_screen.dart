@@ -36,7 +36,7 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
       body: viewModel.items.isEmpty
         ? Center(
           child: Text(
-            'You have no organizations or projects.',
+            'You have no projects with session data.',
             style: Theme.of(context).textTheme.subtitle1
           ),
         )
@@ -48,8 +48,7 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
               return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
                   child: Text(
-                    'Bookmarked project are shown before others on the main screen. '
-                        'Additionally, only projects with sessions in the last 90 days are shown.',
+                    item.text,
                     style: Theme.of(context).textTheme.caption,
                   )
               );
