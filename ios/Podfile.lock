@@ -10,12 +10,12 @@ PODS:
   - qr_code_scanner (0.2.0):
     - Flutter
     - MTBBarcodeScanner
-  - Sentry (6.0.12):
-    - Sentry/Core (= 6.0.12)
-  - Sentry/Core (6.0.12)
+  - Sentry (6.1.4):
+    - Sentry/Core (= 6.1.4)
+  - Sentry/Core (6.1.4)
   - sentry_flutter (0.0.1):
     - Flutter
-    - Sentry (~> 6.0.10)
+    - Sentry (~> 6.1.4)
   - shared_preferences (0.0.1):
     - Flutter
   - url_launcher (0.0.1):
@@ -61,11 +61,11 @@ SPEC CHECKSUMS:
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   qr_code_scanner: bb67d64904c3b9658ada8c402e8b4d406d5d796e
-  Sentry: 8ffcfe3416e0a58b90bb1ae319e8e8a13022a03e
-  sentry_flutter: e57e33f56d5791e4effa48e85e44505367686b27
+  Sentry: 9d055e2de30a77685e86b219acf02e59b82091fc
+  sentry_flutter: 8b2b2e1c0101ef562106b5d272d3c0c741512c01
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
 
 PODFILE CHECKSUM: 6d1bb90894c7fed710a3f8d350212ccf81a1401d
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.9.3

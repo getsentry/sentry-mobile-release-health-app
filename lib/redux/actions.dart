@@ -21,8 +21,8 @@ class SwitchTabAction {
   final int selectedTab;
 }
 
-class LoginAction {
-  LoginAction(this.authToken);
+class LoginSuccessAction {
+  LoginSuccessAction(this.authToken);
   final String authToken;
 }
 
@@ -168,7 +168,9 @@ class BookmarkProjectSuccessAction {
 }
 
 class BookmarkProjectFailureAction extends ApiFailureAction {
-  BookmarkProjectFailureAction(error, StackTrace stackTrace) : super(error, stackTrace);
+  BookmarkProjectFailureAction(this.projectSlug, this.bookmarked, error, StackTrace stackTrace) : super(error, stackTrace);
+  final String projectSlug;
+  final bool bookmarked;
 }
 
 // FetchApDex

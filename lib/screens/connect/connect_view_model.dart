@@ -39,7 +39,7 @@ class ConnectViewModel {
       final sentryApi = SentryApi(token);
       await sentryApi.organizations(); // Do a sample call
       sentryApi.close();
-      store.dispatch(LoginAction(token));
+      store.dispatch(LoginSuccessAction(token));
     } catch (exception, stackTrace) {
       Sentry.captureException(exception, stackTrace: stackTrace);
       rethrow;

@@ -15,7 +15,7 @@ AppState appReducer(AppState state, dynamic action) =>
 final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, SwitchTabAction>(_switchTabAction),
   TypedReducer<GlobalState, RehydrateSuccessAction>(_rehydrateSuccessAction),
-  TypedReducer<GlobalState, LoginAction>(_loginAction),
+  TypedReducer<GlobalState, LoginSuccessAction>(_loginAction),
   TypedReducer<GlobalState, LogoutAction>(_logoutAction),
   TypedReducer<GlobalState, FetchOrgsAndProjectsAction>(_fetchOrganizationsAndProjectsAction),
   TypedReducer<GlobalState, FetchOrgsAndProjectsProgressAction>(_fetchOrgsAndProjectsProgressAction),
@@ -30,7 +30,9 @@ final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, FetchAuthenticatedUserSuccessAction>(_fetchAuthenticatedUserSuccessAction),
   TypedReducer<GlobalState, FetchSessionsSuccessAction>(_fetchSessionsSuccessAction),
   TypedReducer<GlobalState, FetchApdexSuccessAction>(_fetchApdexSuccessAction),
+  TypedReducer<GlobalState, BookmarkProjectAction>(_bookmarkProjectAction),
   TypedReducer<GlobalState, BookmarkProjectSuccessAction>(_bookmarkProjectSuccessAction),
+  TypedReducer<GlobalState, BookmarkProjectFailureAction>(_bookmarkProjectFailureAction),
   TypedReducer<GlobalState, ApiFailureAction>(_apiFailureAction),
   
 ]);
@@ -50,7 +52,7 @@ GlobalState _rehydrateSuccessAction(GlobalState state, RehydrateSuccessAction ac
   return state.copyWith(hydrated: true, authToken: action.authToken, version: action.version);
 }
 
-GlobalState _loginAction(GlobalState state, LoginAction action) {
+GlobalState _loginAction(GlobalState state, LoginSuccessAction action) {
   return state.copyWith(authToken: action.authToken);
 }
 
@@ -215,13 +217,46 @@ GlobalState _fetchApdexSuccessAction(GlobalState state, FetchApdexSuccessAction 
   );
 }
 
+GlobalState _bookmarkProjectAction(GlobalState state, BookmarkProjectAction action) {
+  final project = state.projectsWithSessions.firstWhere((element) => element.slug == action.projectSlug);
+  if (project != null) {
+    return _replaceProject(state, project.copyWith(isBookmarked: action.bookmarked));
+  } else {
+    return state;
+  }
+}
+
 GlobalState _bookmarkProjectSuccessAction(GlobalState state, BookmarkProjectSuccessAction action) {
+  return _replaceProject(state, action.project);
+}
+
+GlobalState _bookmarkProjectFailureAction(GlobalState state, BookmarkProjectFailureAction action) {
+  final project = state.projectsWithSessions.firstWhere((element) => element.slug == action.projectSlug);
+  if (project != null) {
+    return _replaceProject(state, project.copyWith(isBookmarked: action.bookmarked));
+  } else {
+    return state;
+  }
+}
+
+GlobalState _apiFailureAction(GlobalState state, ApiFailureAction action) {
+  final error = action.error;
+  if (error is ApiError && error.statusCode == 401) {
+    return _logoutAction(state, LogoutAction());
+  } else {
+    return state;
+  }
+}
+
+// Helpers
+
+GlobalState _replaceProject(GlobalState state, Project projectToReplace) {
   final projectsByOrganizationSlug = <String, List<Project>>{};
   final projects = <Project>[];
 
   for (final project in state.projectsWithSessions) {
-    if (project.id == action.project.id) {
-      projects.add(action.project);
+    if (project.id == projectToReplace.id) {
+      projects.add(projectToReplace);
     } else {
       projects.add(project);
     }
@@ -230,8 +265,8 @@ GlobalState _bookmarkProjectSuccessAction(GlobalState state, BookmarkProjectSucc
   for (final organizationSlug in state.projectsByOrganizationSlug.keys) {
     final projects = <Project>[];
     for (final project in state.projectsByOrganizationSlug[organizationSlug]) {
-      if (project.id == action.project.id) {
-        projects.add(action.project);
+      if (project.id == projectToReplace.id) {
+        projects.add(projectToReplace);
       } else {
         projects.add(project);
       }
@@ -252,15 +287,6 @@ GlobalState _bookmarkProjectSuccessAction(GlobalState state, BookmarkProjectSucc
       projectsByOrganizationSlug: projectsByOrganizationSlug,
       projectsWithSessions: projects
   );
-}
-
-GlobalState _apiFailureAction(GlobalState state, ApiFailureAction action) {
-  final error = action.error;
-  if (error is ApiError && error.statusCode == 401) {
-    return _logoutAction(state, LogoutAction());
-  } else {
-    return state;
-  }
 }
 
 // -----------------------------

@@ -19,5 +19,24 @@ class Project {
   final bool isBookmarked;
 
   Map<String, dynamic> toJson() => _$ProjectToJson(this);
-}
 
+  Project copyWith({
+    String id,
+    String name,
+    String slug,
+    String platform,
+    List<String> platforms,
+    LatestRelease latestRelease,
+    bool isBookmarked
+  }) {
+    return Project(
+      id ?? this.id,
+      name ?? this.name,
+      slug ?? this.slug,
+      platform ?? this.platform,
+      platforms ?? this.platforms,
+      latestRelease ?? this.latestRelease,
+      isBookmarked ?? this.isBookmarked
+    );
+  }
+}

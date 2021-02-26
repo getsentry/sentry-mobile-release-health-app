@@ -3,7 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 
 import '../../redux/state/app_state.dart';
 import '../../screens/debug/sentry_flutter_screen.dart';
-import '../../screens/project_picker/project_picker.dart';
+import '../../screens/projects/projects_screen.dart';
 import '../../utils/sentry_colors.dart';
 import 'settings_header.dart';
 import 'settings_view_model.dart';
@@ -59,7 +59,7 @@ class _SettingsState extends State<Settings> {
                 onTap: () =>
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                          builder: (BuildContext context) => ProjectPicker()
+                          builder: (BuildContext context) => ProjectsScreen()
                       ),
                     ),
               ),
