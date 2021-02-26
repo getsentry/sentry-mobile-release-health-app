@@ -165,7 +165,9 @@ class BookmarkProjectSuccessAction {
 }
 
 class BookmarkProjectFailureAction extends ApiFailureAction {
-  BookmarkProjectFailureAction(error, StackTrace stackTrace) : super(error, stackTrace);
+  BookmarkProjectFailureAction(this.projectSlug, this.bookmarked, error, StackTrace stackTrace) : super(error, stackTrace);
+  final String projectSlug;
+  final bool bookmarked;
 }
 
 // FetchApDex

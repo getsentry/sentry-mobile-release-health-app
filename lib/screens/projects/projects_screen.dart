@@ -3,17 +3,17 @@ import 'package:flutter_redux/flutter_redux.dart';
 
 import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
-import '../../screens/project_picker/project_picker_item.dart';
+import '../../screens/projects/project_item.dart';
 import '../../screens/settings/settings_header.dart';
 import '../../utils/sentry_colors.dart';
-import 'project_picker_view_model.dart';
+import 'projects_screen_view_model.dart';
 
-class ProjectPicker extends StatefulWidget {
+class ProjectsScreen extends StatefulWidget {
   @override
-  _ProjectPickerState createState() => _ProjectPickerState();
+  _ProjectsScreenState createState() => _ProjectsScreenState();
 }
 
-class _ProjectPickerState extends State<ProjectPicker> {
+class _ProjectsScreenState extends State<ProjectsScreen> {
   
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class _ProjectPickerState extends State<ProjectPicker> {
       body: viewModel.items.isEmpty
         ? Center(
           child: Text(
-            'You have no organizations or projects.',
+            'You have no projects with session data.',
             style: Theme.of(context).textTheme.subtitle1
           ),
         )
@@ -48,8 +48,7 @@ class _ProjectPickerState extends State<ProjectPicker> {
               return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
                   child: Text(
-                    'Bookmarked project are shown before others on the main screen. '
-                        'Additionally, only projects with sessions in the last 90 days are shown.',
+                    item.text,
                     style: Theme.of(context).textTheme.caption,
                   )
               );
@@ -68,7 +67,6 @@ class _ProjectPickerState extends State<ProjectPicker> {
                       color: SentryColors.revolver
                   ),
                 ),
-                subtitle: !item.hasSessions ? Text('No recent sessions.') : null,
                 trailing: Icon(
                   item.isBookmarked ? Icons.star : Icons.star_border,
                   color: item.isBookmarked ? SentryColors.lightningYellow : SentryColors.graySuit,
