@@ -5,7 +5,7 @@ import '../../redux/state/app_state.dart';
 import '../../types/organization.dart';
 import '../../types/project.dart';
 
-import 'project_picker_item.dart';
+import 'project_item.dart';
 
 class ProjectPickerViewModel {
   ProjectPickerViewModel.fromStore(Store<AppState> store) {

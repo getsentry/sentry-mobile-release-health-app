@@ -3,17 +3,17 @@ import 'package:flutter_redux/flutter_redux.dart';
 
 import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
-import '../../screens/project_picker/project_picker_item.dart';
+import '../../screens/projects/project_item.dart';
 import '../../screens/settings/settings_header.dart';
 import '../../utils/sentry_colors.dart';
-import 'project_picker_view_model.dart';
+import 'projects_screen_view_model.dart';
 
-class ProjectPicker extends StatefulWidget {
+class ProjectsScreen extends StatefulWidget {
   @override
-  _ProjectPickerState createState() => _ProjectPickerState();
+  _ProjectsScreenState createState() => _ProjectsScreenState();
 }
 
-class _ProjectPickerState extends State<ProjectPicker> {
+class _ProjectsScreenState extends State<ProjectsScreen> {
   
   @override
   Widget build(BuildContext context) {
