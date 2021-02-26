@@ -63,7 +63,7 @@ GlobalState _logoutAction(GlobalState state, LogoutAction action) {
 }
 
 GlobalState _fetchOrganizationsAndProjectsAction(GlobalState state, FetchOrgsAndProjectsAction action) {
-  if (action.reload) {
+  if (action.resetSessionData) {
     return state.copyWith(
       sessionsByProjectId: {},
       sessionsBeforeByProjectId: {},

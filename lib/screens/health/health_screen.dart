@@ -79,7 +79,7 @@ class _HealthScreenState extends State<HealthScreen> {
         _index = index;
       };
 
-      if (_index == null) {
+      if (_index == null || _index >= viewModel.projects.length) {
         updateIndex(0);
       }
 
@@ -180,10 +180,11 @@ class _HealthScreenState extends State<HealthScreen> {
           Duration(microseconds: 100),
           () {
             viewModel.reloadProjects();
-            setState(() {
-              updateIndex(0);
-              _pageController.jumpToPage(0);
-            });
+
+            // Reload session data for previous, current and next index.
+            viewModel.fetchDataForProject(_index - 1);
+            viewModel.fetchDataForProject(_index);
+            viewModel.fetchDataForProject(_index + 1);
           }
         ),
       );
