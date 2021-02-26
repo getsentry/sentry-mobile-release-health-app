@@ -25,7 +25,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           final Set<String> projectIdsWithSessions = {};
           final Map<String, List<Project>> projectsByOrganizationId = {};
 
-          var fullProgress = organizations.length * 2;
+          final fullProgress = organizations.length * 2;
           var currentProgress = 0;
 
           for (final organization in organizations) {
