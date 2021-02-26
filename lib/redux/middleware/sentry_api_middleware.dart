@@ -19,6 +19,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
       final thunkAction = (Store<AppState> store) async {
         final api = SentryApi(store.state.globalState.authToken);
         try {
+          store.dispatch(LoadingAction(true, 'Fetching Organization...'));
           final organizations = await api.organizations();
           final individualOrganizations = <Organization>[];
           final Set<String> projectIdsWithSessions = {};
@@ -28,11 +29,13 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
             final individualOrganization = await api.organization(organization.slug);
             individualOrganizations.add(individualOrganization ?? organization);
 
+            store.dispatch(LoadingAction(true, '${organization.name} -> Fetching projects...'));
             final projects = await api.projects(organization.slug);
             if (projects.isNotEmpty) {
               projectsByOrganizationId[organization.slug] = projects;
             }
 
+            store.dispatch(LoadingAction(true, '${organization.name} -> Checking for sessions...'));
             try {
               final projectsWithSessionsForOrganization = await api.projectIdsWithSessions(organization.slug);
               projectIdsWithSessions.addAll(projectsWithSessionsForOrganization);
@@ -40,6 +43,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
               // We skip this org since it has no projects
             }
           }
+          store.dispatch(LoadingAction(true, 'Almost there'));
           store.dispatch(FetchOrganizationsAndProjectsSuccessAction(individualOrganizations, projectsByOrganizationId, projectIdsWithSessions));
         } catch (e, s) {
           store.dispatch(FetchOrganizationsAndProjectsFailureAction(e, s));

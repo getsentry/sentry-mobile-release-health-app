@@ -37,9 +37,19 @@ class _HealthScreenState extends State<HealthScreen> {
 
   Widget _content(HealthScreenViewModel viewModel) {
     if (viewModel.showLoadingScreen) {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
+      return Scaffold(body:
+      Center(child:
+        Column(
+            mainAxisAlignment : MainAxisAlignment.center,
+            crossAxisAlignment : CrossAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(),
+              Container(
+                  padding: EdgeInsets.only(top: 16, left: 22, right: 22),
+                  child: Text(viewModel.loadingText ?? 'Loading ...')
+              )
+        ])
+      ));
     } else if (viewModel.showProjectEmptyScreen) {
       return EmptyScreen(
         title: 'No projects found',

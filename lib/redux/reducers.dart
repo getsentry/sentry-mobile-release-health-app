@@ -35,7 +35,7 @@ final globalReducer = combineReducers<GlobalState>([
 ]);
 
 GlobalState _loadingAction(GlobalState state, LoadingAction action) {
-  return state.copyWith(isLoading: action.loading);
+  return state.copyWith(isLoading: action.loading, loadingText: action.text);
 }
 
 GlobalState _switchTabAction(GlobalState state, SwitchTabAction action) {

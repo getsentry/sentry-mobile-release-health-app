@@ -32,8 +32,9 @@ class LogoutAction {
 }
 
 class LoadingAction {
-  LoadingAction(this.loading);
+  LoadingAction(this.loading, [this.text = '']);
   final bool loading;
+  final String text;
 }
 
 class ApiFailureAction {

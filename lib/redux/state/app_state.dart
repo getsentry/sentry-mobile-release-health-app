@@ -40,6 +40,7 @@ class GlobalState {
       this.projectsByOrganizationSlug,
       this.projectsFetchedError,
       this.isLoading,
+      this.loadingText,
       this.projectIdsWithSessions,
       this.projectsWithSessions,
       this.latestReleasesByProjectId,
@@ -96,6 +97,7 @@ class GlobalState {
   final Map<String, Cursor> projectCursorsByOrganizationSlug;
   final Map<String, List<Project>> projectsByOrganizationSlug;
   final bool isLoading;
+  final String loadingText;
   final bool projectsFetchedError;
 
   final Set<String> projectIdsWithSessions;
@@ -129,6 +131,7 @@ class GlobalState {
     Map<String, Cursor> projectCursorsByOrganizationSlug,
     Map<String, List<Project>> projectsByOrganizationSlug,
     bool isLoading,
+    String loadingText,
     bool projectsFetchedError,
     Set<String> projectIdsWithSessions,
     List<Project> projectsWithSessions,
@@ -157,6 +160,7 @@ class GlobalState {
       projectsByOrganizationSlug: projectsByOrganizationSlug ?? this.projectsByOrganizationSlug,
       projectsFetchedError: projectsFetchedError ?? this.projectsFetchedError,
       isLoading: isLoading ?? this.isLoading,
+      loadingText: loadingText ?? this.loadingText,
       projectIdsWithSessions: projectIdsWithSessions ?? this.projectIdsWithSessions,
       projectsWithSessions: projectsWithSessions ?? this.projectsWithSessions,
       latestReleasesByProjectId: latestReleasesByProjectId ?? this.latestReleasesByProjectId,
