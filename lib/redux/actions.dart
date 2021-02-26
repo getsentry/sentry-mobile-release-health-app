@@ -30,12 +30,6 @@ class LogoutAction {
   LogoutAction();
 }
 
-class OrgsAndProjectsLoadingAction {
-  OrgsAndProjectsLoadingAction(this.loading, [this.text = '', this.progress]);
-  final bool loading;
-  final String text;
-  final double progress;
-}
 
 class ApiFailureAction {
   ApiFailureAction(this.error, this.stackTrace);
@@ -45,20 +39,26 @@ class ApiFailureAction {
 
 // FetchOrganizationsAndProjects
 
-class FetchOrganizationsAndProjectsAction {
-  FetchOrganizationsAndProjectsAction(this.reload);
+class FetchOrgsAndProjectsAction {
+  FetchOrgsAndProjectsAction(this.reload);
   final bool reload;
 }
 
-class FetchOrganizationsAndProjectsSuccessAction {
-  FetchOrganizationsAndProjectsSuccessAction(this.organizations, this.projectsByOrganizationSlug, this.projectIdsWithSessions);
+class FetchOrgsAndProjectsProgressAction {
+  FetchOrgsAndProjectsProgressAction(this.text, this.progress);
+  final String text;
+  final double progress;
+}
+
+class FetchOrgsAndProjectsSuccessAction {
+  FetchOrgsAndProjectsSuccessAction(this.organizations, this.projectsByOrganizationSlug, this.projectIdsWithSessions);
   final List<Organization> organizations;
   final Map<String, List<Project>> projectsByOrganizationSlug;
   final Set<String> projectIdsWithSessions;
 }
 
-class FetchOrganizationsAndProjectsFailureAction extends ApiFailureAction {
-  FetchOrganizationsAndProjectsFailureAction(error, StackTrace stackTrace) : super(error, stackTrace);
+class FetchOrgsAndProjectsFailureAction extends ApiFailureAction {
+  FetchOrgsAndProjectsFailureAction(error, StackTrace stackTrace) : super(error, stackTrace);
 }
 
 // FetchLatestRelease

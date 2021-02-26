@@ -36,7 +36,10 @@ class GlobalState {
       this.organizations,
       this.organizationsSlugByProjectSlug,
       this.projectsByOrganizationSlug,
-      this.projectsFetchedError,
+      this.orgsAndProjectsLoading,
+      this.orgsAndProjectsProgress,
+      this.orgsAndProjectsProgressText,
+      this.orgsAndProjectsError,
       this.projectIdsWithSessions,
       this.projectsWithSessions,
       this.latestReleasesByProjectId,
@@ -50,9 +53,6 @@ class GlobalState {
       this.apdexBeforeByProjectId,
       this.issuesByProjectSlug,
       this.selectedOrganization,
-      this.isLoading,
-      this.loadingProgress,
-      this.loadingText,
       this.selectedProject,
       this.me});
 
@@ -65,7 +65,10 @@ class GlobalState {
       organizations: [],
       organizationsSlugByProjectSlug: {},
       projectsByOrganizationSlug: {},
-      projectsFetchedError: false,
+      orgsAndProjectsLoading: false,
+      orgsAndProjectsProgress: null,
+      orgsAndProjectsProgressText: null,
+      orgsAndProjectsError: false,
       projectIdsWithSessions: {},
       projectsWithSessions: [],
       latestReleasesByProjectId: {},
@@ -79,8 +82,6 @@ class GlobalState {
       apdexByProjectId: {},
       apdexBeforeByProjectId: {},
       selectedOrganization: null,
-      isLoading: true,
-      loadingProgress: null,
       selectedProject: null,
       me: null
     );
@@ -94,10 +95,11 @@ class GlobalState {
   final List<Organization> organizations;
   final Map<String, String> organizationsSlugByProjectSlug;
   final Map<String, List<Project>> projectsByOrganizationSlug;
-  final bool isLoading;
-  final String loadingText;
-  final double loadingProgress;
-  final bool projectsFetchedError;
+
+  final bool orgsAndProjectsLoading;
+  final double orgsAndProjectsProgress;
+  final String orgsAndProjectsProgressText;
+  final bool orgsAndProjectsError;
 
   final Set<String> projectIdsWithSessions;
   final List<Project> projectsWithSessions;
@@ -128,7 +130,10 @@ class GlobalState {
     List<Organization> organizations,
     Map<String, String> organizationsSlugByProjectSlug,
     Map<String, List<Project>> projectsByOrganizationSlug,
-    bool projectsFetchedError,
+    bool orgsAndProjectsLoading,
+    double orgsAndProjectsProgress,
+    String orgsAndProjectsProgressText,
+    bool orgsAndProjectsError,
     Set<String> projectIdsWithSessions,
     List<Project> projectsWithSessions,
     Map<String, Release> latestReleasesByProjectId,
@@ -142,9 +147,6 @@ class GlobalState {
     Map<String, double> apdexBeforeByProjectId,
     Map<String, List<Group>> issuesByProjectSlug,
     Organization selectedOrganization,
-    bool isLoading,
-    String loadingText,
-    double loadingProgress,
     Project selectedProject,
     User me,
   }) {
@@ -156,7 +158,10 @@ class GlobalState {
       organizations: organizations ?? this.organizations,
       organizationsSlugByProjectSlug: organizationsSlugByProjectSlug ?? this.organizationsSlugByProjectSlug,
       projectsByOrganizationSlug: projectsByOrganizationSlug ?? this.projectsByOrganizationSlug,
-      projectsFetchedError: projectsFetchedError ?? this.projectsFetchedError,
+      orgsAndProjectsLoading: orgsAndProjectsLoading ?? this.orgsAndProjectsLoading,
+      orgsAndProjectsProgress: orgsAndProjectsProgress ?? this.orgsAndProjectsProgress,
+      orgsAndProjectsProgressText: orgsAndProjectsProgressText ?? this.orgsAndProjectsProgressText,
+      orgsAndProjectsError: orgsAndProjectsError ?? this.orgsAndProjectsError,
       projectIdsWithSessions: projectIdsWithSessions ?? this.projectIdsWithSessions,
       projectsWithSessions: projectsWithSessions ?? this.projectsWithSessions,
       latestReleasesByProjectId: latestReleasesByProjectId ?? this.latestReleasesByProjectId,
@@ -170,9 +175,6 @@ class GlobalState {
       apdexBeforeByProjectId: apdexBeforeByProjectId ?? this.apdexBeforeByProjectId,
       issuesByProjectSlug: issuesByProjectSlug ?? this.issuesByProjectSlug,
       selectedOrganization: selectedOrganization ?? this.selectedOrganization,
-      isLoading: isLoading ?? this.isLoading,
-      loadingText: loadingText ?? this.loadingText,
-      loadingProgress: loadingProgress ?? this.loadingProgress,
       selectedProject: selectedProject ?? this.selectedProject,
       me: me ?? this.me
     );

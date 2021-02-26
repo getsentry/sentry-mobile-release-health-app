@@ -17,9 +17,10 @@ final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, RehydrateSuccessAction>(_rehydrateSuccessAction),
   TypedReducer<GlobalState, LoginAction>(_loginAction),
   TypedReducer<GlobalState, LogoutAction>(_logoutAction),
-  TypedReducer<GlobalState, FetchOrganizationsAndProjectsAction>(_fetchOrganizationsAndProjectsAction),
-  TypedReducer<GlobalState, FetchOrganizationsAndProjectsSuccessAction>(_fetchOrganizationsAndProjectsSuccessAction),
-  TypedReducer<GlobalState, FetchOrganizationsAndProjectsFailureAction>(_fetchOrganizationsAndProjectsFailure),
+  TypedReducer<GlobalState, FetchOrgsAndProjectsAction>(_fetchOrganizationsAndProjectsAction),
+  TypedReducer<GlobalState, FetchOrgsAndProjectsProgressAction>(_fetchOrgsAndProjectsProgressAction),
+  TypedReducer<GlobalState, FetchOrgsAndProjectsSuccessAction>(_fetchOrgsAndProjectsSuccessAction),
+  TypedReducer<GlobalState, FetchOrgsAndProjectsFailureAction>(_fetchOrgsAndProjectsFailure),
   TypedReducer<GlobalState, FetchLatestReleasesAction>(_fetchLatestReleasesAction),
   TypedReducer<GlobalState, FetchLatestReleasesSuccessAction>(_fetchLatestReleasesSuccessAction),
   TypedReducer<GlobalState, FetchLatestReleaseSuccessAction>(_fetchLatestReleaseSuccessAction),
@@ -31,11 +32,14 @@ final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, FetchApdexSuccessAction>(_fetchApdexSuccessAction),
   TypedReducer<GlobalState, BookmarkProjectSuccessAction>(_bookmarkProjectSuccessAction),
   TypedReducer<GlobalState, ApiFailureAction>(_apiFailureAction),
-  TypedReducer<GlobalState, OrgsAndProjectsLoadingAction>(_loadingAction),
+  
 ]);
 
-GlobalState _loadingAction(GlobalState state, OrgsAndProjectsLoadingAction action) {
-  return state.copyWith(isLoading: action.loading, loadingText: action.text, loadingProgress: action.progress);
+GlobalState _fetchOrgsAndProjectsProgressAction(GlobalState state, FetchOrgsAndProjectsProgressAction action) {
+  return state.copyWith(
+      orgsAndProjectsProgress: action.progress,
+      orgsAndProjectsProgressText: action.text
+  );
 }
 
 GlobalState _switchTabAction(GlobalState state, SwitchTabAction action) {
@@ -56,21 +60,23 @@ GlobalState _logoutAction(GlobalState state, LogoutAction action) {
   );
 }
 
-GlobalState _fetchOrganizationsAndProjectsAction(GlobalState state, FetchOrganizationsAndProjectsAction action) {
+GlobalState _fetchOrganizationsAndProjectsAction(GlobalState state, FetchOrgsAndProjectsAction action) {
   if (action.reload) {
     return state.copyWith(
       sessionsByProjectId: {},
       sessionsBeforeByProjectId: {},
-      projectsFetchedError: false
+      orgsAndProjectsLoading: true,
+      orgsAndProjectsError: false
     );
   } else {
     return state.copyWith(
-      projectsFetchedError: false
+      orgsAndProjectsLoading: true,
+      orgsAndProjectsError: false
     );
   }
 }
 
-GlobalState _fetchOrganizationsAndProjectsSuccessAction(GlobalState state, FetchOrganizationsAndProjectsSuccessAction action) {
+GlobalState _fetchOrgsAndProjectsSuccessAction(GlobalState state, FetchOrgsAndProjectsSuccessAction action) {
   final organizationsSlugByProjectSlug = <String, String>{};
   final projectsById = <String, Project>{};
 
@@ -105,12 +111,14 @@ GlobalState _fetchOrganizationsAndProjectsSuccessAction(GlobalState state, Fetch
     projectIdsWithSessions: action.projectIdsWithSessions,
     projectsWithSessions: projectsWithSessions,
     projectsByOrganizationSlug: action.projectsByOrganizationSlug,
+    orgsAndProjectsLoading: false
   );
 }
 
-GlobalState _fetchOrganizationsAndProjectsFailure(GlobalState state, FetchOrganizationsAndProjectsFailureAction action) {
+GlobalState _fetchOrgsAndProjectsFailure(GlobalState state, FetchOrgsAndProjectsFailureAction action) {
   return state.copyWith(
-    projectsFetchedError: true,
+    orgsAndProjectsLoading: false,
+    orgsAndProjectsError: true,
   );
 }
 

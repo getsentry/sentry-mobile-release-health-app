@@ -23,11 +23,11 @@ class HealthScreenViewModel {
       _crashFreeUsersBeforeByProjectId = store.state.globalState.crashFreeUsersBeforeByProjectId,
       _apdexByProjectId = store.state.globalState.apdexByProjectId,
       _apdexBeforeByProjectId = store.state.globalState.apdexBeforeByProjectId,
-      showProjectEmptyScreen = store.state.globalState.projectsByOrganizationSlug.keys.isEmpty && !store.state.globalState.isLoading,
-      showLoadingScreen = store.state.globalState.projectsByOrganizationSlug.keys.isEmpty && store.state.globalState.isLoading,
-      showErrorScreen = store.state.globalState.projectsFetchedError,
-      loadingText = store.state.globalState.loadingText,
-      loadingProgress = store.state.globalState.loadingProgress;
+      showProjectEmptyScreen = store.state.globalState.projectsByOrganizationSlug.keys.isEmpty && !store.state.globalState.orgsAndProjectsLoading,
+      showLoadingScreen = store.state.globalState.projectsByOrganizationSlug.keys.isEmpty && store.state.globalState.orgsAndProjectsLoading,
+      showErrorScreen = store.state.globalState.orgsAndProjectsError,
+      loadingProgress = store.state.globalState.orgsAndProjectsProgress,
+      loadingText = store.state.globalState.orgsAndProjectsProgressText;
 
   final Store<AppState> _store;
 
@@ -47,19 +47,19 @@ class HealthScreenViewModel {
   final Map<String, double> _apdexByProjectId;
   final Map<String, double> _apdexBeforeByProjectId;
 
-  final String loadingText;
   final double loadingProgress;
+  final String loadingText;
 
   final bool showProjectEmptyScreen;
   final bool showLoadingScreen;
   final bool showErrorScreen;
 
   void fetchProjects() {
-    _store.dispatch(FetchOrganizationsAndProjectsAction(false));
+    _store.dispatch(FetchOrgsAndProjectsAction(false));
   }
 
   void reloadProjects() {
-    _store.dispatch(FetchOrganizationsAndProjectsAction(true));
+    _store.dispatch(FetchOrgsAndProjectsAction(true));
   }
 
   ProjectCard projectCard(int index) {

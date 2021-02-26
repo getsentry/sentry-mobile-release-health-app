@@ -14,12 +14,11 @@ import '../state/app_state.dart';
 class SentryApiMiddleware extends MiddlewareClass<AppState> {
   @override
   dynamic call(Store<AppState> store, action, next) {
-    if (action is FetchOrganizationsAndProjectsAction) {
-      store.dispatch(OrgsAndProjectsLoadingAction(true));
+    if (action is FetchOrgsAndProjectsAction) {
       final thunkAction = (Store<AppState> store) async {
         final api = SentryApi(store.state.globalState.authToken);
         try {
-          store.dispatch(OrgsAndProjectsLoadingAction(true, 'Fetching Organization...'));
+          store.dispatch(FetchOrgsAndProjectsProgressAction('Fetching organizations...', null));
           final organizations = await api.organizations();
           final individualOrganizations = <Organization>[];
           final Set<String> projectIdsWithSessions = {};
@@ -32,13 +31,13 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
             final individualOrganization = await api.organization(organization.slug);
             individualOrganizations.add(individualOrganization ?? organization);
 
-            store.dispatch(OrgsAndProjectsLoadingAction(true, '${organization.name} -> Fetching projects...', ++currentProgress / fullProgress));
+            store.dispatch(FetchOrgsAndProjectsProgressAction('${organization.name}: Fetching projects...', ++currentProgress / fullProgress));
             final projects = await api.projects(organization.slug);
             if (projects.isNotEmpty) {
               projectsByOrganizationId[organization.slug] = projects;
             }
 
-            store.dispatch(OrgsAndProjectsLoadingAction(true, '${organization.name} -> Checking for sessions...', ++currentProgress / fullProgress));
+            store.dispatch(FetchOrgsAndProjectsProgressAction('${organization.name}: Checking for sessions...', ++currentProgress / fullProgress));
             try {
               final projectsWithSessionsForOrganization = await api.projectIdsWithSessions(organization.slug);
               projectIdsWithSessions.addAll(projectsWithSessionsForOrganization);
@@ -46,12 +45,11 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
               Sentry.addBreadcrumb(Breadcrumb(message: 'Org has no projects -> $e', level: SentryLevel.error));
             }
           }
-          store.dispatch(OrgsAndProjectsLoadingAction(true, 'Almost there'));
-          store.dispatch(FetchOrganizationsAndProjectsSuccessAction(individualOrganizations, projectsByOrganizationId, projectIdsWithSessions));
+          store.dispatch(FetchOrgsAndProjectsProgressAction('Almost there', null));
+          store.dispatch(FetchOrgsAndProjectsSuccessAction(individualOrganizations, projectsByOrganizationId, projectIdsWithSessions));
         } catch (e, s) {
-          store.dispatch(FetchOrganizationsAndProjectsFailureAction(e, s));
+          store.dispatch(FetchOrgsAndProjectsFailureAction(e, s));
         }
-        store.dispatch(OrgsAndProjectsLoadingAction(false));
         api.close();
       };
       next(action);
