@@ -57,11 +57,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 child: Text('Skip', style: TextStyle(color: SentryColors.rum)),
                 onPressed: () {
                   final lastPageIndex = _onboardingDetailScreens.length - 1;
-                  _pageController.animateToPage(
-                      lastPageIndex,
-                      duration: Duration(milliseconds: 500),
-                      curve: Curves.easeOut
-                  );
+                  _pageController.jumpToPage(lastPageIndex);
                   updateCurrentPage(lastPageIndex);
                 }
             ),
