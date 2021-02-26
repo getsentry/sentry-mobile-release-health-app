@@ -6,7 +6,6 @@ import 'package:http/http.dart';
 import 'package:sentry_flutter/sentry_flutter.dart' as sentry;
 
 import '../api/api_errors.dart';
-import '../types/cursor.dart';
 import '../types/group.dart';
 import '../types/organization.dart';
 import '../types/project.dart';

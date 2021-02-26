@@ -125,7 +125,7 @@ class _HealthScreenState extends State<HealthScreen> {
                           },
                         )),
                     Container(
-                      padding: EdgeInsets.only(top: 16, left: 22, right: 22),
+                      padding: EdgeInsets.only(top: 8, left: 22, right: 22),
                       child: Column(
                         children: [
                           Padding(

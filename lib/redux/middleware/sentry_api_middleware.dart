@@ -2,7 +2,6 @@ import 'package:redux/redux.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 import '../../api/sentry_api.dart';
-import '../../types/cursor.dart';
 import '../../types/group.dart';
 import '../../types/organization.dart';
 import '../../types/project.dart';
