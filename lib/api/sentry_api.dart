@@ -6,7 +6,6 @@ import 'package:http/http.dart';
 import 'package:sentry_flutter/sentry_flutter.dart' as sentry;
 
 import '../api/api_errors.dart';
-import '../types/cursor.dart';
 import '../types/group.dart';
 import '../types/organization.dart';
 import '../types/project.dart';
@@ -41,15 +40,8 @@ class SentryApi {
     return _parseResponse(response, (jsonMap) => Organization.fromJson(jsonMap));
   }
 
-  Future<List<Project>> projects(String slug, Cursor cursor) async {
-    final queryParameters = <String, String>{
-    };
-
-    if (cursor != null) {
-      queryParameters[cursor.queryKey()] = cursor.queryValue();
-    }
-
-    final response = await client.get(Uri.https(baseUrlName, '$baseUrlPath/organizations/$slug/projects/', queryParameters),
+  Future<List<Project>> projects(String slug) async {
+    final response = await client.get(Uri.https(baseUrlName, '$baseUrlPath/organizations/$slug/projects/'),
         headers: _defaultHeader()
     );
     return _parseResponseList(response, (jsonMap) => Project.fromJson(jsonMap));

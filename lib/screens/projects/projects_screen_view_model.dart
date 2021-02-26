@@ -7,30 +7,30 @@ import '../../types/project.dart';
 
 import 'project_item.dart';
 
-class ProjectPickerViewModel {
-  ProjectPickerViewModel.fromStore(Store<AppState> store) {
+class ProjectsScreenViewModel {
+  ProjectsScreenViewModel.fromStore(Store<AppState> store) {
     final List<ProjectPickerItem> items = [];
     for (final Organization organization in store.state.globalState.organizations) {
-        final organizationProjects = store.state.globalState.projectsByOrganizationSlug[organization.slug]
-            .where((project) => store.state.globalState.projectIdsWithSessions.contains(project.id)).toList()
-            ?? [];
-        organizationProjects.sort((Project a, Project b) {
+        final organizationProjects = store.state.globalState.projectsByOrganizationSlug[organization.slug] ?? [];
+        final projectsWithSessions = organizationProjects
+            .where((project) => store.state.globalState.projectIdsWithSessions.contains(project.id))
+            .toList();
+        projectsWithSessions.sort((Project a, Project b) {
           return a.name.toLowerCase().compareTo(b.name.toLowerCase());
         });
 
-        if (organizationProjects.isNotEmpty) {
+        if (projectsWithSessions.isNotEmpty) {
           items.add(
               ProjectPickerOrganizationItem(
                   organization.name
               )
           );
-          for (final Project organizationProject in organizationProjects) {
+          for (final Project project in projectsWithSessions) {
             items.add(
               ProjectPickerProjectItem(
                 organization.slug,
-                organizationProject.slug,
-                organizationProject.slug,
-                organizationProject.isBookmarked
+                project.slug,
+                project.isBookmarked
               )
             );
           }
