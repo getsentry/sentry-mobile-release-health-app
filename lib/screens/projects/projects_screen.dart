@@ -62,7 +62,7 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
               return ListTile(
                 contentPadding: EdgeInsets.only(right: 16, top: 0, left: 16, bottom: 0),
                 title: Text(
-                  item.title,
+                  item.projectSlug,
                   style: Theme.of(context).textTheme.bodyText1.apply(
                       color: SentryColors.revolver
                   ),

@@ -30,7 +30,6 @@ class ProjectsScreenViewModel {
               ProjectPickerProjectItem(
                 organization.slug,
                 project.slug,
-                project.slug,
                 project.isBookmarked
               )
             );
