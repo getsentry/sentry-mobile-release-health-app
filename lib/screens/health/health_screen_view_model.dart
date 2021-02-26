@@ -26,7 +26,8 @@ class HealthScreenViewModel {
       showProjectEmptyScreen = store.state.globalState.projectsByOrganizationSlug.keys.isEmpty && !store.state.globalState.isLoading,
       showLoadingScreen = store.state.globalState.projectsByOrganizationSlug.keys.isEmpty && store.state.globalState.isLoading,
       showErrorScreen = store.state.globalState.projectsFetchedError,
-      loadingText = store.state.globalState.loadingText;
+      loadingText = store.state.globalState.loadingText,
+      loadingProgress = store.state.globalState.loadingProgress;
 
   final Store<AppState> _store;
 
@@ -47,6 +48,7 @@ class HealthScreenViewModel {
   final Map<String, double> _apdexBeforeByProjectId;
 
   final String loadingText;
+  final double loadingProgress;
 
   final bool showProjectEmptyScreen;
   final bool showLoadingScreen;

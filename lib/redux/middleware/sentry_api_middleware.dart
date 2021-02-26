@@ -26,17 +26,20 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           final Set<String> projectIdsWithSessions = {};
           final Map<String, List<Project>> projectsByOrganizationId = {};
 
+          var fullProgress = organizations.length * 2;
+          var currentProgress = 0;
+
           for (final organization in organizations) {
             final individualOrganization = await api.organization(organization.slug);
             individualOrganizations.add(individualOrganization ?? organization);
 
-            store.dispatch(LoadingAction(true, '${organization.name} -> Fetching projects...'));
+            store.dispatch(LoadingAction(true, '${organization.name} -> Fetching projects...', ++currentProgress / fullProgress));
             final projects = await api.projects(organization.slug);
             if (projects.isNotEmpty) {
               projectsByOrganizationId[organization.slug] = projects;
             }
 
-            store.dispatch(LoadingAction(true, '${organization.name} -> Checking for sessions...'));
+            store.dispatch(LoadingAction(true, '${organization.name} -> Checking for sessions...', ++currentProgress / fullProgress));
             try {
               final projectsWithSessionsForOrganization = await api.projectIdsWithSessions(organization.slug);
               projectIdsWithSessions.addAll(projectsWithSessionsForOrganization);

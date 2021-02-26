@@ -39,8 +39,6 @@ class GlobalState {
       this.projectCursorsByOrganizationSlug,
       this.projectsByOrganizationSlug,
       this.projectsFetchedError,
-      this.isLoading,
-      this.loadingText,
       this.projectIdsWithSessions,
       this.projectsWithSessions,
       this.latestReleasesByProjectId,
@@ -54,6 +52,9 @@ class GlobalState {
       this.apdexBeforeByProjectId,
       this.issuesByProjectSlug,
       this.selectedOrganization,
+      this.isLoading,
+      this.loadingProgress,
+      this.loadingText,
       this.selectedProject,
       this.me});
 
@@ -82,6 +83,7 @@ class GlobalState {
       apdexBeforeByProjectId: {},
       selectedOrganization: null,
       isLoading: true,
+      loadingProgress: null,
       selectedProject: null,
       me: null
     );
@@ -98,6 +100,7 @@ class GlobalState {
   final Map<String, List<Project>> projectsByOrganizationSlug;
   final bool isLoading;
   final String loadingText;
+  final double loadingProgress;
   final bool projectsFetchedError;
 
   final Set<String> projectIdsWithSessions;
@@ -130,8 +133,6 @@ class GlobalState {
     Map<String, String> organizationsSlugByProjectSlug,
     Map<String, Cursor> projectCursorsByOrganizationSlug,
     Map<String, List<Project>> projectsByOrganizationSlug,
-    bool isLoading,
-    String loadingText,
     bool projectsFetchedError,
     Set<String> projectIdsWithSessions,
     List<Project> projectsWithSessions,
@@ -146,6 +147,9 @@ class GlobalState {
     Map<String, double> apdexBeforeByProjectId,
     Map<String, List<Group>> issuesByProjectSlug,
     Organization selectedOrganization,
+    bool isLoading,
+    String loadingText,
+    double loadingProgress,
     Project selectedProject,
     User me,
   }) {
@@ -159,8 +163,6 @@ class GlobalState {
       projectCursorsByOrganizationSlug: projectCursorsByOrganizationSlug ?? this.projectCursorsByOrganizationSlug,
       projectsByOrganizationSlug: projectsByOrganizationSlug ?? this.projectsByOrganizationSlug,
       projectsFetchedError: projectsFetchedError ?? this.projectsFetchedError,
-      isLoading: isLoading ?? this.isLoading,
-      loadingText: loadingText ?? this.loadingText,
       projectIdsWithSessions: projectIdsWithSessions ?? this.projectIdsWithSessions,
       projectsWithSessions: projectsWithSessions ?? this.projectsWithSessions,
       latestReleasesByProjectId: latestReleasesByProjectId ?? this.latestReleasesByProjectId,
@@ -174,6 +176,9 @@ class GlobalState {
       apdexBeforeByProjectId: apdexBeforeByProjectId ?? this.apdexBeforeByProjectId,
       issuesByProjectSlug: issuesByProjectSlug ?? this.issuesByProjectSlug,
       selectedOrganization: selectedOrganization ?? this.selectedOrganization,
+      isLoading: isLoading ?? this.isLoading,
+      loadingText: loadingText ?? this.loadingText,
+      loadingProgress: loadingProgress ?? this.loadingProgress,
       selectedProject: selectedProject ?? this.selectedProject,
       me: me ?? this.me
     );
