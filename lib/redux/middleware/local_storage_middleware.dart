@@ -19,7 +19,9 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
       final packageInfo = await PackageInfo.fromPlatform();
       final version = 'Version ${packageInfo.version} (${packageInfo.buildNumber})';
       store.dispatch(RehydrateSuccessAction(authToken, version));
-      store.dispatch(FetchAuthenticatedUserAction());
+      if (authToken != null) {
+        store.dispatch(FetchAuthenticatedUserAction());
+      }
     }
     if (action is LoginSuccessAction) {
       await secureStorage.write(key: 'authToken', value: action.authToken);
