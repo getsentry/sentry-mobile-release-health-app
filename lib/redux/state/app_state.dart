@@ -65,7 +65,7 @@ class GlobalState {
       organizations: [],
       organizationsSlugByProjectSlug: {},
       projectsByOrganizationSlug: {},
-      orgsAndProjectsLoading: false,
+      orgsAndProjectsLoading: true,
       orgsAndProjectsProgress: null,
       orgsAndProjectsProgressText: null,
       orgsAndProjectsError: false,
