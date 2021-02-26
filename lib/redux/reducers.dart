@@ -15,7 +15,7 @@ AppState appReducer(AppState state, dynamic action) =>
 final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, SwitchTabAction>(_switchTabAction),
   TypedReducer<GlobalState, RehydrateSuccessAction>(_rehydrateSuccessAction),
-  TypedReducer<GlobalState, LoginAction>(_loginAction),
+  TypedReducer<GlobalState, LoginSuccessAction>(_loginAction),
   TypedReducer<GlobalState, LogoutAction>(_logoutAction),
   TypedReducer<GlobalState, FetchOrganizationsAndProjectsAction>(_fetchOrganizationsAndProjectsAction),
   TypedReducer<GlobalState, FetchOrganizationsAndProjectsSuccessAction>(_fetchOrganizationsAndProjectsSuccessAction),
@@ -41,7 +41,7 @@ GlobalState _rehydrateSuccessAction(GlobalState state, RehydrateSuccessAction ac
   return state.copyWith(hydrated: true, authToken: action.authToken, version: action.version);
 }
 
-GlobalState _loginAction(GlobalState state, LoginAction action) {
+GlobalState _loginAction(GlobalState state, LoginSuccessAction action) {
   return state.copyWith(authToken: action.authToken);
 }
 

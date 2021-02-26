@@ -11,6 +11,14 @@ class SentrySdkMiddleware extends MiddlewareClass<AppState> {
     if (action is ApiFailureAction) {
       Sentry.captureException(action.error, stackTrace: action.stackTrace);
     }
+    if (action is FetchAuthenticatedUserSuccessAction) {
+      // https://docs.sentry.io/platforms/flutter/enriching-events/identify-user/
+      // Set to auto to let the server decide the IP
+      Sentry.configureScope((scope) => scope.user = User(email: action.me.email, id: action.me.id, ipAddress: '{{auto}}'));
+    }
+    if (action is LogoutAction) {
+      Sentry.configureScope((scope) => scope.user = null);
+    }
     next(action);
   }
 }

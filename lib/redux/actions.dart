@@ -22,8 +22,8 @@ class SwitchTabAction {
   final int selectedTab;
 }
 
-class LoginAction {
-  LoginAction(this.authToken);
+class LoginSuccessAction {
+  LoginSuccessAction(this.authToken);
   final String authToken;
 }
 
