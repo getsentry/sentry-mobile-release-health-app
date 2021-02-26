@@ -75,9 +75,11 @@ class _OnboardingDetailScreenState extends State<OnboardingDetailScreen> {
   
   void _fadeOutSecondImageDelayed() {
     Future.delayed(const Duration(milliseconds: 500), () {
-      setState(() {
-        _secondImageVisible = true;
-      });
+      if (mounted) {
+        setState(() {
+          _secondImageVisible = true;
+        });
+      }
     });
   }
 }

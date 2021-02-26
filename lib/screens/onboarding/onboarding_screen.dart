@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import '../../screens/connect/connect_screen.dart';
 import '../../screens/onboarding/onboarding_info_screen.dart';
 import '../../utils/sentry_colors.dart';
-import 'onboarding_image_screen.dart';
+import 'onboarding_detail_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   @override
