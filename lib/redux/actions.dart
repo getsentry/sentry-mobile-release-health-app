@@ -1,4 +1,3 @@
-import '../types/cursor.dart';
 import '../types/group.dart';
 import '../types/organization.dart';
 import '../types/project.dart';
