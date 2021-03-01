@@ -68,7 +68,7 @@ cd ios
 fastlane build_ios_and_upload_ipa
 ```
 
-After the build finished processing, you can fetch the latest dsyms and upload them to Sentry.
+After the build finished processing, you can fetch the latest dsyms and upload them to Sentry. For this, you need to install the fastlane plugin first https://github.com/getsentry/sentry-fastlane-plugin
 
 ```
 fastlane upload_dsym
