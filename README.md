@@ -56,6 +56,7 @@ Provide environment variables needed for fastlane. For example by updating your 
 export FASTLANE_USER="user@sentry.io"
 export FASTLANE_ITC_TEAM_ID="12345678" # The identifier of the iTunes Connect (AppStore Connect) team
 export FASTLANE_PROVISIONING_PROFILE_NAME="Profile For Appstore" # The name of the provisioning profile
+export SENTRY_AUTH_TOKEN="Sentry AuthToken" # Used iOS dsym upload
 ```
 
 Change working directory to 'ios' and run 'fastlane build_ios_and_upload_ipa'.
@@ -65,6 +66,12 @@ The build number from the current TestFlight build will be read and incremented 
 ```
 cd ios
 fastlane build_ios_and_upload_ipa
+```
+
+After the build finished processing, you can fetch the latest dsyms and upload them to Sentry.
+
+```
+fastlane upload_dsym
 ```
 
 # Build Android and Upload to Google Play Internal
