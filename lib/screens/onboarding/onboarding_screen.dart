@@ -27,6 +27,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     precacheImage(Image.asset('assets/onboarding_2.png').image, context);
     precacheImage(Image.asset('assets/onboarding_3.png').image, context);
     precacheImage(Image.asset('assets/sitting-logo.jpg').image, context);
+    precacheImage(Image.asset('assets/reading-logo.jpg').image, context);
     precacheImage(Image.asset('assets/user-menu.png').image, context);
     super.didChangeDependencies();
   }
