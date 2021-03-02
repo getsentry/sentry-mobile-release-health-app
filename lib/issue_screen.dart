@@ -122,7 +122,7 @@ class IssueView extends StatelessWidget {
         'https://sentry.io/organizations/${viewModel.selectedOrganization.slug}/issues/${latestEvent.groupID}';
 
     if (await canLaunch(url)) {
-      await launch(url);
+      await launch(url, forceSafariVC: false);
     } else {
       throw 'Could not launch $url';
     }

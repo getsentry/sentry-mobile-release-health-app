@@ -143,7 +143,7 @@ class _ConnectScreenState extends State<ConnectScreen> {
   Future<void> _openAccountSettings() async {
     const url = 'https://sentry.io/settings/account/api/mobile-app/';
     if (await canLaunch(url)) {
-      await launch(url);
+      await launch(url, forceSafariVC: false);
     }
   }
 
