@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sentry_mobile/screens/onboarding/onboarding_consent_screen.dart';
 
 import '../../screens/connect/connect_screen.dart';
 import '../../screens/onboarding/onboarding_info_screen.dart';
@@ -39,19 +40,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         brightness: Brightness.light,
-        actions: [
-          Visibility(
-            visible: _currentPage < _pageItems.length - 1,
-            child: FlatButton(
-                child: Text('Skip', style: TextStyle(color: SentryColors.rum)),
-                onPressed: () {
-                  final lastPageIndex = _pageItems.length - 1;
-                  _pageController.jumpToPage(lastPageIndex);
-                  _updateCurrentPage(lastPageIndex);
-                }
-            ),
-          )
-        ],
       ),
       body: Stack(
           alignment: AlignmentDirectional.bottomCenter,
@@ -119,8 +107,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         );
       case OnboardingScreenItem.INFO:
         return OnboardingInfoScreen();
+      case OnboardingScreenItem.CONSENT:
+        return OnboardingConsentScreen();
       case OnboardingScreenItem.CONNECT:
         return ConnectScreen();
+
     }
     return null;
   }
