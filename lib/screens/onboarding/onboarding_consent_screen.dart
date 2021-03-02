@@ -51,7 +51,9 @@ class OnboardingConsentScreen extends StatelessWidget {
                     FlatButton(
                       child: const Text('Maybe Later'),
                       textColor: SentryColors.rum,
-                      onPressed: () => onPressedEnableOrDisable,
+                      onPressed: () {
+                        onPressedEnableOrDisable();
+                      },
                     ),
                   ]
               )

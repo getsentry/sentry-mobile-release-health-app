@@ -114,7 +114,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         return OnboardingInfoScreen();
       case OnboardingScreenItem.CONSENT:
         return OnboardingConsentScreen(
-            () => _jumpToLastPage
+            () {
+              _jumpToLastPage();
+            }
         );
       case OnboardingScreenItem.CONNECT:
         return ConnectScreen();

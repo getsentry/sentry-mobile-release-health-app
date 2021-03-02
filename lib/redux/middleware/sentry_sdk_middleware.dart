@@ -10,14 +10,14 @@ class SentrySdkMiddleware extends MiddlewareClass<AppState> {
   @override
   dynamic call(Store<AppState> store, dynamic action, NextDispatcher next) async {
     if (action is RehydrateSuccessAction) {
-      if (action.sentrySdkEnabled) {
+      if (action.sentrySdkEnabled && !Sentry.isEnabled) {
         _enableSentrySdk();
       }
     }
     if (action is SentrySdkToggleAction) {
-      if (action.enabled) {
+      if (action.enabled && !Sentry.isEnabled) {
         _enableSentrySdk();
-      } else {
+      } else if (!action.enabled && Sentry.isEnabled) {
         _disableSentrySdk();
       }
     }
