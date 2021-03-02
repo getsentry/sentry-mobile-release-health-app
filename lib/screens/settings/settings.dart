@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../redux/state/app_state.dart';
 import '../../screens/debug/sentry_flutter_screen.dart';
@@ -65,7 +66,27 @@ class _SettingsState extends State<Settings> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: SettingsHeader('Account'),
+                child: SettingsHeader('Other'),
+              ),
+              ListTile(
+                title: Text(
+                  'Privacy Policy',
+                  style: Theme.of(context).textTheme.bodyText1.apply(
+                      color: SentryColors.revolver
+                  ),
+                ),
+                leading: Icon(
+                  Icons.privacy_tip,
+                  color: SentryColors.royalBlue,
+                ),
+                onTap: () async {
+                  const url = 'https://sentry.io/privacy/';
+                  if (await canLaunch(url)) {
+                    await launch(url);
+                  } else {
+                  throw 'Could not launch $url';
+                  }
+                }
               ),
               ListTile(
                 title: Text(
