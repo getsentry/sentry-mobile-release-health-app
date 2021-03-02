@@ -23,6 +23,23 @@ platform :ios do
 	app_identifier = CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier)
 	team_id = CredentialsManager::AppfileConfig.try_fetch_value(:team_id)
 
+	desc "Bump version in pubspec.yaml"
+	lane :bump_version do |options|
+		build_number = latest_testflight_build_number + 1
+
+		pubspec_path = "../../pubspec.yaml"
+		pubspec_yaml_reader = YamlReader.new(pubspec_path)
+		pubspec_file_reader = FileReader.new(pubspec_path)
+		pubspec_file_writter = FileWritter.new(pubspec_path)
+
+		previousVersion = pubspec_yaml_reader.field('version')
+				
+		newContent = pubspec_file_reader.read.map { |s| s.gsub(previousVersion, options[:version]) }
+        pubspec_file_writter.write(newContent)
+
+        puts "Wrote new version #{options[:version]} to #{pubspec_path}"
+	end
+
 	desc "Bump the build number in pubspec.yaml"
 	lane :bump_build_number do
 		build_number = latest_testflight_build_number + 1
