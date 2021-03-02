@@ -1,4 +1,6 @@
 
+import 'dart:math';
+
 extension RelativeDateTime on DateTime {
 
   static const secondsToMinuteThreshold = 44;
@@ -102,8 +104,11 @@ extension RelativeDateTime on DateTime {
 
   // This uses method average month length, which will not work correctly for large date differences.
   int differenceInMonths(DateTime endDate) {
-    return endDate.difference(this).inDays ~/ (365.2425 / 12.0);
+
+    return _monthDiff(endDate, this).toInt();
   }
+
+
 
   int differenceInYears(DateTime endDate) {
     final startDate = this;
@@ -119,4 +124,72 @@ extension RelativeDateTime on DateTime {
     }
     return years;
   }
+
+  // Extracted from Jiffy, which in turn is based on moment.js, which we use in
+  // the web version. Don't change code formatting to stay comparable with source.
+  // Source: https://pub.dev/packages/jiffy
+
+  static const _daysInMonthArray = [
+    0,
+    31,
+    28,
+    31,
+    30,
+    31,
+    30,
+    31,
+    31,
+    30,
+    31,
+    30,
+    31
+  ];
+
+  num _monthDiff(DateTime a, DateTime b) {
+    final wholeMonthDiff = ((b.year - a.year) * 12) + (b.month - a.month);
+    final anchor = _addMonths(a, wholeMonthDiff);
+    DateTime anchor2;
+    double adjust;
+
+    if (b.millisecondsSinceEpoch - anchor.millisecondsSinceEpoch < 0) {
+      anchor2 = _addMonths(a, wholeMonthDiff - 1);
+      adjust = (b.millisecondsSinceEpoch - anchor.millisecondsSinceEpoch) /
+          (anchor.millisecondsSinceEpoch - anchor2.millisecondsSinceEpoch);
+    } else {
+      anchor2 = _addMonths(a, wholeMonthDiff + 1);
+      adjust = (b.millisecondsSinceEpoch - anchor.millisecondsSinceEpoch) /
+          (anchor2.millisecondsSinceEpoch - anchor.millisecondsSinceEpoch);
+    }
+    return -(wholeMonthDiff + adjust) ?? 0;
+  }
+
+  DateTime _addMonths(DateTime from, int months) {
+    final r = months % 12;
+    final q = (months - r) ~/ 12;
+    var newYear = from.year + q;
+    var newMonth = from.month + r;
+    if (newMonth > 12) {
+      newYear++;
+      newMonth -= 12;
+    }
+    final newDay = min(from.day, _daysInMonth(newYear, newMonth));
+    if (from.isUtc) {
+      return DateTime.utc(newYear, newMonth, newDay, from.hour, from.minute,
+          from.second, from.millisecond, from.microsecond);
+    } else {
+      return DateTime(newYear, newMonth, newDay, from.hour, from.minute,
+          from.second, from.millisecond, from.microsecond);
+    }
+  }
+
+  int _daysInMonth(int year, int month) {
+    var result = _daysInMonthArray[month];
+    if (month == 2 && _isLeapYear(year)) {
+      result++;
+    }
+    return result;
+  }
+
+  bool _isLeapYear(int year) =>
+      (year % 4 == 0) && ((year % 100 != 0) || (year % 400 == 0));
 }
