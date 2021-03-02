@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:sentry_mobile/screens/onboarding/onboarding_consent_screen.dart';
 
 import '../../screens/connect/connect_screen.dart';
+import '../../screens/onboarding/onboarding_consent_screen.dart';
 import '../../screens/onboarding/onboarding_info_screen.dart';
 import '../../utils/sentry_colors.dart';
 import 'onboarding_detail_screen.dart';
@@ -113,8 +113,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         return OnboardingInfoScreen();
       case OnboardingScreenItem.CONSENT:
         return OnboardingConsentScreen(
-            () => _jumpToLastPage(),
-            () => _jumpToLastPage(),
+            () => _jumpToLastPage
         );
       case OnboardingScreenItem.CONNECT:
         return ConnectScreen();

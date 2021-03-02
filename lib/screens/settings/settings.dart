@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:sentry_mobile/redux/actions.dart';
 
+import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
 import '../../screens/debug/sentry_flutter_screen.dart';
 import '../../screens/projects/projects_screen.dart';

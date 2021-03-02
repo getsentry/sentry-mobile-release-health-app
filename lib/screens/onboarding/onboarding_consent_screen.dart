@@ -6,10 +6,9 @@ import '../../redux/state/app_state.dart';
 import '../../utils/sentry_colors.dart';
 
 class OnboardingConsentScreen extends StatelessWidget {
-  OnboardingConsentScreen(this.onEnable, this.onDisable);
+  OnboardingConsentScreen(this.onPressedEnableOrDisable);
 
-  final Function onEnable;
-  final Function onDisable;
+  final Function onPressedEnableOrDisable;
 
   @override
   Widget build(BuildContext context) {
@@ -46,15 +45,13 @@ class OnboardingConsentScreen extends StatelessWidget {
                         StoreProvider.of<AppState>(context).dispatch(
                           SentrySdkToggleAction(true)
                         );
-                        onEnable();
+                        onPressedEnableOrDisable();
                       },
                     ),
                     FlatButton(
                       child: const Text('Maybe Later'),
                       textColor: SentryColors.rum,
-                      onPressed: () async {
-                        onDisable();
-                      },
+                      onPressed: () => onPressedEnableOrDisable,
                     ),
                   ]
               )
