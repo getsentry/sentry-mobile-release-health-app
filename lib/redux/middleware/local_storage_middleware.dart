@@ -16,11 +16,23 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
   dynamic call(Store<AppState> store, dynamic action, NextDispatcher next) async {
     if (action is RehydrateAction) {
       final String authToken = await secureStorage.read(key: 'authToken');
+
+      final String sdkEnabledValue = await secureStorage.read(key: 'sdkEnabled');
+      final bool sdkEnabled = sdkEnabledValue == 'true';
+
       final packageInfo = await PackageInfo.fromPlatform();
       final version = 'Version ${packageInfo.version} (${packageInfo.buildNumber})';
-      store.dispatch(RehydrateSuccessAction(authToken, version));
+
+      store.dispatch(RehydrateSuccessAction(authToken, sdkEnabled, version));
       if (authToken != null) {
         store.dispatch(FetchAuthenticatedUserAction());
+      }
+    }
+    if (action is SdkToggle) {
+      if (action.enabled) {
+        await secureStorage.write(key: 'sdkEnabled', value: 'true');
+      } else {
+        await secureStorage.delete(key: 'sdkEnabled');
       }
     }
     if (action is LoginSuccessAction) {
@@ -29,6 +41,7 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
     }
     if (action is LogoutAction) {
       await secureStorage.delete(key: 'authToken');
+      await secureStorage.delete(key: 'sdkEnabled');
       await preferences.clear();
     }
     next(action);

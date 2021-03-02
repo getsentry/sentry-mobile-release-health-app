@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:sentry_mobile/utils/sentry_colors.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+
+import '../../redux/actions.dart';
+import '../../redux/state/app_state.dart';
+import '../../utils/sentry_colors.dart';
 
 class OnboardingConsentScreen extends StatelessWidget {
   OnboardingConsentScreen(this.onEnable, this.onDisable);
@@ -39,6 +43,9 @@ class OnboardingConsentScreen extends StatelessWidget {
                       textColor: Colors.white,
                       color: SentryColors.rum,
                       onPressed: () async {
+                        StoreProvider.of<AppState>(context).dispatch(
+                          SdkToggle(true)
+                        );
                         onEnable();
                       },
                     ),
