@@ -1,10 +1,11 @@
-
 import 'package:flutter/material.dart';
 import 'package:sentry_mobile/utils/sentry_colors.dart';
 
-import '../../screens/shared/link_rich_text.dart';
-
 class OnboardingConsentScreen extends StatelessWidget {
+  OnboardingConsentScreen(this.onEnable, this.onDisable);
+
+  final Function onEnable;
+  final Function onDisable;
 
   @override
   Widget build(BuildContext context) {
@@ -38,14 +39,14 @@ class OnboardingConsentScreen extends StatelessWidget {
                       textColor: Colors.white,
                       color: SentryColors.rum,
                       onPressed: () async {
-                        // TODO
+                        onEnable();
                       },
                     ),
                     FlatButton(
                       child: const Text('Maybe Later'),
                       textColor: SentryColors.rum,
                       onPressed: () async {
-                        // TODO
+                        onDisable();
                       },
                     ),
                   ]

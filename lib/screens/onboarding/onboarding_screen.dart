@@ -85,6 +85,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     setState(() {});
   }
 
+  void _jumpToLastPage() {
+    _pageController.jumpToPage(_pageItems.length - 1);
+  }
+
   Widget _widgetForItem(OnboardingScreenItem item) {
     switch (item) {
       case OnboardingScreenItem.IMAGE_1:
@@ -108,7 +112,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       case OnboardingScreenItem.INFO:
         return OnboardingInfoScreen();
       case OnboardingScreenItem.CONSENT:
-        return OnboardingConsentScreen();
+        return OnboardingConsentScreen(
+            () => _jumpToLastPage(),
+            () => _jumpToLastPage(),
+        );
       case OnboardingScreenItem.CONNECT:
         return ConnectScreen();
 
