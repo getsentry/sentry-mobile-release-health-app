@@ -61,8 +61,17 @@ Future<void> main() async {
         child: SentryMobile(),
       ));
     },
-    (Object error, StackTrace stackTrace) {
-      Sentry.captureException(error, stackTrace: stackTrace);
+    (Object error, StackTrace stackTrace) async {
+
+      final mechanism = Mechanism(type: 'runZonedGuarded', handled: true);
+      final throwableMechanism = ThrowableMechanism(mechanism, error);
+
+      final event = SentryEvent(
+        throwable: throwableMechanism,
+        level: SentryLevel.fatal,
+      );
+
+      await Sentry.captureEvent(event, stackTrace: stackTrace);
     }
   );
 }
