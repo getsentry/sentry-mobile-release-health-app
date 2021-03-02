@@ -12,36 +12,39 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
   final SharedPreferences preferences;
   final FlutterSecureStorage secureStorage;
 
+  final _keyAuthToken = 'authToken';
+  final _keySentrySdkEnabled = 'sentrySdkEnabled';
+
   @override
   dynamic call(Store<AppState> store, dynamic action, NextDispatcher next) async {
     if (action is RehydrateAction) {
-      final String authToken = await secureStorage.read(key: 'authToken');
+      final String authToken = await secureStorage.read(key: _keyAuthToken);
 
-      final String sdkEnabledValue = await secureStorage.read(key: 'sdkEnabled');
-      final bool sdkEnabled = sdkEnabledValue == 'true';
+      final String sentrySdkEnabledValue = await secureStorage.read(key: _keySentrySdkEnabled);
+      final bool sentrySdkEnabled = sentrySdkEnabledValue == 'true';
 
       final packageInfo = await PackageInfo.fromPlatform();
       final version = 'Version ${packageInfo.version} (${packageInfo.buildNumber})';
 
-      store.dispatch(RehydrateSuccessAction(authToken, sdkEnabled, version));
+      store.dispatch(RehydrateSuccessAction(authToken, sentrySdkEnabled, version));
       if (authToken != null) {
         store.dispatch(FetchAuthenticatedUserAction());
       }
     }
-    if (action is SdkToggle) {
+    if (action is SentrySdkToggleAction) {
       if (action.enabled) {
-        await secureStorage.write(key: 'sdkEnabled', value: 'true');
+        await secureStorage.write(key: _keySentrySdkEnabled, value: 'true');
       } else {
-        await secureStorage.delete(key: 'sdkEnabled');
+        await secureStorage.delete(key: _keySentrySdkEnabled);
       }
     }
     if (action is LoginSuccessAction) {
-      await secureStorage.write(key: 'authToken', value: action.authToken);
+      await secureStorage.write(key: _keyAuthToken, value: action.authToken);
       store.dispatch(FetchAuthenticatedUserAction());
     }
     if (action is LogoutAction) {
-      await secureStorage.delete(key: 'authToken');
-      await secureStorage.delete(key: 'sdkEnabled');
+      await secureStorage.delete(key: _keyAuthToken);
+      await secureStorage.delete(key: _keySentrySdkEnabled);
       await preferences.clear();
     }
     next(action);

@@ -11,9 +11,9 @@ class RehydrateAction {
 }
 
 class RehydrateSuccessAction {
-  RehydrateSuccessAction(this.authToken, this.sdkEnabled, this.version);
+  RehydrateSuccessAction(this.authToken, this.sentrySdkEnabled, this.version);
   final String authToken;
-  final bool sdkEnabled;
+  final bool sentrySdkEnabled;
   final String version;
 }
 
@@ -195,10 +195,10 @@ class FetchApdexFailureAction extends ApiFailureAction {
   FetchApdexFailureAction(error, StackTrace stackTrace) : super(error, stackTrace);
 }
 
-// Sdk
+// SentrySdkToggle
 
-class SdkToggle {
-  SdkToggle(this.enabled);
+class SentrySdkToggleAction {
+  SentrySdkToggleAction(this.enabled);
   final bool enabled;
 }
 

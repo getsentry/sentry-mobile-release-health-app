@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:sentry_mobile/redux/actions.dart';
 
 import '../../redux/state/app_state.dart';
 import '../../screens/debug/sentry_flutter_screen.dart';
@@ -65,7 +66,33 @@ class _SettingsState extends State<Settings> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: SettingsHeader('Account'),
+                child: SettingsHeader('Other'),
+              ),
+              SwitchListTile(
+                title: Text(
+                  'Sentry SDK',
+                  style: Theme.of(context).textTheme.bodyText1.apply(
+                      color: SentryColors.revolver
+                  ),
+                ),
+                value: viewModel.sentrySdkEnabled,
+                subtitle: Text(
+                  viewModel.sentrySdkEnabled
+                    ? 'Crash detection is enabled.'
+                    : 'Help us improve the app by enabling crash detection.',
+                  style: Theme.of(context).textTheme.subtitle1.apply(
+                      color: SentryColors.mamba
+                  )
+                ),
+                secondary: Icon(
+                  Icons.bug_report_rounded,
+                  color: SentryColors.burntSienna,
+                ),
+                onChanged: (bool value) {
+                  StoreProvider.of<AppState>(context).dispatch(
+                      SentrySdkToggleAction(value)
+                  );
+                },
               ),
               ListTile(
                 title: Text(

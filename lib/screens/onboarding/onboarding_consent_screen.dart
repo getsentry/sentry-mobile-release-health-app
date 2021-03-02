@@ -44,7 +44,7 @@ class OnboardingConsentScreen extends StatelessWidget {
                       color: SentryColors.rum,
                       onPressed: () async {
                         StoreProvider.of<AppState>(context).dispatch(
-                          SdkToggle(true)
+                          SentrySdkToggleAction(true)
                         );
                         onEnable();
                       },
