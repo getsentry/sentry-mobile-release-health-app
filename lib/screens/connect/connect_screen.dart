@@ -45,7 +45,7 @@ class _ConnectScreenState extends State<ConnectScreen> {
                     ),
                     SizedBox(height: 32),
                     Text(
-                      'Navigate to "Mobile app" in settings...',
+                      'Navigate to "Mobile app" in settings',
                       style: Theme.of(context).textTheme.bodyText1,
                       textAlign: TextAlign.center,
                     ),
@@ -102,7 +102,7 @@ class _ConnectScreenState extends State<ConnectScreen> {
                     SizedBox(height: 12),
                     FlatButton(
                         textColor: SentryColors.royalBlue,
-                        child: Text('Open "Mobile app" in settings'),
+                        child: Text('click here to open it on your phone'),
                         onPressed: _openAccountSettings
                     ),
                     ButtonTheme(

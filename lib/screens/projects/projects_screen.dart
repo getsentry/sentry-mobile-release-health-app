@@ -36,7 +36,7 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
       body: viewModel.items.isEmpty
         ? Center(
           child: Text(
-            'You have no projects with session data.',
+            'Nope. None of your projects have session data. Do you need to upgrade your SDK?',
             style: Theme.of(context).textTheme.subtitle1
           ),
         )
