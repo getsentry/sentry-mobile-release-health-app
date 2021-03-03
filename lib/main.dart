@@ -1,4 +1,5 @@
-import 'package:flutter/foundation.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -42,15 +43,10 @@ Future<Store<AppState>> createStore() async {
 }
 
 Future<void> main() async {
-  await SentryFlutter.init(
-    (options) {
-      if (kReleaseMode) {
-        options.dsn = 'https://319565557671403383e51a7e3fae4529@o1.ingest.sentry.io/5645511';
-      } else {
-        options.dsn = 'https://b647bf95c35249fe967c91feae3f72d7@o447951.ingest.sentry.io/5555613';
-      }
-    },
-    appRunner: () async {
+  runZonedGuarded(
+    () async {
+
+      WidgetsFlutterBinding.ensureInitialized();
 
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.portraitDown,
@@ -64,6 +60,18 @@ Future<void> main() async {
         store: store,
         child: SentryMobile(),
       ));
+    },
+    (Object error, StackTrace stackTrace) async {
+
+      final mechanism = Mechanism(type: 'runZonedGuarded', handled: true);
+      final throwableMechanism = ThrowableMechanism(mechanism, error);
+
+      final event = SentryEvent(
+        throwable: throwableMechanism,
+        level: SentryLevel.fatal,
+      );
+
+      await Sentry.captureEvent(event, stackTrace: stackTrace);
     }
   );
 }

@@ -101,6 +101,7 @@ flutter:
   assets:
     - assets/user-menu.png
     - assets/sitting-logo.jpg
+    - assets/reading-logo.jpg
     - assets/onboarding_1_a.png
     - assets/onboarding_1_b.png
     - assets/onboarding_2.png

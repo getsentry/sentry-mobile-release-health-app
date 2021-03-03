@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../screens/connect/connect_screen.dart';
+import '../../screens/onboarding/onboarding_consent_screen.dart';
 import '../../screens/onboarding/onboarding_info_screen.dart';
 import '../../utils/sentry_colors.dart';
 import 'onboarding_detail_screen.dart';
@@ -26,6 +27,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     precacheImage(Image.asset('assets/onboarding_2.png').image, context);
     precacheImage(Image.asset('assets/onboarding_3.png').image, context);
     precacheImage(Image.asset('assets/sitting-logo.jpg').image, context);
+    precacheImage(Image.asset('assets/reading-logo.jpg').image, context);
     precacheImage(Image.asset('assets/user-menu.png').image, context);
     super.didChangeDependencies();
   }
@@ -39,19 +41,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         brightness: Brightness.light,
-        actions: [
-          Visibility(
-            visible: _currentPage < _pageItems.length - 1,
-            child: FlatButton(
-                child: Text('Skip', style: TextStyle(color: SentryColors.rum)),
-                onPressed: () {
-                  final lastPageIndex = _pageItems.length - 1;
-                  _pageController.jumpToPage(lastPageIndex);
-                  _updateCurrentPage(lastPageIndex);
-                }
-            ),
-          )
-        ],
       ),
       body: Stack(
           alignment: AlignmentDirectional.bottomCenter,
@@ -97,6 +86,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     setState(() {});
   }
 
+  void _animateToLastPage() {
+    _pageController.animateToPage(
+      _pageItems.length - 1,
+      duration: Duration(milliseconds: 200),
+      curve: Curves.easeInOut
+    );
+  }
+
   Widget _widgetForItem(OnboardingScreenItem item) {
     switch (item) {
       case OnboardingScreenItem.IMAGE_1:
@@ -119,8 +116,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         );
       case OnboardingScreenItem.INFO:
         return OnboardingInfoScreen();
+      case OnboardingScreenItem.CONSENT:
+        return OnboardingConsentScreen(
+            () {
+              _animateToLastPage();
+            }
+        );
       case OnboardingScreenItem.CONNECT:
         return ConnectScreen();
+
     }
     return null;
   }

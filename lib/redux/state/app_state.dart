@@ -31,6 +31,7 @@ class GlobalState {
   GlobalState(
       {this.authToken,
       this.hydrated,
+      this.sentrySdkEnabled,
       this.version,
       this.selectedTab,
       this.organizations,
@@ -60,6 +61,7 @@ class GlobalState {
     return GlobalState(
       authToken: null,
       hydrated: false,
+      sentrySdkEnabled: false,
       version: '--',
       selectedTab: 0,
       organizations: [],
@@ -89,6 +91,7 @@ class GlobalState {
 
   final String authToken;
   final bool hydrated;
+  final bool sentrySdkEnabled;
   final String version;
   final int selectedTab;
 
@@ -124,6 +127,7 @@ class GlobalState {
   GlobalState copyWith({
     String authToken,
     bool hydrated,
+    bool sentrySdkEnabled,
     String version,
     int selectedTab,
     bool setTokenNull = false,
@@ -153,6 +157,7 @@ class GlobalState {
     return GlobalState(
       authToken: setTokenNull ? null : (authToken ?? this.authToken),
       hydrated: hydrated ?? this.hydrated,
+      sentrySdkEnabled: sentrySdkEnabled ?? this.sentrySdkEnabled,
       version: version ?? this.version,
       selectedTab: selectedTab ?? this.selectedTab,
       organizations: organizations ?? this.organizations,

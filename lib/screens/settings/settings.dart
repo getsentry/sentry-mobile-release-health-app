@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
 import '../../screens/debug/sentry_flutter_screen.dart';
 import '../../screens/projects/projects_screen.dart';
@@ -69,24 +70,50 @@ class _SettingsState extends State<Settings> {
                 child: SettingsHeader('Other'),
               ),
               ListTile(
+                  title: Text(
+                    'Privacy Policy',
+                    style: Theme.of(context).textTheme.bodyText1.apply(
+                        color: SentryColors.revolver
+                    ),
+                  ),
+                  leading: Icon(
+                    Icons.privacy_tip,
+                    color: SentryColors.royalBlue,
+                  ),
+                  onTap: () async {
+                    const url = 'https://sentry.io/privacy/';
+                    if (await canLaunch(url)) {
+                      await launch(url, forceSafariVC: false);
+                    } else {
+                      throw 'Could not launch $url';
+                    }
+                  }
+              ),
+              SwitchListTile(
                 title: Text(
-                  'Privacy Policy',
+                  'Sentry SDK',
                   style: Theme.of(context).textTheme.bodyText1.apply(
                       color: SentryColors.revolver
                   ),
                 ),
-                leading: Icon(
-                  Icons.privacy_tip,
-                  color: SentryColors.royalBlue,
+                value: viewModel.sentrySdkEnabled,
+                subtitle: Text(
+                  viewModel.sentrySdkEnabled
+                    ? 'Crash detection is enabled.'
+                    : 'Help us improve the app by enabling crash detection.',
+                  style: Theme.of(context).textTheme.subtitle1.apply(
+                      color: SentryColors.mamba
+                  )
                 ),
-                onTap: () async {
-                  const url = 'https://sentry.io/privacy/';
-                  if (await canLaunch(url)) {
-                    await launch(url);
-                  } else {
-                  throw 'Could not launch $url';
-                  }
-                }
+                secondary: Icon(
+                  Icons.bug_report_rounded,
+                  color: SentryColors.burntSienna,
+                ),
+                onChanged: (bool value) {
+                  StoreProvider.of<AppState>(context).dispatch(
+                      SentrySdkToggleAction(value)
+                  );
+                },
               ),
               ListTile(
                 title: Text(

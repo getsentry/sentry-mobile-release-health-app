@@ -11,8 +11,9 @@ class RehydrateAction {
 }
 
 class RehydrateSuccessAction {
-  RehydrateSuccessAction(this.authToken, this.version);
+  RehydrateSuccessAction(this.authToken, this.sentrySdkEnabled, this.version);
   final String authToken;
+  final bool sentrySdkEnabled;
   final String version;
 }
 
@@ -29,7 +30,6 @@ class LoginSuccessAction {
 class LogoutAction {
   LogoutAction();
 }
-
 
 class ApiFailureAction {
   ApiFailureAction(this.error, this.stackTrace);
@@ -193,6 +193,13 @@ class FetchApdexSuccessAction {
 
 class FetchApdexFailureAction extends ApiFailureAction {
   FetchApdexFailureAction(error, StackTrace stackTrace) : super(error, stackTrace);
+}
+
+// SentrySdkToggle
+
+class SentrySdkToggleAction {
+  SentrySdkToggleAction(this.enabled);
+  final bool enabled;
 }
 
 // SelectOrganization

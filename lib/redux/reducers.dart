@@ -33,6 +33,7 @@ final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, BookmarkProjectAction>(_bookmarkProjectAction),
   TypedReducer<GlobalState, BookmarkProjectSuccessAction>(_bookmarkProjectSuccessAction),
   TypedReducer<GlobalState, BookmarkProjectFailureAction>(_bookmarkProjectFailureAction),
+  TypedReducer<GlobalState, SentrySdkToggleAction>(_sentrySdkToggle),
   TypedReducer<GlobalState, ApiFailureAction>(_apiFailureAction),
   
 ]);
@@ -49,7 +50,12 @@ GlobalState _switchTabAction(GlobalState state, SwitchTabAction action) {
 }
 
 GlobalState _rehydrateSuccessAction(GlobalState state, RehydrateSuccessAction action) {
-  return state.copyWith(hydrated: true, authToken: action.authToken, version: action.version);
+  return state.copyWith(
+      hydrated: true,
+      authToken: action.authToken,
+      sentrySdkEnabled: action.sentrySdkEnabled,
+      version: action.version
+  );
 }
 
 GlobalState _loginAction(GlobalState state, LoginSuccessAction action) {
@@ -237,6 +243,12 @@ GlobalState _bookmarkProjectFailureAction(GlobalState state, BookmarkProjectFail
   } else {
     return state;
   }
+}
+
+GlobalState _sentrySdkToggle(GlobalState state, SentrySdkToggleAction action) {
+  return state.copyWith(
+    sentrySdkEnabled: action.enabled
+  );
 }
 
 GlobalState _apiFailureAction(GlobalState state, ApiFailureAction action) {

@@ -12,23 +12,39 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
   final SharedPreferences preferences;
   final FlutterSecureStorage secureStorage;
 
+  final _keyAuthToken = 'authToken';
+  final _keySentrySdkEnabled = 'sentrySdkEnabled';
+
   @override
   dynamic call(Store<AppState> store, dynamic action, NextDispatcher next) async {
     if (action is RehydrateAction) {
-      final String authToken = await secureStorage.read(key: 'authToken');
+      final String authToken = await secureStorage.read(key: _keyAuthToken);
+
+      final String sentrySdkEnabledValue = await secureStorage.read(key: _keySentrySdkEnabled);
+      final bool sentrySdkEnabled = sentrySdkEnabledValue == 'true';
+
       final packageInfo = await PackageInfo.fromPlatform();
       final version = 'Version ${packageInfo.version} (${packageInfo.buildNumber})';
-      store.dispatch(RehydrateSuccessAction(authToken, version));
+
+      store.dispatch(RehydrateSuccessAction(authToken, sentrySdkEnabled, version));
       if (authToken != null) {
         store.dispatch(FetchAuthenticatedUserAction());
       }
     }
+    if (action is SentrySdkToggleAction) {
+      if (action.enabled) {
+        await secureStorage.write(key: _keySentrySdkEnabled, value: 'true');
+      } else {
+        await secureStorage.delete(key: _keySentrySdkEnabled);
+      }
+    }
     if (action is LoginSuccessAction) {
-      await secureStorage.write(key: 'authToken', value: action.authToken);
+      await secureStorage.write(key: _keyAuthToken, value: action.authToken);
       store.dispatch(FetchAuthenticatedUserAction());
     }
     if (action is LogoutAction) {
-      await secureStorage.delete(key: 'authToken');
+      await secureStorage.delete(key: _keyAuthToken);
+      await secureStorage.delete(key: _keySentrySdkEnabled);
       await preferences.clear();
     }
     next(action);

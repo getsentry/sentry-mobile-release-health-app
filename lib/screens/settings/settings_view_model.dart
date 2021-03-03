@@ -15,6 +15,7 @@ class SettingsViewModel {
         .join(', ');
 
     bookmarkedProjects = projects.isNotEmpty ? projects : '--';
+    sentrySdkEnabled = store.state.globalState.sentrySdkEnabled;
     userInfo = store.state.globalState.me?.email ?? '--';
     version = store.state.globalState.version;
   }
@@ -22,7 +23,8 @@ class SettingsViewModel {
   Store<AppState> _store;
 
   String bookmarkedProjects;
-  String userInfo;
+  bool sentrySdkEnabled = false;
+  String userInfo = '--';
   String version = '--';
 
   void fetchAuthenticatedUserIfNeeded() {
