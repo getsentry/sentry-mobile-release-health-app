@@ -27,10 +27,10 @@ class OnboardingInfoScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 12),
                 LinkRichText(
-                    'Sentry Mobile is still early access software, focused on Release Health. To use the rest of Sentry\'s features, please use ',
+                    'Sentry Mobile is available only to the cool folks, our Early Adopters. We\'re starting out with Release Health. For other Sentry features, please use ',
                     'https://www.sentry.io/',
                     'sentry.io',
-                    ' instead.',
+                    '.\n\nFeatures available to Early Adopters are still in progress and may have bugs. We recognize the irony.',
                     Theme.of(context).textTheme.subtitle1
                 )
               ]

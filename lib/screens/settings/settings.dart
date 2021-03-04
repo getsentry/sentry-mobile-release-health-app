@@ -134,8 +134,8 @@ class _SettingsState extends State<Settings> {
                 value: viewModel.sentrySdkEnabled,
                 subtitle: Text(
                   viewModel.sentrySdkEnabled
-                    ? 'Crash detection is enabled.'
-                    : 'Help us improve the app by enabling crash detection.',
+                    ? 'Enabled'
+                    : 'Disabled',
                   style: Theme.of(context).textTheme.subtitle1.apply(
                       color: SentryColors.mamba
                   )

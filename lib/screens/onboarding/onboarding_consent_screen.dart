@@ -32,7 +32,7 @@ class OnboardingConsentScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 12),
                     Text(
-                      'We are using our own SDK for collecting crash reports and session data and to improve our product. Are we allowed to?\nPleaeassseee',
+                      'We\'re using our own SDK to collect crash reports and session data. That okay with you?',
                       style: Theme.of(context).textTheme.subtitle1,
                       textAlign: TextAlign.center,
                     ),

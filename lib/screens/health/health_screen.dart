@@ -52,14 +52,14 @@ class _HealthScreenState extends State<HealthScreen> {
     } else if (viewModel.showProjectEmptyScreen) {
       return EmptyScreen(
         title: 'No projects found',
-        text: 'You need at least one project with session data to use this view.',
+        text: 'At least one project needs to provide session data for this to work.',
         button: 'Refresh',
         action: viewModel.fetchProjects
       );
     } else
       if (viewModel.showErrorScreen) {
       return EmptyScreen(
-          title: 'Error',
+          title: 'Ooops',
           text: 'Something went wrong. Please try again.',
           button: 'Retry',
           action: viewModel.fetchProjects
