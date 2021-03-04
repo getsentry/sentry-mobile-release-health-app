@@ -5,7 +5,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:sentry_mobile/screens/html/html_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
 import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
 import '../../screens/debug/sentry_flutter_screen.dart';
@@ -108,9 +107,9 @@ class _SettingsState extends State<Settings> {
 
                     String eulaFilePath;
                     if (Platform.isIOS) {
-                      eulaFilePath = 'assets/sentry_eula_ios.html';
+                      eulaFilePath = 'assets/sentry_eula_ios.md';
                     } else {
-                      eulaFilePath = 'assets/sentry_eula_android.html';
+                      eulaFilePath = 'assets/sentry_eula_android.md';
                     }
 
                     Navigator.push(

@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HtmlScreen extends StatelessWidget {
@@ -20,21 +20,19 @@ class HtmlScreen extends StatelessWidget {
         future: rootBundle.loadString(_htmlFilePath),
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
           if (snapshot.hasData) {
-            return SingleChildScrollView(
-              child: Html(
-                data: snapshot.data,
-                padding: EdgeInsets.symmetric(
+            return Markdown(
+              data: snapshot.data,
+              padding: EdgeInsets.symmetric(
                   horizontal: 22,
                   vertical: 16
-                ),
-                onLinkTap: (String link) async {
-                  if (await canLaunch(link)) {
-                    await launch(link, forceSafariVC: false);
-                  } else {
-                    throw 'Could not launch $link';
-                  }
-                },
               ),
+              onTapLink: (String text, String href, String title) async {
+                if (await canLaunch(href)) {
+                  await launch(href, forceSafariVC: false);
+                } else {
+                  throw 'Could not launch $href';
+                }
+              }
             );
           } else {
             return Center(
