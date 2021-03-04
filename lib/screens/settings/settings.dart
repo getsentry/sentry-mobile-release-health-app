@@ -152,7 +152,7 @@ class _SettingsState extends State<Settings> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: SettingsHeader('Other'),
+                child: SettingsHeader('Application'),
               ),
               ListTile(
                 title: Text(
