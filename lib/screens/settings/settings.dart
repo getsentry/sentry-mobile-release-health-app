@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:sentry_mobile/screens/html/html_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../redux/actions.dart';
@@ -89,6 +92,38 @@ class _SettingsState extends State<Settings> {
                     }
                   }
               ),
+              ListTile(
+                  title: Text(
+                    'End User License Agreement',
+                    style: Theme.of(context).textTheme.bodyText1.apply(
+                        color: SentryColors.revolver
+                    ),
+                  ),
+                  leading: Icon(
+                    Icons.person,
+                    color: SentryColors.shamrock,
+                  ),
+                  onTap: () async {
+
+                    String eulaFilePath;
+                    if (Platform.isIOS) {
+                      eulaFilePath = 'assets/sentry_eula_ios.md';
+                    } else {
+                      eulaFilePath = 'assets/sentry_eula_android.md';
+                    }
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          fullscreenDialog: true,
+                          builder: (context) => HtmlScreen(
+                            'End User License Agreement',
+                            eulaFilePath
+                          )
+                      ),
+                    );
+                  }
+              ),
               SwitchListTile(
                 title: Text(
                   'Sentry SDK',
@@ -114,6 +149,10 @@ class _SettingsState extends State<Settings> {
                       SentrySdkToggleAction(value)
                   );
                 },
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: SettingsHeader('Other'),
               ),
               ListTile(
                 title: Text(
