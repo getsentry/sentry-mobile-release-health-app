@@ -39,6 +39,7 @@ dependencies:
   flutter_svg: ^0.18.1
   qr_code_scanner: ^0.3.5
   clipboard: ^0.1.2+8
+  flutter_html: ^0.8.2
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -99,6 +100,8 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
   assets:
+    - assets/sentry_eula_android.html
+    - assets/sentry_eula_ios.html
     - assets/user-menu.png
     - assets/sitting-logo.jpg
     - assets/reading-logo.jpg
