@@ -200,7 +200,7 @@ class IssueView extends StatelessWidget {
                       ],
                     )),
                 Contexts(eventContext: latestEvent.context),
-                RaisedButton(
+                ElevatedButton(
                     onPressed: launchEventUrl, child: Text('Open in Browser')),
               ],
             )));
