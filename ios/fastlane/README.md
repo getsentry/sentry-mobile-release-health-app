@@ -36,9 +36,9 @@ Upload ipa for TestFlight
 fastlane ios upload_ipa
 ```
 Upload ipa to TestFlight
-### ios build_ios_and_upload_ipa
+### ios build_ios_and_upload
 ```
-fastlane ios build_ios_and_upload_ipa
+fastlane ios build_ios_and_upload
 ```
 Build for iOS and upload ipa to TestFlight/
 ### ios upload_dsym
@@ -46,6 +46,11 @@ Build for iOS and upload ipa to TestFlight/
 fastlane ios upload_dsym
 ```
 Upload current dsym to sentry.io
+### ios upload_debug_info
+```
+fastlane ios upload_debug_info
+```
+Upload debug info to sentry.io
 
 ----
 
