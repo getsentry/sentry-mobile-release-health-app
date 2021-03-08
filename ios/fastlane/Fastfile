@@ -102,15 +102,11 @@ platform :ios do
 
 	desc "Upload current dsym to sentry.io"
 	lane :upload_dsym do
-		download_dsyms(
-			version: "latest",
-			output_directory: "fastlane/dsym"
-		)
 		sentry_upload_dsym(
 			auth_token: ENV['SENTRY_AUTH_TOKEN'],
 			org_slug: 'sentry',
 			project_slug: 'sentry-mobile',
-			dsym_path: 'fastlane/dsym'
+			dsym_path: 'build'
 		)
 	end
 end
