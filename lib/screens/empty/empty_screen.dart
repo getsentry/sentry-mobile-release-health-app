@@ -24,10 +24,6 @@ class EmptyScreen extends StatelessWidget {
               SizedBox(height: 22),
               ElevatedButton(
                 child: Text(button),
-                style: ButtonStyle(
-                  foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                  backgroundColor: MaterialStateProperty.all<Color>(SentryColors.rum),
-                ),
                 onPressed: () async {
                   action();
                 },

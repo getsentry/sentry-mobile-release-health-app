@@ -39,10 +39,6 @@ class OnboardingConsentScreen extends StatelessWidget {
                     SizedBox(height: 12),
                     ElevatedButton(
                       child: const Text('Enable SDK'),
-                      style: ButtonStyle(
-                        foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                        backgroundColor: MaterialStateProperty.all<Color>(SentryColors.rum),
-                      ),
                       onPressed: () async {
                         StoreProvider.of<AppState>(context).dispatch(
                           SentrySdkToggleAction(true)

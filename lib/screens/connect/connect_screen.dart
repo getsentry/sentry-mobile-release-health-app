@@ -79,10 +79,6 @@ class _ConnectScreenState extends State<ConnectScreen> {
                               Icons.qr_code,
                               color: Colors.white
                           ),
-                          style: ButtonStyle(
-                            foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                            backgroundColor: MaterialStateProperty.all<Color>(SentryColors.rum),
-                          ),
                           onPressed: () async {
                             final encodedToken = await _presentScannerScreen();
                             setState(() {
@@ -116,10 +112,6 @@ class _ConnectScreenState extends State<ConnectScreen> {
                         icon: Icon(
                             Icons.content_paste_rounded,
                             color: Colors.white
-                        ),
-                        style: ButtonStyle(
-                          foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                          backgroundColor: MaterialStateProperty.all<Color>(SentryColors.rum),
                         ),
                         onPressed: () async {
                           final enteredToken = await _showDialog();
