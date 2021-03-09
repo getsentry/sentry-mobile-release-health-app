@@ -35,6 +35,7 @@ class _SettingsState extends State<Settings> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings'),
+        brightness: Brightness.dark,
       ),
       body: SingleChildScrollView(
         child: Container(
