@@ -71,7 +71,7 @@ class _SettingsState extends State<Settings> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: SettingsHeader('Other'),
+                child: SettingsHeader('Info'),
               ),
               ListTile(
                   title: Text(
@@ -125,6 +125,10 @@ class _SettingsState extends State<Settings> {
                     );
                   }
               ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: SettingsHeader('Application'),
+              ),
               SwitchListTile(
                 title: Text(
                   'Sentry SDK',
@@ -134,12 +138,12 @@ class _SettingsState extends State<Settings> {
                 ),
                 value: viewModel.sentrySdkEnabled,
                 subtitle: Text(
-                  viewModel.sentrySdkEnabled
-                    ? 'Enabled'
-                    : 'Disabled',
-                  style: Theme.of(context).textTheme.subtitle1.apply(
-                      color: SentryColors.mamba
-                  )
+                    viewModel.sentrySdkEnabled
+                        ? 'Enabled'
+                        : 'Disabled',
+                    style: Theme.of(context).textTheme.subtitle1.apply(
+                        color: SentryColors.mamba
+                    )
                 ),
                 secondary: Icon(
                   Icons.bug_report_rounded,
@@ -150,10 +154,6 @@ class _SettingsState extends State<Settings> {
                       SentrySdkToggleAction(value)
                   );
                 },
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: SettingsHeader('Application'),
               ),
               ListTile(
                 title: Text(
