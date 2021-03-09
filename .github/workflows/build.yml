@@ -24,7 +24,7 @@ jobs:
               java-version: '8'
         - uses: subosito/flutter-action@v1
           with:
-            flutter-version: '1.22.6'
+            flutter-version: '2.0.1'
         - name: Fix iOS build bug
           if: matrix.target == 'ios'
           run: rm ios/Podfile
