@@ -35,9 +35,13 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
       ),
       body: viewModel.items.isEmpty
         ? Center(
-          child: Text(
-            'Nope. None of your projects have session data. Do you need to upgrade your SDK?',
-            style: Theme.of(context).textTheme.subtitle1
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              'None of your projects have session data. Do you need to upgrade your SDK?',
+              style: Theme.of(context).textTheme.subtitle1,
+              textAlign: TextAlign.center,
+            ),
           ),
         )
         : ListView.builder(
