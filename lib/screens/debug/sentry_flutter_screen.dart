@@ -98,7 +98,7 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
       subtitle: Text(
           subtitle
       ),
-      trailing: RaisedButton(
+      trailing: ElevatedButton(
         child: _loading ? Text('Loading...') : Text('Send') ,
         onPressed: _loading ? null : () => _captureEvent(),
       )
@@ -118,7 +118,7 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
         subtitle: Text(
             subtitle
         ),
-        trailing: RaisedButton(
+        trailing: ElevatedButton(
           child: _loading ? Text('Loading...') : Text('Send') ,
           onPressed: _loading ? null : () => _captureMessage(),
         )
