@@ -57,7 +57,7 @@ class SentryApi {
   Future<Set<String>>projectIdsWithSessions(String organizationSlug) async {
     final queryParameters = <String, dynamic>{ /*String|Iterable<String>*/
       'project': '-1',
-      'interval': '90d',
+      'interval': '1d',
       'statsPeriod': '90d',
       'field': SessionGroup.sumSessionKey,
       'groupBy': SessionGroupBy.projectKey
