@@ -15,6 +15,7 @@ class HtmlScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(_title),
+        brightness: Brightness.dark,
       ),
       body: FutureBuilder<String>(
         future: rootBundle.loadString(_htmlFilePath),

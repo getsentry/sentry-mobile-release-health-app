@@ -37,10 +37,8 @@ class OnboardingConsentScreen extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: 12),
-                    RaisedButton(
+                    ElevatedButton(
                       child: const Text('Enable SDK'),
-                      textColor: Colors.white,
-                      color: SentryColors.rum,
                       onPressed: () async {
                         StoreProvider.of<AppState>(context).dispatch(
                           SentrySdkToggleAction(true)
@@ -48,9 +46,11 @@ class OnboardingConsentScreen extends StatelessWidget {
                         onPressedEnableOrDisable();
                       },
                     ),
-                    FlatButton(
+                    TextButton(
                       child: const Text('Maybe Later'),
-                      textColor: SentryColors.rum,
+                      style: ButtonStyle(
+                        foregroundColor: MaterialStateProperty.all<Color>(SentryColors.rum)
+                      ),
                       onPressed: () {
                         onPressedEnableOrDisable();
                       },

@@ -31,7 +31,8 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
   Widget _content(ProjectsScreenViewModel viewModel) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bookmarked Projects')
+        title: Text('Bookmarked Projects'),
+        brightness: Brightness.dark
       ),
       body: viewModel.items.isEmpty
         ? Center(

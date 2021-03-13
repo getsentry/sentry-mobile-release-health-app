@@ -45,6 +45,7 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Sentry Flutter SDK - Debug'),
+        brightness: Brightness.dark,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -155,7 +156,7 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
       subtitle: Text(
           subtitle
       ),
-      trailing: RaisedButton(
+      trailing: ElevatedButton(
         child: _loading ? Text('Loading...') : fatal ? Text('Throw') : Text('Send'),
         onPressed: _loading ? null : () => _captureException(typeToThrow, fatal),
       ),
@@ -174,7 +175,7 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
             : primaryLanguage ? 'Swift' : 'Objective C',
           style: TextStyle(color: Colors.deepPurpleAccent)
       ),
-      trailing: RaisedButton(
+      trailing: ElevatedButton(
         child: Text('Crash!'),
         onPressed: () => _callCrashNative(nativePlatform, primaryLanguage),
       ),

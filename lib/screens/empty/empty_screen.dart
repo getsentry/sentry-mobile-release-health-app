@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../utils/sentry_colors.dart';
-
 class EmptyScreen extends StatelessWidget {
   EmptyScreen({@required this.title, @required this.text, @required this.button, @required this.action});
 
@@ -22,10 +20,8 @@ class EmptyScreen extends StatelessWidget {
               SizedBox(height: 8),
               Text(text, textAlign: TextAlign.center),
               SizedBox(height: 22),
-              RaisedButton(
+              ElevatedButton(
                 child: Text(button),
-                textColor: Colors.white,
-                color: SentryColors.rum,
                 onPressed: () async {
                   action();
                 },

@@ -73,14 +73,12 @@ class _ConnectScreenState extends State<ConnectScreen> {
                     SizedBox(height: 22),
                     ButtonTheme(
                       minWidth: 144,
-                      child: RaisedButton.icon(
+                      child: ElevatedButton.icon(
                           label: Text('Scan Token'),
                           icon: Icon(
                               Icons.qr_code,
                               color: Colors.white
                           ),
-                          textColor: Colors.white,
-                          color: SentryColors.rum,
                           onPressed: () async {
                             final encodedToken = await _presentScannerScreen();
                             setState(() {
@@ -100,21 +98,21 @@ class _ConnectScreenState extends State<ConnectScreen> {
                     SizedBox(height: 22),
                     Text('OR'),
                     SizedBox(height: 12),
-                    FlatButton(
-                        textColor: SentryColors.royalBlue,
+                    TextButton(
+                        style: ButtonStyle(
+                          foregroundColor: MaterialStateProperty.all<Color>(SentryColors.royalBlue)
+                        ),
                         child: Text('click here to open it on your phone'),
                         onPressed: _openAccountSettings
                     ),
                     ButtonTheme(
                       minWidth: 144,
-                      child: RaisedButton.icon(
+                      child: ElevatedButton.icon(
                         label: Text('Paste Token'),
                         icon: Icon(
                             Icons.content_paste_rounded,
                             color: Colors.white
                         ),
-                        textColor: Colors.white,
-                        color: SentryColors.rum,
                         onPressed: () async {
                           final enteredToken = await _showDialog();
                           setState(() {
@@ -186,12 +184,12 @@ class _ConnectScreenState extends State<ConnectScreen> {
             ]
           ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
                 child: const Text('Cancel'),
                 onPressed: () {
                   Navigator.of(context).pop(null);
                 }),
-            FlatButton(
+            TextButton(
                 child: const Text('Ok'),
                 onPressed: () {
                   Navigator.of(context).pop(textEditingController.text);
@@ -217,7 +215,7 @@ class _ConnectScreenState extends State<ConnectScreen> {
               style: Theme.of(context).textTheme.bodyText1
           ),
           actions: [
-            FlatButton(
+            TextButton(
                 key: Key('ok'),
                 onPressed: () => Navigator.of(context).pop(),
                 child: Text('Ok')),
