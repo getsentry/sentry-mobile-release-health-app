@@ -50,28 +50,24 @@ flutter run
 
 # Build iOS and Upload to TestFlight
 
-Provide environment variables needed for fastlane. For example by updating your `~/.bash_profile`
+- Provide environment variables needed for fastlane. For example by updating your `~/.bash_profile`
 
 ```
 export FASTLANE_USER="user@sentry.io"
 export FASTLANE_ITC_TEAM_ID="12345678" # The identifier of the iTunes Connect (AppStore Connect) team
 export FASTLANE_PROVISIONING_PROFILE_NAME="Profile For Appstore" # The name of the provisioning profile
-export SENTRY_AUTH_TOKEN="Sentry AuthToken" # Used iOS dsym upload
+export SENTRY_AUTH_TOKEN="Sentry AuthToken" # Used for iOS dsym and debug info upload
 ```
 
-Change working directory to 'ios' and run 'fastlane build_ios_and_upload_ipa'.
+- You need to install the fastlane plugin https://github.com/getsentry/sentry-fastlane-plugin.
 
-The build number from the current TestFlight build will be read and incremented by one.
+- Change working directory to 'ios' and run 'fastlane build_ios_and_upload'.
+	- The build number from the current TestFlight build will be read and incremented by one.
+	- After successfully IPA upload, the lane will also upload local DSYM files and other debug info to Sentry.
 
 ```
 cd ios
-fastlane build_ios_and_upload_ipa
-```
-
-After the build finished processing, you can fetch the latest dsyms and upload them to Sentry. For this, you need to install the fastlane plugin first https://github.com/getsentry/sentry-fastlane-plugin
-
-```
-fastlane upload_dsym
+fastlane build_ios_and_upload
 ```
 
 # Build Android and Upload to Google Play Internal

@@ -92,26 +92,31 @@ platform :ios do
 	end
 
 	desc "Build for iOS and upload ipa to TestFlight/"
-	lane :build_ios_and_upload_ipa do |options|
+	lane :build_ios_and_upload do |options|
 		bump_build_number()
 		
 		build_ios()
 		build_ipa()
 		upload_ipa()
+		upload_dsym()
+		upload_debug_info()
 	end
 
 	desc "Upload current dsym to sentry.io"
 	lane :upload_dsym do
-		download_dsyms(
-			version: "latest",
-			output_directory: "fastlane/dsym"
-		)
 		sentry_upload_dsym(
 			auth_token: ENV['SENTRY_AUTH_TOKEN'],
 			org_slug: 'sentry',
 			project_slug: 'sentry-mobile',
-			dsym_path: 'fastlane/dsym'
+			dsym_path: 'build'
 		)
+	end
+
+	desc "Upload debug info to sentry.io"
+	lane :upload_debug_info do
+		Dir.chdir ".." do
+			sh("sentry-cli", "upload-dif", "--org", "sentry", "--project", "sentry-mobile", ".")
+		end
 	end
 end
 
