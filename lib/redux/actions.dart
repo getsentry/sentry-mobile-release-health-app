@@ -118,7 +118,8 @@ class FetchIssuesFailureAction extends ApiFailureAction {
 // FetchAuthenticatedUser
 
 class FetchAuthenticatedUserAction {
-  FetchAuthenticatedUserAction();
+  FetchAuthenticatedUserAction(this.authToken);
+  final String authToken;
 }
 
 class FetchAuthenticatedUserSuccessAction {

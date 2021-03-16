@@ -29,7 +29,7 @@ class SettingsViewModel {
 
   void fetchAuthenticatedUserIfNeeded() {
     if (_store.state.globalState.me == null) {
-      _store.dispatch(FetchAuthenticatedUserAction());
+      _store.dispatch(FetchAuthenticatedUserAction(_store.state.globalState.authToken));
     }
   }
 }
