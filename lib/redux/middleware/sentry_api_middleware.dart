@@ -120,7 +120,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
       store.dispatch(thunkAction);
     } else if (action is FetchAuthenticatedUserAction) {
       final thunkAction = (Store<AppState> store) async {
-        final api = SentryApi(store.state.globalState.authToken);
+        final api = SentryApi(store.state.globalState.authToken ?? action.authToken);
         try {
           final me = await api.authenticatedUser();
           store.dispatch(

@@ -28,7 +28,7 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
 
       store.dispatch(RehydrateSuccessAction(authToken, sentrySdkEnabled, version));
       if (authToken != null) {
-        store.dispatch(FetchAuthenticatedUserAction());
+        store.dispatch(FetchAuthenticatedUserAction(authToken));
       }
     }
     if (action is SentrySdkToggleAction) {
@@ -40,7 +40,7 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
     }
     if (action is LoginSuccessAction) {
       await secureStorage.write(key: _keyAuthToken, value: action.authToken);
-      store.dispatch(FetchAuthenticatedUserAction());
+      store.dispatch(FetchAuthenticatedUserAction(action.authToken));
     }
     if (action is LogoutAction) {
       await secureStorage.delete(key: _keyAuthToken);
