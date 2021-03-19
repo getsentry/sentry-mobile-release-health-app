@@ -1,4 +1,4 @@
-// @dart=2.9
+
 
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -53,7 +53,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
   }
 
   Future<void> _pushSettings(BuildContext context) async {
-    final bool logout = await Navigator.of(context).push(
+    final bool? logout = await Navigator.of(context).push(
       MaterialPageRoute(
           builder: (BuildContext context) => Settings()
       ),
