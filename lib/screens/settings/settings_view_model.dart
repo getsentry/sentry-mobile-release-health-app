@@ -1,4 +1,4 @@
-// @dart=2.9
+
 
 import 'package:redux/redux.dart';
 
@@ -12,7 +12,7 @@ class SettingsViewModel {
     final projects = store.state.globalState
         .projectsByOrganizationSlug
         .values.expand((element) => element)
-        .where((element) => element.latestRelease != null && element.isBookmarked)
+        .where((element) => element.latestRelease != null && element.isBookmarked == true)
         .map((e) => e.slug)
         .join(', ');
 
@@ -22,16 +22,18 @@ class SettingsViewModel {
     version = store.state.globalState.version;
   }
 
-  Store<AppState> _store;
+  Store<AppState>? _store;
 
-  String bookmarkedProjects;
+  String bookmarkedProjects = '--';
   bool sentrySdkEnabled = false;
   String userInfo = '--';
   String version = '--';
 
   void fetchAuthenticatedUserIfNeeded() {
-    if (_store.state.globalState.me == null) {
-      _store.dispatch(FetchAuthenticatedUserAction(_store.state.globalState.authToken));
+    final me = _store?.state.globalState.me;
+    final authToken = _store?.state.globalState.authToken;
+    if (me == null && authToken != null) {
+      _store?.dispatch(FetchAuthenticatedUserAction(authToken));
     }
   }
 }

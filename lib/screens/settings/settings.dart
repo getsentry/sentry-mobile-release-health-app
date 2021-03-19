@@ -1,4 +1,4 @@
-// @dart=2.9
+
 
 import 'dart:io';
 
@@ -16,7 +16,7 @@ import 'settings_header.dart';
 import 'settings_view_model.dart';
 
 class Settings extends StatefulWidget {
-  const Settings({Key key}) : super(key: key);
+  const Settings({Key? key}) : super(key: key);
 
   @override
   _SettingsState createState() => _SettingsState();
@@ -50,13 +50,13 @@ class _SettingsState extends State<Settings> {
               ListTile(
                 title: Text(
                   'Bookmarked Projects',
-                  style: Theme.of(context).textTheme.bodyText1.apply(
+                  style: Theme.of(context).textTheme.bodyText1?.apply(
                     color: SentryColors.revolver
                   ),
                 ),
                 subtitle: Text(
                     viewModel.bookmarkedProjects,
-                    style: Theme.of(context).textTheme.subtitle1.apply(
+                    style: Theme.of(context).textTheme.subtitle1?.apply(
                         color: SentryColors.mamba
                     )
                 ),
@@ -78,7 +78,7 @@ class _SettingsState extends State<Settings> {
               ListTile(
                   title: Text(
                     'Privacy Policy',
-                    style: Theme.of(context).textTheme.bodyText1.apply(
+                    style: Theme.of(context).textTheme.bodyText1?.apply(
                         color: SentryColors.revolver
                     ),
                   ),
@@ -98,7 +98,7 @@ class _SettingsState extends State<Settings> {
               ListTile(
                   title: Text(
                     'End User License Agreement',
-                    style: Theme.of(context).textTheme.bodyText1.apply(
+                    style: Theme.of(context).textTheme.bodyText1?.apply(
                         color: SentryColors.revolver
                     ),
                   ),
@@ -134,7 +134,7 @@ class _SettingsState extends State<Settings> {
               SwitchListTile(
                 title: Text(
                   'Sentry SDK',
-                  style: Theme.of(context).textTheme.bodyText1.apply(
+                  style: Theme.of(context).textTheme.bodyText1?.apply(
                       color: SentryColors.revolver
                   ),
                 ),
@@ -143,7 +143,7 @@ class _SettingsState extends State<Settings> {
                     viewModel.sentrySdkEnabled
                         ? 'Enabled'
                         : 'Disabled',
-                    style: Theme.of(context).textTheme.subtitle1.apply(
+                    style: Theme.of(context).textTheme.subtitle1?.apply(
                         color: SentryColors.mamba
                     )
                 ),
@@ -160,13 +160,13 @@ class _SettingsState extends State<Settings> {
               ListTile(
                 title: Text(
                   'Sign Out',
-                  style: Theme.of(context).textTheme.bodyText1.apply(
+                  style: Theme.of(context).textTheme.bodyText1?.apply(
                       color: SentryColors.revolver
                   ),
                 ),
                 subtitle: Text(
                   viewModel.userInfo,
-                  style: Theme.of(context).textTheme.subtitle1.apply(
+                  style: Theme.of(context).textTheme.subtitle1?.apply(
                       color: SentryColors.mamba
                   )
                 ),
