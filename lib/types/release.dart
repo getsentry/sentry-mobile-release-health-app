@@ -1,6 +1,8 @@
 
 // TODO(denis): Change to JsonSerializable and generate Json code,
 
+// @dart=2.9
+
 import 'author.dart';
 import 'deploy.dart';
 import 'stat.dart';

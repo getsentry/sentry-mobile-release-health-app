@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:flutter_svg/svg.dart';
 
 // ignore: avoid_classes_with_only_static_members

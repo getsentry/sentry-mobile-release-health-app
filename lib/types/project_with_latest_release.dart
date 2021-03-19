@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'project.dart';
 import 'release.dart';
 

@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import '../types/session_group.dart';
 import '../types/session_status.dart';
 import '../types/sessions.dart';

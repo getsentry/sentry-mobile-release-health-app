@@ -1,3 +1,5 @@
+// @dart=2.9
+
 
 class Stat {
   Stat(this.timestamp, this.value);

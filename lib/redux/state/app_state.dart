@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import '../../redux/state/session_state.dart';
 import '../../screens/chart/line_chart_point.dart';
 import '../../types/group.dart';

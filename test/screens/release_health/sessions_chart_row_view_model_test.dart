@@ -26,7 +26,7 @@ void main() {
       );
 
       final sut = SessionsChartRowViewModel.create(sessionState);
-      expect(sut.data.points,
+      expect(sut.data!.points,
         equals([LineChartPoint(0, 0), LineChartPoint(1, 10)])
       );
     });
@@ -91,7 +91,7 @@ void main() {
       );
 
       final sut = SessionsChartRowViewModel.create(sessionState);
-      expect(sut.data.points,
+      expect(sut.data!.points,
           equals([LineChartPoint(0, 0), LineChartPoint(1, 0)])
       );
     });

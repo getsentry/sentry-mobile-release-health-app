@@ -19,7 +19,7 @@ import '../utils/date_time_format.dart';
 class SentryApi {
   SentryApi(this.authToken);
 
-  final String authToken;
+  final String? authToken;
 
   final client = sentry.SentryHttpClient(client: Client());
   final baseUrlName = 'sentry.io';
@@ -42,7 +42,7 @@ class SentryApi {
     return _parseResponse(response, (jsonMap) => Organization.fromJson(jsonMap));
   }
 
-  Future<List<Project>> projects(String slug) async {
+  Future<List<Project>> projects(String? slug) async {
     final response = await client.get(Uri.https(baseUrlName, '$baseUrlPath/organizations/$slug/projects/'),
         headers: _defaultHeader()
     );
@@ -74,8 +74,8 @@ class SentryApi {
 
     final sessions = _parseResponse(response, (jsonMap) => Sessions.fromJson(jsonMap));
     final projectIds = <String>{};
-    for (final group in sessions.groups) {
-      projectIds.add(group.by.project.toString());
+    for (final group in sessions.groups!) {
+      projectIds.add(group.by!.project.toString());
     }
     return projectIds;
   }
@@ -92,7 +92,7 @@ class SentryApi {
     return _parseResponse(response, (jsonMap) => Project.fromJson(jsonMap));
   }
 
-  Future<List<Release>> releases({@required String organizationSlug, @required String projectId, int perPage = 25, int health = 1, int flatten = 0, String summaryStatsPeriod = '24h'}) async {
+  Future<List<Release>> releases({required String organizationSlug, required String projectId, int perPage = 25, int health = 1, int flatten = 0, String summaryStatsPeriod = '24h'}) async {
     final queryParameters = {
       'project': projectId,
       'perPage': '$perPage',
@@ -106,7 +106,7 @@ class SentryApi {
     return _parseResponseList(response, (jsonMap) => Release.fromJson(jsonMap));
   }
 
-  Future<Release> release({@required String organizationSlug, @required String projectId, @required String releaseId, int health = 1, String summaryStatsPeriod = '24h'}) async {
+  Future<Release> release({required String organizationSlug, required String? projectId, required String? releaseId, int health = 1, String summaryStatsPeriod = '24h'}) async {
     final queryParameters = {
       'project': projectId,
       'health': '$health',
@@ -118,7 +118,7 @@ class SentryApi {
     return _parseResponse(response, (jsonMap) => Release.fromJson(jsonMap));
   }
 
-  Future<List<Group>> issues({@required String organizationSlug, @required String projectSlug}) async {
+  Future<List<Group>> issues({required String? organizationSlug, required String? projectSlug}) async {
     final queryParameters = {
       'statsPeriod': '24h'
     };
@@ -128,7 +128,7 @@ class SentryApi {
     return _parseResponseList(response, (jsonMap) => Group.fromJson(jsonMap));
   }
 
-  Future<double> apdex({@required int apdexThreshold, @required String organizationSlug, @required String projectId, @required DateTime start, @required DateTime end}) async {
+  Future<double> apdex({required int apdexThreshold, required String organizationSlug, required String projectId, required DateTime start, required DateTime end}) async {
     final queryParameters = {
       'field': 'apdex($apdexThreshold)',
       'project': projectId,
@@ -144,7 +144,7 @@ class SentryApi {
       final data = responseJson['data'] as List<dynamic>;
       if (data.isNotEmpty) {
         final apdexData = data.first as Map<String, dynamic>;
-        return apdexData['apdex_$apdexThreshold'] as double;
+        return (apdexData['apdex_$apdexThreshold'] as double?)!;
       } else {
         return null;
       }
@@ -161,14 +161,14 @@ class SentryApi {
   }
 
   Future<Sessions> sessions({
-    @required String organizationSlug,
-    @required String projectId,
-    @required Iterable<String> fields,
+    required String organizationSlug,
+    required String projectId,
+    required Iterable<String> fields,
     String statsPeriod = '24h',
     String interval = '1h',
-    String groupBy,
-    String statsPeriodStart,
-    String statsPeriodEnd}) async {
+    String? groupBy,
+    String? statsPeriodStart,
+    String? statsPeriodEnd}) async {
     final queryParameters = <String, dynamic>{ /*String|Iterable<String>*/
       'project': projectId,
       'interval': interval,

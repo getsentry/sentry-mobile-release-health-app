@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:package_info/package_info.dart';
 import 'package:redux/redux.dart';

@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:intl/intl.dart';
 
 // Source: https://api.flutter.dev/flutter/dart-core/DateTime/toIso8601String.html
