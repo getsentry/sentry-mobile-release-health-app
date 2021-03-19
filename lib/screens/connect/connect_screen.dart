@@ -1,4 +1,4 @@
-// @dart=2.9
+
 
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
@@ -147,15 +147,15 @@ class _ConnectScreenState extends State<ConnectScreen> {
     }
   }
 
-  Future<String> _presentScannerScreen() async {
+  Future<String?> _presentScannerScreen() async {
     return await Navigator.of(context).push(
       MaterialPageRoute(
           builder: (BuildContext context) => ScannerScreen()
       ),
-    ) as String;
+    ) as String?;
   }
 
-  Future<String> _showDialog() async {
+  Future<String?> _showDialog() async {
     final textEditingController = TextEditingController();
 
     return showDialog<String>(

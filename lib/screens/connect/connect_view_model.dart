@@ -1,4 +1,4 @@
-// @dart=2.9
+
 
 import 'dart:convert';
 
@@ -18,7 +18,7 @@ class ConnectViewModel {
 
   Store<AppState> store;
 
-  Future<void> onTokenEncoded(String encoded) async {
+  Future<void> onTokenEncoded(String? encoded) async {
     if (encoded == null) {
       return;
     }
@@ -33,7 +33,7 @@ class ConnectViewModel {
     }
   }
 
-  Future<void> onToken(String token) async {
+  Future<void> onToken(String? token) async {
     if (token == null) {
       return;
     }
