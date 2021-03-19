@@ -1,4 +1,4 @@
-// @dart=2.9
+
 
 
 import 'package:flutter/material.dart';
@@ -24,13 +24,13 @@ class HtmlScreen extends StatelessWidget {
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
           if (snapshot.hasData) {
             return Markdown(
-              data: snapshot.data,
+              data: snapshot.data!,
               padding: EdgeInsets.symmetric(
                   horizontal: 22,
                   vertical: 16
               ),
-              onTapLink: (String text, String href, String title) async {
-                if (await canLaunch(href)) {
+              onTapLink: (String text, String? href, String title) async {
+                if (href != null && await canLaunch(href)) {
                   await launch(href, forceSafariVC: false);
                 } else {
                   throw 'Could not launch $href';

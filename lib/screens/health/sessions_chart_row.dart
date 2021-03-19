@@ -1,4 +1,4 @@
-// @dart=2.9
+
 
 import 'package:flutter/material.dart';
 
@@ -10,11 +10,11 @@ import '../../utils/sentry_icons.dart';
 import '../../utils/session_formatting.dart';
 
 class SessionsChartRow extends StatelessWidget {
-  SessionsChartRow({@required this.title, @required this.color, @required this.sessionState, this.flipDeltaColors = false});
+  SessionsChartRow({required this.title, required this.color, required this.sessionState, this.flipDeltaColors = false});
 
   final String title;
   final Color color;
-  final SessionState sessionState;
+  final SessionState? sessionState;
   final bool flipDeltaColors;
 
   @override
@@ -67,7 +67,7 @@ class SessionsChartRow extends StatelessWidget {
                   : Container(
                     margin: EdgeInsets.symmetric(horizontal: 12),
                     child: LineChart(
-                        data: viewModel.data,
+                        data: viewModel.data!,
                         lineWidth: 2.0,
                         lineColor: color,
                         gradientStart: color.withAlpha(84),
@@ -124,8 +124,8 @@ class SessionsChartRow extends StatelessWidget {
 
   // Helper
 
-  String _getTrendPercentage(double change) {
-    return change == 0 ? '--' : change.floor().abs().toString() + '%';
+  String _getTrendPercentage(double? change) {
+    return change == null || change == 0 ? '--' : change.floor().abs().toString() + '%';
   }
 
   Color _getTrendColor(double change, bool flipDelta) {
@@ -134,8 +134,8 @@ class SessionsChartRow extends StatelessWidget {
         : !flipDelta ? Color(0xff23B480) : Color(0xffEE6855);
   }
 
-  Icon _getTrendIcon(double change, bool flipDeltaColor) {
-    if (change == 0) {
+  Icon? _getTrendIcon(double? change, bool flipDeltaColor) {
+    if (change == null || change == 0) {
       return null;
     }
     final trendColor = _getTrendColor(change, flipDeltaColor);

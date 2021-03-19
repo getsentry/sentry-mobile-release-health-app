@@ -1,4 +1,4 @@
-// @dart=2.9
+
 
 import 'package:flutter/material.dart';
 
@@ -7,7 +7,7 @@ import 'health_card_view_model.dart';
 
 class HealthCard extends StatelessWidget {
   HealthCard(
-      {@required this.title, this.viewModel});
+      {required this.title, required this.viewModel});
 
   final String title;
   final HealthCardViewModel viewModel;

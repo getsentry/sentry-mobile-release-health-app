@@ -1,4 +1,4 @@
-// @dart=2.9
+
 
 
 import 'package:flutter/material.dart';
@@ -11,7 +11,7 @@ import '../../utils/sentry_icons.dart';
 class HealthCardViewModel {
   HealthCardViewModel(this.value, this.change);
 
-  HealthCardViewModel.crashFreeSessions(double value, double valueBefore) {
+  HealthCardViewModel.crashFreeSessions(double? value, double? valueBefore) {
     color = colorForValue(value);
     if (value != null) {
       this.value = value.formattedPercent();
@@ -27,7 +27,7 @@ class HealthCardViewModel {
     }
   }
 
-  HealthCardViewModel.crashFreeUsers(double value, double valueBefore) {
+  HealthCardViewModel.crashFreeUsers(double? value, double? valueBefore) {
     color = colorForValue(value);
     if (value != null) {
       this.value = value.formattedPercent();
@@ -43,7 +43,7 @@ class HealthCardViewModel {
     }
   }
 
-  HealthCardViewModel.apdex(double value, double valueBefore) {
+  HealthCardViewModel.apdex(double? value, double? valueBefore) {
     color = value == null ? SentryColors.lavenderGray : SentryColors.revolver;
     if (value != null) {
       this.value = valueFormatApdex.format(value);
@@ -64,13 +64,13 @@ class HealthCardViewModel {
   static const warningThreshold = 99.5;
   static const dangerThreshold = 98;
 
-  Color color;
-  String value;
+  late Color color;
+  late String value;
 
-  String change;
-  Icon trendIcon;
+  late String change;
+  Icon? trendIcon;
 
-  static Color colorForValue(double value) {
+  static Color colorForValue(double? value) {
     return value == null
       ? SentryColors.lavenderGray
       : value > warningThreshold
@@ -80,14 +80,12 @@ class HealthCardViewModel {
           : SentryColors.burntSienna;
   }
 
-  static Icon getTrendIcon(double change) {
+  static Icon? getTrendIcon(double? change) {
     if (change == null || change == 0) {
       return null;
     }
-    return change == 0
-        ? Icon(SentryIcons.trend_same, color: SentryColors.lavenderGray, size: 8.0)
-        : change > 0
-          ? Icon(SentryIcons.trend_up, color: SentryColors.shamrock, size: 8.0)
-          : Icon(SentryIcons.trend_down, color: SentryColors.burntSienna, size: 8.0);
+    return change > 0
+      ? Icon(SentryIcons.trend_up, color: SentryColors.shamrock, size: 8.0)
+      : Icon(SentryIcons.trend_down, color: SentryColors.burntSienna, size: 8.0);
   }
 }

@@ -8,16 +8,16 @@ class SessionState {
   SessionState({
     required this.projectId,
     required this.numberOfSessions,
-    required this.previousNumberOfSessions,
+    this.previousNumberOfSessions,
     required this.sessionPoints,
-    required this.previousSessionPoints
+    this.previousSessionPoints
   });
 
   final String projectId;
 
   final int numberOfSessions;
-  final int previousNumberOfSessions;
+  final int? previousNumberOfSessions;
 
   final List<LineChartPoint> sessionPoints;
-  final List<LineChartPoint> previousSessionPoints;
+  final List<LineChartPoint>? previousSessionPoints;
 }
