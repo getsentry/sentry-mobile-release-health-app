@@ -49,7 +49,7 @@ class FetchOrgsAndProjectsAction {
 class FetchOrgsAndProjectsProgressAction {
   FetchOrgsAndProjectsProgressAction(this.text, this.progress);
   final String text;
-  final double progress;
+  final double? progress;
 }
 
 class FetchOrgsAndProjectsSuccessAction {

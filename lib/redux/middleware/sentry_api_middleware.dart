@@ -18,7 +18,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
       final thunkAction = (Store<AppState> store) async {
         final api = SentryApi(store.state.globalState.authToken);
         try {
-          store.dispatch(FetchOrgsAndProjectsProgressAction('Fetching organizations...', 0));
+          store.dispatch(FetchOrgsAndProjectsProgressAction('Fetching organizations...', null));
           final organizations = await api.organizations();
           final individualOrganizations = <Organization>[];
           final Set<String> projectIdsWithSessions = {};
