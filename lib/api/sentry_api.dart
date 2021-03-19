@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:sentry_flutter/sentry_flutter.dart' as sentry;
 
@@ -128,7 +127,7 @@ class SentryApi {
     return _parseResponseList(response, (jsonMap) => Group.fromJson(jsonMap));
   }
 
-  Future<double> apdex({required int apdexThreshold, required String organizationSlug, required String projectId, required DateTime start, required DateTime end}) async {
+  Future<double?> apdex({required int apdexThreshold, required String organizationSlug, required String projectId, required DateTime start, required DateTime end}) async {
     final queryParameters = {
       'field': 'apdex($apdexThreshold)',
       'project': projectId,
@@ -144,7 +143,7 @@ class SentryApi {
       final data = responseJson['data'] as List<dynamic>;
       if (data.isNotEmpty) {
         final apdexData = data.first as Map<String, dynamic>;
-        return (apdexData['apdex_$apdexThreshold'] as double?)!;
+        return apdexData['apdex_$apdexThreshold'] as double;
       } else {
         return null;
       }
@@ -157,7 +156,7 @@ class SentryApi {
     final response = await client.get(Uri.https(baseUrlName, '$baseUrlPath/'),
         headers: _defaultHeader()
     );
-    return _parseResponse(response, (jsonMap) => User.fromJson(jsonMap['user'] as Map<String, dynamic>));
+    return _parseResponse(response, (jsonMap) => User.fromJson(jsonMap!['user'] as Map<String, dynamic>));
   }
 
   Future<Sessions> sessions({
@@ -220,9 +219,9 @@ class SentryApi {
     }
   }
 
-  T _parseResponse<T>(Response response, T Function(Map<String, dynamic> r) map) {
+  T _parseResponse<T>(Response response, T Function(Map<String, dynamic>? r) map) {
     if (response.statusCode == 200) {
-      final responseJson = json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
+      final responseJson = json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>?;
       return map(responseJson);
     } else {
       throw ApiError(response.statusCode, response.body);
