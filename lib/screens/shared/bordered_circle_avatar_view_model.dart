@@ -1,4 +1,4 @@
-// @dart=2.9
+
 
 import 'package:flutter/material.dart';
 
@@ -24,7 +24,7 @@ class BorderedCircleAvatarViewModel {
     }
   }
 
-  final String url;
-  final String initials;
-  final Color backgroundColor;
+  final String? url;
+  final String? initials;
+  final Color? backgroundColor;
 }

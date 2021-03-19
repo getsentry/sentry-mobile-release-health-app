@@ -1,4 +1,4 @@
-// @dart=2.9
+
 
 import 'package:flutter/material.dart';
 
@@ -7,9 +7,9 @@ import 'bordered_circle_avatar_view_model.dart';
 
 class BorderedCircleAvatar extends StatelessWidget {
   BorderedCircleAvatar({
-    @required this.radius,
-    @required this.border,
-    @required this.viewModel,
+    required this.radius,
+    required this.border,
+    required this.viewModel,
   });
 
   final double radius;
@@ -27,21 +27,23 @@ class BorderedCircleAvatar extends StatelessWidget {
       child:
         viewModel.url != null
         ? CircleAvatar(
-            backgroundImage: NetworkImage(viewModel.url),
+            backgroundImage: NetworkImage(viewModel.url!),
             radius: radius,
         )
-        : CircleAvatar(
-          child: Text(
-            viewModel.initials,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: radius,
-              color: Colors.white
-            )
-          ),
-          backgroundColor: viewModel.backgroundColor,
-          radius: radius,
-        )
+        : viewModel.initials != null
+          ? CircleAvatar(
+            child: Text(
+              viewModel.initials!,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: radius,
+                color: Colors.white
+              )
+            ),
+            backgroundColor: viewModel.backgroundColor,
+            radius: radius,
+          )
+          : null
     );
   }
 }
