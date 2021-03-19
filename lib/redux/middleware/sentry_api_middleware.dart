@@ -1,5 +1,3 @@
-
-
 import 'package:redux/redux.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -20,7 +18,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
       final thunkAction = (Store<AppState> store) async {
         final api = SentryApi(store.state.globalState.authToken);
         try {
-          store.dispatch(FetchOrgsAndProjectsProgressAction('Fetching organizations...', null));
+          store.dispatch(FetchOrgsAndProjectsProgressAction('Fetching organizations...', 0));
           final organizations = await api.organizations();
           final individualOrganizations = <Organization>[];
           final Set<String> projectIdsWithSessions = {};
@@ -31,7 +29,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
 
           for (final organization in organizations) {
             final individualOrganization = await api.organization(organization.slug!);
-            individualOrganizations.add(individualOrganization ?? organization);
+            individualOrganizations.add(individualOrganization);
 
             store.dispatch(FetchOrgsAndProjectsProgressAction('${organization.name}: Fetching projects...', ++currentProgress / fullProgress));
             final projects = await api.projects(organization.slug);
@@ -141,7 +139,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
         try {
           final sessions = await api.sessions(
               organizationSlug: action.organizationSlug,
-              projectId: action.projectId!,
+              projectId: action.projectId,
               fields: [SessionGroup.sumSessionKey, SessionGroup.countUniqueUsersKey],
               groupBy: SessionGroupBy.sessionStatusKey,
               statsPeriodStart: '25h',
@@ -150,7 +148,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
 
           final sessionsBefore = await api.sessions(
               organizationSlug: action.organizationSlug,
-              projectId: action.projectId!,
+              projectId: action.projectId,
               fields: [SessionGroup.sumSessionKey, SessionGroup.countUniqueUsersKey],
               groupBy: SessionGroupBy.sessionStatusKey,
               statsPeriodStart: '49h',
@@ -171,7 +169,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
       final thunkAction = (Store<AppState> store) async {
         final api = SentryApi(store.state.globalState.authToken);
         try {
-          final project = await api.bookmarkProject(action.organizationSlug!, action.projectSlug!, action.bookmarked);
+          final project = await api.bookmarkProject(action.organizationSlug, action.projectSlug, action.bookmarked);
           store.dispatch(
               BookmarkProjectSuccessAction(action.organizationSlug, project)
           );

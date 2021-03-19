@@ -1,4 +1,4 @@
-// @dart=2.9
+
 
 import '../types/group.dart';
 import '../types/organization.dart';
@@ -14,7 +14,7 @@ class RehydrateAction {
 
 class RehydrateSuccessAction {
   RehydrateSuccessAction(this.authToken, this.sentrySdkEnabled, this.version);
-  final String authToken;
+  final String? authToken;
   final bool sentrySdkEnabled;
   final String version;
 }
@@ -190,8 +190,8 @@ class FetchApdexSuccessAction {
   FetchApdexSuccessAction(this.projectId, this.apdex, this.apdexBefore);
 
   final String projectId;
-  final double apdex;
-  final double apdexBefore;
+  final double? apdex;
+  final double? apdexBefore;
 }
 
 class FetchApdexFailureAction extends ApiFailureAction {
