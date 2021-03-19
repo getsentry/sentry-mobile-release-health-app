@@ -70,7 +70,7 @@ class GlobalState {
       orgsAndProjectsLoading: true,
       orgsAndProjectsProgress: null,
       orgsAndProjectsProgressText: null,
-      orgsAndProjectsError: false,
+      orgsAndProjectsError: null,
       projectIdsWithSessions: {},
       projectsWithSessions: [],
       latestReleasesByProjectId: {},
@@ -102,7 +102,7 @@ class GlobalState {
   final bool orgsAndProjectsLoading;
   final double orgsAndProjectsProgress;
   final String orgsAndProjectsProgressText;
-  final bool orgsAndProjectsError;
+  final dynamic orgsAndProjectsError;
 
   final Set<String> projectIdsWithSessions;
   final List<Project> projectsWithSessions;
@@ -137,7 +137,8 @@ class GlobalState {
     bool orgsAndProjectsLoading,
     double orgsAndProjectsProgress,
     String orgsAndProjectsProgressText,
-    bool orgsAndProjectsError,
+    bool setOrgsAndProjectsErrorNull = false,
+    dynamic orgsAndProjectsError,
     Set<String> projectIdsWithSessions,
     List<Project> projectsWithSessions,
     Map<String, Release> latestReleasesByProjectId,
@@ -170,7 +171,7 @@ class GlobalState {
       orgsAndProjectsProgressText: (orgsAndProjectsLoading ?? this.orgsAndProjectsLoading)
           ? orgsAndProjectsProgressText ?? this.orgsAndProjectsProgressText
           : null,
-      orgsAndProjectsError: orgsAndProjectsError ?? this.orgsAndProjectsError,
+      orgsAndProjectsError: setOrgsAndProjectsErrorNull ? null : orgsAndProjectsError ?? this.orgsAndProjectsError,
       projectIdsWithSessions: projectIdsWithSessions ?? this.projectIdsWithSessions,
       projectsWithSessions: projectsWithSessions ?? this.projectsWithSessions,
       latestReleasesByProjectId: latestReleasesByProjectId ?? this.latestReleasesByProjectId,

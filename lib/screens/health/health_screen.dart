@@ -58,14 +58,22 @@ class _HealthScreenState extends State<HealthScreen> {
       );
     } else
       if (viewModel.showErrorScreen) {
-      return EmptyScreen(
-          title: 'Ooops',
-          text: 'Something went wrong. Please try again.',
-          button: 'Retry',
-          action: viewModel.fetchProjects
-      );
+        if (viewModel.showErrorNoConnectionScreen) {
+          return EmptyScreen(
+              title: 'No connection',
+              text: 'Please check your connection and try again.',
+              button: 'Retry',
+              action: viewModel.fetchProjects
+          );
+        } else {
+          return EmptyScreen(
+              title: 'Ooops',
+              text: 'Something went wrong. Please try again.',
+              button: 'Retry',
+              action: viewModel.fetchProjects
+          );
+        }
     } else {
-
       WidgetsBinding.instance.addPostFrameCallback( ( Duration duration ) {
         if (viewModel.showLoadingScreen) {
           _refreshKey.currentState.show();
