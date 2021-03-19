@@ -25,8 +25,8 @@ class IssueScreen extends StatefulWidget {
 }
 
 Future<Group> fetchGroup() async {
-  final response =
-      await http.get('https://jennmueng.com/sentry_sample_issue.json');
+  final uri = Uri.https('jennmueng.com', 'sentry_sample_issue.json');
+  final response = await http.get(uri);
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -42,8 +42,8 @@ Future<Group> fetchGroup() async {
 }
 
 Future<Event> fetchEvent() async {
-  final response =
-      await http.get('https://jennmueng.com/sentry_sample_event.json');
+  final uri = Uri.https('jennmueng.com', 'sentry_sample_event.json');
+  final response = await http.get(uri);
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,

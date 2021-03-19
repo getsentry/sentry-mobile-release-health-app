@@ -186,7 +186,7 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
     setState(() {
       _loading = true;
     });
-    final event = SentryEvent(message: Message('Sentry.captureEvent'));
+    final event = SentryEvent(message: SentryMessage('Sentry.captureEvent'));
     Sentry.captureEvent(event)
         .then((value) => {
       setState(() {

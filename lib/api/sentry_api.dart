@@ -22,19 +22,21 @@ class SentryApi {
   final String authToken;
 
   final client = sentry.SentryHttpClient(client: Client());
-  final baseUrlScheme = 'https://';
   final baseUrlName = 'sentry.io';
   final baseUrlPath = '/api/0';
 
   Future<List<Organization>> organizations() async {
-    final response = await client.get('${_baseUrl()}/organizations/?member=1',
-        headers: _defaultHeader()
+    final queryParameters = <String, dynamic>{ /*String|Iterable<String>*/
+      'member': '1',
+    };
+    final response = await client.get(Uri.https(baseUrlName, '$baseUrlPath/organizations/', queryParameters),
+      headers: _defaultHeader()
     );
     return _parseResponseList(response, (jsonMap) => Organization.fromJson(jsonMap));
   }
 
   Future<Organization> organization(String organizationSlug) async {
-    final response = await client.get('${_baseUrl()}/organizations/$organizationSlug/',
+    final response = await client.get(Uri.https(baseUrlName, '$baseUrlPath/organizations/$organizationSlug/'),
         headers: _defaultHeader()
     );
     return _parseResponse(response, (jsonMap) => Organization.fromJson(jsonMap));
@@ -48,7 +50,7 @@ class SentryApi {
   }
 
   Future<Project> project(String organizationSlug, String projectSlug) async {
-    final response = await client.get('${_baseUrl()}/projects/$organizationSlug/$projectSlug/',
+    final response = await client.get(Uri.https(baseUrlName, '$baseUrlPath/projects/$organizationSlug/$projectSlug/'),
         headers: _defaultHeader()
     );
     return _parseResponse(response, (jsonMap) => Project.fromJson(jsonMap));
@@ -83,7 +85,7 @@ class SentryApi {
       'isBookmarked': bookmark,
     };
 
-    final response = await client.put('${_baseUrl()}/projects/$organizationSlug/$projectSlug/',
+    final response = await client.put(Uri.https(baseUrlName, '$baseUrlPath/projects/$organizationSlug/$projectSlug/'),
         headers: _defaultHeader(),
         body: json.encode(bodyParameters)
     );
@@ -197,10 +199,6 @@ class SentryApi {
   }
 
   // Helper
-
-  String _baseUrl() {
-    return '$baseUrlScheme$baseUrlName$baseUrlPath';
-  }
 
   Map<String, String> _defaultHeader() {
     final headers = <String, String>{
