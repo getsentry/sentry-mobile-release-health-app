@@ -1,4 +1,4 @@
-// @dart=2.9
+
 
 import 'package:json_annotation/json_annotation.dart';
 import 'stat.dart';
@@ -11,10 +11,10 @@ class Stats {
   factory Stats.fromJson(Map<String, dynamic> json) => _$StatsFromJson(json);
 
   @JsonKey(name: '24h')
-  final List<Stat> stats24h;
+  final List<Stat>? stats24h;
 
   @JsonKey(name: '14d')
-  final List<Stat> stats14d;
+  final List<Stat>? stats14d;
 
   Map<String, dynamic> toJson() => _$StatsToJson(this);
 }

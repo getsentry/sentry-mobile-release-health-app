@@ -38,7 +38,7 @@ class SentryApi {
     final response = await client.get(Uri.https(baseUrlName, '$baseUrlPath/organizations/$organizationSlug/'),
         headers: _defaultHeader()
     );
-    return _parseResponse(response, (jsonMap) => Organization.fromJson(jsonMap));
+    return _parseResponse(response, (jsonMap) => Organization.fromJson(jsonMap!));
   }
 
   Future<List<Project>> projects(String? slug) async {
@@ -52,7 +52,7 @@ class SentryApi {
     final response = await client.get(Uri.https(baseUrlName, '$baseUrlPath/projects/$organizationSlug/$projectSlug/'),
         headers: _defaultHeader()
     );
-    return _parseResponse(response, (jsonMap) => Project.fromJson(jsonMap));
+    return _parseResponse(response, (jsonMap) => Project.fromJson(jsonMap!));
   }
 
   Future<Set<String>>projectIdsWithSessions(String organizationSlug) async {
@@ -71,7 +71,7 @@ class SentryApi {
         headers: _defaultHeader()
     );
 
-    final sessions = _parseResponse(response, (jsonMap) => Sessions.fromJson(jsonMap));
+    final sessions = _parseResponse(response, (jsonMap) => Sessions.fromJson(jsonMap!));
     final projectIds = <String>{};
     for (final group in sessions.groups!) {
       projectIds.add(group.by!.project.toString());
@@ -88,7 +88,7 @@ class SentryApi {
         headers: _defaultHeader(),
         body: json.encode(bodyParameters)
     );
-    return _parseResponse(response, (jsonMap) => Project.fromJson(jsonMap));
+    return _parseResponse(response, (jsonMap) => Project.fromJson(jsonMap!));
   }
 
   Future<List<Release>> releases({required String organizationSlug, required String projectId, int perPage = 25, int health = 1, int flatten = 0, String summaryStatsPeriod = '24h'}) async {
@@ -190,7 +190,7 @@ class SentryApi {
     final response = await client.get(request,
         headers: _defaultHeader()
     );
-    return _parseResponse(response, (jsonMap) => Sessions.fromJson(jsonMap));
+    return _parseResponse(response, (jsonMap) => Sessions.fromJson(jsonMap!));
   }
 
   void close() {

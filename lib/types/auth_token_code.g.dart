@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// @dart=2.9
-
 part of 'auth_token_code.dart';
 
 // **************************************************************************
@@ -10,7 +8,7 @@ part of 'auth_token_code.dart';
 
 AuthTokenCode _$AuthTokenCodeFromJson(Map<String, dynamic> json) {
   return AuthTokenCode(
-    json['authToken'] as String,
+    json['authToken'] as String?,
   );
 }
 

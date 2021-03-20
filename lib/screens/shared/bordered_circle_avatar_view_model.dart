@@ -12,7 +12,7 @@ class BorderedCircleAvatarViewModel {
     if (author.avatar?.avatarType == 'letter_avatar') {
       return BorderedCircleAvatarViewModel(
           null,
-          LetterAvatar.getInitials(author.name ?? author.email),
+          LetterAvatar.getInitials(author.name ?? author.email ?? ''),
           LetterAvatar.getLetterAvatarColor('${author.id}-${author.email}')
       );
     } else {

@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// @dart=2.9
-
 part of 'event_metadata.dart';
 
 // **************************************************************************
@@ -10,10 +8,10 @@ part of 'event_metadata.dart';
 
 EventMetadata _$EventMetadataFromJson(Map<String, dynamic> json) {
   return EventMetadata(
-    value: json['value'] as String,
-    message: json['message'] as String,
-    type: json['type'] as String,
-    title: json['title'] as String,
+    value: json['value'] as String?,
+    message: json['message'] as String?,
+    type: json['type'] as String?,
+    title: json['title'] as String?,
   );
 }
 

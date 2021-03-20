@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// @dart=2.9
-
 part of 'group.dart';
 
 // **************************************************************************
@@ -10,14 +8,14 @@ part of 'group.dart';
 
 Group _$GroupFromJson(Map<String, dynamic> json) {
   return Group(
-    id: json['id'] as String,
-    culprit: json['culprit'] as String,
+    id: json['id'] as String?,
+    culprit: json['culprit'] as String?,
     lastSeen: dateTimeFromString(json['lastSeen'] as String),
     firstSeen: dateTimeFromString(json['firstSeen'] as String),
-    userCount: json['userCount'] as int,
-    count: json['count'] as String,
-    title: json['title'] as String,
-    type: json['type'] as String,
+    userCount: json['userCount'] as int?,
+    count: json['count'] as String?,
+    title: json['title'] as String?,
+    type: json['type'] as String?,
     metadata: metadataFromJson(json['metadata'] as Map<String, dynamic>),
     firstRelease:
         _releaseFromJson(json['firstRelease'] as Map<String, dynamic>),
@@ -39,6 +37,6 @@ Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
       'firstSeen': dateTimeToString(instance.firstSeen),
       'firstRelease': _releaseToJson(instance.firstRelease),
       'lastRelease': _releaseToJson(instance.lastRelease),
-      'metadata': metadataToJson(instance.metadata),
+      'metadata': instance.metadata,
       'stats': instance.stats,
     };

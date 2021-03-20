@@ -1,4 +1,4 @@
-// @dart=2.9
+
 
 import 'package:json_annotation/json_annotation.dart';
 import 'session_status.dart';
@@ -14,10 +14,10 @@ class SessionGroupBy {
   static const projectKey = 'project';
 
   @JsonKey(name: SessionGroupBy.sessionStatusKey)
-  final SessionStatus sessionStatus;
+  final SessionStatus? sessionStatus;
 
   @JsonKey(name: SessionGroupBy.projectKey)
-  final int project;
+  final int? project;
 
   Map<String, dynamic> toJson() => _$SessionGroupByToJson(this);
 }

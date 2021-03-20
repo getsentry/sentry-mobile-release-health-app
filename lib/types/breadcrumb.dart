@@ -1,4 +1,4 @@
-// @dart=2.9
+
 
 import 'package:json_annotation/json_annotation.dart';
 
@@ -19,13 +19,13 @@ class Breadcrumb {
   factory Breadcrumb.fromJson(Map<String, dynamic> json) =>
       _$BreadcrumbFromJson(json);
 
-  final String type;
-  final String category;
-  final String level;
-  final String message;
+  final String? type;
+  final String? category;
+  final String? level;
+  final String? message;
   @JsonKey(fromJson: dateTimeFromString, toJson: dateTimeToString)
-  final DateTime timestamp;
-  final Map<String, dynamic> data;
+  final DateTime? timestamp;
+  final Map<String, dynamic>? data;
 
   Map<String, dynamic> toJson() => _$BreadcrumbToJson(this);
 }

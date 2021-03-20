@@ -1,4 +1,4 @@
-// @dart=2.9
+
 
 import 'package:json_annotation/json_annotation.dart';
 
@@ -10,10 +10,10 @@ class Organization {
 
   factory Organization.fromJson(Map<String, dynamic> json) => _$OrganizationFromJson(json);
 
-  final String id;
-  final String name;
-  final String slug;
-  final int apdexThreshold;
+  final String? id;
+  final String? name;
+  final String? slug;
+  final int? apdexThreshold;
 
   Map<String, dynamic> toJson() => _$OrganizationToJson(this);
 }

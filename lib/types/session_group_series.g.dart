@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// @dart=2.9
-
 part of 'session_group_series.dart';
 
 // **************************************************************************
@@ -10,8 +8,10 @@ part of 'session_group_series.dart';
 
 SessionGroupSeries _$SessionGroupSeriesFromJson(Map<String, dynamic> json) {
   return SessionGroupSeries(
-    (json['sum(session)'] as List)?.map((e) => e as int)?.toList(),
-    (json['count_unique(user)'] as List)?.map((e) => e as int)?.toList(),
+    (json['sum(session)'] as List<dynamic>?)?.map((e) => e as int).toList(),
+    (json['count_unique(user)'] as List<dynamic>?)
+        ?.map((e) => e as int)
+        .toList(),
   );
 }
 

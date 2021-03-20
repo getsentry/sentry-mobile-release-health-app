@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// @dart=2.9
-
 part of 'author.dart';
 
 // **************************************************************************
@@ -10,10 +8,10 @@ part of 'author.dart';
 
 Author _$AuthorFromJson(Map<String, dynamic> json) {
   return Author(
-    json['id'] as String,
-    json['name'] as String,
-    json['email'] as String,
-    json['avatarUrl'] as String,
+    json['id'] as String?,
+    json['name'] as String?,
+    json['email'] as String?,
+    json['avatarUrl'] as String?,
     json['avatar'] == null
         ? null
         : Avatar.fromJson(json['avatar'] as Map<String, dynamic>),

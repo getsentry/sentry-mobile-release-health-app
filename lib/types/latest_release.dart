@@ -1,4 +1,4 @@
-// @dart=2.9
+
 
 import 'package:json_annotation/json_annotation.dart';
 
@@ -11,7 +11,7 @@ class LatestRelease {
 
   factory LatestRelease.fromJson(Map<String, dynamic> json) => _$LatestReleaseFromJson(json);
 
-  final String version;
+  final String? version;
 
   Map<String, dynamic> toJson() => _$LatestReleaseToJson(this);
 }

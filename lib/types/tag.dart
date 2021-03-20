@@ -1,4 +1,4 @@
-// @dart=2.9
+
 
 import 'package:json_annotation/json_annotation.dart';
 
@@ -10,8 +10,8 @@ class Tag {
 
   factory Tag.fromJson(Map<String, dynamic> json) => _$TagFromJson(json);
 
-  final String value;
-  final String key;
+  final String? value;
+  final String? key;
 
   Map<String, dynamic> toJson() => _$TagToJson(this);
 }

@@ -1,11 +1,11 @@
-// @dart=2.9
+
 
 
 class Stat {
   Stat(this.timestamp, this.value);
   Stat.fromJson(List json)
-      : timestamp = json.map((e) => e as int)?.first ?? 0,
-        value = json.map((e) => e as int)?.last ?? 0;
+      : timestamp = json.map((e) => e as int).first,
+        value = json.map((e) => e as int).last;
 
   int timestamp;
   int value;

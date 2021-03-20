@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// @dart=2.9
-
 part of 'project.dart';
 
 // **************************************************************************
@@ -10,15 +8,15 @@ part of 'project.dart';
 
 Project _$ProjectFromJson(Map<String, dynamic> json) {
   return Project(
-    json['id'] as String,
-    json['name'] as String,
-    json['slug'] as String,
-    json['platform'] as String,
-    (json['platforms'] as List)?.map((e) => e as String)?.toList(),
+    json['id'] as String?,
+    json['name'] as String?,
+    json['slug'] as String?,
+    json['platform'] as String?,
+    (json['platforms'] as List<dynamic>?)?.map((e) => e as String).toList(),
     json['latestRelease'] == null
         ? null
         : LatestRelease.fromJson(json['latestRelease'] as Map<String, dynamic>),
-    json['isBookmarked'] as bool,
+    json['isBookmarked'] as bool?,
   );
 }
 

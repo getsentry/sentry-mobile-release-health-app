@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// @dart=2.9
-
 part of 'breadcrumb.dart';
 
 // **************************************************************************
@@ -10,11 +8,11 @@ part of 'breadcrumb.dart';
 
 Breadcrumb _$BreadcrumbFromJson(Map<String, dynamic> json) {
   return Breadcrumb(
-    type: json['type'] as String,
-    category: json['category'] as String,
-    level: json['level'] as String,
-    message: json['message'] as String,
-    data: json['data'] as Map<String, dynamic>,
+    type: json['type'] as String?,
+    category: json['category'] as String?,
+    level: json['level'] as String?,
+    message: json['message'] as String?,
+    data: json['data'] as Map<String, dynamic>?,
     timestamp: dateTimeFromString(json['timestamp'] as String),
   );
 }

@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// @dart=2.9
-
 part of 'deploy.dart';
 
 // **************************************************************************
@@ -10,7 +8,7 @@ part of 'deploy.dart';
 
 Deploy _$DeployFromJson(Map<String, dynamic> json) {
   return Deploy(
-    json['environment'] as String,
+    json['environment'] as String?,
     json['dateFinished'] == null
         ? null
         : DateTime.parse(json['dateFinished'] as String),

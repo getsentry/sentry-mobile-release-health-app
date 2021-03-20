@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// @dart=2.9
-
 part of 'latest_release.dart';
 
 // **************************************************************************
@@ -10,7 +8,7 @@ part of 'latest_release.dart';
 
 LatestRelease _$LatestReleaseFromJson(Map<String, dynamic> json) {
   return LatestRelease(
-    json['version'] as String,
+    json['version'] as String?,
   );
 }
 

@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// @dart=2.9
-
 part of 'user.dart';
 
 // **************************************************************************
@@ -10,9 +8,9 @@ part of 'user.dart';
 
 User _$UserFromJson(Map<String, dynamic> json) {
   return User(
-    json['id'] as String,
-    json['username'] as String,
-    json['email'] as String,
+    json['id'] as String?,
+    json['username'] as String?,
+    json['email'] as String?,
   );
 }
 

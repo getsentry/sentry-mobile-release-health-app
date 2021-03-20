@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// @dart=2.9
-
 part of 'organization.dart';
 
 // **************************************************************************
@@ -10,10 +8,10 @@ part of 'organization.dart';
 
 Organization _$OrganizationFromJson(Map<String, dynamic> json) {
   return Organization(
-    json['id'] as String,
-    json['name'] as String,
-    json['slug'] as String,
-    json['apdexThreshold'] as int,
+    json['id'] as String?,
+    json['name'] as String?,
+    json['slug'] as String?,
+    json['apdexThreshold'] as int?,
   );
 }
 

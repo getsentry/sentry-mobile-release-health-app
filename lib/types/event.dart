@@ -1,4 +1,4 @@
-// @dart=2.9
+
 
 import 'package:json_annotation/json_annotation.dart';
 
@@ -47,22 +47,22 @@ class Event {
 
   factory Event.fromJson(Map<String, dynamic> json) => _$EventFromJson(json);
 
-  final String id;
-  final String culprit;
-  final int userCount;
-  final int count;
-  final String title;
+  final String? id;
+  final String? culprit;
+  final int? userCount;
+  final int? count;
+  final String? title;
 
   @JsonKey(fromJson: metadataFromJson, toJson: metadataToJson)
-  final EventMetadata metadata;
+  final EventMetadata? metadata;
 
   @JsonKey(fromJson: _tagsFromJson, toJson: _tagsToJson)
-  final List<Tag> tags;
-  final List<Map<String, dynamic>> entries;
-  final String groupID;
+  final List<Tag>? tags;
+  final List<Map<String, dynamic>>? entries;
+  final String? groupID;
 
   @JsonKey(fromJson: _contextFromJson, toJson: _contextToJson)
-  final Map<String, dynamic> context;
+  final Map<String, dynamic>? context;
 
   Map<String, dynamic> toJson() => _$EventToJson(this);
 }
@@ -92,4 +92,4 @@ Map<String, dynamic> _contextFromJson(Map<String, dynamic> json) {
   return newMap;
 }
 
-Map<String, dynamic> _contextToJson(Map<String, dynamic> context) => context;
+Map<String, dynamic>? _contextToJson(Map<String, dynamic>? context) => context;

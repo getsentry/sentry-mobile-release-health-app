@@ -90,15 +90,15 @@ GlobalState _fetchOrgsAndProjectsSuccessAction(GlobalState state, FetchOrgsAndPr
   final Map<String, Project> projectsById = <String, Project>{};
 
   for (final project in state.projectsWithSessions) {
-    projectsById[project.id] = project;
+    projectsById[project.id!] = project;
   }
 
   for (final organizationSlug in action.projectsByOrganizationSlug.keys) {
     for (final project in action.projectsByOrganizationSlug[organizationSlug]!) {
-      organizationsSlugByProjectSlug[project.slug] = organizationSlug;
+      organizationsSlugByProjectSlug[project.slug!] = organizationSlug;
 
       if (action.projectIdsWithSessions.contains(project.id)) {
-        projectsById[project.id] = project;
+        projectsById[project.id!] = project;
       }
     }
   }
@@ -147,7 +147,10 @@ GlobalState _fetchLatestReleasesSuccessAction(GlobalState state, FetchLatestRele
   final Map<String, Release> latestReleasesByProjectId = <String, Release>{};
 
   for (final projectsWithLatestRelease in action.projectsWithLatestReleases) {
-    latestReleasesByProjectId[projectsWithLatestRelease.project.id] = projectsWithLatestRelease.release;
+    final release = projectsWithLatestRelease.release;
+    if (release != null) {
+      latestReleasesByProjectId[projectsWithLatestRelease.project.id!] = release;
+    }
   }
 
   return state.copyWith(
@@ -160,7 +163,7 @@ GlobalState _fetchLatestReleaseSuccessAction(GlobalState state, FetchLatestRelea
   final project = state.projectsByOrganizationSlug[organizationSlug!]!.where((element) => element.slug == action.projectSlug).first;
 
   final Map<String, Release> latestReleasesByProjectId = state.latestReleasesByProjectId;
-  latestReleasesByProjectId[project.id] = action.latestRelease;
+  latestReleasesByProjectId[project.id!] = action.latestRelease;
 
   return state.copyWith(
       latestReleasesByProjectId: latestReleasesByProjectId,
@@ -212,7 +215,7 @@ GlobalState _fetchSessionsSuccessAction(GlobalState state, FetchSessionsSuccessA
   if (sessionsBeforeCrashFreeUsers != null) {
     crashFreeUsersBeforeByProjectId[action.projectId] = sessionsBeforeCrashFreeUsers;
   }
-  
+
   return state.copyWith(
       sessionsByProjectId: sessionsByProjectId,
       sessionsBeforeByProjectId: sessionsBeforeByProjectId,
