@@ -1,7 +1,3 @@
-
-
-import 'package:flutter/foundation.dart';
-
 import '../../screens/chart/line_chart_point.dart';
 
 class SessionState {

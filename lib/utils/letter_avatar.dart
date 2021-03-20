@@ -22,7 +22,7 @@ class LetterAvatar {
   ];
 
   static String getInitials(String displayName) {
-    var displayNameValue = (displayName ?? '').trim();
+    var displayNameValue = displayName.trim();
     if (displayNameValue.isEmpty) {
       displayNameValue = '?';
     }

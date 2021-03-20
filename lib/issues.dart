@@ -38,12 +38,10 @@ class IssuesScreenBuilder extends StatelessWidget {
           case 'Issues':
             return MaterialPageRoute<dynamic>(
                 builder: (context) => IssuesScreen(), settings: settings);
-            break;
 
           case 'Event':
             return MaterialPageRoute<dynamic>(
                 builder: (context) => IssueScreen(), settings: settings);
-            break;
 
           default:
             throw Exception('Invalid route');

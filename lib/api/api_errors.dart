@@ -6,8 +6,6 @@ class ApiError extends Error {
 
   @override
   String toString() {
-    return statusCode != null
-        ? 'api error statusCode: $statusCode message: ${Error.safeToString(message)}'
-        : 'Unknown json error';
+    return 'api error statusCode: $statusCode message: ${Error.safeToString(message)}';
   }
 }

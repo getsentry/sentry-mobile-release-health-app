@@ -315,9 +315,7 @@ class _SampleError extends Error {
 
   @override
   String toString() {
-    return message != null
-        ? 'Sample error: ${Error.safeToString(message)}'
-        : 'Unknown error';
+    return 'Sample error: ${Error.safeToString(message)}';
   }
 }
 

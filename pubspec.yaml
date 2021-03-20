@@ -22,8 +22,8 @@ environment:
 
 dependencies:
   clipboard: ^0.1.3
-  cupertino_icons: ^1.0.2
   collection: ^1.15.0-nullsafety.4
+  cupertino_icons: ^1.0.2
   equatable: ^2.0.0
   flutter:
     sdk: flutter

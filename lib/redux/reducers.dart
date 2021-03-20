@@ -106,7 +106,7 @@ GlobalState _fetchOrgsAndProjectsSuccessAction(GlobalState state, FetchOrgsAndPr
   final projectsWithSessions = projectsById.values.toList();
 
   projectsWithSessions.sort((Project a, Project b) {
-    return (a.slug ?? a.name)?.toLowerCase().compareTo((b.slug ?? b.name)?.toLowerCase() ?? '') ?? 0;
+    return a.slug.toLowerCase().compareTo(b.slug.toLowerCase());
   });
   projectsWithSessions.sort((Project a, Project b) {
     final valueA = a.isBookmarked! ? 0 : 1;
@@ -309,7 +309,7 @@ GlobalState _replaceProject(GlobalState state, Project projectToReplace) {
   }
 
   projects.sort((Project a, Project b) {
-    return (a.slug ?? a.name)?.toLowerCase().compareTo((b.slug ?? b.name)?.toLowerCase() ?? '') ?? 0;
+    return a.slug.toLowerCase().compareTo(b.slug.toLowerCase());
   });
   projects.sort((Project a, Project b) {
     final valueA = a.isBookmarked! ? 0 : 1;

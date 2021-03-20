@@ -30,7 +30,7 @@ class ProjectCard extends StatelessWidget {
           child: FittedBox(
             fit: BoxFit.cover,
             child: Text(
-              project!.slug ?? project!.name ?? '--',
+              project?.slug ?? '--',
               maxLines: 2,
               style: Theme.of(context).textTheme.headline5,
             ),
@@ -161,7 +161,7 @@ class ProjectCard extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              _infoBox(context, "Total: ${sessions?.numberOfSessions?.formattedNumberOfSession() ?? '--'}"),
+                              _infoBox(context, "Total: ${sessions?.numberOfSessions.formattedNumberOfSession() ?? '--'}"),
                               // if (release?.authors?.isNotEmpty == true)
                               //   SizedBox(width: 6),
                               // AvatarStack(
