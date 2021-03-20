@@ -29,9 +29,9 @@ Map<String, dynamic> _$EventToJson(Event instance) => <String, dynamic>{
       'userCount': instance.userCount,
       'count': instance.count,
       'title': instance.title,
-      'metadata': instance.metadata,
-      'tags': instance.tags,
+      'metadata': metadataToJson(instance.metadata),
+      'tags': _tagsToJson(instance.tags),
       'entries': instance.entries,
       'groupID': instance.groupID,
-      'context': instance.context,
+      'context': _contextToJson(instance.context),
     };

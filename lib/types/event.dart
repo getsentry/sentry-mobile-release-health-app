@@ -70,8 +70,8 @@ class Event {
 List<Tag> _tagsFromJson(List<dynamic> jsons) => jsons
     .map((dynamic json) => Tag.fromJson(json as Map<String, dynamic>))
     .toList();
-List<Map<String, dynamic>> _tagsToJson(List<Tag> tags) =>
-    tags.map((Tag tag) => tag.toJson()).toList();
+List<Map<String, dynamic>> _tagsToJson(List<Tag>? tags) =>
+    tags?.map((Tag tag) => tag.toJson()).toList() ?? [];
 
 Map<String, dynamic> _contextFromJson(Map<String, dynamic> json) {
   final newMap = <String, dynamic>{};

@@ -12,9 +12,9 @@ class Project {
   
   factory Project.fromJson(Map<String, dynamic> json) => _$ProjectFromJson(json);
 
-  final String? id;
+  final String id;
   final String? name;
-  final String? slug;
+  final String slug;
   final String? platform;
   final List<String>? platforms;
   final LatestRelease? latestRelease; // TODO(denis): Change to `Release` once it implements JsonSerializable.

@@ -8,9 +8,9 @@ part of 'project.dart';
 
 Project _$ProjectFromJson(Map<String, dynamic> json) {
   return Project(
-    json['id'] as String?,
+    json['id'] as String,
     json['name'] as String?,
-    json['slug'] as String?,
+    json['slug'] as String,
     json['platform'] as String?,
     (json['platforms'] as List<dynamic>?)?.map((e) => e as String).toList(),
     json['latestRelease'] == null

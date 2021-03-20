@@ -22,5 +22,5 @@ class EventMetadata {
 EventMetadata? metadataFromJson(Map<String, dynamic> json) =>
     EventMetadata.fromJson(json);
 
-Map<String, dynamic> metadataToJson(EventMetadata metadata) =>
-    metadata.toJson();
+Map<String, dynamic> metadataToJson(EventMetadata? metadata) =>
+    metadata?.toJson() ?? <String, dynamic>{};

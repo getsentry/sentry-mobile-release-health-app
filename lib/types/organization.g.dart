@@ -8,9 +8,9 @@ part of 'organization.dart';
 
 Organization _$OrganizationFromJson(Map<String, dynamic> json) {
   return Organization(
-    json['id'] as String?,
+    json['id'] as String,
     json['name'] as String?,
-    json['slug'] as String?,
+    json['slug'] as String,
     json['apdexThreshold'] as int?,
   );
 }

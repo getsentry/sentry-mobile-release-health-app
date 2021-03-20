@@ -67,10 +67,10 @@ class HealthScreenViewModel {
   ProjectCard projectCard(int index) {
     final projectWitLatestRelease = projects[index];
     return ProjectCard(
-        _store.state.globalState.organizationForProjectSlug(projectWitLatestRelease.project.slug!)?.name,
+        _store.state.globalState.organizationForProjectSlug(projectWitLatestRelease.project.slug)?.name,
         projectWitLatestRelease.project,
         projectWitLatestRelease.release,
-        _totalSessionStateByProjectId[projectWitLatestRelease.project.id!]
+        _totalSessionStateByProjectId[projectWitLatestRelease.project.id]
     );
   }
 
@@ -78,13 +78,13 @@ class HealthScreenViewModel {
     final project = projects[index].project;
     switch (sessionStatus) {
       case SessionStatus.healthy:
-        return _healthySessionsStateByProjectId[project.id!];
+        return _healthySessionsStateByProjectId[project.id];
       case SessionStatus.errored:
-        return _erroredSessionsStateByProjectId[project.id!];
+        return _erroredSessionsStateByProjectId[project.id];
       case SessionStatus.crashed:
-        return _crashedSessionStateByProjectId[project.id!];
+        return _crashedSessionStateByProjectId[project.id];
       case SessionStatus.abnormal:
-        return _abnormalSessionsStateByProjectId[project.id!];
+        return _abnormalSessionsStateByProjectId[project.id];
     }
   }
 
@@ -101,24 +101,24 @@ class HealthScreenViewModel {
   HealthCardViewModel crashFreeSessionsForProject(int index) {
     final project = projects[index].project;
     return HealthCardViewModel.crashFreeSessions(
-      _crashFreeSessionsByProjectId[project.id!],
-      _crashFreeSessionsBeforeByProjectId[project.id!],
+      _crashFreeSessionsByProjectId[project.id],
+      _crashFreeSessionsBeforeByProjectId[project.id],
     );
   }
 
   HealthCardViewModel crashFreeUsersForProject(int index) {
     final project = projects[index].project;
     return HealthCardViewModel.crashFreeSessions(
-      _crashFreeUsersByProjectId[project.id!],
-      _crashFreeUsersBeforeByProjectId[project.id!],
+      _crashFreeUsersByProjectId[project.id],
+      _crashFreeUsersBeforeByProjectId[project.id],
     );
   }
 
   HealthCardViewModel apdexForProject(int index) {
     final project = projects[index].project;
     return HealthCardViewModel.apdex(
-      _apdexByProjectId[project.id!],
-      _apdexBeforeByProjectId[project.id!],
+      _apdexByProjectId[project.id],
+      _apdexBeforeByProjectId[project.id],
     );
   }
   
@@ -154,17 +154,17 @@ class HealthScreenViewModel {
   // }
 
   void _fetchSessions(ProjectWithLatestRelease projectWithLatestRelease) {
-    final organizationSlug = _store.state.globalState.organizationsSlugByProjectSlug[projectWithLatestRelease.project.slug!];
+    final organizationSlug = _store.state.globalState.organizationsSlugByProjectSlug[projectWithLatestRelease.project.slug];
     if (organizationSlug == null) {
       return;
     }
-    if (_store.state.globalState.sessionsByProjectId[projectWithLatestRelease.project.id!] != null) {
+    if (_store.state.globalState.sessionsByProjectId[projectWithLatestRelease.project.id] != null) {
       return; // Only fetch when there is no data available yet
     }
     _store.dispatch(
         FetchSessionsAction(
             organizationSlug,
-            projectWithLatestRelease.project.id!
+            projectWithLatestRelease.project.id
         )
     );
   }

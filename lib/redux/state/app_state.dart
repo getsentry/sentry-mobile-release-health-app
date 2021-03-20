@@ -268,6 +268,6 @@ class GlobalState {
   }
 
   List<ProjectWithLatestRelease> projectsWithLatestReleases() {
-    return projectsWithSessions.map((project) => ProjectWithLatestRelease(project, latestReleasesByProjectId[project.id!])).toList();
+    return projectsWithSessions.map((project) => ProjectWithLatestRelease(project, latestReleasesByProjectId[project.id])).toList();
   }
 }

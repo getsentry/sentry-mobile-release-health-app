@@ -13,7 +13,7 @@ class Author {
   factory Author.fromJson(Map<String, dynamic> json) =>
       _$AuthorFromJson(json);
 
-  final String? id;
+  final String id;
   final String? name;
   final String? email;
   final String? avatarUrl;

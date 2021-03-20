@@ -37,6 +37,6 @@ Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
       'firstSeen': dateTimeToString(instance.firstSeen),
       'firstRelease': _releaseToJson(instance.firstRelease),
       'lastRelease': _releaseToJson(instance.lastRelease),
-      'metadata': instance.metadata,
+      'metadata': metadataToJson(instance.metadata),
       'stats': instance.stats,
     };

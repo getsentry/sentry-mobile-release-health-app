@@ -28,18 +28,18 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           var currentProgress = 0;
 
           for (final organization in organizations) {
-            final individualOrganization = await api.organization(organization.slug!);
+            final individualOrganization = await api.organization(organization.slug);
             individualOrganizations.add(individualOrganization);
 
             store.dispatch(FetchOrgsAndProjectsProgressAction('${organization.name}: Fetching projects...', ++currentProgress / fullProgress));
             final projects = await api.projects(organization.slug);
             if (projects.isNotEmpty) {
-              projectsByOrganizationId[organization.slug!] = projects;
+              projectsByOrganizationId[organization.slug] = projects;
             }
 
             store.dispatch(FetchOrgsAndProjectsProgressAction('${organization.name}: Checking for sessions...', ++currentProgress / fullProgress));
             try {
-              final projectsWithSessionsForOrganization = await api.projectIdsWithSessions(organization.slug!);
+              final projectsWithSessionsForOrganization = await api.projectIdsWithSessions(organization.slug);
               projectIdsWithSessions.addAll(projectsWithSessionsForOrganization);
             } catch (e) {
               Sentry.addBreadcrumb(Breadcrumb(message: 'Org has no projects -> $e', level: SentryLevel.error));
@@ -65,7 +65,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
 
             for (final projectToFetch in projectsToFetch) {
               final project = await api.project(
-                  organizationSlug, projectToFetch.slug!
+                  organizationSlug, projectToFetch.slug
               );
               final latestRelease = await api.release(
                   organizationSlug: organizationSlug,

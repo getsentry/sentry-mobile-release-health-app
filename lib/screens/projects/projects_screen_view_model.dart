@@ -13,7 +13,7 @@ class ProjectsScreenViewModel {
   ProjectsScreenViewModel.fromStore(Store<AppState> store) {
     final List<ProjectItem> items = [];
     for (final Organization organization in store.state.globalState.organizations) {
-        final organizationProjects = store.state.globalState.projectsByOrganizationSlug[organization.slug!] ?? [];
+        final organizationProjects = store.state.globalState.projectsByOrganizationSlug[organization.slug] ?? [];
         final projectsWithSessions = organizationProjects
             .where((project) => store.state.globalState.projectIdsWithSessions.contains(project.id))
             .toList();
@@ -30,8 +30,8 @@ class ProjectsScreenViewModel {
           for (final Project project in projectsWithSessions) {
             items.add(
               ProjectProjectItem(
-                organization.slug!,
-                project.slug!,
+                organization.slug,
+                project.slug,
                 project.isBookmarked!
               )
             );
