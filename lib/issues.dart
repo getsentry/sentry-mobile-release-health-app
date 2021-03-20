@@ -1,4 +1,4 @@
-// @dart=2.9
+
 
 import 'dart:io';
 
@@ -15,7 +15,7 @@ import 'types/group.dart';
 import 'types/organization.dart';
 import 'types/project.dart';
 
-Future<List<Group>> fetchGroups(String orgSlug, String projSlug, Cookie cookie) async {
+Future<List<Group>> fetchGroups(String orgSlug, String projSlug, Cookie? cookie) async {
   final api = SentryApi(null);
   try {
     return await api.issues(organizationSlug: orgSlug, projectSlug: projSlug);
@@ -27,7 +27,7 @@ Future<List<Group>> fetchGroups(String orgSlug, String projSlug, Cookie cookie) 
 }
 
 class IssuesScreenBuilder extends StatelessWidget {
-  const IssuesScreenBuilder({Key key}) : super(key: key);
+  const IssuesScreenBuilder({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -65,13 +65,13 @@ class IssuesScreen extends StatelessWidget {
 
 class IssuesViewModel {
   IssuesViewModel(
-      {@required this.selectedOrganization,
-      @required this.selectedProject,
-      @required this.sessionCookie});
+      {required this.selectedOrganization,
+      required this.selectedProject,
+      required this.sessionCookie});
 
-  final Organization selectedOrganization;
-  final Project selectedProject;
-  final Cookie sessionCookie;
+  final Organization? selectedOrganization;
+  final Project? selectedProject;
+  final Cookie? sessionCookie;
 
   static IssuesViewModel fromStore(Store<AppState> store) => IssuesViewModel(
       selectedOrganization: store.state.globalState.selectedOrganization,
@@ -81,7 +81,7 @@ class IssuesViewModel {
 }
 
 class IssuesScreenStateWrapper extends StatefulWidget {
-  const IssuesScreenStateWrapper({Key key, @required this.viewModel})
+  const IssuesScreenStateWrapper({Key? key, required this.viewModel})
       : super(key: key);
 
   final IssuesViewModel viewModel;
@@ -91,10 +91,10 @@ class IssuesScreenStateWrapper extends StatefulWidget {
 }
 
 class _IssuesScreenState extends State<IssuesScreenStateWrapper> {
-  _IssuesScreenState({@required this.viewModel});
+  _IssuesScreenState({required this.viewModel});
 
   final IssuesViewModel viewModel;
-  Future<List<Group>> groupsFuture;
+  late Future<List<Group>> groupsFuture;
 
   @override
   void initState() {
@@ -104,11 +104,18 @@ class _IssuesScreenState extends State<IssuesScreenStateWrapper> {
 
   void getData() {
     setState(() {
-      groupsFuture = fetchGroups(
-          viewModel.selectedOrganization?.slug,
-          viewModel.selectedProject?.slug,
-          viewModel.sessionCookie
-      );
+      final selectedOrganizationSlug = viewModel.selectedOrganization?.slug;
+      final selectedProjectSlug = viewModel.selectedProject?.slug;
+
+      if (selectedOrganizationSlug != null && selectedProjectSlug != null) {
+        groupsFuture = fetchGroups(
+            selectedOrganizationSlug,
+            selectedProjectSlug,
+            viewModel.sessionCookie
+        );
+      } else {
+        groupsFuture = Future.value(<Group>[]);
+      }
     });
   }
 
@@ -132,11 +139,11 @@ class _IssuesScreenState extends State<IssuesScreenStateWrapper> {
                 itemBuilder: (context, index) {
                   final group = groups[index];
                   return Issue(
-                      title: group.metadata.type ?? 'Error',
-                      value: group.title,
-                      culprit: group.culprit,
-                      userCount: group.userCount,
-                      count: group.count,
+                      title: group.metadata?.type ?? 'Error',
+                      value: group.title ?? '--',
+                      culprit: group.culprit ?? '--',
+                      userCount: group.userCount ?? 0,
+                      count: group.count ?? '--',
                       lastSeen: group.lastSeen,
                       firstSeen: group.lastSeen
                   );
@@ -161,21 +168,21 @@ class _IssuesScreenState extends State<IssuesScreenStateWrapper> {
 
 class Issue extends StatelessWidget {
   Issue(
-      {@required this.title,
-      this.value,
-      @required this.culprit,
-      @required this.userCount,
-      @required this.count,
-      @required this.firstSeen,
-      @required this.lastSeen});
+      {required this.title,
+      required this.value,
+      required this.culprit,
+      required this.userCount,
+      required this.count,
+      this.firstSeen,
+     this.lastSeen});
 
   final String title;
   final String value;
   final String culprit;
   final int userCount;
   final String count;
-  final DateTime firstSeen;
-  final DateTime lastSeen;
+  final DateTime? firstSeen;
+  final DateTime? lastSeen;
 
   @override
   Widget build(BuildContext context) => GestureDetector(
@@ -198,9 +205,11 @@ class Issue extends StatelessWidget {
                           style: TextStyle(fontWeight: FontWeight.bold)),
                       Text(culprit, style: TextStyle(color: Colors.black54)),
                       Text(value, style: TextStyle(color: Colors.black87)),
-                      Text(
-                          '${timeago.format(lastSeen)} — ${timeago.format(firstSeen)}',
-                          style: TextStyle(color: Colors.black54))
+                      if (lastSeen != null && firstSeen != null)
+                        Text(
+                          '${timeago.format(lastSeen!)} — ${timeago.format(firstSeen!)}',
+                          style: TextStyle(color: Colors.black54)
+                        )
                     ],
                   )),
               Row(
