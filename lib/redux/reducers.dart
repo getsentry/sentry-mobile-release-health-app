@@ -190,16 +190,28 @@ GlobalState _fetchSessionsSuccessAction(GlobalState state, FetchSessionsSuccessA
   sessionsBeforeByProjectId[action.projectId] = action.sessionsBefore;
   
   final Map<String, double> crashFreeSessionsByProjectId = state.crashFreeSessionsByProjectId;
-  crashFreeSessionsByProjectId[action.projectId] = action.sessions.crashFreeSessions();
+  final sessionsCrashFreeSessions = action.sessions.crashFreeSessions();
+  if (sessionsCrashFreeSessions != null) {
+    crashFreeSessionsByProjectId[action.projectId] = sessionsCrashFreeSessions;
+  }
   
   final Map<String, double> crashFreeSessionsBeforeByProjectId = state.crashFreeSessionsBeforeByProjectId;
-  crashFreeSessionsBeforeByProjectId[action.projectId] = action.sessionsBefore.crashFreeSessions();
+  final sessionsBeforeCrashFreeSessions = action.sessionsBefore.crashFreeSessions();
+  if (sessionsBeforeCrashFreeSessions != null) {
+    crashFreeSessionsBeforeByProjectId[action.projectId] = sessionsBeforeCrashFreeSessions;
+  }
 
   final Map<String, double> crashFreeUsersByProjectId = state.crashFreeUsersByProjectId;
-  crashFreeUsersByProjectId[action.projectId] = action.sessions.crashFreeUsers();
+  final sessionsCrashFreeUsers = action.sessions.crashFreeUsers();
+  if (sessionsCrashFreeUsers != null) {
+    crashFreeUsersByProjectId[action.projectId] = sessionsCrashFreeUsers;
+  }
 
   final Map<String, double> crashFreeUsersBeforeByProjectId = state.crashFreeUsersBeforeByProjectId;
-  crashFreeUsersBeforeByProjectId[action.projectId] = action.sessionsBefore.crashFreeUsers();
+  final sessionsBeforeCrashFreeUsers = action.sessionsBefore.crashFreeUsers();
+  if (sessionsBeforeCrashFreeUsers != null) {
+    crashFreeUsersBeforeByProjectId[action.projectId] = sessionsBeforeCrashFreeUsers;
+  }
   
   return state.copyWith(
       sessionsByProjectId: sessionsByProjectId,
