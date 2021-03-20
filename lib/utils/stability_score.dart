@@ -23,7 +23,7 @@ extension StabilityScore on Sessions {
     int? errored;
     int? abnormal;
     int? crashed;
-    for (final group in groups!) {
+    for (final group in groups ?? <SessionGroup>[]) {
       if (group.by?.sessionStatus == SessionStatus.healthy) {
         healthy = valueFromGroup(group);
       } else if (group.by?.sessionStatus == SessionStatus.errored) {
