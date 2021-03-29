@@ -43,6 +43,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
               projectIdsWithSessions.addAll(projectsWithSessionsForOrganization);
             } catch (e) {
               Sentry.addBreadcrumb(Breadcrumb(message: 'Org has no projects -> $e', level: SentryLevel.error));
+              rethrow;
             }
           }
           store.dispatch(FetchOrgsAndProjectsSuccessAction(individualOrganizations, projectsByOrganizationId, projectIdsWithSessions));
