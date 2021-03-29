@@ -9,9 +9,6 @@
 
 [![build](https://github.com/getsentry/sentry-mobile/workflows/build/badge.svg?branch=main)](https://github.com/getsentry/sentry-mobile/actions?query=branch%3Amain)
 
-This is a hackweek project and not a Sentry product.  
-There are no plans of publishing this app to the App Store/Google Play Store.
-
 # Run source generators
 
 `flutter pub run build_runner build`
