@@ -49,17 +49,7 @@ class _HealthScreenState extends State<HealthScreen> {
           ]
         )
       );
-    } else if (viewModel.showProjectEmptyScreen) {
-      return EmptyScreen(
-        title: 'No projects found',
-        text: 'At least one project needs to provide session data for this to work.',
-        button: 'Refresh',
-        action: () {
-          viewModel.fetchProjects();
-          reloadSessionData(viewModel, _index);
-        });
-    } else
-      if (viewModel.showErrorScreen) {
+    } else if (viewModel.showErrorScreen) {
         if (viewModel.showErrorNoConnectionScreen) {
           return EmptyScreen(
               title: 'No connection',
@@ -79,6 +69,15 @@ class _HealthScreenState extends State<HealthScreen> {
                 reloadSessionData(viewModel, _index);
               });
         }
+    } else if (viewModel.showProjectEmptyScreen) {
+      return EmptyScreen(
+        title: 'No projects found',
+        text: 'At least one project needs to provide session data for this to work.',
+        button: 'Refresh',
+        action: () {
+          viewModel.fetchProjects();
+          reloadSessionData(viewModel, _index);
+        });
     } else {
       WidgetsBinding.instance.addPostFrameCallback( ( Duration duration ) {
         if (viewModel.showLoadingScreen) {
