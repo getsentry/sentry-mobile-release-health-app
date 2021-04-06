@@ -1,19 +1,21 @@
 
-class ProjectPickerItem {
+
+
+class ProjectItem {
 }
 
-class ProjectPickerHeadlineItem extends ProjectPickerItem {
-  ProjectPickerHeadlineItem(this.text);
+class ProjectHeadlineItem extends ProjectItem {
+  ProjectHeadlineItem(this.text);
   final String text;
 }
 
-class ProjectPickerOrganizationItem extends ProjectPickerItem {
-  ProjectPickerOrganizationItem(this.title);
+class ProjectOrganizationItem extends ProjectItem {
+  ProjectOrganizationItem(this.title);
   final String title;
 }
 
-class ProjectPickerProjectItem extends ProjectPickerItem {
-  ProjectPickerProjectItem(this.organizationSlug, this.projectSlug, this.isBookmarked);
+class ProjectProjectItem extends ProjectItem {
+  ProjectProjectItem(this.organizationSlug, this.projectSlug, this.isBookmarked);
 
   final String organizationSlug;
   final String projectSlug;

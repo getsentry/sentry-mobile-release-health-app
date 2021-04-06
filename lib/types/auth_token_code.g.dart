@@ -8,7 +8,7 @@ part of 'auth_token_code.dart';
 
 AuthTokenCode _$AuthTokenCodeFromJson(Map<String, dynamic> json) {
   return AuthTokenCode(
-    json['authToken'] as String,
+    json['authToken'] as String?,
   );
 }
 

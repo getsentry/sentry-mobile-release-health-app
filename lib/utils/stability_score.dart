@@ -1,34 +1,36 @@
+
+
 import '../types/session_group.dart';
 import '../types/session_status.dart';
 import '../types/sessions.dart';
 
 extension StabilityScore on Sessions {
-  double crashFreeSessions() {
+  double? crashFreeSessions() {
     return _crashFree((SessionGroup group) {
-      return group?.totals?.sumSession;
+      return group.totals?.sumSession;
     });
   }
 
-  double crashFreeUsers() {
+  double? crashFreeUsers() {
     return _crashFree((SessionGroup group) {
-      return group?.totals?.countUniqueUsers;
+      return group.totals?.countUniqueUsers;
     });
   }
 
   // Higher order function to calculate crash free value
-  double _crashFree(int Function(SessionGroup group) valueFromGroup) {
-    int healthy;
-    int errored;
-    int abnormal;
-    int crashed;
-    for (final group in groups) {
-      if (group?.by?.sessionStatus == SessionStatus.healthy) {
+  double? _crashFree(int? Function(SessionGroup group) valueFromGroup) {
+    int? healthy;
+    int? errored;
+    int? abnormal;
+    int? crashed;
+    for (final group in groups ?? <SessionGroup>[]) {
+      if (group.by?.sessionStatus == SessionStatus.healthy) {
         healthy = valueFromGroup(group);
-      } else if (group?.by?.sessionStatus == SessionStatus.errored) {
+      } else if (group.by?.sessionStatus == SessionStatus.errored) {
         errored = valueFromGroup(group);
-      } else if (group?.by?.sessionStatus == SessionStatus.abnormal) {
+      } else if (group.by?.sessionStatus == SessionStatus.abnormal) {
         abnormal = valueFromGroup(group);
-      } else if (group?.by?.sessionStatus == SessionStatus.crashed) {
+      } else if (group.by?.sessionStatus == SessionStatus.crashed) {
         crashed = valueFromGroup(group);
       }
     }

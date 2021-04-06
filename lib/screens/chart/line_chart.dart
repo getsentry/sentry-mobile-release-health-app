@@ -1,3 +1,5 @@
+
+
 import 'dart:ui';
 import 'dart:ui' as ui;
 
@@ -7,9 +9,9 @@ import 'line_chart_data.dart';
 import 'line_chart_point.dart';
 
 class LineChart extends StatelessWidget {
-  LineChart({@required this.data, @required this.lineWidth, @required this.lineColor, @required this.gradientStart, @required this.gradientEnd, this.cubicLines});
+  LineChart({required this.data, required this.lineWidth, required this.lineColor, required this.gradientStart, required this.gradientEnd, required this.cubicLines});
 
-  final LineChartData data;
+  final LineChartData? data;
   final double lineWidth;
   final Color lineColor;
   final Color gradientStart;
@@ -35,15 +37,19 @@ class _LineChartPainter extends CustomPainter {
     linePadding = lineWidth / 2.0;
   }
 
-  LineChartData data;
-  Paint linePaint;
-  double linePadding;
+  LineChartData? data;
+  late Paint linePaint;
+  late double linePadding;
   Color gradientStart;
   Color gradientEnd;
   bool cubicLines;
 
   @override
   void paint(Canvas canvas, Size size) {
+    final data = this.data;
+    if (data == null) {
+      return;
+    }
     if (data.points.length < 2) {
       return;
     }
@@ -112,7 +118,7 @@ class _LineChartPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     final oldLineChartPainter = oldDelegate as _LineChartPainter;
-    return oldLineChartPainter.data.points != data.points;
+    return oldLineChartPainter.data?.points != data?.points;
   }
 
   // Helper
@@ -135,8 +141,6 @@ class _LineChartPainter extends CustomPainter {
     gradientPath.lineTo(0, firstPoint.y);
     return gradientPath;
   }
-
-
 
   double _normalized(double point, double min, double max) {
     if ((max - min) == 0) {

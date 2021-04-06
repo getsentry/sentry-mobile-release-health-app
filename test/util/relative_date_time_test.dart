@@ -62,18 +62,19 @@ void main() {
     });
 
     test('Days to month threshold', () {
-      var a = DateTime.now();
+      final now = DateTime.parse('2021-03-31');
+      var a = now;
 
       a = a.subtract(Duration(days: 25));
       expect(
-          a.relativeFromNow(),
+          a.relativeDateFrom(now),
           equals('25 days ago'),
           reason: 'Below default days to month (singular) threshold'
       );
 
       a = a.subtract(Duration(days: 1));
       expect(
-          a.relativeFromNow(),
+          a.relativeDateFrom(now),
           equals('a month ago'),
           reason: 'Above default days to month (singular) threshold'
       );

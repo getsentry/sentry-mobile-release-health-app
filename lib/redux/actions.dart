@@ -1,3 +1,5 @@
+
+
 import '../types/group.dart';
 import '../types/organization.dart';
 import '../types/project.dart';
@@ -12,7 +14,7 @@ class RehydrateAction {
 
 class RehydrateSuccessAction {
   RehydrateSuccessAction(this.authToken, this.sentrySdkEnabled, this.version);
-  final String authToken;
+  final String? authToken;
   final bool sentrySdkEnabled;
   final String version;
 }
@@ -47,7 +49,7 @@ class FetchOrgsAndProjectsAction {
 class FetchOrgsAndProjectsProgressAction {
   FetchOrgsAndProjectsProgressAction(this.text, this.progress);
   final String text;
-  final double progress;
+  final double? progress;
 }
 
 class FetchOrgsAndProjectsSuccessAction {
@@ -188,8 +190,8 @@ class FetchApdexSuccessAction {
   FetchApdexSuccessAction(this.projectId, this.apdex, this.apdexBefore);
 
   final String projectId;
-  final double apdex;
-  final double apdexBefore;
+  final double? apdex;
+  final double? apdexBefore;
 }
 
 class FetchApdexFailureAction extends ApiFailureAction {

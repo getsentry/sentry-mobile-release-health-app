@@ -1,3 +1,5 @@
+
+
 import 'dart:async';
 import 'dart:io';
 
@@ -15,10 +17,10 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
   bool _loading = false;
 
   var _successResultEvent = false;
-  String _failureResultEvent;
+  String? _failureResultEvent;
 
   var _successResultMessage = false;
-  String _failureResultMessage;
+  String? _failureResultMessage;
 
   final _successResultsHandled = {
     _TypeToThrow.EXCEPTION: false,
@@ -26,7 +28,7 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
     _TypeToThrow.STRING: false,
   };
 
-  final Map<_TypeToThrow, String> _failureResultsHandled = {
+  final Map<_TypeToThrow, String?> _failureResultsHandled = {
     _TypeToThrow.EXCEPTION: null,
     _TypeToThrow.ERROR: null,
     _TypeToThrow.STRING: null,
@@ -37,8 +39,6 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
     _TypeToThrow.ERROR: false,
     _TypeToThrow.STRING: false,
   };
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -128,13 +128,13 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
   Widget _createListTile(String title, _TypeToThrow typeToThrow, {bool fatal = false}) {
     var subtitle = '';
     if (!fatal) {
-      subtitle = _successResultsHandled[typeToThrow]
+      subtitle = _successResultsHandled[typeToThrow]!
           ? 'Success'
           : _failureResultsHandled[typeToThrow] != null
             ? 'Failure: ${_failureResultsHandled[typeToThrow]}'
             : '--';
     } else {
-      subtitle = _successResultsUnhandled[typeToThrow]
+      subtitle = _successResultsUnhandled[typeToThrow]!
           ? 'Success'
           : '--';
     }
@@ -186,7 +186,7 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
     setState(() {
       _loading = true;
     });
-    final event = SentryEvent(message: Message('Sentry.captureEvent'));
+    final event = SentryEvent(message: SentryMessage('Sentry.captureEvent'));
     Sentry.captureEvent(event)
         .then((value) => {
       setState(() {
@@ -246,10 +246,10 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
       setState(() {
         _successResultsUnhandled[typeToThrow] = true;
       });
-      throw exceptionObject;
+      throw exceptionObject as Object;
     } else {
       try {
-        throw exceptionObject;
+        throw exceptionObject as Object;
       } catch (exception, stackTrace) {
         Sentry.captureException(exception, stackTrace: stackTrace)
             .then((value) => {
@@ -300,15 +300,11 @@ extension _TypeToThrowPrint on _TypeToThrow {
     switch(this) {
       case _TypeToThrow.EXCEPTION:
         return 'Exception';
-        break;
       case _TypeToThrow.ERROR:
         return 'Error';
-        break;
       case _TypeToThrow.STRING:
         return 'String';
-        break;
     }
-    return null;
   }
 }
 
@@ -319,9 +315,7 @@ class _SampleError extends Error {
 
   @override
   String toString() {
-    return message != null
-        ? 'Sample error: ${Error.safeToString(message)}'
-        : 'Unknown error';
+    return 'Sample error: ${Error.safeToString(message)}';
   }
 }
 

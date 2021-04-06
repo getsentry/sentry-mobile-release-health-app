@@ -1,4 +1,6 @@
 
+
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -12,7 +14,7 @@ class LinkRichText extends StatelessWidget {
   final String _link;
   final String _linkText;
   final String _suffix;
-  final TextStyle _textStyle;
+  final TextStyle? _textStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +29,8 @@ class LinkRichText extends StatelessWidget {
           TextSpan(
             text: _linkText,
             style: TextStyle(
-              fontFamily: _textStyle.fontFamily,
-              fontSize: _textStyle.fontSize,
+              fontFamily: _textStyle?.fontFamily,
+              fontSize: _textStyle?.fontSize,
               color: SentryColors.royalBlue
             ),
             recognizer: TapGestureRecognizer()

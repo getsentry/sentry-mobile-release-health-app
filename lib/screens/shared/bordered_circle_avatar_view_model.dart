@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 
 import '../../types/author.dart';
@@ -10,7 +12,7 @@ class BorderedCircleAvatarViewModel {
     if (author.avatar?.avatarType == 'letter_avatar') {
       return BorderedCircleAvatarViewModel(
           null,
-          LetterAvatar.getInitials(author.name ?? author.email),
+          LetterAvatar.getInitials(author.name ?? author.email ?? ''),
           LetterAvatar.getLetterAvatarColor('${author.id}-${author.email}')
       );
     } else {
@@ -22,7 +24,7 @@ class BorderedCircleAvatarViewModel {
     }
   }
 
-  final String url;
-  final String initials;
-  final Color backgroundColor;
+  final String? url;
+  final String? initials;
+  final Color? backgroundColor;
 }

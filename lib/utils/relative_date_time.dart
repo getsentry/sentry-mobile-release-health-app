@@ -1,4 +1,6 @@
 
+
+
 import 'dart:math';
 
 extension RelativeDateTime on DateTime {
@@ -10,7 +12,11 @@ extension RelativeDateTime on DateTime {
   static const monthsToYearThreshold = 10;
 
   String relativeFromNow() {
-    final now = DateTime.now();
+    return relativeDateFrom(DateTime.now());
+  }
+
+  String relativeDateFrom(DateTime dateTimeFrom) {
+    final now = dateTimeFrom;
     final difference = now.difference(this);
 
     // Years
@@ -160,7 +166,7 @@ extension RelativeDateTime on DateTime {
       adjust = (b.millisecondsSinceEpoch - anchor.millisecondsSinceEpoch) /
           (anchor2.millisecondsSinceEpoch - anchor.millisecondsSinceEpoch);
     }
-    return -(wholeMonthDiff + adjust) ?? 0;
+    return -(wholeMonthDiff + adjust);
   }
 
   DateTime _addMonths(DateTime from, int months) {

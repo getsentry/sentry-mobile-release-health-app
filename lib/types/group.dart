@@ -1,3 +1,5 @@
+
+
 import 'package:json_annotation/json_annotation.dart';
 
 import '../types/stats.dart';
@@ -25,30 +27,30 @@ class Group {
       });
   factory Group.fromJson(Map<String, dynamic> json) => _$GroupFromJson(json);
 
-  final String id;
-  final String culprit;
-  final int userCount;
-  final String count;
-  final String title;
-  final String type;
+  final String? id;
+  final String? culprit;
+  final int? userCount;
+  final String? count;
+  final String? title;
+  final String? type;
 
   @JsonKey(fromJson: dateTimeFromString, toJson: dateTimeToString)
-  final DateTime lastSeen;
+  final DateTime? lastSeen;
   @JsonKey(fromJson: dateTimeFromString, toJson: dateTimeToString)
-  final DateTime firstSeen;
+  final DateTime? firstSeen;
   @JsonKey(fromJson: _releaseFromJson, toJson: _releaseToJson)
-  final Release firstRelease;
+  final Release? firstRelease;
   @JsonKey(fromJson: _releaseFromJson, toJson: _releaseToJson)
-  final Release lastRelease;
+  final Release? lastRelease;
 
   @JsonKey(fromJson: metadataFromJson, toJson: metadataToJson)
-  final EventMetadata metadata;
+  final EventMetadata? metadata;
 
-  final Stats stats;
+  final Stats? stats;
 
   Map<String, dynamic> toJson() => _$GroupToJson(this);
 }
 
-Release _releaseFromJson(Map<String, dynamic> json) =>
+Release? _releaseFromJson(Map<String, dynamic>? json) =>
     json == null ? null : Release.fromJson(json);
-Release _releaseToJson(Release release) => null; //  not used.
+Release? _releaseToJson(Release? release) => null; //  not used.

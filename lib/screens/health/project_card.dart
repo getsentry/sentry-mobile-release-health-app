@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -13,10 +15,10 @@ import '../chart/line_chart_data.dart';
 class ProjectCard extends StatelessWidget {
   ProjectCard(this.organizationName, this.project, this.release, this.sessions);
 
-  final String organizationName;
-  final Project project; // Nullable
-  final Release release; // Nullable
-  final SessionState sessions; // Nullable
+  final String? organizationName;
+  final Project? project; // Nullable
+  final Release? release; // Nullable
+  final SessionState? sessions; // Nullable
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class ProjectCard extends StatelessWidget {
           child: FittedBox(
             fit: BoxFit.cover,
             child: Text(
-              project.slug ?? project.name ?? '--',
+              project?.slug ?? '--',
               maxLines: 2,
               style: Theme.of(context).textTheme.headline5,
             ),
@@ -38,7 +40,7 @@ class ProjectCard extends StatelessWidget {
     ];
 
 
-    final platform = project.platform ?? (project.platforms?.isNotEmpty == true ? project.platforms?.first : null);
+    final platform = project!.platform ?? (project!.platforms?.isNotEmpty == true ? project!.platforms?.first : null);
     if (platform != null) {
       final platformImage = PlatformIcons.svgPicture(platform, 20, 20);
       if (platformImage != null) {
@@ -122,7 +124,7 @@ class ProjectCard extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: 12),
                         child: LineChart(
-                          data: LineChartData.prepareData(points: sessions.sessionPoints),
+                          data: LineChartData.prepareData(points: sessions!.sessionPoints),
                           lineWidth: 5.0,
                           lineColor: Colors.black.withOpacity(0.05),
                           gradientStart: Colors.transparent,
@@ -133,7 +135,7 @@ class ProjectCard extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 12),
                         child: LineChart(
-                            data: LineChartData.prepareData(points: sessions.sessionPoints),
+                            data: LineChartData.prepareData(points: sessions!.sessionPoints),
                             lineWidth: 5.0,
                             lineColor: Colors.white,
                             gradientStart: Colors.transparent,
@@ -159,7 +161,7 @@ class ProjectCard extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              _infoBox(context, "Total: ${sessions?.numberOfSessions?.formattedNumberOfSession() ?? '--'}"),
+                              _infoBox(context, "Total: ${sessions?.numberOfSessions.formattedNumberOfSession() ?? '--'}"),
                               // if (release?.authors?.isNotEmpty == true)
                               //   SizedBox(width: 6),
                               // AvatarStack(

@@ -8,7 +8,7 @@ part of 'deploy.dart';
 
 Deploy _$DeployFromJson(Map<String, dynamic> json) {
   return Deploy(
-    json['environment'] as String,
+    json['environment'] as String?,
     json['dateFinished'] == null
         ? null
         : DateTime.parse(json['dateFinished'] as String),

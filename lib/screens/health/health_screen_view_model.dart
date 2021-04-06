@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:redux/redux.dart';
 
 import '../../redux/actions.dart';
@@ -51,8 +50,8 @@ class HealthScreenViewModel {
   final Map<String, double> _apdexByProjectId;
   final Map<String, double> _apdexBeforeByProjectId;
 
-  final double loadingProgress;
-  final String loadingText;
+  final double? loadingProgress;
+  final String? loadingText;
 
   final bool showProjectEmptyScreen;
   final bool showLoadingScreen;
@@ -77,7 +76,7 @@ class HealthScreenViewModel {
     );
   }
 
-  SessionState sessionState(int index, SessionStatus sessionStatus) {
+  SessionState? sessionState(int index, SessionStatus sessionStatus) {
     final project = projects[index].project;
     switch (sessionStatus) {
       case SessionStatus.healthy:
@@ -89,12 +88,11 @@ class HealthScreenViewModel {
       case SessionStatus.abnormal:
         return _abnormalSessionsStateByProjectId[project.id];
     }
-    return null;
   }
 
   bool showAbnormalSessions(int index) {
     final project = projects[index].project;
-    final platform = project?.platform?.toLowerCase();
+    final platform = project.platform?.toLowerCase();
     if (platform == null) {
       return true;
     } else {
@@ -136,11 +134,9 @@ class HealthScreenViewModel {
     //_fetchApdex(projectWithLatestRelease);
     if (index + 1 < projects.length) {
       final nextProjectWithLatestRelease = projects[index + 1];
-      if (nextProjectWithLatestRelease != null) {
-        //_fetchLatestRelease(nextProjectWithLatestRelease);
-        _fetchSessions(nextProjectWithLatestRelease);
-        //_fetchApdex(nextProjectWithLatestRelease);
-      }
+      //_fetchLatestRelease(nextProjectWithLatestRelease);
+      _fetchSessions(nextProjectWithLatestRelease);
+      //_fetchApdex(nextProjectWithLatestRelease);
     }
   }
 

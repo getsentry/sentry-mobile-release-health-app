@@ -13,17 +13,17 @@ import 'health_screen_view_model.dart';
 import 'sessions_chart_row.dart';
 
 class HealthScreen extends StatefulWidget {
-  const HealthScreen({Key key}) : super(key: key);
+  const HealthScreen({Key? key}) : super(key: key);
 
   @override
   _HealthScreenState createState() => _HealthScreenState();
 }
 
 class _HealthScreenState extends State<HealthScreen> {
-  int _index;
+  int? _index;
 
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
-  PageController _pageController;
+  PageController? _pageController;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +57,7 @@ class _HealthScreenState extends State<HealthScreen> {
               button: 'Retry',
               action: () {
                 viewModel.fetchProjects();
-                reloadSessionData(viewModel, _index);
+                reloadSessionData(viewModel, _index ?? 0);
               });
         } else {
           return EmptyScreen(
@@ -66,7 +66,7 @@ class _HealthScreenState extends State<HealthScreen> {
               button: 'Retry',
               action: () {
                 viewModel.fetchProjects();
-                reloadSessionData(viewModel, _index);
+                reloadSessionData(viewModel, _index ?? 0);
               });
         }
     } else if (viewModel.showProjectEmptyScreen) {
@@ -76,14 +76,14 @@ class _HealthScreenState extends State<HealthScreen> {
         button: 'Refresh',
         action: () {
           viewModel.fetchProjects();
-          reloadSessionData(viewModel, _index);
+          reloadSessionData(viewModel, _index ?? 0);
         });
     } else {
-      WidgetsBinding.instance.addPostFrameCallback( ( Duration duration ) {
+      WidgetsBinding.instance!.addPostFrameCallback( ( Duration duration ) {
         if (viewModel.showLoadingScreen) {
-          _refreshKey.currentState.show();
+          _refreshKey.currentState!.show();
         } else {
-          _refreshKey.currentState.deactivate();
+          _refreshKey.currentState!.deactivate();
         }
       });
 
@@ -92,9 +92,11 @@ class _HealthScreenState extends State<HealthScreen> {
         _index = index;
       };
 
-      if (_index == null || _index >= viewModel.projects.length) {
+      if (_index == null || _index! >= viewModel.projects.length) {
         updateIndex(0);
       }
+
+      final index = _index ?? 0;
 
       return RefreshIndicator(
         key: _refreshKey,
@@ -148,12 +150,12 @@ class _HealthScreenState extends State<HealthScreen> {
                               children: [
                                 HealthCard(
                                   title: 'Crash Free Sessions',
-                                  viewModel: viewModel.crashFreeSessionsForProject(_index),
+                                  viewModel: viewModel.crashFreeSessionsForProject(index),
                                 ),
                                 SizedBox(width: 8),
                                 HealthCard(
                                   title: 'Crash Free Users',
-                                  viewModel: viewModel.crashFreeUsersForProject(_index),
+                                  viewModel: viewModel.crashFreeUsersForProject(index),
                                 ),
                               ],
                             ),
@@ -161,24 +163,24 @@ class _HealthScreenState extends State<HealthScreen> {
                           SessionsChartRow(
                             title: 'Healthy',
                             color: SentryColors.buttercup,
-                            sessionState: viewModel.sessionState(_index, SessionStatus.healthy),
+                            sessionState: viewModel.sessionState(index, SessionStatus.healthy),
                             flipDeltaColors: true,
                           ),
                           SessionsChartRow(
                             title: 'Errored',
                             color: SentryColors.eastBay,
-                            sessionState: viewModel.sessionState(_index, SessionStatus.errored),
+                            sessionState: viewModel.sessionState(index, SessionStatus.errored),
                           ),
-                          if (viewModel.showAbnormalSessions(_index))
+                          if (viewModel.showAbnormalSessions(index))
                             SessionsChartRow(
                               title: 'Abnormal',
                               color: SentryColors.tapestry,
-                              sessionState: viewModel.sessionState(_index, SessionStatus.abnormal),
+                              sessionState: viewModel.sessionState(index, SessionStatus.abnormal),
                             ),
                           SessionsChartRow(
                             title: 'Crashed',
                             color: SentryColors.burntSienna,
-                            sessionState: viewModel.sessionState(_index, SessionStatus.crashed),
+                            sessionState: viewModel.sessionState(index, SessionStatus.crashed),
                           ),
                         ],
                       ),
@@ -193,7 +195,7 @@ class _HealthScreenState extends State<HealthScreen> {
           Duration(microseconds: 100),
           () {
             viewModel.reloadProjects();
-            reloadSessionData(viewModel, _index);
+            reloadSessionData(viewModel, _index ?? 0);
           }
         ),
       );

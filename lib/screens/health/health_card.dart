@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 
 import '../../utils/sentry_colors.dart';
@@ -5,7 +7,7 @@ import 'health_card_view_model.dart';
 
 class HealthCard extends StatelessWidget {
   HealthCard(
-      {@required this.title, this.viewModel});
+      {required this.title, required this.viewModel});
 
   final String title;
   final HealthCardViewModel viewModel;

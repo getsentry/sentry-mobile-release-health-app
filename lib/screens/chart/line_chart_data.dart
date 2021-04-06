@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'line_chart_point.dart';
 
 class LineChartData {
@@ -14,7 +13,7 @@ class LineChartData {
   final double countY;
 
   /// Normalize data points so they all start at zero. Return min/max values.
-  static LineChartData prepareData({@required List<LineChartPoint> points, double preferredMinY, double preferredMaxY}) {
+  static LineChartData prepareData({required List<LineChartPoint> points, double? preferredMinY, double? preferredMaxY}) {
     var minX = double.maxFinite;
     var maxX = 0.0;
     var minY = double.maxFinite;

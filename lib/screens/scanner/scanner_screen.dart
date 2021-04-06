@@ -1,3 +1,5 @@
+
+
 import 'dart:io';
 import 'dart:math';
 
@@ -8,7 +10,7 @@ import '../../utils/sentry_colors.dart';
 
 class ScannerScreen extends StatefulWidget {
   const ScannerScreen({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -16,7 +18,7 @@ class ScannerScreen extends StatefulWidget {
 }
 
 class _ScannerScreenState extends State<ScannerScreen> {
-  QRViewController _controller;
+  QRViewController? _controller;
   final GlobalKey _scannerKey = GlobalKey(debugLabel: 'QR');
   var _popped = false;
 
@@ -26,9 +28,9 @@ class _ScannerScreenState extends State<ScannerScreen> {
   void reassemble() {
     super.reassemble();
     if (Platform.isAndroid) {
-      _controller.pauseCamera();
+      _controller?.pauseCamera();
     }
-    _controller.resumeCamera();
+    _controller?.resumeCamera();
   }
 
   @override
@@ -100,13 +102,13 @@ class _ScannerScreenState extends State<ScannerScreen> {
       _controller = controller;
     });
     controller.scannedDataStream.listen((scanData) {
-      if (scanData?.code != null) {
-        _popIfPossible(scanData?.code);
+      if (scanData.code != null) {
+        _popIfPossible(scanData.code);
       }
     });
   }
 
-  void _popIfPossible(String result) {
+  void _popIfPossible(String? result) {
     if (mounted && !_popped) {
       _popped = true; // Don't dismiss multiple times.
       Navigator.pop(context, result);

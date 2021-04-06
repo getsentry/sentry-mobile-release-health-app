@@ -1,3 +1,5 @@
+
+
 import 'package:json_annotation/json_annotation.dart';
 
 import 'latest_release.dart';
@@ -11,23 +13,23 @@ class Project {
   factory Project.fromJson(Map<String, dynamic> json) => _$ProjectFromJson(json);
 
   final String id;
-  final String name;
+  final String? name;
   final String slug;
-  final String platform;
-  final List<String> platforms;
-  final LatestRelease latestRelease; // TODO(denis): Change to `Release` once it implements JsonSerializable.
-  final bool isBookmarked;
+  final String? platform;
+  final List<String>? platforms;
+  final LatestRelease? latestRelease; // TODO(denis): Change to `Release` once it implements JsonSerializable.
+  final bool? isBookmarked;
 
   Map<String, dynamic> toJson() => _$ProjectToJson(this);
 
   Project copyWith({
-    String id,
-    String name,
-    String slug,
-    String platform,
-    List<String> platforms,
-    LatestRelease latestRelease,
-    bool isBookmarked
+    String? id,
+    String? name,
+    String? slug,
+    String? platform,
+    List<String>? platforms,
+    LatestRelease? latestRelease,
+    bool? isBookmarked
   }) {
     return Project(
       id ?? this.id,

@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 
 import 'text_theme_ext.dart';
@@ -5,7 +7,7 @@ import 'text_theme_ext.dart';
 const double HIDDEN_HEIGHT = 240;
 
 class ContextView extends StatelessWidget {
-  const ContextView({@required this.title, @required this.value});
+  const ContextView({required this.title, required this.value});
 
   final String title;
   final dynamic value;
@@ -42,7 +44,7 @@ class ContextView extends StatelessWidget {
 }
 
 class ContextRow extends StatelessWidget {
-  ContextRow({@required this.name, @required this.value});
+  ContextRow({required this.name, required this.value});
   final String name;
   final String value;
 

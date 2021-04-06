@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
@@ -49,7 +51,7 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
           itemCount: viewModel.items.length,
           itemBuilder: (context, index) {
             final item = viewModel.items[index];
-            if (item is ProjectPickerHeadlineItem) {
+            if (item is ProjectHeadlineItem) {
               return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
                   child: Text(
@@ -58,17 +60,17 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                   )
               );
             }
-            else if (item is ProjectPickerOrganizationItem) {
+            else if (item is ProjectOrganizationItem) {
               return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: SettingsHeader(item.title)
               );
-            } else if (item is ProjectPickerProjectItem) {
+            } else if (item is ProjectProjectItem) {
               return ListTile(
                 contentPadding: EdgeInsets.only(right: 16, top: 0, left: 16, bottom: 0),
                 title: Text(
                   item.projectSlug,
-                  style: Theme.of(context).textTheme.bodyText1.apply(
+                  style: Theme.of(context).textTheme.bodyText1?.apply(
                       color: SentryColors.revolver
                   ),
                 ),

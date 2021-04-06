@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 
 import '../../utils/sentry_colors.dart';
@@ -6,7 +8,7 @@ class OnboardingDetailScreen extends StatefulWidget {
   OnboardingDetailScreen(this._firstImage, this._secondImage, this._subtitle);
 
   final String _firstImage;
-  final String _secondImage;
+  final String? _secondImage;
   final String _subtitle;
 
   @override
@@ -17,7 +19,7 @@ class _OnboardingDetailScreenState extends State<OnboardingDetailScreen> {
   _OnboardingDetailScreenState(this._firstImage, this._secondImage, this._subtitle);
 
   final String _firstImage;
-  final String _secondImage;
+  final String? _secondImage;
   final String _subtitle;
 
   var _secondImageVisible = false;
@@ -47,7 +49,7 @@ class _OnboardingDetailScreenState extends State<OnboardingDetailScreen> {
                       duration: Duration(seconds: 3),
                       child: Container(
                         alignment: Alignment.center,
-                        child: Image.asset(_secondImage)
+                        child: Image.asset(_secondImage!)
                       ),
                     )
                   ],
@@ -60,8 +62,8 @@ class _OnboardingDetailScreenState extends State<OnboardingDetailScreen> {
                 child: Text(
                   _subtitle,
                   style: TextStyle(
-                      fontFamily: Theme.of(context).textTheme.subtitle1.fontFamily,
-                      fontSize: Theme.of(context).textTheme.headline3.fontSize,
+                      fontFamily: Theme.of(context).textTheme.subtitle1?.fontFamily,
+                      fontSize: Theme.of(context).textTheme.headline3?.fontSize,
                       color: SentryColors.revolver
                   ),
                   textAlign: TextAlign.center,

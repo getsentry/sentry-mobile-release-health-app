@@ -8,7 +8,7 @@ part of 'latest_release.dart';
 
 LatestRelease _$LatestReleaseFromJson(Map<String, dynamic> json) {
   return LatestRelease(
-    json['version'] as String,
+    json['version'] as String?,
   );
 }
 

@@ -8,18 +8,18 @@ part of 'event.dart';
 
 Event _$EventFromJson(Map<String, dynamic> json) {
   return Event(
-    id: json['id'] as String,
-    culprit: json['culprit'] as String,
-    userCount: json['userCount'] as int,
-    count: json['count'] as int,
-    title: json['title'] as String,
+    id: json['id'] as String?,
+    culprit: json['culprit'] as String?,
+    userCount: json['userCount'] as int?,
+    count: json['count'] as int?,
+    title: json['title'] as String?,
     metadata: metadataFromJson(json['metadata'] as Map<String, dynamic>),
     tags: _tagsFromJson(json['tags'] as List),
-    groupID: json['groupID'] as String,
+    groupID: json['groupID'] as String?,
     context: _contextFromJson(json['context'] as Map<String, dynamic>),
-    entries: (json['entries'] as List)
+    entries: (json['entries'] as List<dynamic>?)
         ?.map((e) => e as Map<String, dynamic>)
-        ?.toList(),
+        .toList(),
   );
 }
 

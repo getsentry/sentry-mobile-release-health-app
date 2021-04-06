@@ -29,7 +29,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
 
           for (final organization in organizations) {
             final individualOrganization = await api.organization(organization.slug);
-            individualOrganizations.add(individualOrganization ?? organization);
+            individualOrganizations.add(individualOrganization);
 
             store.dispatch(FetchOrgsAndProjectsProgressAction('${organization.name}: Fetching projects...', ++currentProgress / fullProgress));
             final projects = await api.projects(organization.slug);
@@ -71,7 +71,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
               final latestRelease = await api.release(
                   organizationSlug: organizationSlug,
                   projectId: project.id,
-                  releaseId: project.latestRelease.version
+                  releaseId: project.latestRelease!.version
               );
               projectsWithLatestRelease.add(ProjectWithLatestRelease(project, latestRelease));
             }

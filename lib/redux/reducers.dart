@@ -3,6 +3,7 @@ import 'package:redux/redux.dart';
 import '../api/api_errors.dart';
 import '../types/project.dart';
 import '../types/release.dart';
+import '../utils/collections.dart';
 import '../utils/stability_score.dart';
 import 'actions.dart';
 import 'state/app_state.dart';
@@ -34,7 +35,7 @@ final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, BookmarkProjectSuccessAction>(_bookmarkProjectSuccessAction),
   TypedReducer<GlobalState, BookmarkProjectFailureAction>(_bookmarkProjectFailureAction),
   TypedReducer<GlobalState, SentrySdkToggleAction>(_sentrySdkToggle),
-  TypedReducer<GlobalState, ApiFailureAction>(_apiFailureAction),
+  TypedReducer<GlobalState, ApiFailureAction>(_apiFailureAction)
   
 ]);
 
@@ -85,15 +86,15 @@ GlobalState _fetchOrganizationsAndProjectsAction(GlobalState state, FetchOrgsAnd
 }
 
 GlobalState _fetchOrgsAndProjectsSuccessAction(GlobalState state, FetchOrgsAndProjectsSuccessAction action) {
-  final organizationsSlugByProjectSlug = <String, String>{};
-  final projectsById = <String, Project>{};
+  final Map<String, String> organizationsSlugByProjectSlug = <String, String>{};
+  final Map<String, Project> projectsById = <String, Project>{};
 
   for (final project in state.projectsWithSessions) {
     projectsById[project.id] = project;
   }
 
   for (final organizationSlug in action.projectsByOrganizationSlug.keys) {
-    for (final project in action.projectsByOrganizationSlug[organizationSlug]) {
+    for (final project in action.projectsByOrganizationSlug[organizationSlug]!) {
       organizationsSlugByProjectSlug[project.slug] = organizationSlug;
 
       if (action.projectIdsWithSessions.contains(project.id)) {
@@ -105,11 +106,11 @@ GlobalState _fetchOrgsAndProjectsSuccessAction(GlobalState state, FetchOrgsAndPr
   final projectsWithSessions = projectsById.values.toList();
 
   projectsWithSessions.sort((Project a, Project b) {
-    return (a.slug ?? a.name).toLowerCase().compareTo((b.slug ?? b.name).toLowerCase());
+    return a.slug.toLowerCase().compareTo(b.slug.toLowerCase());
   });
   projectsWithSessions.sort((Project a, Project b) {
-    final valueA = a.isBookmarked ? 0 : 1;
-    final valueB = b.isBookmarked ? 0 : 1;
+    final valueA = a.isBookmarked! ? 0 : 1;
+    final valueB = b.isBookmarked! ? 0 : 1;
     return valueA.compareTo(valueB);
   });
 
@@ -143,10 +144,13 @@ GlobalState _fetchLatestReleasesAction(GlobalState state, FetchLatestReleasesAct
 }
 
 GlobalState _fetchLatestReleasesSuccessAction(GlobalState state, FetchLatestReleasesSuccessAction action) {
-  final latestReleasesByProjectId = <String, Release>{};
+  final Map<String, Release> latestReleasesByProjectId = <String, Release>{};
 
   for (final projectsWithLatestRelease in action.projectsWithLatestReleases) {
-    latestReleasesByProjectId[projectsWithLatestRelease.project.id] = projectsWithLatestRelease.release;
+    final release = projectsWithLatestRelease.release;
+    if (release != null) {
+      latestReleasesByProjectId[projectsWithLatestRelease.project.id] = release;
+    }
   }
 
   return state.copyWith(
@@ -156,9 +160,9 @@ GlobalState _fetchLatestReleasesSuccessAction(GlobalState state, FetchLatestRele
 
 GlobalState _fetchLatestReleaseSuccessAction(GlobalState state, FetchLatestReleaseSuccessAction action) {
   final organizationSlug = state.organizationsSlugByProjectSlug[action.projectSlug];
-  final project = state.projectsByOrganizationSlug[organizationSlug].where((element) => element.slug == action.projectSlug).first;
+  final project = state.projectsByOrganizationSlug[organizationSlug!]!.where((element) => element.slug == action.projectSlug).first;
 
-  final latestReleasesByProjectId = state.latestReleasesByProjectId;
+  final Map<String, Release> latestReleasesByProjectId = state.latestReleasesByProjectId;
   latestReleasesByProjectId[project.id] = action.latestRelease;
 
   return state.copyWith(
@@ -188,18 +192,30 @@ GlobalState _fetchSessionsSuccessAction(GlobalState state, FetchSessionsSuccessA
   final sessionsBeforeByProjectId = state.sessionsBeforeByProjectId;
   sessionsBeforeByProjectId[action.projectId] = action.sessionsBefore;
   
-  final crashFreeSessionsByProjectId = state.crashFreeSessionsByProjectId;
-  crashFreeSessionsByProjectId[action.projectId] = action.sessions.crashFreeSessions();
+  final Map<String, double> crashFreeSessionsByProjectId = state.crashFreeSessionsByProjectId;
+  final sessionsCrashFreeSessions = action.sessions.crashFreeSessions();
+  if (sessionsCrashFreeSessions != null) {
+    crashFreeSessionsByProjectId[action.projectId] = sessionsCrashFreeSessions;
+  }
   
-  final crashFreeSessionsBeforeByProjectId = state.crashFreeSessionsBeforeByProjectId;
-  crashFreeSessionsBeforeByProjectId[action.projectId] = action.sessionsBefore.crashFreeSessions();
+  final Map<String, double> crashFreeSessionsBeforeByProjectId = state.crashFreeSessionsBeforeByProjectId;
+  final sessionsBeforeCrashFreeSessions = action.sessionsBefore.crashFreeSessions();
+  if (sessionsBeforeCrashFreeSessions != null) {
+    crashFreeSessionsBeforeByProjectId[action.projectId] = sessionsBeforeCrashFreeSessions;
+  }
 
-  final crashFreeUsersByProjectId = state.crashFreeUsersByProjectId;
-  crashFreeUsersByProjectId[action.projectId] = action.sessions.crashFreeUsers();
+  final Map<String, double> crashFreeUsersByProjectId = state.crashFreeUsersByProjectId;
+  final sessionsCrashFreeUsers = action.sessions.crashFreeUsers();
+  if (sessionsCrashFreeUsers != null) {
+    crashFreeUsersByProjectId[action.projectId] = sessionsCrashFreeUsers;
+  }
 
-  final crashFreeUsersBeforeByProjectId = state.crashFreeUsersBeforeByProjectId;
-  crashFreeUsersBeforeByProjectId[action.projectId] = action.sessionsBefore.crashFreeUsers();
-  
+  final Map<String, double> crashFreeUsersBeforeByProjectId = state.crashFreeUsersBeforeByProjectId;
+  final sessionsBeforeCrashFreeUsers = action.sessionsBefore.crashFreeUsers();
+  if (sessionsBeforeCrashFreeUsers != null) {
+    crashFreeUsersBeforeByProjectId[action.projectId] = sessionsBeforeCrashFreeUsers;
+  }
+
   return state.copyWith(
       sessionsByProjectId: sessionsByProjectId,
       sessionsBeforeByProjectId: sessionsBeforeByProjectId,
@@ -212,10 +228,16 @@ GlobalState _fetchSessionsSuccessAction(GlobalState state, FetchSessionsSuccessA
 
 GlobalState _fetchApdexSuccessAction(GlobalState state, FetchApdexSuccessAction action) {
   final apdexByProjectId = state.apdexByProjectId;
-  apdexByProjectId[action.projectId] = action.apdex;
+  final apdex = action.apdex;
+  if (apdex != null) {
+    apdexByProjectId[action.projectId] = apdex;
+  }
 
   final apdexBeforeByProjectId = state.apdexBeforeByProjectId;
-  apdexBeforeByProjectId[action.projectId] = action.apdexBefore;
+  final apdexBefore = action.apdexBefore;
+  if (apdexBefore != null) {
+    apdexBeforeByProjectId[action.projectId] = apdexBefore;
+  }
 
   return state.copyWith(
     apdexByProjectId: apdexByProjectId,
@@ -224,7 +246,7 @@ GlobalState _fetchApdexSuccessAction(GlobalState state, FetchApdexSuccessAction 
 }
 
 GlobalState _bookmarkProjectAction(GlobalState state, BookmarkProjectAction action) {
-  final project = state.projectsWithSessions.firstWhere((element) => element.slug == action.projectSlug);
+  final project = state.projectsWithSessions.firstWhereOrNull((element) => element.slug == action.projectSlug);
   if (project != null) {
     return _replaceProject(state, project.copyWith(isBookmarked: action.bookmarked));
   } else {
@@ -237,7 +259,7 @@ GlobalState _bookmarkProjectSuccessAction(GlobalState state, BookmarkProjectSucc
 }
 
 GlobalState _bookmarkProjectFailureAction(GlobalState state, BookmarkProjectFailureAction action) {
-  final project = state.projectsWithSessions.firstWhere((element) => element.slug == action.projectSlug);
+  final project = state.projectsWithSessions.firstWhereOrNull((element) => element.slug == action.projectSlug);
   if (project != null) {
     return _replaceProject(state, project.copyWith(isBookmarked: action.bookmarked));
   } else {
@@ -276,7 +298,7 @@ GlobalState _replaceProject(GlobalState state, Project projectToReplace) {
 
   for (final organizationSlug in state.projectsByOrganizationSlug.keys) {
     final projects = <Project>[];
-    for (final project in state.projectsByOrganizationSlug[organizationSlug]) {
+    for (final project in state.projectsByOrganizationSlug[organizationSlug]!) {
       if (project.id == projectToReplace.id) {
         projects.add(projectToReplace);
       } else {
@@ -287,11 +309,11 @@ GlobalState _replaceProject(GlobalState state, Project projectToReplace) {
   }
 
   projects.sort((Project a, Project b) {
-    return (a.slug ?? a.name).toLowerCase().compareTo((b.slug ?? b.name).toLowerCase());
+    return a.slug.toLowerCase().compareTo(b.slug.toLowerCase());
   });
   projects.sort((Project a, Project b) {
-    final valueA = a.isBookmarked ? 0 : 1;
-    final valueB = b.isBookmarked ? 0 : 1;
+    final valueA = a.isBookmarked! ? 0 : 1;
+    final valueB = b.isBookmarked! ? 0 : 1;
     return valueA.compareTo(valueB);
   });
 
