@@ -50,19 +50,34 @@ class _HealthScreenState extends State<HealthScreen> {
         )
       );
     } else if (viewModel.showErrorScreen) {
-      return EmptyScreen(
-          title: 'Ooops',
-          text: 'Something went wrong. Please try again.',
-          button: 'Retry',
-          action: viewModel.fetchProjects
-      );
+        if (viewModel.showErrorNoConnectionScreen) {
+          return EmptyScreen(
+              title: 'No connection',
+              text: 'Please check your connection and try again.',
+              button: 'Retry',
+              action: () {
+                viewModel.fetchProjects();
+                reloadSessionData(viewModel, _index);
+              });
+        } else {
+          return EmptyScreen(
+              title: 'Ooops',
+              text: 'Something went wrong. Please try again.',
+              button: 'Retry',
+              action: () {
+                viewModel.fetchProjects();
+                reloadSessionData(viewModel, _index);
+              });
+        }
     } else if (viewModel.showProjectEmptyScreen) {
       return EmptyScreen(
         title: 'No projects found',
         text: 'At least one project needs to provide session data for this to work.',
         button: 'Refresh',
-        action: viewModel.fetchProjects
-      );
+        action: () {
+          viewModel.fetchProjects();
+          reloadSessionData(viewModel, _index);
+        });
     } else {
       WidgetsBinding.instance.addPostFrameCallback( ( Duration duration ) {
         if (viewModel.showLoadingScreen) {
@@ -178,14 +193,17 @@ class _HealthScreenState extends State<HealthScreen> {
           Duration(microseconds: 100),
           () {
             viewModel.reloadProjects();
-
-            // Reload session data for previous, current and next index.
-            viewModel.fetchDataForProject(_index - 1);
-            viewModel.fetchDataForProject(_index);
-            viewModel.fetchDataForProject(_index + 1);
+            reloadSessionData(viewModel, _index);
           }
         ),
       );
     }
+  }
+
+  // Reload session data for previous, current and next index.
+  void reloadSessionData(HealthScreenViewModel viewModel, int currentIndex) {
+    viewModel.fetchDataForProject(currentIndex - 1);
+    viewModel.fetchDataForProject(currentIndex);
+    viewModel.fetchDataForProject(currentIndex + 1);
   }
 }
