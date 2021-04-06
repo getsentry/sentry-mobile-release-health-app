@@ -38,7 +38,7 @@ dependencies:
   qr_code_scanner: ^0.4.0-nullsafety.0
   redux: ^5.0.0
   redux_thunk: ^0.4.0
-  sentry_flutter: ^4.1.0-nullsafety.1
+  sentry_flutter: ^5.0.0
   shared_preferences: ^2.0.5
   timeago: ^3.0.2
   url_launcher: ^6.0.2
