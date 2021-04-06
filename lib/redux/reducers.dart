@@ -75,12 +75,12 @@ GlobalState _fetchOrganizationsAndProjectsAction(GlobalState state, FetchOrgsAnd
       sessionsByProjectId: {},
       sessionsBeforeByProjectId: {},
       orgsAndProjectsLoading: true,
-      orgsAndProjectsError: false
+      setOrgsAndProjectsErrorNull: true
     );
   } else {
     return state.copyWith(
       orgsAndProjectsLoading: true,
-      orgsAndProjectsError: false
+      setOrgsAndProjectsErrorNull: true
     );
   }
 }
@@ -127,7 +127,7 @@ GlobalState _fetchOrgsAndProjectsSuccessAction(GlobalState state, FetchOrgsAndPr
 GlobalState _fetchOrgsAndProjectsFailure(GlobalState state, FetchOrgsAndProjectsFailureAction action) {
   return state.copyWith(
     orgsAndProjectsLoading: false,
-    orgsAndProjectsError: true,
+    orgsAndProjectsError: action.error,
   );
 }
 

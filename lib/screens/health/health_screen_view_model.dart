@@ -1,5 +1,5 @@
-
-
+import 'dart:async';
+import 'dart:io';
 import 'package:redux/redux.dart';
 
 import '../../redux/actions.dart';
@@ -27,7 +27,8 @@ class HealthScreenViewModel {
       _apdexBeforeByProjectId = store.state.globalState.apdexBeforeByProjectId,
       showProjectEmptyScreen = store.state.globalState.projectsWithSessions.isEmpty && !store.state.globalState.orgsAndProjectsLoading,
       showLoadingScreen = store.state.globalState.projectsWithSessions.isEmpty && store.state.globalState.orgsAndProjectsLoading,
-      showErrorScreen = store.state.globalState.orgsAndProjectsError,
+      showErrorScreen = store.state.globalState.orgsAndProjectsError != null,
+      showErrorNoConnectionScreen = store.state.globalState.orgsAndProjectsError is TimeoutException || store.state.globalState.orgsAndProjectsError is SocketException,
       loadingProgress = store.state.globalState.orgsAndProjectsProgress,
       loadingText = store.state.globalState.orgsAndProjectsProgressText;
 
@@ -55,6 +56,7 @@ class HealthScreenViewModel {
   final bool showProjectEmptyScreen;
   final bool showLoadingScreen;
   final bool showErrorScreen;
+  final bool showErrorNoConnectionScreen;
 
   void fetchProjects() {
     _store.dispatch(FetchOrgsAndProjectsAction(false));

@@ -12,7 +12,11 @@ extension RelativeDateTime on DateTime {
   static const monthsToYearThreshold = 10;
 
   String relativeFromNow() {
-    final now = DateTime.now();
+    return relativeDateFrom(DateTime.now());
+  }
+
+  String relativeDateFrom(DateTime dateTimeFrom) {
+    final now = dateTimeFrom;
     final difference = now.difference(this);
 
     // Years
