@@ -1,3 +1,5 @@
+
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -18,15 +20,15 @@ import 'types/organization.dart';
 import 'types/tag.dart';
 
 class IssueScreen extends StatefulWidget {
-  const IssueScreen({Key key}) : super(key: key);
+  const IssueScreen({Key? key}) : super(key: key);
 
   @override
   _IssueState createState() => _IssueState();
 }
 
 Future<Group> fetchGroup() async {
-  final response =
-      await http.get('https://jennmueng.com/sentry_sample_issue.json');
+  final uri = Uri.https('jennmueng.com', 'sentry_sample_issue.json');
+  final response = await http.get(uri);
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -42,8 +44,8 @@ Future<Group> fetchGroup() async {
 }
 
 Future<Event> fetchEvent() async {
-  final response =
-      await http.get('https://jennmueng.com/sentry_sample_event.json');
+  final uri = Uri.https('jennmueng.com', 'sentry_sample_event.json');
+  final response = await http.get(uri);
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -59,16 +61,16 @@ Future<Event> fetchEvent() async {
 }
 
 class IssueViewModel {
-  IssueViewModel({@required this.selectedOrganization});
-  final Organization selectedOrganization;
+  IssueViewModel({required this.selectedOrganization});
+  final Organization? selectedOrganization;
 
   static IssueViewModel fromStore(Store<AppState> store) => IssueViewModel(
       selectedOrganization: store.state.globalState.selectedOrganization);
 }
 
 class _IssueState extends State<IssueScreen> {
-  Future<Event> futureEvent;
-  Future<Group> futureGroup;
+  late Future<Event> futureEvent;
+  late Future<Group> futureGroup;
 
   @override
   void initState() {
@@ -89,8 +91,8 @@ class _IssueState extends State<IssueScreen> {
         future: Future.wait<dynamic>([futureEvent, futureGroup]),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            final event = snapshot.data[0] as Event;
-            final group = snapshot.data[1] as Group;
+            final event = snapshot.data![0] as Event;
+            final group = snapshot.data![1] as Group;
 
             return StoreConnector<AppState, IssueViewModel>(
                 converter: (store) => IssueViewModel.fromStore(store),
@@ -109,9 +111,9 @@ class _IssueState extends State<IssueScreen> {
 
 class IssueView extends StatelessWidget {
   IssueView(
-      {@required this.latestEvent,
-      @required this.group,
-      @required this.viewModel});
+      {required this.latestEvent,
+      required this.group,
+      required this.viewModel});
   final Event latestEvent;
   final Group group;
   final IssueViewModel viewModel;
@@ -119,10 +121,10 @@ class IssueView extends StatelessWidget {
   /// Launches the issue in a web browser.
   Future<void> launchEventUrl() async {
     final url =
-        'https://sentry.io/organizations/${viewModel.selectedOrganization.slug}/issues/${latestEvent.groupID}';
+        'https://sentry.io/organizations/${viewModel.selectedOrganization!.slug}/issues/${latestEvent.groupID}';
 
     if (await canLaunch(url)) {
-      await launch(url);
+      await launch(url, forceSafariVC: false);
     } else {
       throw 'Could not launch $url';
     }
@@ -132,7 +134,7 @@ class IssueView extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Breadcrumb> breadcrumbs = [];
 
-    for (final entry in latestEvent.entries) {
+    for (final entry in latestEvent.entries!) {
       if (entry['type'] == 'breadcrumbs') {
         final List<dynamic> d = entry['data']['values'] as List<dynamic>;
 
@@ -153,29 +155,29 @@ class IssueView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(latestEvent.metadata.type,
+                        Text(latestEvent.metadata!.type!,
                             style: Theme.of(context).textTheme.headline1),
-                        Text(latestEvent.culprit,
+                        Text(latestEvent.culprit!,
                             style: TextStyle(
                                 color: Colors.black54,
                                 fontSize: Theme.of(context)
                                     .textTheme
-                                    .headline2
+                                    .headline2!
                                     .fontSize)),
                         Container(
                             margin: EdgeInsets.only(top: 12),
-                            child: Text(latestEvent.title,
+                            child: Text(latestEvent.title!,
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: Theme.of(context)
                                         .textTheme
-                                        .headline4
+                                        .headline4!
                                         .fontSize)))
                       ],
                     )),
                 EventCounts(
-                    count: group.count, userCount: group.userCount.toString()),
-                Tags(tags: latestEvent.tags),
+                    count: group.count!, userCount: group.userCount.toString()),
+                Tags(tags: latestEvent.tags!),
                 BreadcrumbViewer(breadcrumbs: breadcrumbs),
                 Container(
                     margin: EdgeInsets.only(top: 14),
@@ -189,18 +191,18 @@ class IssueView extends StatelessWidget {
                       children: [
                         IssueSeenRelease(
                             title: 'Last Seen',
-                            version: group.lastRelease.version,
-                            when: timeago.format(group.lastSeen),
+                            version: group.lastRelease!.version!,
+                            when: timeago.format(group.lastSeen!),
                             time: group.lastSeen.toString()),
                         IssueSeenRelease(
                             title: 'First Seen',
-                            version: group.firstRelease.version,
-                            when: timeago.format(group.firstSeen),
+                            version: group.firstRelease!.version!,
+                            when: timeago.format(group.firstSeen!),
                             time: group.firstSeen.toString()),
                       ],
                     )),
-                Contexts(eventContext: latestEvent.context),
-                RaisedButton(
+                Contexts(eventContext: latestEvent.context!),
+                ElevatedButton(
                     onPressed: launchEventUrl, child: Text('Open in Browser')),
               ],
             )));
@@ -208,7 +210,7 @@ class IssueView extends StatelessWidget {
 }
 
 class Tags extends StatelessWidget {
-  Tags({@required this.tags});
+  Tags({required this.tags});
   final List<Tag> tags;
 
   @override
@@ -232,7 +234,7 @@ class Tags extends StatelessWidget {
                 crossAxisAlignment: WrapCrossAlignment.start,
                 children: tags
                     .map((Tag tag) =>
-                        TagCard(tagKey: tag.key, tagValue: tag.value))
+                        TagCard(tagKey: tag.key!, tagValue: tag.value!))
                     .toList()),
           ],
         ));
@@ -240,7 +242,7 @@ class Tags extends StatelessWidget {
 }
 
 class TagCard extends StatelessWidget {
-  TagCard({@required this.tagKey, @required this.tagValue});
+  TagCard({required this.tagKey, required this.tagValue});
 
   final String tagKey;
   final String tagValue;
@@ -288,7 +290,7 @@ class TagCard extends StatelessWidget {
 }
 
 class EventCounts extends StatelessWidget {
-  EventCounts({this.count, this.userCount});
+  EventCounts({required this.count, required this.userCount});
 
   final String count;
   final String userCount;
@@ -313,7 +315,7 @@ class EventCounts extends StatelessWidget {
 }
 
 class EventCount extends StatelessWidget {
-  EventCount({this.title, this.value});
+  EventCount({required this.title, required this.value});
 
   final String title;
   final String value;
@@ -334,7 +336,7 @@ class EventCount extends StatelessWidget {
 }
 
 class Contexts extends StatelessWidget {
-  Contexts({@required this.eventContext});
+  Contexts({required this.eventContext});
 
   final Map<String, dynamic> eventContext;
 
@@ -352,7 +354,7 @@ class Contexts extends StatelessWidget {
 }
 
 class IssueSeenRelease extends StatelessWidget {
-  IssueSeenRelease({this.title, this.version, this.when, this.time});
+  IssueSeenRelease({required this.title, required this.version, required this.when, required this.time});
   final String title;
   final String version;
   final String when;

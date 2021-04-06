@@ -1,6 +1,7 @@
+
+
 import '../../redux/state/session_state.dart';
 import '../../screens/chart/line_chart_point.dart';
-import '../../types/cursor.dart';
 import '../../types/group.dart';
 import '../../types/organization.dart';
 import '../../types/project.dart';
@@ -11,7 +12,7 @@ import '../../types/sessions.dart';
 import '../../types/user.dart';
 
 class AppState {
-  AppState({this.globalState});
+  AppState({required this.globalState});
 
   factory AppState.initial() {
     return AppState(
@@ -21,7 +22,7 @@ class AppState {
 
   final GlobalState globalState;
 
-  AppState copyWith({GlobalState globalState}) {
+  AppState copyWith({GlobalState? globalState}) {
     return AppState(
       globalState: globalState ?? this.globalState,
     );
@@ -31,25 +32,29 @@ class AppState {
 class GlobalState {
   GlobalState(
       {this.authToken,
-      this.hydrated,
-      this.version,
-      this.selectedTab,
-      this.organizations,
-      this.organizationsSlugByProjectSlug,
-      this.projectCursorsByOrganizationSlug,
-      this.projectsByOrganizationSlug,
-      this.projectsFetchedOnce,
-      this.projects,
-      this.latestReleasesByProjectId,
-      this.sessionsByProjectId,
-      this.sessionsBeforeByProjectId,
-      this.crashFreeSessionsByProjectId,
-      this.crashFreeSessionsBeforeByProjectId,
-      this.crashFreeUsersByProjectId,
-      this.crashFreeUsersBeforeByProjectId,
-      this.apdexByProjectId,
-      this.apdexBeforeByProjectId,
-      this.issuesByProjectSlug,
+      required this.hydrated,
+      required this.sentrySdkEnabled,
+      required this.version,
+      required this.selectedTab,
+      required this.organizations,
+      required this.organizationsSlugByProjectSlug,
+      required this.projectsByOrganizationSlug,
+      required this.orgsAndProjectsLoading,
+      required this.orgsAndProjectsProgress,
+      required this.orgsAndProjectsProgressText,
+      required this.orgsAndProjectsError,
+      required this.projectIdsWithSessions,
+      required this.projectsWithSessions,
+      required this.latestReleasesByProjectId,
+      required this.sessionsByProjectId,
+      required this.sessionsBeforeByProjectId,
+      required this.crashFreeSessionsByProjectId,
+      required this.crashFreeSessionsBeforeByProjectId,
+      required this.crashFreeUsersByProjectId,
+      required this.crashFreeUsersBeforeByProjectId,
+      required this.apdexByProjectId,
+      required this.apdexBeforeByProjectId,
+      required this.issuesByProjectSlug,
       this.selectedOrganization,
       this.selectedProject,
       this.me});
@@ -58,14 +63,18 @@ class GlobalState {
     return GlobalState(
       authToken: null,
       hydrated: false,
+      sentrySdkEnabled: false,
       version: '--',
       selectedTab: 0,
       organizations: [],
       organizationsSlugByProjectSlug: {},
-      projectCursorsByOrganizationSlug: {},
       projectsByOrganizationSlug: {},
-      projectsFetchedOnce: false,
-      projects: [],
+      orgsAndProjectsLoading: true,
+      orgsAndProjectsProgress: null,
+      orgsAndProjectsProgressText: null,
+      orgsAndProjectsError: null,
+      projectIdsWithSessions: {},
+      projectsWithSessions: [],
       latestReleasesByProjectId: {},
       sessionsByProjectId: {},
       sessionsBeforeByProjectId: {},
@@ -82,18 +91,23 @@ class GlobalState {
     );
   }
 
-  final String authToken;
+  final String? authToken;
   final bool hydrated;
+  final bool sentrySdkEnabled;
   final String version;
   final int selectedTab;
 
   final List<Organization> organizations;
   final Map<String, String> organizationsSlugByProjectSlug;
-  final Map<String, Cursor> projectCursorsByOrganizationSlug;
   final Map<String, List<Project>> projectsByOrganizationSlug;
-  final bool projectsFetchedOnce;
 
-  final List<Project> projects;
+  final bool orgsAndProjectsLoading;
+  final double? orgsAndProjectsProgress;
+  final String? orgsAndProjectsProgressText;
+  final dynamic? orgsAndProjectsError;
+
+  final Set<String> projectIdsWithSessions;
+  final List<Project> projectsWithSessions;
   final Map<String, Release> latestReleasesByProjectId;
 
   final Map<String, Sessions> sessionsByProjectId;
@@ -107,49 +121,61 @@ class GlobalState {
 
   final Map<String, List<Group>> issuesByProjectSlug;
 
-  final Organization selectedOrganization;
-  final Project selectedProject;
+  final Organization? selectedOrganization;
+  final Project? selectedProject;
 
-  final User me;
+  final User? me;
 
   GlobalState copyWith({
-    String authToken,
-    bool hydrated,
-    String version,
-    int selectedTab,
+    String? authToken,
+    bool? hydrated,
+    bool? sentrySdkEnabled,
+    String? version,
+    int? selectedTab,
     bool setTokenNull = false,
-    List<Organization> organizations,
-    Map<String, String> organizationsSlugByProjectSlug,
-    Map<String, Cursor> projectCursorsByOrganizationSlug,
-    Map<String, List<Project>> projectsByOrganizationSlug,
-    bool projectsFetchedOnce,
-    bool projectsLoading,
-    List<Project> projects,
-    Map<String, Release> latestReleasesByProjectId,
-    Map<String, Sessions> sessionsByProjectId,
-    Map<String, Sessions> sessionsBeforeByProjectId,
-    Map<String, double> crashFreeSessionsByProjectId,
-    Map<String, double> crashFreeSessionsBeforeByProjectId,
-    Map<String, double> crashFreeUsersByProjectId,
-    Map<String, double> crashFreeUsersBeforeByProjectId,
-    Map<String, double> apdexByProjectId,
-    Map<String, double> apdexBeforeByProjectId,
-    Map<String, List<Group>> issuesByProjectSlug,
-    Organization selectedOrganization,
-    Project selectedProject,
-    User me,
+    List<Organization>? organizations,
+    Map<String, String>? organizationsSlugByProjectSlug,
+    Map<String, List<Project>>? projectsByOrganizationSlug,
+    bool? orgsAndProjectsLoading,
+    double? orgsAndProjectsProgress,
+    String? orgsAndProjectsProgressText,
+    dynamic? orgsAndProjectsError,
+    bool setOrgsAndProjectsErrorNull = false,
+    Set<String>? projectIdsWithSessions,
+    List<Project>? projectsWithSessions,
+    Map<String, Release>? latestReleasesByProjectId,
+    Map<String, Sessions>? sessionsByProjectId,
+    Map<String, Sessions>? sessionsBeforeByProjectId,
+    Map<String, double>? crashFreeSessionsByProjectId,
+    Map<String, double>? crashFreeSessionsBeforeByProjectId,
+    Map<String, double>? crashFreeUsersByProjectId,
+    Map<String, double>? crashFreeUsersBeforeByProjectId,
+    Map<String, double>? apdexByProjectId,
+    Map<String, double>? apdexBeforeByProjectId,
+    Map<String, List<Group>>? issuesByProjectSlug,
+    Organization? selectedOrganization,
+    Project? selectedProject,
+    User? me,
   }) {
     return GlobalState(
       authToken: setTokenNull ? null : (authToken ?? this.authToken),
       hydrated: hydrated ?? this.hydrated,
+      sentrySdkEnabled: sentrySdkEnabled ?? this.sentrySdkEnabled,
       version: version ?? this.version,
       selectedTab: selectedTab ?? this.selectedTab,
       organizations: organizations ?? this.organizations,
       organizationsSlugByProjectSlug: organizationsSlugByProjectSlug ?? this.organizationsSlugByProjectSlug,
-      projectCursorsByOrganizationSlug: projectCursorsByOrganizationSlug ?? this.projectCursorsByOrganizationSlug,
       projectsByOrganizationSlug: projectsByOrganizationSlug ?? this.projectsByOrganizationSlug,
-      projectsFetchedOnce: projectsFetchedOnce ?? this.projectsFetchedOnce,
-      projects: projects ?? this.projects,
+      orgsAndProjectsLoading: orgsAndProjectsLoading ?? this.orgsAndProjectsLoading,
+      orgsAndProjectsProgress: (orgsAndProjectsLoading ?? this.orgsAndProjectsLoading)
+        ? orgsAndProjectsProgress ?? this.orgsAndProjectsProgress
+        : null,
+      orgsAndProjectsProgressText: (orgsAndProjectsLoading ?? this.orgsAndProjectsLoading)
+          ? orgsAndProjectsProgressText ?? this.orgsAndProjectsProgressText
+          : null,
+      orgsAndProjectsError: setOrgsAndProjectsErrorNull ? null : orgsAndProjectsError ?? this.orgsAndProjectsError,
+      projectIdsWithSessions: projectIdsWithSessions ?? this.projectIdsWithSessions,
+      projectsWithSessions: projectsWithSessions ?? this.projectsWithSessions,
       latestReleasesByProjectId: latestReleasesByProjectId ?? this.latestReleasesByProjectId,
       sessionsByProjectId: sessionsByProjectId ?? this.sessionsByProjectId,
       sessionsBeforeByProjectId: sessionsBeforeByProjectId ?? this.sessionsBeforeByProjectId,
@@ -206,22 +232,22 @@ class GlobalState {
 
   // Returns the total number of sessions and the line chart points for individual intervals.
   List<dynamic> createTotalSessionCountAndLinePoints(Set<SessionStatus> sessionStatus, Sessions sessions) {
-    final groups = sessions.groups.where((element) =>
-        sessionStatus.contains(element.by.sessionStatus)
+    final groups = sessions.groups!.where((element) =>
+        sessionStatus.contains(element.by!.sessionStatus)
     ).toList();
 
     var total = 0;
     for (final group in groups) {
-      total += group.totals.sumSession;
+      total += group.totals!.sumSession!;
     }
 
     final lineChartPoints = <LineChartPoint>[];
-    for (var index = 0; index < sessions.intervals.length; index++) {
-      final interval = sessions.intervals[index];
+    for (var index = 0; index < sessions.intervals!.length; index++) {
+      final interval = sessions.intervals![index];
       var sum = 0;
 
       for (final group in groups) {
-        sum += group.series.sumSession[index];
+        sum += group.series!.sumSession![index];
       }
       lineChartPoints.add(
         LineChartPoint(
@@ -233,7 +259,7 @@ class GlobalState {
     return [total, lineChartPoints];
   }
 
-  Organization organizationForProjectSlug(String projectSlug) {
+  Organization? organizationForProjectSlug(String projectSlug) {
     final organizationSlug = organizationsSlugByProjectSlug[projectSlug];
     if (organizationSlug != null) {
       return organizations.firstWhere((element) => element.slug == organizationSlug);
@@ -243,6 +269,6 @@ class GlobalState {
   }
 
   List<ProjectWithLatestRelease> projectsWithLatestReleases() {
-    return projects.map((project) => ProjectWithLatestRelease(project, latestReleasesByProjectId[project.id])).toList();
+    return projectsWithSessions.map((project) => ProjectWithLatestRelease(project, latestReleasesByProjectId[project.id])).toList();
   }
 }

@@ -13,13 +13,16 @@
 ///
 /// 
 ///
+
+
+
 import 'package:flutter/widgets.dart';
 
 class SentryIcons {
   SentryIcons._();
 
   static const _kFontFam = 'SentryIcons';
-  static const String _kFontPkg = null;
+  static const String? _kFontPkg = null;
 
   static const IconData settings = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData trend_up = IconData(0xe807, fontFamily: _kFontFam, fontPackage: _kFontPkg);

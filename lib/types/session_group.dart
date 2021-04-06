@@ -1,4 +1,6 @@
 
+
+
 import 'package:json_annotation/json_annotation.dart';
 
 import 'session_group_by.dart';
@@ -15,9 +17,9 @@ class SessionGroup {
   static const sumSessionKey = 'sum(session)';
   static const countUniqueUsersKey = 'count_unique(user)';
 
-  final SessionGroupBy by;
-  final SessionGroupTotals totals;
-  final SessionGroupSeries series;
+  final SessionGroupBy? by;
+  final SessionGroupTotals? totals;
+  final SessionGroupSeries? series;
 
   Map<String, dynamic> toJson() => _$SessionGroupToJson(this);
 }

@@ -1,5 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
+
 part of 'stats.dart';
 
 // **************************************************************************
@@ -8,14 +9,14 @@ part of 'stats.dart';
 
 Stats _$StatsFromJson(Map<String, dynamic> json) {
   return Stats(
-    (json['24h'] as List)
+    (json['24h'] as List?)
         ?.map(
-            (e) => e == null ? null : Stat.fromJson(e as List))
-        ?.toList(),
-    (json['14d'] as List)
+            (e) => Stat.fromJson(e as List? ?? []))
+        .toList(),
+    (json['14d'] as List?)
         ?.map(
-            (e) => e == null ? null : Stat.fromJson(e as List))
-        ?.toList(),
+            (e) => Stat.fromJson(e as List? ?? []))
+        .toList(),
   );
 }
 

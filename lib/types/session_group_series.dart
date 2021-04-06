@@ -1,4 +1,6 @@
 
+
+
 import 'package:json_annotation/json_annotation.dart';
 
 import 'session_group.dart';
@@ -11,10 +13,10 @@ class SessionGroupSeries {
   factory SessionGroupSeries.fromJson(Map<String, dynamic> json) => _$SessionGroupSeriesFromJson(json);
 
   @JsonKey(name: SessionGroup.sumSessionKey)
-  final List<int> sumSession;
+  final List<int>? sumSession;
 
   @JsonKey(name: SessionGroup.countUniqueUsersKey)
-  final List<int> countUniqueUsers;
+  final List<int>? countUniqueUsers;
 
   Map<String, dynamic> toJson() => _$SessionGroupSeriesToJson(this);
 }

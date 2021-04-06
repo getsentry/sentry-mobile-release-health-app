@@ -1,10 +1,12 @@
+
+
 import 'package:flutter/material.dart';
 
 import 'text_theme_ext.dart';
 import 'types/breadcrumb.dart';
 
 class BreadcrumbViewer extends StatelessWidget {
-  BreadcrumbViewer({@required this.breadcrumbs});
+  BreadcrumbViewer({required this.breadcrumbs});
 
   final List<Breadcrumb> breadcrumbs;
 
@@ -57,7 +59,7 @@ class BreadcrumbViewer extends StatelessWidget {
 }
 
 class BreadcrumbCard extends StatelessWidget {
-  BreadcrumbCard({@required this.breadcrumb});
+  BreadcrumbCard({required this.breadcrumb});
 
   final Breadcrumb breadcrumb;
 
@@ -77,7 +79,7 @@ class BreadcrumbCard extends StatelessWidget {
     }
 
     final List<Widget> dataRows = [];
-    breadcrumb.data.forEach((key, dynamic value) {
+    breadcrumb.data!.forEach((key, dynamic value) {
       dataRows.add(BreadcrumbDataRow(title: key, value: '$value'));
     });
 
@@ -113,7 +115,7 @@ class BreadcrumbCard extends StatelessWidget {
                         Container(
                             width: MediaQuery.of(context).size.width * 0.18,
                             margin: EdgeInsets.only(top: 1, right: 4),
-                            child: Text(breadcrumb.category,
+                            child: Text(breadcrumb.category!,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                     fontWeight: FontWeight.w600,
@@ -139,7 +141,7 @@ class BreadcrumbCard extends StatelessWidget {
                 )),
             Container(
               child: Text(
-                  '${breadcrumb.timestamp.hour.toString()}:${breadcrumb.timestamp.minute.toString()}:${breadcrumb.timestamp.second.toString()}',
+                  '${breadcrumb.timestamp!.hour.toString()}:${breadcrumb.timestamp!.minute.toString()}:${breadcrumb.timestamp!.second.toString()}',
                   style: TextStyle(fontSize: 10, letterSpacing: 0.2)),
             ),
           ],
@@ -148,9 +150,9 @@ class BreadcrumbCard extends StatelessWidget {
 }
 
 class BreadcrumbDataRow extends StatelessWidget {
-  BreadcrumbDataRow({@required this.title, this.value});
+  BreadcrumbDataRow({required this.title, this.value});
   final String title;
-  final String value;
+  final String? value;
 
   @override
   Widget build(BuildContext context) {

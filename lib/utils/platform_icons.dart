@@ -1,3 +1,5 @@
+
+
 import 'package:flutter_svg/svg.dart';
 
 // ignore: avoid_classes_with_only_static_members
@@ -106,7 +108,7 @@ class PlatformIcons {
     // Please add them where they belong alphabetically
   };
 
-  static SvgPicture svgPicture(String platform, double width, double height) {
+  static SvgPicture? svgPicture(String platform, double width, double height) {
     final filename = platformToFileName[platform];
     if (filename != null) {
       return SvgPicture.asset('assets/platformicons/$filename.svg', width: width, height: height

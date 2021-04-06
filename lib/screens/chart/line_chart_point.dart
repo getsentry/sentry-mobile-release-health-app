@@ -1,3 +1,5 @@
+
+
 import 'package:equatable/equatable.dart';
 
 class LineChartPoint extends Equatable {

@@ -1,3 +1,5 @@
+
+
 import 'package:json_annotation/json_annotation.dart';
 
 import 'avatar.dart';
@@ -12,10 +14,10 @@ class Author {
       _$AuthorFromJson(json);
 
   final String id;
-  final String name;
-  final String email;
-  final String avatarUrl;
-  final Avatar avatar;
+  final String? name;
+  final String? email;
+  final String? avatarUrl;
+  final Avatar? avatar;
 
   Map<String, dynamic> toJson() => _$AuthorToJson(this);
 }

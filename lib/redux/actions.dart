@@ -1,4 +1,5 @@
-import '../types/cursor.dart';
+
+
 import '../types/group.dart';
 import '../types/organization.dart';
 import '../types/project.dart';
@@ -12,8 +13,9 @@ class RehydrateAction {
 }
 
 class RehydrateSuccessAction {
-  RehydrateSuccessAction(this.authToken, this.version);
-  final String authToken;
+  RehydrateSuccessAction(this.authToken, this.sentrySdkEnabled, this.version);
+  final String? authToken;
+  final bool sentrySdkEnabled;
   final String version;
 }
 
@@ -22,8 +24,8 @@ class SwitchTabAction {
   final int selectedTab;
 }
 
-class LoginAction {
-  LoginAction(this.authToken);
+class LoginSuccessAction {
+  LoginSuccessAction(this.authToken);
   final String authToken;
 }
 
@@ -32,28 +34,33 @@ class LogoutAction {
 }
 
 class ApiFailureAction {
-  ApiFailureAction(this.error);
+  ApiFailureAction(this.error, this.stackTrace);
   final dynamic error;
+  final StackTrace stackTrace;
 }
 
 // FetchOrganizationsAndProjects
 
-class FetchOrganizationsAndProjectsAction {
-  FetchOrganizationsAndProjectsAction(this.pagination, this.reload);
-  final bool pagination;
-  final bool reload;
+class FetchOrgsAndProjectsAction {
+  FetchOrgsAndProjectsAction(this.resetSessionData);
+  final bool resetSessionData;
 }
 
-class FetchOrganizationsAndProjectsSuccessAction {
-  FetchOrganizationsAndProjectsSuccessAction(this.organizations, this.projectsByOrganizationSlug, this.projectCursorsByOrganizationSlug, this.reload);
+class FetchOrgsAndProjectsProgressAction {
+  FetchOrgsAndProjectsProgressAction(this.text, this.progress);
+  final String text;
+  final double? progress;
+}
+
+class FetchOrgsAndProjectsSuccessAction {
+  FetchOrgsAndProjectsSuccessAction(this.organizations, this.projectsByOrganizationSlug, this.projectIdsWithSessions);
   final List<Organization> organizations;
   final Map<String, List<Project>> projectsByOrganizationSlug;
-  final Map<String, Cursor> projectCursorsByOrganizationSlug;
-  final bool reload;
+  final Set<String> projectIdsWithSessions;
 }
 
-class FetchOrganizationsAndProjectsFailureAction extends ApiFailureAction {
-  FetchOrganizationsAndProjectsFailureAction(error) : super(error);
+class FetchOrgsAndProjectsFailureAction extends ApiFailureAction {
+  FetchOrgsAndProjectsFailureAction(error, StackTrace stackTrace) : super(error, stackTrace);
 }
 
 // FetchLatestRelease
@@ -73,7 +80,7 @@ class FetchLatestReleaseSuccessAction {
 }
 
 class FetchLatestReleaseFailureAction extends ApiFailureAction {
-  FetchLatestReleaseFailureAction(error) : super(error);
+  FetchLatestReleaseFailureAction(error, StackTrace stackTrace) : super(error, stackTrace);
 }
 
 // FetchLatestReleases
@@ -89,7 +96,7 @@ class FetchLatestReleasesSuccessAction {
 }
 
 class FetchLatestReleasesFailureAction extends ApiFailureAction {
-  FetchLatestReleasesFailureAction(error) : super(error);
+  FetchLatestReleasesFailureAction(error, StackTrace stackTrace) : super(error, stackTrace);
 }
 
 // FetchIssues
@@ -107,13 +114,14 @@ class FetchIssuesSuccessAction {
 }
 
 class FetchIssuesFailureAction extends ApiFailureAction {
-  FetchIssuesFailureAction(error) : super(error);
+  FetchIssuesFailureAction(error, StackTrace stackTrace) : super(error, stackTrace);
 }
 
 // FetchAuthenticatedUser
 
 class FetchAuthenticatedUserAction {
-  FetchAuthenticatedUserAction();
+  FetchAuthenticatedUserAction(this.authToken);
+  final String authToken;
 }
 
 class FetchAuthenticatedUserSuccessAction {
@@ -122,7 +130,7 @@ class FetchAuthenticatedUserSuccessAction {
 }
 
 class FetchAuthenticatedUserFailureAction extends ApiFailureAction {
-  FetchAuthenticatedUserFailureAction(error) : super(error);
+  FetchAuthenticatedUserFailureAction(error, StackTrace stackTrace) : super(error, stackTrace);
 }
 
 // FetchSessions
@@ -142,7 +150,7 @@ class FetchSessionsSuccessAction {
 }
 
 class FetchSessionsFailureAction extends ApiFailureAction {
-  FetchSessionsFailureAction(error) : super(error);
+  FetchSessionsFailureAction(error, StackTrace stackTrace) : super(error, stackTrace);
 }
 
 // BookmarkProject
@@ -163,7 +171,9 @@ class BookmarkProjectSuccessAction {
 }
 
 class BookmarkProjectFailureAction extends ApiFailureAction {
-  BookmarkProjectFailureAction(error) : super(error);
+  BookmarkProjectFailureAction(this.projectSlug, this.bookmarked, error, StackTrace stackTrace) : super(error, stackTrace);
+  final String projectSlug;
+  final bool bookmarked;
 }
 
 // FetchApDex
@@ -180,12 +190,19 @@ class FetchApdexSuccessAction {
   FetchApdexSuccessAction(this.projectId, this.apdex, this.apdexBefore);
 
   final String projectId;
-  final double apdex;
-  final double apdexBefore;
+  final double? apdex;
+  final double? apdexBefore;
 }
 
 class FetchApdexFailureAction extends ApiFailureAction {
-  FetchApdexFailureAction(error) : super(error);
+  FetchApdexFailureAction(error, StackTrace stackTrace) : super(error, stackTrace);
+}
+
+// SentrySdkToggle
+
+class SentrySdkToggleAction {
+  SentrySdkToggleAction(this.enabled);
+  final bool enabled;
 }
 
 // SelectOrganization

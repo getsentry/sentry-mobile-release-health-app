@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:io';
 import 'package:redux/redux.dart';
 
 import '../../redux/actions.dart';
@@ -23,10 +25,12 @@ class HealthScreenViewModel {
       _crashFreeUsersBeforeByProjectId = store.state.globalState.crashFreeUsersBeforeByProjectId,
       _apdexByProjectId = store.state.globalState.apdexByProjectId,
       _apdexBeforeByProjectId = store.state.globalState.apdexBeforeByProjectId,
-      showProjectEmptyScreen = store.state.globalState.projectsFetchedOnce &&
-        store.state.globalState.projectsByOrganizationSlug.keys.isEmpty,
-      showLoadingScreen = !store.state.globalState.projectsFetchedOnce &&
-          store.state.globalState.projectsByOrganizationSlug.keys.isEmpty;
+      showProjectEmptyScreen = store.state.globalState.projectsWithSessions.isEmpty && !store.state.globalState.orgsAndProjectsLoading,
+      showLoadingScreen = store.state.globalState.projectsWithSessions.isEmpty && store.state.globalState.orgsAndProjectsLoading,
+      showErrorScreen = store.state.globalState.orgsAndProjectsError != null,
+      showErrorNoConnectionScreen = store.state.globalState.orgsAndProjectsError is TimeoutException || store.state.globalState.orgsAndProjectsError is SocketException,
+      loadingProgress = store.state.globalState.orgsAndProjectsProgress,
+      loadingText = store.state.globalState.orgsAndProjectsProgressText;
 
   final Store<AppState> _store;
 
@@ -46,15 +50,20 @@ class HealthScreenViewModel {
   final Map<String, double> _apdexByProjectId;
   final Map<String, double> _apdexBeforeByProjectId;
 
+  final double? loadingProgress;
+  final String? loadingText;
+
   final bool showProjectEmptyScreen;
   final bool showLoadingScreen;
+  final bool showErrorScreen;
+  final bool showErrorNoConnectionScreen;
 
   void fetchProjects() {
-    _store.dispatch(FetchOrganizationsAndProjectsAction(true, false));
+    _store.dispatch(FetchOrgsAndProjectsAction(false));
   }
 
   void reloadProjects() {
-    _store.dispatch(FetchOrganizationsAndProjectsAction(true, true));
+    _store.dispatch(FetchOrgsAndProjectsAction(true));
   }
 
   ProjectCard projectCard(int index) {
@@ -67,7 +76,7 @@ class HealthScreenViewModel {
     );
   }
 
-  SessionState sessionState(int index, SessionStatus sessionStatus) {
+  SessionState? sessionState(int index, SessionStatus sessionStatus) {
     final project = projects[index].project;
     switch (sessionStatus) {
       case SessionStatus.healthy:
@@ -79,12 +88,11 @@ class HealthScreenViewModel {
       case SessionStatus.abnormal:
         return _abnormalSessionsStateByProjectId[project.id];
     }
-    return null;
   }
 
   bool showAbnormalSessions(int index) {
     final project = projects[index].project;
-    final platform = project?.platform?.toLowerCase();
+    final platform = project.platform?.toLowerCase();
     if (platform == null) {
       return true;
     } else {
@@ -117,17 +125,18 @@ class HealthScreenViewModel {
   }
   
   void fetchDataForProject(int index) {
+    if (index < 0 || index >= projects.length) {
+      return;
+    }
     final projectWithLatestRelease = projects[index];
     //_fetchLatestRelease(projectWithLatestRelease);
     _fetchSessions(projectWithLatestRelease);
     //_fetchApdex(projectWithLatestRelease);
     if (index + 1 < projects.length) {
       final nextProjectWithLatestRelease = projects[index + 1];
-      if (nextProjectWithLatestRelease != null) {
-        //_fetchLatestRelease(nextProjectWithLatestRelease);
-        _fetchSessions(nextProjectWithLatestRelease);
-        //_fetchApdex(nextProjectWithLatestRelease);
-      }
+      //_fetchLatestRelease(nextProjectWithLatestRelease);
+      _fetchSessions(nextProjectWithLatestRelease);
+      //_fetchApdex(nextProjectWithLatestRelease);
     }
   }
 

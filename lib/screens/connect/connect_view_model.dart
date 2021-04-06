@@ -1,3 +1,5 @@
+
+
 import 'dart:convert';
 
 import 'package:redux/redux.dart';
@@ -16,7 +18,7 @@ class ConnectViewModel {
 
   Store<AppState> store;
 
-  Future<void> onTokenEncoded(String encoded) async {
+  Future<void> onTokenEncoded(String? encoded) async {
     if (encoded == null) {
       return;
     }
@@ -31,7 +33,7 @@ class ConnectViewModel {
     }
   }
 
-  Future<void> onToken(String token) async {
+  Future<void> onToken(String? token) async {
     if (token == null) {
       return;
     }
@@ -39,7 +41,7 @@ class ConnectViewModel {
       final sentryApi = SentryApi(token);
       await sentryApi.organizations(); // Do a sample call
       sentryApi.close();
-      store.dispatch(LoginAction(token));
+      store.dispatch(LoginSuccessAction(token));
     } catch (exception, stackTrace) {
       Sentry.captureException(exception, stackTrace: stackTrace);
       rethrow;

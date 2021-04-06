@@ -1,11 +1,13 @@
+
+
 import '../../redux/state/session_state.dart';
 import '../../screens/chart/line_chart_data.dart';
 import '../../screens/chart/line_chart_point.dart';
 
 class SessionsChartRowViewModel {
 
-  SessionsChartRowViewModel.create(SessionState sessionState) {
-    if (sessionState == null || sessionState.sessionPoints == null) {
+  SessionsChartRowViewModel.create(SessionState? sessionState) {
+    if (sessionState == null) {
       data = null;
       percentChange = 0.0;
       numberOfIssues = 0;
@@ -17,23 +19,24 @@ class SessionsChartRowViewModel {
           ]
       );
       percentChange = 0.0;
-      numberOfIssues = data.countY.toInt();
+      numberOfIssues = data!.countY.toInt();
     } else {
       data = LineChartData.prepareData(
           points: sessionState.sessionPoints
       );
-      if (sessionState.previousNumberOfSessions != null) {
-        percentChange = _percentChange(sessionState.previousNumberOfSessions.toDouble(), sessionState.numberOfSessions.toDouble());
+      final previousNumberOfSessions = sessionState.previousNumberOfSessions;
+      if (previousNumberOfSessions != null) {
+        percentChange = _percentChange(previousNumberOfSessions.toDouble(), sessionState.numberOfSessions.toDouble());
       } else {
         percentChange = 0.0;
       }
-      numberOfIssues = data.countY.toInt();
+      numberOfIssues = data!.countY.toInt();
     }
   }
   
-  LineChartData data;
-  double percentChange;
-  int numberOfIssues;
+  LineChartData? data;
+  double?/*late*/ percentChange;
+  late int numberOfIssues;
 
   // Helper
 

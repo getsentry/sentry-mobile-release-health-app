@@ -1,11 +1,13 @@
+
+
 import 'package:flutter/material.dart';
 
 import '../../utils/sentry_colors.dart';
 
 class HealthDivider extends StatelessWidget {
   HealthDivider(
-      {@required this.title,
-        @required this.onSeeAll});
+      {required this.title,
+        required this.onSeeAll});
 
   final String title;
   final void Function() onSeeAll;

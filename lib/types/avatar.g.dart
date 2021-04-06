@@ -8,7 +8,7 @@ part of 'avatar.dart';
 
 Avatar _$AvatarFromJson(Map<String, dynamic> json) {
   return Avatar(
-    json['avatarType'] as String,
+    json['avatarType'] as String?,
   );
 }
 

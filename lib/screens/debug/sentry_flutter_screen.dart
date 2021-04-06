@@ -1,3 +1,5 @@
+
+
 import 'dart:async';
 import 'dart:io';
 
@@ -14,10 +16,22 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
   static const platform = MethodChannel('app.mobile.sentry.io/nativeCrash');
   bool _loading = false;
 
+  var _successResultEvent = false;
+  String? _failureResultEvent;
+
+  var _successResultMessage = false;
+  String? _failureResultMessage;
+
   final _successResultsHandled = {
     _TypeToThrow.EXCEPTION: false,
     _TypeToThrow.ERROR: false,
     _TypeToThrow.STRING: false,
+  };
+
+  final Map<_TypeToThrow, String?> _failureResultsHandled = {
+    _TypeToThrow.EXCEPTION: null,
+    _TypeToThrow.ERROR: null,
+    _TypeToThrow.STRING: null,
   };
 
   final _successResultsUnhandled = {
@@ -26,17 +40,12 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
     _TypeToThrow.STRING: false,
   };
 
-  final Map<_TypeToThrow, String> _failureResultsHandled = {
-    _TypeToThrow.EXCEPTION: null,
-    _TypeToThrow.ERROR: null,
-    _TypeToThrow.STRING: null,
-  };
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Sentry Flutter SDK - Debug'),
+        brightness: Brightness.dark,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -44,14 +53,20 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
-              child: Text('Captured', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+              child: Text('Event & Message', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            ),
+            _createEventListTile(),
+            _createMessageListTile(),
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
+              child: Text('Sentry.captureException', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
             ),
             _createListTile('Sentry.captureException', _TypeToThrow.EXCEPTION),
             _createListTile('Sentry.captureException', _TypeToThrow.ERROR),
             _createListTile('Sentry.captureException', _TypeToThrow.STRING),
             Padding(
               padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
-              child: Text('Not Captured', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+              child: Text('Throw Exception', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
             ),
             _createListTile('Throw Exception', _TypeToThrow.EXCEPTION, fatal: true),
             _createListTile('Throw Exception', _TypeToThrow.ERROR, fatal: true),
@@ -70,16 +85,56 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
     );
   }
 
+  Widget _createEventListTile() {
+    var subtitle = _successResultEvent ? 'Success' : '--';
+    if (_failureResultEvent != null) {
+      subtitle = 'Failure: $_failureResultEvent';
+    }
+    return ListTile(
+      title: Text(
+          'Sentry.captureEvent',
+          style: TextStyle(color: Colors.black)
+      ),
+      subtitle: Text(
+          subtitle
+      ),
+      trailing: ElevatedButton(
+        child: _loading ? Text('Loading...') : Text('Send') ,
+        onPressed: _loading ? null : () => _captureEvent(),
+      )
+    );
+  }
+
+  Widget _createMessageListTile() {
+    var subtitle = _successResultMessage ? 'Success' : '--';
+    if (_failureResultMessage != null) {
+      subtitle = 'Failure: $_failureResultMessage';
+    }
+    return ListTile(
+        title: Text(
+            'Sentry.sendMessage',
+            style: TextStyle(color: Colors.black)
+        ),
+        subtitle: Text(
+            subtitle
+        ),
+        trailing: ElevatedButton(
+          child: _loading ? Text('Loading...') : Text('Send') ,
+          onPressed: _loading ? null : () => _captureMessage(),
+        )
+    );
+  }
+
   Widget _createListTile(String title, _TypeToThrow typeToThrow, {bool fatal = false}) {
     var subtitle = '';
     if (!fatal) {
-      subtitle = _successResultsHandled[typeToThrow]
+      subtitle = _successResultsHandled[typeToThrow]!
           ? 'Success'
           : _failureResultsHandled[typeToThrow] != null
             ? 'Failure: ${_failureResultsHandled[typeToThrow]}'
             : '--';
     } else {
-      subtitle = _successResultsUnhandled[typeToThrow]
+      subtitle = _successResultsUnhandled[typeToThrow]!
           ? 'Success'
           : '--';
     }
@@ -101,7 +156,7 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
       subtitle: Text(
           subtitle
       ),
-      trailing: RaisedButton(
+      trailing: ElevatedButton(
         child: _loading ? Text('Loading...') : fatal ? Text('Throw') : Text('Send'),
         onPressed: _loading ? null : () => _captureException(typeToThrow, fatal),
       ),
@@ -120,11 +175,50 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
             : primaryLanguage ? 'Swift' : 'Objective C',
           style: TextStyle(color: Colors.deepPurpleAccent)
       ),
-      trailing: RaisedButton(
+      trailing: ElevatedButton(
         child: Text('Crash!'),
         onPressed: () => _callCrashNative(nativePlatform, primaryLanguage),
       ),
     );
+  }
+
+  void _captureEvent() {
+    setState(() {
+      _loading = true;
+    });
+    final event = SentryEvent(message: SentryMessage('Sentry.captureEvent'));
+    Sentry.captureEvent(event)
+        .then((value) => {
+      setState(() {
+        _loading = false;
+        _successResultEvent = true;
+      })
+    })
+        .catchError((error) => {
+      setState(() {
+        _loading = false;
+        _failureResultEvent = Error.safeToString(error);
+      })
+    });
+  }
+
+  void _captureMessage() {
+    setState(() {
+      _loading = true;
+    });
+    Sentry.captureMessage('Sentry.captureMessage')
+        .then((value) => {
+      setState(() {
+        _loading = false;
+        _successResultMessage = true;
+      })
+    })
+        .catchError((error) => {
+      setState(() {
+        _loading = false;
+        _failureResultMessage = Error.safeToString(error);
+      })
+    });
   }
 
   void _captureException(_TypeToThrow typeToThrow, bool fatal) {
@@ -152,10 +246,10 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
       setState(() {
         _successResultsUnhandled[typeToThrow] = true;
       });
-      throw exceptionObject;
+      throw exceptionObject as Object;
     } else {
       try {
-        throw exceptionObject;
+        throw exceptionObject as Object;
       } catch (exception, stackTrace) {
         Sentry.captureException(exception, stackTrace: stackTrace)
             .then((value) => {
@@ -206,15 +300,11 @@ extension _TypeToThrowPrint on _TypeToThrow {
     switch(this) {
       case _TypeToThrow.EXCEPTION:
         return 'Exception';
-        break;
       case _TypeToThrow.ERROR:
         return 'Error';
-        break;
       case _TypeToThrow.STRING:
         return 'String';
-        break;
     }
-    return null;
   }
 }
 
@@ -225,9 +315,7 @@ class _SampleError extends Error {
 
   @override
   String toString() {
-    return message != null
-        ? 'Sample error: ${Error.safeToString(message)}'
-        : 'Unknown error';
+    return 'Sample error: ${Error.safeToString(message)}';
   }
 }
 
