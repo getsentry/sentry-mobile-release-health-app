@@ -11,7 +11,7 @@ import Flutter
 
         if let controller = window?.rootViewController as? FlutterViewController {
             let batteryChannel = FlutterMethodChannel(
-                name: "app.sentrymobile.io/nativeCrash",
+                name: "app.mobile.sentry.io/nativeCrash",
                 binaryMessenger: controller.binaryMessenger
             )
             batteryChannel.setMethodCallHandler {

@@ -1,4 +1,4 @@
-package io.sentrymobile.app;
+package io.sentry.mobile.app;
 import android.os.AsyncTask;
 
 public class NativeCrashJava {
