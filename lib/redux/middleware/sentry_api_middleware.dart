@@ -1,5 +1,6 @@
 import 'package:redux/redux.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:sentry_mobile/api/api_errors.dart';
 
 import '../../api/sentry_api.dart';
 import '../../types/group.dart';
@@ -42,8 +43,11 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
               final projectsWithSessionsForOrganization = await api.projectIdsWithSessions(organization.slug);
               projectIdsWithSessions.addAll(projectsWithSessionsForOrganization);
             } catch (e) {
-              Sentry.addBreadcrumb(Breadcrumb(message: 'Org has no projects -> $e', level: SentryLevel.error));
-              rethrow;
+              if (e is ApiError && e.statusCode == 400) {
+                Sentry.addBreadcrumb(Breadcrumb(message: 'Org has no projects -> $e', level: SentryLevel.error));
+              } else {
+                rethrow;
+              }
             }
           }
           store.dispatch(FetchOrgsAndProjectsSuccessAction(individualOrganizations, projectsByOrganizationId, projectIdsWithSessions));
