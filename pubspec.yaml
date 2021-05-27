@@ -19,6 +19,7 @@ version: 1.0.1+21
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
+  flutter: ^2.0.0
 
 dependencies:
   clipboard: ^0.1.3
@@ -107,79 +108,4 @@ flutter:
     - assets/onboarding_1_b.png
     - assets/onboarding_2.png
     - assets/onboarding_3.png
-    - assets/platformicons/HTML5.svg
-    - assets/platformicons/backbone.svg
-    - assets/platformicons/csharp.svg
-    - assets/platformicons/express.svg
-    - assets/platformicons/java.svg
-    - assets/platformicons/php.svg
-    - assets/platformicons/scala.svg
-    - assets/platformicons/tryton.svg
-    - assets/platformicons/actix.svg
-    - assets/platformicons/blazor.svg
-    - assets/platformicons/dart.svg
-    - assets/platformicons/falcon.svg
-    - assets/platformicons/javascript.svg
-    - assets/platformicons/pyramid.svg
-    - assets/platformicons/sentry.svg
-    - assets/platformicons/unity.svg
-    - assets/platformicons/aiohttp.svg
-    - assets/platformicons/bootstrap.svg
-    - assets/platformicons/default.svg
-    - assets/platformicons/flask.svg
-    - assets/platformicons/koa.svg
-    - assets/platformicons/python.svg
-    - assets/platformicons/serverless.svg
-    - assets/platformicons/uno.svg
-    - assets/platformicons/android.svg
-    - assets/platformicons/bottle.svg
-    - assets/platformicons/django.svg
-    - assets/platformicons/flutter.svg
-    - assets/platformicons/kotlin.svg
-    - assets/platformicons/qt.svg
-    - assets/platformicons/sinatra.svg
-    - assets/platformicons/unreal.svg
-    - assets/platformicons/angularjs.svg
-    - assets/platformicons/celery.svg
-    - assets/platformicons/dotnet.svg
-    - assets/platformicons/fsharp.svg
-    - assets/platformicons/laravel.svg
-    - assets/platformicons/rails.svg
-    - assets/platformicons/spring.svg
-    - assets/platformicons/vue.svg
-    - assets/platformicons/app-engine.svg
-    - assets/platformicons/chalice.svg
-    - assets/platformicons/dotnetcore.svg
-    - assets/platformicons/gatsby.svg
-    - assets/platformicons/logback.svg
-    - assets/platformicons/react.svg
-    - assets/platformicons/springboot.svg
-    - assets/platformicons/xamarin.svg
-    - assets/platformicons/apple.svg
-    - assets/platformicons/clojure.svg
-    - assets/platformicons/dotnetfx.svg
-    - assets/platformicons/gcp.svg
-    - assets/platformicons/nativec.svg
-    - assets/platformicons/redis.svg
-    - assets/platformicons/stride3d.svg
-    - assets/platformicons/aws.svg
-    - assets/platformicons/connect.svg
-    - assets/platformicons/electron.svg
-    - assets/platformicons/go.svg
-    - assets/platformicons/nextjs.svg
-    - assets/platformicons/redux.svg
-    - assets/platformicons/swift.svg
-    - assets/platformicons/awslamda.svg
-    - assets/platformicons/cordova.svg
-    - assets/platformicons/elixir.svg
-    - assets/platformicons/godot.svg
-    - assets/platformicons/nodejs.svg
-    - assets/platformicons/ruby.svg
-    - assets/platformicons/symfony.svg
-    - assets/platformicons/azure.svg
-    - assets/platformicons/cryengine.svg
-    - assets/platformicons/ember.svg
-    - assets/platformicons/google.svg
-    - assets/platformicons/perl.svg
-    - assets/platformicons/rust.svg
-    - assets/platformicons/tornado.svg
+    - assets/platformicons/
