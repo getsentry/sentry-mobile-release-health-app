@@ -141,17 +141,14 @@ class _SettingsState extends State<Settings> {
                     Icons.library_books,
                     color: SentryColors.tapestry,
                   ),
-                  onTap: () async {
-                    await Navigator.of(context).push(
+                  onTap: () {
+                    Navigator.of(context).push(
                       MaterialPageRoute(
                           builder: (BuildContext context) => LicenseScreen(
                             viewModel.version
                           )
                       ),
                     );
-                    Timer(Duration(milliseconds: 500), () {
-                      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
-                    });
                   }
               ),
               Padding(
