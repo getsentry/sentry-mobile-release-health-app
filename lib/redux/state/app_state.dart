@@ -104,7 +104,7 @@ class GlobalState {
   final bool orgsAndProjectsLoading;
   final double? orgsAndProjectsProgress;
   final String? orgsAndProjectsProgressText;
-  final dynamic? orgsAndProjectsError;
+  final dynamic orgsAndProjectsError;
 
   final Set<String> projectIdsWithSessions;
   final List<Project> projectsWithSessions;
@@ -139,7 +139,7 @@ class GlobalState {
     bool? orgsAndProjectsLoading,
     double? orgsAndProjectsProgress,
     String? orgsAndProjectsProgressText,
-    dynamic? orgsAndProjectsError,
+    dynamic orgsAndProjectsError,
     bool setOrgsAndProjectsErrorNull = false,
     Set<String>? projectIdsWithSessions,
     List<Project>? projectsWithSessions,

@@ -1,10 +1,10 @@
-
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:sentry_mobile/screens/html/html_screen.dart';
+import 'package:sentry_mobile/screens/license/license_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../redux/actions.dart';
@@ -122,6 +122,27 @@ class _SettingsState extends State<Settings> {
                           builder: (context) => HtmlScreen(
                             'End User License Agreement',
                             eulaFilePath
+                          )
+                      ),
+                    );
+                  }
+              ),
+              ListTile(
+                  title: Text(
+                    'Licenses',
+                    style: Theme.of(context).textTheme.bodyText1?.apply(
+                        color: SentryColors.revolver
+                    ),
+                  ),
+                  leading: Icon(
+                    Icons.library_books,
+                    color: SentryColors.tapestry,
+                  ),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => LicenseScreen(
+                            viewModel.version
                           )
                       ),
                     );
