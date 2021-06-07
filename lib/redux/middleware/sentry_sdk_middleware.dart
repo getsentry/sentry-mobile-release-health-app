@@ -8,7 +8,10 @@ import '../../redux/state/app_state.dart';
 class SentrySdkMiddleware extends MiddlewareClass<AppState> {
   @override
   dynamic call(
-      Store<AppState> store, dynamic action, NextDispatcher next) async {
+    Store<AppState> store,
+    dynamic action,
+    NextDispatcher next,
+  ) async {
     if (action is RehydrateSuccessAction) {
       if (action.sentrySdkEnabled && !Sentry.isEnabled) {
         _enableSentrySdk();
@@ -27,8 +30,13 @@ class SentrySdkMiddleware extends MiddlewareClass<AppState> {
     if (action is FetchAuthenticatedUserSuccessAction) {
       // https://docs.sentry.io/platforms/flutter/enriching-events/identify-user/
       // Set to auto to let the server decide the IP
-      Sentry.configureScope((scope) => scope.user = SentryUser(
-          email: action.me.email, id: action.me.id, ipAddress: '{{auto}}'));
+      Sentry.configureScope(
+        (scope) => scope.user = SentryUser(
+          email: action.me.email,
+          id: action.me.id,
+          ipAddress: '{{auto}}',
+        ),
+      );
     }
     if (action is LogoutAction) {
       Sentry.configureScope((scope) => scope.user = null);
