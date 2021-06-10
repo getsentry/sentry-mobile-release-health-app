@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:sentry_mobile/redux/actions.dart';
 
 import '../../redux/state/app_state.dart';
 import '../../screens/empty/empty_screen.dart';
@@ -19,11 +20,23 @@ class HealthScreen extends StatefulWidget {
   _HealthScreenState createState() => _HealthScreenState();
 }
 
-class _HealthScreenState extends State<HealthScreen> {
+class _HealthScreenState extends State<HealthScreen> with WidgetsBindingObserver {
   int? _index;
 
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
   PageController? _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance?.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance?.removeObserver(this);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +92,7 @@ class _HealthScreenState extends State<HealthScreen> {
           reloadSessionData(viewModel, _index ?? 0);
         });
     } else {
-      WidgetsBinding.instance!.addPostFrameCallback( ( Duration duration ) {
+      WidgetsBinding.instance?.addPostFrameCallback( ( Duration duration ) {
         if (viewModel.showLoadingScreen) {
           _refreshKey.currentState!.show();
         } else {
@@ -207,5 +220,17 @@ class _HealthScreenState extends State<HealthScreen> {
     viewModel.fetchDataForProject(currentIndex - 1);
     viewModel.fetchDataForProject(currentIndex);
     viewModel.fetchDataForProject(currentIndex + 1);
+  }
+
+  // WidgetsBindingObserver
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed && StoreProvider.of<AppState>(context).state.globalState.orgsAndProjectsError != null) {
+      StoreProvider.of<AppState>(context).dispatch(
+          FetchOrgsAndProjectsAction(true)
+      );
+    }
   }
 }
