@@ -23,7 +23,7 @@ class SentryApi {
   final client = sentry.SentryHttpClient(
     captureFailedRequests: true,
     sendDefaultPii: false,
-    failedRequestStatusCodes: [sentry.SentryStatusCode.range(500, 599)],
+    failedRequestStatusCodes: [sentry.SentryStatusCode.range(400, 599)],
   );
   final baseUrlName = 'sentry.io';
   final baseUrlPath = '/api/0';
