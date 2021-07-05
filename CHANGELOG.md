@@ -1,5 +1,6 @@
 # Unreleased
 
+* Use Sentry Flutter 6.0.0-beta.1 (#200)
 * Bump Dependencies (#202)
 
 # 1.0.2
