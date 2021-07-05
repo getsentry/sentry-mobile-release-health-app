@@ -1,6 +1,9 @@
 # Unreleased
 
 * Use Sentry Flutter 6.0.0-beta.1 (#200)
+
+# 1.0.2
+
 * Only consider sentry_mobile as in app frames (#192) 
 * Reload projects on resume if there is an error (#195)
 * Use Sentry Flutter 5.1.0-beta.1 (#190)
