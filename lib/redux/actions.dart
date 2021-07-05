@@ -221,6 +221,12 @@ class SentrySdkToggleAction {
   final bool enabled;
 }
 
+// PresentRatingAction
+
+class PresentRatingAction {
+  PresentRatingAction();
+}
+
 // SelectOrganization
 
 class SelectOrganizationAction {
@@ -234,3 +240,4 @@ class SelectProjectAction {
   SelectProjectAction(this.project);
   final Project project;
 }
+

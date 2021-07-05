@@ -209,7 +209,7 @@ class GlobalState {
         issuesByProjectSlug: issuesByProjectSlug ?? this.issuesByProjectSlug,
         selectedOrganization: selectedOrganization ?? this.selectedOrganization,
         selectedProject: selectedProject ?? this.selectedProject,
-        numberOfRatingEvents: numberOfRatingEvents ?? 0,
+        numberOfRatingEvents: numberOfRatingEvents ?? this.numberOfRatingEvents,
         me: me ?? this.me);
   }
 

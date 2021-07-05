@@ -25,6 +25,7 @@ class HealthScreen extends StatefulWidget {
 class _HealthScreenState extends State<HealthScreen>
     with WidgetsBindingObserver {
   int? _index;
+  bool _ratingPresented = false;
 
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
   final InAppReview inAppReview = InAppReview.instance;
@@ -114,7 +115,10 @@ class _HealthScreenState extends State<HealthScreen>
 
       final index = _index ?? 0;
 
-      //inAppReview.requestReview();
+      if (viewModel.evaluateRatingPresentation() && !_ratingPresented) {
+        _ratingPresented = true;
+        inAppReview.requestReview();
+      }
 
       return RefreshIndicator(
         key: _refreshKey,

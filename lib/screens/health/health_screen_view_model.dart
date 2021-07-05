@@ -200,4 +200,12 @@ class HealthScreenViewModel {
   //       )
   //   );
   // }
+
+  bool evaluateRatingPresentation() {
+    if (_store.state.globalState.numberOfRatingEvents > 10) {
+      _store.dispatch(PresentRatingAction());
+      return true;
+    }
+    return false;
+  }
 }

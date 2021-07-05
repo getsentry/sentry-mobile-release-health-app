@@ -45,6 +45,9 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
         await secureStorage.delete(key: _keySentrySdkEnabled);
       }
     }
+    if (action is PresentRatingAction) {
+      await _resetNumberOfRatingEvents();
+    }
     if (action is LoginSuccessAction) {
       await secureStorage.write(key: _keyAuthToken, value: action.authToken);
       store.dispatch(FetchAuthenticatedUserAction(action.authToken));
@@ -63,5 +66,9 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
     numberOfRatingEvents += 1;
     await secureStorage.write(key: _keyNumberOfRatingEvents, value: '$numberOfRatingEvents');
     return numberOfRatingEvents;
+  }
+
+  Future<void> _resetNumberOfRatingEvents() async {
+    await secureStorage.write(key: _keyNumberOfRatingEvents, value: '0');
   }
 }
