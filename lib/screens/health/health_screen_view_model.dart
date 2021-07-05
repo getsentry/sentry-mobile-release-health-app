@@ -201,11 +201,11 @@ class HealthScreenViewModel {
   //   );
   // }
 
-  bool evaluateRatingPresentation() {
-    if (_store.state.globalState.numberOfRatingEvents > 10) {
-      _store.dispatch(PresentRatingAction());
-      return true;
-    }
-    return false;
+  bool shouldPresentRating() {
+    return _store.state.globalState.numberOfRatingEvents > 3;
+  }
+
+  void didPresentRating() {
+    _store.dispatch(PresentRatingAction());
   }
 }
