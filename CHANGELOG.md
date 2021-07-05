@@ -1,5 +1,7 @@
 # Unreleased
 
+* Bump Dependencies (#202)
+
 # 1.0.2
 
 * Only consider sentry_mobile as in app frames (#192) 
