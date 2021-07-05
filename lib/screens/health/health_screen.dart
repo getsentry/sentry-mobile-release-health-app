@@ -20,7 +20,8 @@ class HealthScreen extends StatefulWidget {
   _HealthScreenState createState() => _HealthScreenState();
 }
 
-class _HealthScreenState extends State<HealthScreen> with WidgetsBindingObserver {
+class _HealthScreenState extends State<HealthScreen>
+    with WidgetsBindingObserver {
   int? _index;
 
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
@@ -49,50 +50,48 @@ class _HealthScreenState extends State<HealthScreen> with WidgetsBindingObserver
 
   Widget _content(HealthScreenViewModel viewModel) {
     if (viewModel.showLoadingScreen) {
-      return Center(child:
-        Column(
-          mainAxisAlignment : MainAxisAlignment.center,
-          crossAxisAlignment : CrossAxisAlignment.center,
-          children: [
+      return Center(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
             CircularProgressIndicator(value: viewModel.loadingProgress),
             Container(
                 padding: EdgeInsets.symmetric(vertical: 16, horizontal: 22),
-                child: Text(viewModel.loadingText ?? 'Loading ...')
-            )
-          ]
-        )
-      );
+                child: Text(viewModel.loadingText ?? 'Loading ...'))
+          ]));
     } else if (viewModel.showErrorScreen) {
-        if (viewModel.showErrorNoConnectionScreen) {
-          return EmptyScreen(
-              title: 'No connection',
-              text: 'Please check your connection and try again.',
-              button: 'Retry',
-              action: () {
-                viewModel.fetchProjects();
-                reloadSessionData(viewModel, _index ?? 0);
-              });
-        } else {
-          return EmptyScreen(
-              title: 'Ooops',
-              text: 'Something went wrong. Please try again.',
-              button: 'Retry',
-              action: () {
-                viewModel.fetchProjects();
-                reloadSessionData(viewModel, _index ?? 0);
-              });
-        }
+      if (viewModel.showErrorNoConnectionScreen) {
+        return EmptyScreen(
+            title: 'No connection',
+            text: 'Please check your connection and try again.',
+            button: 'Retry',
+            action: () {
+              viewModel.fetchProjects();
+              reloadSessionData(viewModel, _index ?? 0);
+            });
+      } else {
+        return EmptyScreen(
+            title: 'Ooops',
+            text: 'Something went wrong. Please try again.',
+            button: 'Retry',
+            action: () {
+              viewModel.fetchProjects();
+              reloadSessionData(viewModel, _index ?? 0);
+            });
+      }
     } else if (viewModel.showProjectEmptyScreen) {
       return EmptyScreen(
-        title: 'No projects found',
-        text: 'At least one project needs to provide session data for this to work.',
-        button: 'Refresh',
-        action: () {
-          viewModel.fetchProjects();
-          reloadSessionData(viewModel, _index ?? 0);
-        });
+          title: 'No projects found',
+          text:
+              'At least one project needs to provide session data for this to work.',
+          button: 'Refresh',
+          action: () {
+            viewModel.fetchProjects();
+            reloadSessionData(viewModel, _index ?? 0);
+          });
     } else {
-      WidgetsBinding.instance?.addPostFrameCallback( ( Duration duration ) {
+      WidgetsBinding.instance?.addPostFrameCallback((Duration duration) {
         if (viewModel.showLoadingScreen) {
           _refreshKey.currentState!.show();
         } else {
@@ -115,102 +114,106 @@ class _HealthScreenState extends State<HealthScreen> with WidgetsBindingObserver
         key: _refreshKey,
         backgroundColor: Colors.white,
         color: Color(0xff81B4FE),
-        child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints viewportConstraints) {
-            _pageController = PageController(viewportFraction: (MediaQuery.of(context).size.width - 32) / MediaQuery.of(context).size.width);
+        child: LayoutBuilder(builder:
+            (BuildContext context, BoxConstraints viewportConstraints) {
+          _pageController = PageController(
+              viewportFraction: (MediaQuery.of(context).size.width - 32) /
+                  MediaQuery.of(context).size.width);
 
-            return ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: viewportConstraints.maxHeight,
-              ),
-              child: SingleChildScrollView(
-                physics: AlwaysScrollableScrollPhysics(),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: 22, right: 22),
-                      child: HealthDivider(
-                        onSeeAll: () {},
-                        title: 'in the last 24 hours',
-                      ),
+          return ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: viewportConstraints.maxHeight,
+            ),
+            child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 22, right: 22),
+                    child: HealthDivider(
+                      onSeeAll: () {},
+                      title: 'in the last 24 hours',
                     ),
-                    SizedBox(
-                        height: 208,
-                        child: PageView.builder(
-                          itemCount: viewModel.projects.length,
-                          controller: _pageController,
-                          onPageChanged: (int index) {
-                            setState(() {
-                              updateIndex(index);
-                              // Fetch next projects at end
-                              if (index == viewModel.projects.length - 1) {
-                                viewModel.fetchProjects();
-                              }
-                            });
-                          },
-                          itemBuilder: (context, index) {
-                            return viewModel.projectCard(index);
-                          },
-                        )),
-                    Container(
-                      padding: EdgeInsets.only(top: 8, left: 22, right: 22),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                HealthCard(
-                                  title: 'Crash Free Sessions',
-                                  viewModel: viewModel.crashFreeSessionsForProject(index),
-                                ),
-                                SizedBox(width: 8),
-                                HealthCard(
-                                  title: 'Crash Free Users',
-                                  viewModel: viewModel.crashFreeUsersForProject(index),
-                                ),
-                              ],
-                            ),
+                  ),
+                  SizedBox(
+                      height: 208,
+                      child: PageView.builder(
+                        itemCount: viewModel.projects.length,
+                        controller: _pageController,
+                        onPageChanged: (int index) {
+                          setState(() {
+                            updateIndex(index);
+                            // Fetch next projects at end
+                            if (index == viewModel.projects.length - 1) {
+                              viewModel.fetchProjects();
+                            }
+                          });
+                        },
+                        itemBuilder: (context, index) {
+                          return viewModel.projectCard(index);
+                        },
+                      )),
+                  Container(
+                    padding: EdgeInsets.only(top: 8, left: 22, right: 22),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              HealthCard(
+                                title: 'Crash Free Sessions',
+                                viewModel: viewModel
+                                    .crashFreeSessionsForProject(index),
+                              ),
+                              SizedBox(width: 8),
+                              HealthCard(
+                                title: 'Crash Free Users',
+                                viewModel:
+                                    viewModel.crashFreeUsersForProject(index),
+                              ),
+                            ],
                           ),
+                        ),
+                        SessionsChartRow(
+                          title: 'Healthy',
+                          color: SentryColors.buttercup,
+                          sessionState: viewModel.sessionState(
+                              index, SessionStatus.healthy),
+                          flipDeltaColors: true,
+                        ),
+                        SessionsChartRow(
+                          title: 'Errored',
+                          color: SentryColors.eastBay,
+                          sessionState: viewModel.sessionState(
+                              index, SessionStatus.errored),
+                        ),
+                        if (viewModel.showAbnormalSessions(index))
                           SessionsChartRow(
-                            title: 'Healthy',
-                            color: SentryColors.buttercup,
-                            sessionState: viewModel.sessionState(index, SessionStatus.healthy),
-                            flipDeltaColors: true,
+                            title: 'Abnormal',
+                            color: SentryColors.tapestry,
+                            sessionState: viewModel.sessionState(
+                                index, SessionStatus.abnormal),
                           ),
-                          SessionsChartRow(
-                            title: 'Errored',
-                            color: SentryColors.eastBay,
-                            sessionState: viewModel.sessionState(index, SessionStatus.errored),
-                          ),
-                          if (viewModel.showAbnormalSessions(index))
-                            SessionsChartRow(
-                              title: 'Abnormal',
-                              color: SentryColors.tapestry,
-                              sessionState: viewModel.sessionState(index, SessionStatus.abnormal),
-                            ),
-                          SessionsChartRow(
-                            title: 'Crashed',
-                            color: SentryColors.burntSienna,
-                            sessionState: viewModel.sessionState(index, SessionStatus.crashed),
-                          ),
-                        ],
-                      ),
+                        SessionsChartRow(
+                          title: 'Crashed',
+                          color: SentryColors.burntSienna,
+                          sessionState: viewModel.sessionState(
+                              index, SessionStatus.crashed),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            );
-          }
-        ),
-        onRefresh: () => Future.delayed(
-          Duration(microseconds: 100),
-          () {
-            viewModel.reloadProjects();
-            reloadSessionData(viewModel, _index ?? 0);
-          }
-        ),
+            ),
+          );
+        }),
+        onRefresh: () => Future.delayed(Duration(microseconds: 100), () {
+          viewModel.reloadProjects();
+          reloadSessionData(viewModel, _index ?? 0);
+        }),
       );
     }
   }
@@ -227,10 +230,14 @@ class _HealthScreenState extends State<HealthScreen> with WidgetsBindingObserver
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.resumed && StoreProvider.of<AppState>(context).state.globalState.orgsAndProjectsError != null) {
-      StoreProvider.of<AppState>(context).dispatch(
-          FetchOrgsAndProjectsAction(true)
-      );
+    if (state == AppLifecycleState.resumed &&
+        StoreProvider.of<AppState>(context)
+                .state
+                .globalState
+                .orgsAndProjectsError !=
+            null) {
+      StoreProvider.of<AppState>(context)
+          .dispatch(FetchOrgsAndProjectsAction(true));
     }
   }
 }

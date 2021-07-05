@@ -1,12 +1,8 @@
-
-
-
 import 'package:flutter/material.dart';
 
 import '../../screens/shared/link_rich_text.dart';
 
 class OnboardingInfoScreen extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -14,14 +10,10 @@ class OnboardingInfoScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Expanded(flex: 4, child: Image.asset('assets/sitting-logo.jpg')),
           Expanded(
-            flex: 4,
-            child: Image.asset('assets/sitting-logo.jpg')
-          ),
-          Expanded(
-            flex: 3,
-            child: Column(
-              children: [
+              flex: 3,
+              child: Column(children: [
                 Text(
                   'Before we start...',
                   style: Theme.of(context).textTheme.headline1,
@@ -33,14 +25,10 @@ class OnboardingInfoScreen extends StatelessWidget {
                     'https://www.sentry.io/',
                     'sentry.io',
                     '.\n\nFeatures available to Early Adopters are still in progress and may have bugs. We recognize the irony.',
-                    Theme.of(context).textTheme.subtitle1
-                )
-              ]
-            )
-          )
+                    Theme.of(context).textTheme.subtitle1)
+              ]))
         ],
-        )
-    ,
+      ),
     );
   }
 }

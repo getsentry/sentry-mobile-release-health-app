@@ -11,21 +11,18 @@ class LicenseScreen extends StatelessWidget {
     final ThemeData themeData = Theme.of(context);
     return Theme(
         data: themeData.copyWith(
-            appBarTheme: AppBarTheme(
-                brightness: Brightness.dark,
-                backgroundColor: SentryColors.rum
+          appBarTheme: AppBarTheme(
+              brightness: Brightness.dark, backgroundColor: SentryColors.rum),
+          textTheme: themeData.textTheme.copyWith(
+            subtitle1: TextStyle(
+              fontSize: 16,
+              color: SentryColors.revolver,
             ),
-            textTheme: themeData.textTheme.copyWith(
-              subtitle1: TextStyle(
-                fontSize: 16,
-                color: SentryColors.revolver,
-              ),
-            ),
+          ),
         ),
         child: LicensePage(
           applicationName: 'Sentry Mobile',
           applicationVersion: applicationVersion,
-        )
-    );
+        ));
   }
 }

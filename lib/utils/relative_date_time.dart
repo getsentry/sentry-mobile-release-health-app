@@ -1,10 +1,6 @@
-
-
-
 import 'dart:math';
 
 extension RelativeDateTime on DateTime {
-
   static const secondsToMinuteThreshold = 44;
   static const minutesToHourThreshold = 44;
   static const hoursToDayThreshold = 21;
@@ -84,9 +80,10 @@ extension RelativeDateTime on DateTime {
     // Minutes
 
     final minutes = difference.inMinutes;
-    if  (minutes > 0) {
+    if (minutes > 0) {
       final fromStartOfMinute = DateTime(year, month, day, hour, minute);
-      final toEndOfMinute = DateTime(now.year, now.month, now.day, now.hour, now.minute);
+      final toEndOfMinute =
+          DateTime(now.year, now.month, now.day, now.hour, now.minute);
       final minutes = toEndOfMinute.difference(fromStartOfMinute).inMinutes;
 
       if (minutes > minutesToHourThreshold) {
@@ -110,21 +107,20 @@ extension RelativeDateTime on DateTime {
 
   // This uses method average month length, which will not work correctly for large date differences.
   int differenceInMonths(DateTime endDate) {
-
     return _monthDiff(endDate, this).toInt();
   }
-
-
 
   int differenceInYears(DateTime endDate) {
     final startDate = this;
     var years = endDate.year - startDate.year;
     if (startDate.compareTo(endDate) < 0) {
-      if (startDate.month == endDate.month && endDate.day < startDate.day || endDate.month < startDate.month) {
+      if (startDate.month == endDate.month && endDate.day < startDate.day ||
+          endDate.month < startDate.month) {
         years--;
       }
     } else {
-      if (startDate.month == endDate.month && endDate.day > startDate.day || endDate.month > startDate.month) {
+      if (startDate.month == endDate.month && endDate.day > startDate.day ||
+          endDate.month > startDate.month) {
         years++;
       }
     }

@@ -1,8 +1,4 @@
-
-
-
-class ProjectItem {
-}
+class ProjectItem {}
 
 class ProjectHeadlineItem extends ProjectItem {
   ProjectHeadlineItem(this.text);
@@ -15,7 +11,8 @@ class ProjectOrganizationItem extends ProjectItem {
 }
 
 class ProjectProjectItem extends ProjectItem {
-  ProjectProjectItem(this.organizationSlug, this.projectSlug, this.isBookmarked);
+  ProjectProjectItem(
+      this.organizationSlug, this.projectSlug, this.isBookmarked);
 
   final String organizationSlug;
   final String projectSlug;

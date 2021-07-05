@@ -1,5 +1,3 @@
-
-
 import 'dart:io';
 import 'dart:math';
 
@@ -36,39 +34,37 @@ class _ScannerScreenState extends State<ScannerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Scan Token'),
-      ),
-      body: Stack(
-        children: [
+        appBar: AppBar(
+          title: Text('Scan Token'),
+        ),
+        body: Stack(children: [
           _buildQrView(context),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 22.0),
+            padding:
+                const EdgeInsets.symmetric(vertical: 16.0, horizontal: 22.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 FutureBuilder(
-                  future: _controller?.getCameraInfo(),
-                  builder: (context, snapshot) {
-                    return IconButton(
-                        icon: Icon(
-                          snapshot.data == CameraFacing.back ? Icons.switch_camera_outlined : Icons.switch_camera,
-                          color: Colors.white,
-                          size: 24.0,
-                        ),
-                        onPressed: () async {
-                          await _controller?.flipCamera();
-                          setState(() {});
-                        }
-                    );
-                  }
-                )
+                    future: _controller?.getCameraInfo(),
+                    builder: (context, snapshot) {
+                      return IconButton(
+                          icon: Icon(
+                            snapshot.data == CameraFacing.back
+                                ? Icons.switch_camera_outlined
+                                : Icons.switch_camera,
+                            color: Colors.white,
+                            size: 24.0,
+                          ),
+                          onPressed: () async {
+                            await _controller?.flipCamera();
+                            setState(() {});
+                          });
+                    })
               ],
             ),
           )
-        ]
-      )
-    );
+        ]));
   }
 
   @override
@@ -79,9 +75,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
 
   Widget _buildQrView(BuildContext context) {
     final minWidthHeight = min(
-        MediaQuery.of(context).size.width,
-        MediaQuery.of(context).size.height
-    );
+        MediaQuery.of(context).size.width, MediaQuery.of(context).size.height);
     return QRView(
       key: _scannerKey,
       onQRViewCreated: _onQRViewCreated,
@@ -90,8 +84,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
           borderRadius: 12,
           borderLength: 32,
           borderWidth: 12,
-          cutOutSize: minWidthHeight  * 2 / 3
-      ),
+          cutOutSize: minWidthHeight * 2 / 3),
     );
   }
 

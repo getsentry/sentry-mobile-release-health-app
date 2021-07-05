@@ -1,5 +1,3 @@
-
-
 import 'package:json_annotation/json_annotation.dart';
 
 part 'avatar.g.dart';
@@ -8,8 +6,7 @@ part 'avatar.g.dart';
 class Avatar {
   Avatar(this.avatarType);
 
-  factory Avatar.fromJson(Map<String, dynamic> json) =>
-      _$AvatarFromJson(json);
+  factory Avatar.fromJson(Map<String, dynamic> json) => _$AvatarFromJson(json);
 
   final String? avatarType;
 

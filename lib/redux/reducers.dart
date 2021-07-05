@@ -8,8 +8,7 @@ import '../utils/stability_score.dart';
 import 'actions.dart';
 import 'state/app_state.dart';
 
-AppState appReducer(AppState state, dynamic action) =>
-    AppState(
+AppState appReducer(AppState state, dynamic action) => AppState(
       globalState: globalReducer(state.globalState, action),
     );
 
@@ -18,45 +17,57 @@ final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, RehydrateSuccessAction>(_rehydrateSuccessAction),
   TypedReducer<GlobalState, LoginSuccessAction>(_loginAction),
   TypedReducer<GlobalState, LogoutAction>(_logoutAction),
-  TypedReducer<GlobalState, FetchOrgsAndProjectsAction>(_fetchOrganizationsAndProjectsAction),
-  TypedReducer<GlobalState, FetchOrgsAndProjectsProgressAction>(_fetchOrgsAndProjectsProgressAction),
-  TypedReducer<GlobalState, FetchOrgsAndProjectsSuccessAction>(_fetchOrgsAndProjectsSuccessAction),
-  TypedReducer<GlobalState, FetchOrgsAndProjectsFailureAction>(_fetchOrgsAndProjectsFailure),
-  TypedReducer<GlobalState, FetchLatestReleasesAction>(_fetchLatestReleasesAction),
-  TypedReducer<GlobalState, FetchLatestReleasesSuccessAction>(_fetchLatestReleasesSuccessAction),
-  TypedReducer<GlobalState, FetchLatestReleaseSuccessAction>(_fetchLatestReleaseSuccessAction),
-  TypedReducer<GlobalState, FetchIssuesSuccessAction>(_fetchIssuesSuccessAction),
-  TypedReducer<GlobalState, SelectOrganizationAction>(_selectOrganizationAction),
+  TypedReducer<GlobalState, FetchOrgsAndProjectsAction>(
+      _fetchOrganizationsAndProjectsAction),
+  TypedReducer<GlobalState, FetchOrgsAndProjectsProgressAction>(
+      _fetchOrgsAndProjectsProgressAction),
+  TypedReducer<GlobalState, FetchOrgsAndProjectsSuccessAction>(
+      _fetchOrgsAndProjectsSuccessAction),
+  TypedReducer<GlobalState, FetchOrgsAndProjectsFailureAction>(
+      _fetchOrgsAndProjectsFailure),
+  TypedReducer<GlobalState, FetchLatestReleasesAction>(
+      _fetchLatestReleasesAction),
+  TypedReducer<GlobalState, FetchLatestReleasesSuccessAction>(
+      _fetchLatestReleasesSuccessAction),
+  TypedReducer<GlobalState, FetchLatestReleaseSuccessAction>(
+      _fetchLatestReleaseSuccessAction),
+  TypedReducer<GlobalState, FetchIssuesSuccessAction>(
+      _fetchIssuesSuccessAction),
+  TypedReducer<GlobalState, SelectOrganizationAction>(
+      _selectOrganizationAction),
   TypedReducer<GlobalState, SelectProjectAction>(_selectProjectAction),
-  TypedReducer<GlobalState, FetchAuthenticatedUserSuccessAction>(_fetchAuthenticatedUserSuccessAction),
-  TypedReducer<GlobalState, FetchSessionsSuccessAction>(_fetchSessionsSuccessAction),
+  TypedReducer<GlobalState, FetchAuthenticatedUserSuccessAction>(
+      _fetchAuthenticatedUserSuccessAction),
+  TypedReducer<GlobalState, FetchSessionsSuccessAction>(
+      _fetchSessionsSuccessAction),
   TypedReducer<GlobalState, FetchApdexSuccessAction>(_fetchApdexSuccessAction),
   TypedReducer<GlobalState, BookmarkProjectAction>(_bookmarkProjectAction),
-  TypedReducer<GlobalState, BookmarkProjectSuccessAction>(_bookmarkProjectSuccessAction),
-  TypedReducer<GlobalState, BookmarkProjectFailureAction>(_bookmarkProjectFailureAction),
+  TypedReducer<GlobalState, BookmarkProjectSuccessAction>(
+      _bookmarkProjectSuccessAction),
+  TypedReducer<GlobalState, BookmarkProjectFailureAction>(
+      _bookmarkProjectFailureAction),
   TypedReducer<GlobalState, SentrySdkToggleAction>(_sentrySdkToggle),
   TypedReducer<GlobalState, ApiFailureAction>(_apiFailureAction)
-  
 ]);
 
-GlobalState _fetchOrgsAndProjectsProgressAction(GlobalState state, FetchOrgsAndProjectsProgressAction action) {
+GlobalState _fetchOrgsAndProjectsProgressAction(
+    GlobalState state, FetchOrgsAndProjectsProgressAction action) {
   return state.copyWith(
       orgsAndProjectsProgress: action.progress,
-      orgsAndProjectsProgressText: action.text
-  );
+      orgsAndProjectsProgressText: action.text);
 }
 
 GlobalState _switchTabAction(GlobalState state, SwitchTabAction action) {
   return state.copyWith(selectedTab: action.selectedTab);
 }
 
-GlobalState _rehydrateSuccessAction(GlobalState state, RehydrateSuccessAction action) {
+GlobalState _rehydrateSuccessAction(
+    GlobalState state, RehydrateSuccessAction action) {
   return state.copyWith(
       hydrated: true,
       authToken: action.authToken,
       sentrySdkEnabled: action.sentrySdkEnabled,
-      version: action.version
-  );
+      version: action.version);
 }
 
 GlobalState _loginAction(GlobalState state, LoginSuccessAction action) {
@@ -64,28 +75,25 @@ GlobalState _loginAction(GlobalState state, LoginSuccessAction action) {
 }
 
 GlobalState _logoutAction(GlobalState state, LogoutAction action) {
-  return GlobalState.initial().copyWith(
-      hydrated: true
-  );
+  return GlobalState.initial().copyWith(hydrated: true);
 }
 
-GlobalState _fetchOrganizationsAndProjectsAction(GlobalState state, FetchOrgsAndProjectsAction action) {
+GlobalState _fetchOrganizationsAndProjectsAction(
+    GlobalState state, FetchOrgsAndProjectsAction action) {
   if (action.resetSessionData) {
     return state.copyWith(
-      sessionsByProjectId: {},
-      sessionsBeforeByProjectId: {},
-      orgsAndProjectsLoading: true,
-      setOrgsAndProjectsErrorNull: true
-    );
+        sessionsByProjectId: {},
+        sessionsBeforeByProjectId: {},
+        orgsAndProjectsLoading: true,
+        setOrgsAndProjectsErrorNull: true);
   } else {
     return state.copyWith(
-      orgsAndProjectsLoading: true,
-      setOrgsAndProjectsErrorNull: true
-    );
+        orgsAndProjectsLoading: true, setOrgsAndProjectsErrorNull: true);
   }
 }
 
-GlobalState _fetchOrgsAndProjectsSuccessAction(GlobalState state, FetchOrgsAndProjectsSuccessAction action) {
+GlobalState _fetchOrgsAndProjectsSuccessAction(
+    GlobalState state, FetchOrgsAndProjectsSuccessAction action) {
   final Map<String, String> organizationsSlugByProjectSlug = <String, String>{};
   final Map<String, Project> projectsById = <String, Project>{};
 
@@ -94,7 +102,8 @@ GlobalState _fetchOrgsAndProjectsSuccessAction(GlobalState state, FetchOrgsAndPr
   }
 
   for (final organizationSlug in action.projectsByOrganizationSlug.keys) {
-    for (final project in action.projectsByOrganizationSlug[organizationSlug]!) {
+    for (final project
+        in action.projectsByOrganizationSlug[organizationSlug]!) {
       organizationsSlugByProjectSlug[project.slug] = organizationSlug;
 
       if (action.projectIdsWithSessions.contains(project.id)) {
@@ -115,35 +124,39 @@ GlobalState _fetchOrgsAndProjectsSuccessAction(GlobalState state, FetchOrgsAndPr
   });
 
   return state.copyWith(
-    organizations: action.organizations,
-    organizationsSlugByProjectSlug: organizationsSlugByProjectSlug,
-    projectIdsWithSessions: action.projectIdsWithSessions,
-    projectsWithSessions: projectsWithSessions,
-    projectsByOrganizationSlug: action.projectsByOrganizationSlug,
-    orgsAndProjectsLoading: false
-  );
+      organizations: action.organizations,
+      organizationsSlugByProjectSlug: organizationsSlugByProjectSlug,
+      projectIdsWithSessions: action.projectIdsWithSessions,
+      projectsWithSessions: projectsWithSessions,
+      projectsByOrganizationSlug: action.projectsByOrganizationSlug,
+      orgsAndProjectsLoading: false);
 }
 
-GlobalState _fetchOrgsAndProjectsFailure(GlobalState state, FetchOrgsAndProjectsFailureAction action) {
+GlobalState _fetchOrgsAndProjectsFailure(
+    GlobalState state, FetchOrgsAndProjectsFailureAction action) {
   return state.copyWith(
     orgsAndProjectsLoading: false,
     orgsAndProjectsError: action.error,
   );
 }
 
-GlobalState _selectOrganizationAction(GlobalState state, SelectOrganizationAction action) {
+GlobalState _selectOrganizationAction(
+    GlobalState state, SelectOrganizationAction action) {
   return state.copyWith(selectedOrganization: action.organization);
 }
 
-GlobalState _selectProjectAction(GlobalState state, SelectProjectAction action) {
+GlobalState _selectProjectAction(
+    GlobalState state, SelectProjectAction action) {
   return state.copyWith(selectedProject: action.project);
 }
 
-GlobalState _fetchLatestReleasesAction(GlobalState state, FetchLatestReleasesAction action) {
+GlobalState _fetchLatestReleasesAction(
+    GlobalState state, FetchLatestReleasesAction action) {
   return state.copyWith();
 }
 
-GlobalState _fetchLatestReleasesSuccessAction(GlobalState state, FetchLatestReleasesSuccessAction action) {
+GlobalState _fetchLatestReleasesSuccessAction(
+    GlobalState state, FetchLatestReleasesSuccessAction action) {
   final Map<String, Release> latestReleasesByProjectId = <String, Release>{};
 
   for (final projectsWithLatestRelease in action.projectsWithLatestReleases) {
@@ -153,67 +166,76 @@ GlobalState _fetchLatestReleasesSuccessAction(GlobalState state, FetchLatestRele
     }
   }
 
-  return state.copyWith(
-    latestReleasesByProjectId: latestReleasesByProjectId
-  );
+  return state.copyWith(latestReleasesByProjectId: latestReleasesByProjectId);
 }
 
-GlobalState _fetchLatestReleaseSuccessAction(GlobalState state, FetchLatestReleaseSuccessAction action) {
-  final organizationSlug = state.organizationsSlugByProjectSlug[action.projectSlug];
-  final project = state.projectsByOrganizationSlug[organizationSlug!]!.where((element) => element.slug == action.projectSlug).first;
+GlobalState _fetchLatestReleaseSuccessAction(
+    GlobalState state, FetchLatestReleaseSuccessAction action) {
+  final organizationSlug =
+      state.organizationsSlugByProjectSlug[action.projectSlug];
+  final project = state.projectsByOrganizationSlug[organizationSlug!]!
+      .where((element) => element.slug == action.projectSlug)
+      .first;
 
-  final Map<String, Release> latestReleasesByProjectId = state.latestReleasesByProjectId;
+  final Map<String, Release> latestReleasesByProjectId =
+      state.latestReleasesByProjectId;
   latestReleasesByProjectId[project.id] = action.latestRelease;
 
   return state.copyWith(
-      latestReleasesByProjectId: latestReleasesByProjectId,
+    latestReleasesByProjectId: latestReleasesByProjectId,
   );
 }
 
-GlobalState _fetchIssuesSuccessAction(GlobalState state, FetchIssuesSuccessAction action) {
+GlobalState _fetchIssuesSuccessAction(
+    GlobalState state, FetchIssuesSuccessAction action) {
   final issuesByProjectSlug = state.issuesByProjectSlug;
   issuesByProjectSlug[action.projectSlug] = action.issues;
 
-  return state.copyWith(
-      issuesByProjectSlug: issuesByProjectSlug
-  );
+  return state.copyWith(issuesByProjectSlug: issuesByProjectSlug);
 }
 
-GlobalState _fetchAuthenticatedUserSuccessAction(GlobalState state, FetchAuthenticatedUserSuccessAction action) {
-  return state.copyWith(
-      me: action.me
-  );
+GlobalState _fetchAuthenticatedUserSuccessAction(
+    GlobalState state, FetchAuthenticatedUserSuccessAction action) {
+  return state.copyWith(me: action.me);
 }
 
-GlobalState _fetchSessionsSuccessAction(GlobalState state, FetchSessionsSuccessAction action) {
+GlobalState _fetchSessionsSuccessAction(
+    GlobalState state, FetchSessionsSuccessAction action) {
   final sessionsByProjectId = state.sessionsByProjectId;
   sessionsByProjectId[action.projectId] = action.sessions;
 
   final sessionsBeforeByProjectId = state.sessionsBeforeByProjectId;
   sessionsBeforeByProjectId[action.projectId] = action.sessionsBefore;
-  
-  final Map<String, double> crashFreeSessionsByProjectId = state.crashFreeSessionsByProjectId;
+
+  final Map<String, double> crashFreeSessionsByProjectId =
+      state.crashFreeSessionsByProjectId;
   final sessionsCrashFreeSessions = action.sessions.crashFreeSessions();
   if (sessionsCrashFreeSessions != null) {
     crashFreeSessionsByProjectId[action.projectId] = sessionsCrashFreeSessions;
   }
-  
-  final Map<String, double> crashFreeSessionsBeforeByProjectId = state.crashFreeSessionsBeforeByProjectId;
-  final sessionsBeforeCrashFreeSessions = action.sessionsBefore.crashFreeSessions();
+
+  final Map<String, double> crashFreeSessionsBeforeByProjectId =
+      state.crashFreeSessionsBeforeByProjectId;
+  final sessionsBeforeCrashFreeSessions =
+      action.sessionsBefore.crashFreeSessions();
   if (sessionsBeforeCrashFreeSessions != null) {
-    crashFreeSessionsBeforeByProjectId[action.projectId] = sessionsBeforeCrashFreeSessions;
+    crashFreeSessionsBeforeByProjectId[action.projectId] =
+        sessionsBeforeCrashFreeSessions;
   }
 
-  final Map<String, double> crashFreeUsersByProjectId = state.crashFreeUsersByProjectId;
+  final Map<String, double> crashFreeUsersByProjectId =
+      state.crashFreeUsersByProjectId;
   final sessionsCrashFreeUsers = action.sessions.crashFreeUsers();
   if (sessionsCrashFreeUsers != null) {
     crashFreeUsersByProjectId[action.projectId] = sessionsCrashFreeUsers;
   }
 
-  final Map<String, double> crashFreeUsersBeforeByProjectId = state.crashFreeUsersBeforeByProjectId;
+  final Map<String, double> crashFreeUsersBeforeByProjectId =
+      state.crashFreeUsersBeforeByProjectId;
   final sessionsBeforeCrashFreeUsers = action.sessionsBefore.crashFreeUsers();
   if (sessionsBeforeCrashFreeUsers != null) {
-    crashFreeUsersBeforeByProjectId[action.projectId] = sessionsBeforeCrashFreeUsers;
+    crashFreeUsersBeforeByProjectId[action.projectId] =
+        sessionsBeforeCrashFreeUsers;
   }
 
   return state.copyWith(
@@ -222,11 +244,11 @@ GlobalState _fetchSessionsSuccessAction(GlobalState state, FetchSessionsSuccessA
       crashFreeSessionsByProjectId: crashFreeSessionsByProjectId,
       crashFreeSessionsBeforeByProjectId: crashFreeSessionsBeforeByProjectId,
       crashFreeUsersByProjectId: crashFreeUsersByProjectId,
-      crashFreeUsersBeforeByProjectId: crashFreeUsersBeforeByProjectId
-  );
+      crashFreeUsersBeforeByProjectId: crashFreeUsersBeforeByProjectId);
 }
 
-GlobalState _fetchApdexSuccessAction(GlobalState state, FetchApdexSuccessAction action) {
+GlobalState _fetchApdexSuccessAction(
+    GlobalState state, FetchApdexSuccessAction action) {
   final apdexByProjectId = state.apdexByProjectId;
   final apdex = action.apdex;
   if (apdex != null) {
@@ -240,37 +262,41 @@ GlobalState _fetchApdexSuccessAction(GlobalState state, FetchApdexSuccessAction 
   }
 
   return state.copyWith(
-    apdexByProjectId: apdexByProjectId,
-    apdexBeforeByProjectId: apdexBeforeByProjectId
-  );
+      apdexByProjectId: apdexByProjectId,
+      apdexBeforeByProjectId: apdexBeforeByProjectId);
 }
 
-GlobalState _bookmarkProjectAction(GlobalState state, BookmarkProjectAction action) {
-  final project = state.projectsWithSessions.firstWhereOrNull((element) => element.slug == action.projectSlug);
+GlobalState _bookmarkProjectAction(
+    GlobalState state, BookmarkProjectAction action) {
+  final project = state.projectsWithSessions
+      .firstWhereOrNull((element) => element.slug == action.projectSlug);
   if (project != null) {
-    return _replaceProject(state, project.copyWith(isBookmarked: action.bookmarked));
+    return _replaceProject(
+        state, project.copyWith(isBookmarked: action.bookmarked));
   } else {
     return state;
   }
 }
 
-GlobalState _bookmarkProjectSuccessAction(GlobalState state, BookmarkProjectSuccessAction action) {
+GlobalState _bookmarkProjectSuccessAction(
+    GlobalState state, BookmarkProjectSuccessAction action) {
   return _replaceProject(state, action.project);
 }
 
-GlobalState _bookmarkProjectFailureAction(GlobalState state, BookmarkProjectFailureAction action) {
-  final project = state.projectsWithSessions.firstWhereOrNull((element) => element.slug == action.projectSlug);
+GlobalState _bookmarkProjectFailureAction(
+    GlobalState state, BookmarkProjectFailureAction action) {
+  final project = state.projectsWithSessions
+      .firstWhereOrNull((element) => element.slug == action.projectSlug);
   if (project != null) {
-    return _replaceProject(state, project.copyWith(isBookmarked: action.bookmarked));
+    return _replaceProject(
+        state, project.copyWith(isBookmarked: action.bookmarked));
   } else {
     return state;
   }
 }
 
 GlobalState _sentrySdkToggle(GlobalState state, SentrySdkToggleAction action) {
-  return state.copyWith(
-    sentrySdkEnabled: action.enabled
-  );
+  return state.copyWith(sentrySdkEnabled: action.enabled);
 }
 
 GlobalState _apiFailureAction(GlobalState state, ApiFailureAction action) {
@@ -319,8 +345,7 @@ GlobalState _replaceProject(GlobalState state, Project projectToReplace) {
 
   return state.copyWith(
       projectsByOrganizationSlug: projectsByOrganizationSlug,
-      projectsWithSessions: projects
-  );
+      projectsWithSessions: projects);
 }
 
 // -----------------------------

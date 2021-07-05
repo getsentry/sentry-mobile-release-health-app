@@ -1,6 +1,3 @@
-
-
-
 class Stat {
   Stat(this.timestamp, this.value);
   Stat.fromJson(List json)

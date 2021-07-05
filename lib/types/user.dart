@@ -1,5 +1,3 @@
-
-
 import 'package:json_annotation/json_annotation.dart';
 
 part 'user.g.dart';
@@ -8,8 +6,7 @@ part 'user.g.dart';
 class User {
   User(this.id, this.username, this.email);
 
-  factory User.fromJson(Map<String, dynamic> json) =>
-      _$UserFromJson(json);
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
   final String? id;
   final String? username;

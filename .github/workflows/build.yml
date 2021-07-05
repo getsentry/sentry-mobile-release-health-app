@@ -24,7 +24,7 @@ jobs:
               java-version: '8'
         - uses: subosito/flutter-action@v1
           with:
-            flutter-version: '2.0.2'
+            channel: 'stable'
         - name: Fix iOS build bug
           if: matrix.target == 'ios'
           run: rm ios/Podfile
@@ -32,6 +32,8 @@ jobs:
           run: flutter test
         - name: Analyze
           run: flutter analyze
+        - name: Format
+          run: flutter format -n --set-exit-if-changed ./
         - name: Build ${{ matrix.target }}
           run: |
             TARGET=${{ matrix.target }}

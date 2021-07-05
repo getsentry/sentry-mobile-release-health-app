@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -16,7 +14,6 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
-
   final _pageController = PageController();
   final _pageItems = OnboardingScreenItem.values;
   var _currentPage = 0;
@@ -33,7 +30,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     precacheImage(Image.asset('assets/user-menu.png').image, context);
     super.didChangeDependencies();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,31 +41,30 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         elevation: 0.0,
         brightness: Brightness.light,
       ),
-      body: Stack(
-          alignment: AlignmentDirectional.bottomCenter,
-          children: [
-            PageView.builder(
-              controller: _pageController,
-              itemCount: _pageItems.length,
-              onPageChanged: (int page) {
-                _updateCurrentPage(page);
-              },
-              itemBuilder: (context, index) {
-                return _widgetForItem(_pageItems[index]);
-              },
-            ),
-            Container(
-              margin: EdgeInsets.only(bottom: 32),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  for (int i = 0; i < _pageItems.length; i++)
-                    i == _currentPage ? _circleIndicator(true) : _circleIndicator(false),
-                ],
-              ),
-            )
-          ]
-      ),
+      body: Stack(alignment: AlignmentDirectional.bottomCenter, children: [
+        PageView.builder(
+          controller: _pageController,
+          itemCount: _pageItems.length,
+          onPageChanged: (int page) {
+            _updateCurrentPage(page);
+          },
+          itemBuilder: (context, index) {
+            return _widgetForItem(_pageItems[index]);
+          },
+        ),
+        Container(
+          margin: EdgeInsets.only(bottom: 32),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              for (int i = 0; i < _pageItems.length; i++)
+                i == _currentPage
+                    ? _circleIndicator(true)
+                    : _circleIndicator(false),
+            ],
+          ),
+        )
+      ]),
     );
   }
 
@@ -78,7 +74,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       height: isActive ? 12 : 8,
       width: isActive ? 12 : 8,
       decoration: BoxDecoration(
-          color: isActive ? SentryColors.rum : SentryColors.rum.withAlpha((256 * 0.2).toInt()),
+          color: isActive
+              ? SentryColors.rum
+              : SentryColors.rum.withAlpha((256 * 0.2).toInt()),
           borderRadius: BorderRadius.all(Radius.circular(12))),
     );
   }
@@ -89,11 +87,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void _animateToLastPage() {
-    _pageController.animateToPage(
-      _pageItems.length - 1,
-      duration: Duration(milliseconds: 200),
-      curve: Curves.easeInOut
-    );
+    _pageController.animateToPage(_pageItems.length - 1,
+        duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
   }
 
   Widget _widgetForItem(OnboardingScreenItem item) {
@@ -102,28 +97,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         return OnboardingDetailScreen(
             'assets/onboarding_1_a.png',
             'assets/onboarding_1_b.png',
-            'Start your day with Sentry. We\'re sorry in advance.'
-        );
+            'Start your day with Sentry. We\'re sorry in advance.');
       case OnboardingScreenItem.IMAGE_2:
-        return OnboardingDetailScreen(
-            'assets/onboarding_2.png',
-            null,
-            'Hey, there\'s a chance things are going well. If so, go back to bed!'
-        );
+        return OnboardingDetailScreen('assets/onboarding_2.png', null,
+            'Hey, there\'s a chance things are going well. If so, go back to bed!');
       case OnboardingScreenItem.IMAGE_3:
-        return OnboardingDetailScreen(
-            'assets/onboarding_3.png',
-            null,
-            'Really though, Sentry will show you everything that is on fire. You\'re welcome!'
-        );
+        return OnboardingDetailScreen('assets/onboarding_3.png', null,
+            'Really though, Sentry will show you everything that is on fire. You\'re welcome!');
       case OnboardingScreenItem.INFO:
         return OnboardingInfoScreen();
       case OnboardingScreenItem.CONSENT:
-        return OnboardingConsentScreen(
-            () {
-              _animateToLastPage();
-            }
-        );
+        return OnboardingConsentScreen(() {
+          _animateToLastPage();
+        });
       case OnboardingScreenItem.CONNECT:
         return ConnectScreen();
     }

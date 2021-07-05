@@ -1,5 +1,3 @@
-
-
 import '../../redux/state/session_state.dart';
 import '../../screens/chart/line_chart_point.dart';
 import '../../types/group.dart';
@@ -61,34 +59,33 @@ class GlobalState {
 
   factory GlobalState.initial() {
     return GlobalState(
-      authToken: null,
-      hydrated: false,
-      sentrySdkEnabled: false,
-      version: '--',
-      selectedTab: 0,
-      organizations: [],
-      organizationsSlugByProjectSlug: {},
-      projectsByOrganizationSlug: {},
-      orgsAndProjectsLoading: true,
-      orgsAndProjectsProgress: null,
-      orgsAndProjectsProgressText: null,
-      orgsAndProjectsError: null,
-      projectIdsWithSessions: {},
-      projectsWithSessions: [],
-      latestReleasesByProjectId: {},
-      sessionsByProjectId: {},
-      sessionsBeforeByProjectId: {},
-      issuesByProjectSlug: {},
-      crashFreeSessionsByProjectId: {},
-      crashFreeSessionsBeforeByProjectId: {},
-      crashFreeUsersByProjectId: {},
-      crashFreeUsersBeforeByProjectId: {},
-      apdexByProjectId: {},
-      apdexBeforeByProjectId: {},
-      selectedOrganization: null,
-      selectedProject: null,
-      me: null
-    );
+        authToken: null,
+        hydrated: false,
+        sentrySdkEnabled: false,
+        version: '--',
+        selectedTab: 0,
+        organizations: [],
+        organizationsSlugByProjectSlug: {},
+        projectsByOrganizationSlug: {},
+        orgsAndProjectsLoading: true,
+        orgsAndProjectsProgress: null,
+        orgsAndProjectsProgressText: null,
+        orgsAndProjectsError: null,
+        projectIdsWithSessions: {},
+        projectsWithSessions: [],
+        latestReleasesByProjectId: {},
+        sessionsByProjectId: {},
+        sessionsBeforeByProjectId: {},
+        issuesByProjectSlug: {},
+        crashFreeSessionsByProjectId: {},
+        crashFreeSessionsBeforeByProjectId: {},
+        crashFreeUsersByProjectId: {},
+        crashFreeUsersBeforeByProjectId: {},
+        apdexByProjectId: {},
+        apdexBeforeByProjectId: {},
+        selectedOrganization: null,
+        selectedProject: null,
+        me: null);
   }
 
   final String? authToken;
@@ -111,13 +108,17 @@ class GlobalState {
   final Map<String, Release> latestReleasesByProjectId;
 
   final Map<String, Sessions> sessionsByProjectId;
-  final Map<String, Sessions> sessionsBeforeByProjectId; // Interval before sessionsByProjectId
+  final Map<String, Sessions>
+      sessionsBeforeByProjectId; // Interval before sessionsByProjectId
   final Map<String, double> crashFreeSessionsByProjectId;
-  final Map<String, double> crashFreeSessionsBeforeByProjectId; // Interval before stabilityScoreByProjectId
+  final Map<String, double>
+      crashFreeSessionsBeforeByProjectId; // Interval before stabilityScoreByProjectId
   final Map<String, double> crashFreeUsersByProjectId;
-  final Map<String, double> crashFreeUsersBeforeByProjectId; // Interval before stabilityScoreByProjectId
+  final Map<String, double>
+      crashFreeUsersBeforeByProjectId; // Interval before stabilityScoreByProjectId
   final Map<String, double> apdexByProjectId;
-  final Map<String, double> apdexBeforeByProjectId; // Interval before apdexByProjectId
+  final Map<String, double>
+      apdexBeforeByProjectId; // Interval before apdexByProjectId
 
   final Map<String, List<Group>> issuesByProjectSlug;
 
@@ -158,41 +159,57 @@ class GlobalState {
     User? me,
   }) {
     return GlobalState(
-      authToken: setTokenNull ? null : (authToken ?? this.authToken),
-      hydrated: hydrated ?? this.hydrated,
-      sentrySdkEnabled: sentrySdkEnabled ?? this.sentrySdkEnabled,
-      version: version ?? this.version,
-      selectedTab: selectedTab ?? this.selectedTab,
-      organizations: organizations ?? this.organizations,
-      organizationsSlugByProjectSlug: organizationsSlugByProjectSlug ?? this.organizationsSlugByProjectSlug,
-      projectsByOrganizationSlug: projectsByOrganizationSlug ?? this.projectsByOrganizationSlug,
-      orgsAndProjectsLoading: orgsAndProjectsLoading ?? this.orgsAndProjectsLoading,
-      orgsAndProjectsProgress: (orgsAndProjectsLoading ?? this.orgsAndProjectsLoading)
-        ? orgsAndProjectsProgress ?? this.orgsAndProjectsProgress
-        : null,
-      orgsAndProjectsProgressText: (orgsAndProjectsLoading ?? this.orgsAndProjectsLoading)
-          ? orgsAndProjectsProgressText ?? this.orgsAndProjectsProgressText
-          : null,
-      orgsAndProjectsError: setOrgsAndProjectsErrorNull ? null : orgsAndProjectsError ?? this.orgsAndProjectsError,
-      projectIdsWithSessions: projectIdsWithSessions ?? this.projectIdsWithSessions,
-      projectsWithSessions: projectsWithSessions ?? this.projectsWithSessions,
-      latestReleasesByProjectId: latestReleasesByProjectId ?? this.latestReleasesByProjectId,
-      sessionsByProjectId: sessionsByProjectId ?? this.sessionsByProjectId,
-      sessionsBeforeByProjectId: sessionsBeforeByProjectId ?? this.sessionsBeforeByProjectId,
-      crashFreeSessionsByProjectId: crashFreeSessionsByProjectId ?? this.crashFreeSessionsByProjectId,
-      crashFreeSessionsBeforeByProjectId: crashFreeSessionsBeforeByProjectId ?? this.crashFreeSessionsBeforeByProjectId,
-      crashFreeUsersByProjectId: crashFreeUsersByProjectId ?? this.crashFreeUsersByProjectId,
-      crashFreeUsersBeforeByProjectId: crashFreeUsersBeforeByProjectId ?? this.crashFreeUsersBeforeByProjectId,
-      apdexByProjectId: apdexByProjectId ?? this.apdexByProjectId,
-      apdexBeforeByProjectId: apdexBeforeByProjectId ?? this.apdexBeforeByProjectId,
-      issuesByProjectSlug: issuesByProjectSlug ?? this.issuesByProjectSlug,
-      selectedOrganization: selectedOrganization ?? this.selectedOrganization,
-      selectedProject: selectedProject ?? this.selectedProject,
-      me: me ?? this.me
-    );
+        authToken: setTokenNull ? null : (authToken ?? this.authToken),
+        hydrated: hydrated ?? this.hydrated,
+        sentrySdkEnabled: sentrySdkEnabled ?? this.sentrySdkEnabled,
+        version: version ?? this.version,
+        selectedTab: selectedTab ?? this.selectedTab,
+        organizations: organizations ?? this.organizations,
+        organizationsSlugByProjectSlug: organizationsSlugByProjectSlug ??
+            this.organizationsSlugByProjectSlug,
+        projectsByOrganizationSlug:
+            projectsByOrganizationSlug ?? this.projectsByOrganizationSlug,
+        orgsAndProjectsLoading:
+            orgsAndProjectsLoading ?? this.orgsAndProjectsLoading,
+        orgsAndProjectsProgress:
+            (orgsAndProjectsLoading ?? this.orgsAndProjectsLoading)
+                ? orgsAndProjectsProgress ?? this.orgsAndProjectsProgress
+                : null,
+        orgsAndProjectsProgressText: (orgsAndProjectsLoading ??
+                this.orgsAndProjectsLoading)
+            ? orgsAndProjectsProgressText ?? this.orgsAndProjectsProgressText
+            : null,
+        orgsAndProjectsError: setOrgsAndProjectsErrorNull
+            ? null
+            : orgsAndProjectsError ?? this.orgsAndProjectsError,
+        projectIdsWithSessions:
+            projectIdsWithSessions ?? this.projectIdsWithSessions,
+        projectsWithSessions: projectsWithSessions ?? this.projectsWithSessions,
+        latestReleasesByProjectId:
+            latestReleasesByProjectId ?? this.latestReleasesByProjectId,
+        sessionsByProjectId: sessionsByProjectId ?? this.sessionsByProjectId,
+        sessionsBeforeByProjectId:
+            sessionsBeforeByProjectId ?? this.sessionsBeforeByProjectId,
+        crashFreeSessionsByProjectId:
+            crashFreeSessionsByProjectId ?? this.crashFreeSessionsByProjectId,
+        crashFreeSessionsBeforeByProjectId:
+            crashFreeSessionsBeforeByProjectId ??
+                this.crashFreeSessionsBeforeByProjectId,
+        crashFreeUsersByProjectId:
+            crashFreeUsersByProjectId ?? this.crashFreeUsersByProjectId,
+        crashFreeUsersBeforeByProjectId: crashFreeUsersBeforeByProjectId ??
+            this.crashFreeUsersBeforeByProjectId,
+        apdexByProjectId: apdexByProjectId ?? this.apdexByProjectId,
+        apdexBeforeByProjectId:
+            apdexBeforeByProjectId ?? this.apdexBeforeByProjectId,
+        issuesByProjectSlug: issuesByProjectSlug ?? this.issuesByProjectSlug,
+        selectedOrganization: selectedOrganization ?? this.selectedOrganization,
+        selectedProject: selectedProject ?? this.selectedProject,
+        me: me ?? this.me);
   }
 
-  Map<String, SessionState> sessionStateByProjectId(Set<SessionStatus> sessionStatus) {
+  Map<String, SessionState> sessionStateByProjectId(
+      Set<SessionStatus> sessionStatus) {
     final sessionStateByProjectId = <String, SessionState>{};
 
     for (final projectId in sessionsByProjectId.keys) {
@@ -206,35 +223,37 @@ class GlobalState {
       var previousLineChartPoints = <LineChartPoint>[];
 
       if (sessions != null) {
-        final totalAndPoints = createTotalSessionCountAndLinePoints(sessionStatus, sessions);
+        final totalAndPoints =
+            createTotalSessionCountAndLinePoints(sessionStatus, sessions);
         total = totalAndPoints[0] as int;
         lineChartPoints = totalAndPoints[1] as List<LineChartPoint>;
       }
 
       if (previousSession != null) {
-        final totalAndPoints = createTotalSessionCountAndLinePoints(sessionStatus, previousSession);
+        final totalAndPoints = createTotalSessionCountAndLinePoints(
+            sessionStatus, previousSession);
         previousTotal = totalAndPoints[0] as int;
         previousLineChartPoints = totalAndPoints[1] as List<LineChartPoint>;
       }
 
       if (sessions != null) {
         sessionStateByProjectId[projectId] = SessionState(
-          projectId: projectId,
-          numberOfSessions: total,
-          previousNumberOfSessions: previousTotal,
-          sessionPoints: lineChartPoints,
-          previousSessionPoints: previousLineChartPoints
-        );
+            projectId: projectId,
+            numberOfSessions: total,
+            previousNumberOfSessions: previousTotal,
+            sessionPoints: lineChartPoints,
+            previousSessionPoints: previousLineChartPoints);
       }
     }
     return sessionStateByProjectId;
   }
 
   // Returns the total number of sessions and the line chart points for individual intervals.
-  List<dynamic> createTotalSessionCountAndLinePoints(Set<SessionStatus> sessionStatus, Sessions sessions) {
-    final groups = sessions.groups!.where((element) =>
-        sessionStatus.contains(element.by!.sessionStatus)
-    ).toList();
+  List<dynamic> createTotalSessionCountAndLinePoints(
+      Set<SessionStatus> sessionStatus, Sessions sessions) {
+    final groups = sessions.groups!
+        .where((element) => sessionStatus.contains(element.by!.sessionStatus))
+        .toList();
 
     var total = 0;
     for (final group in groups) {
@@ -249,12 +268,8 @@ class GlobalState {
       for (final group in groups) {
         sum += group.series!.sumSession![index];
       }
-      lineChartPoints.add(
-        LineChartPoint(
-          interval.millisecondsSinceEpoch.toDouble(),
-          sum.toDouble()
-        )
-      );
+      lineChartPoints.add(LineChartPoint(
+          interval.millisecondsSinceEpoch.toDouble(), sum.toDouble()));
     }
     return [total, lineChartPoints];
   }
@@ -262,13 +277,17 @@ class GlobalState {
   Organization? organizationForProjectSlug(String projectSlug) {
     final organizationSlug = organizationsSlugByProjectSlug[projectSlug];
     if (organizationSlug != null) {
-      return organizations.firstWhere((element) => element.slug == organizationSlug);
+      return organizations
+          .firstWhere((element) => element.slug == organizationSlug);
     } else {
       return null;
     }
   }
 
   List<ProjectWithLatestRelease> projectsWithLatestReleases() {
-    return projectsWithSessions.map((project) => ProjectWithLatestRelease(project, latestReleasesByProjectId[project.id])).toList();
+    return projectsWithSessions
+        .map((project) => ProjectWithLatestRelease(
+            project, latestReleasesByProjectId[project.id]))
+        .toList();
   }
 }

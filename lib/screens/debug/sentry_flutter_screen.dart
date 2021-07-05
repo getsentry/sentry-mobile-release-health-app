@@ -1,5 +1,3 @@
-
-
 import 'dart:async';
 import 'dart:io';
 
@@ -43,46 +41,61 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Sentry Flutter SDK - Debug'),
-        brightness: Brightness.dark,
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
-              child: Text('Event & Message', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-            ),
-            _createEventListTile(),
-            _createMessageListTile(),
-            Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
-              child: Text('Sentry.captureException', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-            ),
-            _createListTile('Sentry.captureException', _TypeToThrow.EXCEPTION),
-            _createListTile('Sentry.captureException', _TypeToThrow.ERROR),
-            _createListTile('Sentry.captureException', _TypeToThrow.STRING),
-            Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
-              child: Text('Throw Exception', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-            ),
-            _createListTile('Throw Exception', _TypeToThrow.EXCEPTION, fatal: true),
-            _createListTile('Throw Exception', _TypeToThrow.ERROR, fatal: true),
-            _createListTile('Throw Exception', _TypeToThrow.STRING, fatal: true),
-            Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
-              child: Text('Native', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-            ),
-            _createNativeListTile(_NativePlatform.Android, true),
-            _createNativeListTile(_NativePlatform.Android, false),
-            _createNativeListTile(_NativePlatform.iOS, true),
-            _createNativeListTile(_NativePlatform.iOS, false)
-          ],
+        appBar: AppBar(
+          title: Text('Sentry Flutter SDK - Debug'),
+          brightness: Brightness.dark,
         ),
-      )
-    );
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 16, right: 16, top: 16, bottom: 8),
+                child: Text('Event & Message',
+                    style:
+                        TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+              ),
+              _createEventListTile(),
+              _createMessageListTile(),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 16, right: 16, top: 16, bottom: 8),
+                child: Text('Sentry.captureException',
+                    style:
+                        TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+              ),
+              _createListTile(
+                  'Sentry.captureException', _TypeToThrow.EXCEPTION),
+              _createListTile('Sentry.captureException', _TypeToThrow.ERROR),
+              _createListTile('Sentry.captureException', _TypeToThrow.STRING),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 16, right: 16, top: 16, bottom: 8),
+                child: Text('Throw Exception',
+                    style:
+                        TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+              ),
+              _createListTile('Throw Exception', _TypeToThrow.EXCEPTION,
+                  fatal: true),
+              _createListTile('Throw Exception', _TypeToThrow.ERROR,
+                  fatal: true),
+              _createListTile('Throw Exception', _TypeToThrow.STRING,
+                  fatal: true),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 16, right: 16, top: 16, bottom: 8),
+                child: Text('Native',
+                    style:
+                        TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+              ),
+              _createNativeListTile(_NativePlatform.Android, true),
+              _createNativeListTile(_NativePlatform.Android, false),
+              _createNativeListTile(_NativePlatform.iOS, true),
+              _createNativeListTile(_NativePlatform.iOS, false)
+            ],
+          ),
+        ));
   }
 
   Widget _createEventListTile() {
@@ -91,18 +104,13 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
       subtitle = 'Failure: $_failureResultEvent';
     }
     return ListTile(
-      title: Text(
-          'Sentry.captureEvent',
-          style: TextStyle(color: Colors.black)
-      ),
-      subtitle: Text(
-          subtitle
-      ),
-      trailing: ElevatedButton(
-        child: _loading ? Text('Loading...') : Text('Send') ,
-        onPressed: _loading ? null : () => _captureEvent(),
-      )
-    );
+        title:
+            Text('Sentry.captureEvent', style: TextStyle(color: Colors.black)),
+        subtitle: Text(subtitle),
+        trailing: ElevatedButton(
+          child: _loading ? Text('Loading...') : Text('Send'),
+          onPressed: _loading ? null : () => _captureEvent(),
+        ));
   }
 
   Widget _createMessageListTile() {
@@ -111,70 +119,64 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
       subtitle = 'Failure: $_failureResultMessage';
     }
     return ListTile(
-        title: Text(
-            'Sentry.sendMessage',
-            style: TextStyle(color: Colors.black)
-        ),
-        subtitle: Text(
-            subtitle
-        ),
+        title:
+            Text('Sentry.sendMessage', style: TextStyle(color: Colors.black)),
+        subtitle: Text(subtitle),
         trailing: ElevatedButton(
-          child: _loading ? Text('Loading...') : Text('Send') ,
+          child: _loading ? Text('Loading...') : Text('Send'),
           onPressed: _loading ? null : () => _captureMessage(),
-        )
-    );
+        ));
   }
 
-  Widget _createListTile(String title, _TypeToThrow typeToThrow, {bool fatal = false}) {
+  Widget _createListTile(String title, _TypeToThrow typeToThrow,
+      {bool fatal = false}) {
     var subtitle = '';
     if (!fatal) {
       subtitle = _successResultsHandled[typeToThrow]!
           ? 'Success'
           : _failureResultsHandled[typeToThrow] != null
-            ? 'Failure: ${_failureResultsHandled[typeToThrow]}'
-            : '--';
+              ? 'Failure: ${_failureResultsHandled[typeToThrow]}'
+              : '--';
     } else {
-      subtitle = _successResultsUnhandled[typeToThrow]!
-          ? 'Success'
-          : '--';
+      subtitle = _successResultsUnhandled[typeToThrow]! ? 'Success' : '--';
     }
 
     return ListTile(
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-              title,
-              style: TextStyle(color: Colors.black)
-          ),
-          Text(
-              '${typeToThrow.name()} Instance',
-              style: TextStyle(color: Colors.deepPurpleAccent)
-          ),
+          Text(title, style: TextStyle(color: Colors.black)),
+          Text('${typeToThrow.name()} Instance',
+              style: TextStyle(color: Colors.deepPurpleAccent)),
         ],
       ),
-      subtitle: Text(
-          subtitle
-      ),
+      subtitle: Text(subtitle),
       trailing: ElevatedButton(
-        child: _loading ? Text('Loading...') : fatal ? Text('Throw') : Text('Send'),
-        onPressed: _loading ? null : () => _captureException(typeToThrow, fatal),
+        child: _loading
+            ? Text('Loading...')
+            : fatal
+                ? Text('Throw')
+                : Text('Send'),
+        onPressed:
+            _loading ? null : () => _captureException(typeToThrow, fatal),
       ),
     );
   }
 
-  Widget _createNativeListTile(_NativePlatform nativePlatform, bool primaryLanguage) {
+  Widget _createNativeListTile(
+      _NativePlatform nativePlatform, bool primaryLanguage) {
     return ListTile(
-      title: Text(
-          nativePlatform == _NativePlatform.Android ? 'Android' : 'iOS',
-          style: TextStyle(color: Colors.black)
-      ),
+      title: Text(nativePlatform == _NativePlatform.Android ? 'Android' : 'iOS',
+          style: TextStyle(color: Colors.black)),
       subtitle: Text(
           nativePlatform == _NativePlatform.Android
-            ? primaryLanguage ? 'Kotlin' : 'Java'
-            : primaryLanguage ? 'Swift' : 'Objective C',
-          style: TextStyle(color: Colors.deepPurpleAccent)
-      ),
+              ? primaryLanguage
+                  ? 'Kotlin'
+                  : 'Java'
+              : primaryLanguage
+                  ? 'Swift'
+                  : 'Objective C',
+          style: TextStyle(color: Colors.deepPurpleAccent)),
       trailing: ElevatedButton(
         child: Text('Crash!'),
         onPressed: () => _callCrashNative(nativePlatform, primaryLanguage),
@@ -189,17 +191,17 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
     final event = SentryEvent(message: SentryMessage('Sentry.captureEvent'));
     Sentry.captureEvent(event)
         .then((value) => {
-      setState(() {
-        _loading = false;
-        _successResultEvent = true;
-      })
-    })
+              setState(() {
+                _loading = false;
+                _successResultEvent = true;
+              })
+            })
         .catchError((error) => {
-      setState(() {
-        _loading = false;
-        _failureResultEvent = Error.safeToString(error);
-      })
-    });
+              setState(() {
+                _loading = false;
+                _failureResultEvent = Error.safeToString(error);
+              })
+            });
   }
 
   void _captureMessage() {
@@ -208,17 +210,17 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
     });
     Sentry.captureMessage('Sentry.captureMessage')
         .then((value) => {
-      setState(() {
-        _loading = false;
-        _successResultMessage = true;
-      })
-    })
+              setState(() {
+                _loading = false;
+                _successResultMessage = true;
+              })
+            })
         .catchError((error) => {
-      setState(() {
-        _loading = false;
-        _failureResultMessage = Error.safeToString(error);
-      })
-    });
+              setState(() {
+                _loading = false;
+                _failureResultMessage = Error.safeToString(error);
+              })
+            });
   }
 
   void _captureException(_TypeToThrow typeToThrow, bool fatal) {
@@ -230,15 +232,18 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
 
     dynamic exceptionObject;
 
-    switch(typeToThrow) {
+    switch (typeToThrow) {
       case _TypeToThrow.EXCEPTION:
-        exceptionObject = Exception('$title - ${typeToThrow.name()} Instance - operatingSystem: ${Platform.operatingSystem}');
+        exceptionObject = Exception(
+            '$title - ${typeToThrow.name()} Instance - operatingSystem: ${Platform.operatingSystem}');
         break;
       case _TypeToThrow.ERROR:
-        exceptionObject = _SampleError('$title - ${typeToThrow.name()} Instance - operatingSystem: ${Platform.operatingSystem}');
+        exceptionObject = _SampleError(
+            '$title - ${typeToThrow.name()} Instance - operatingSystem: ${Platform.operatingSystem}');
         break;
       case _TypeToThrow.STRING:
-        exceptionObject = '$title - ${typeToThrow.name()} Instance - operatingSystem: ${Platform.operatingSystem}';
+        exceptionObject =
+            '$title - ${typeToThrow.name()} Instance - operatingSystem: ${Platform.operatingSystem}';
         break;
     }
 
@@ -253,23 +258,25 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
       } catch (exception, stackTrace) {
         Sentry.captureException(exception, stackTrace: stackTrace)
             .then((value) => {
-          setState(() {
-            _loading = false;
-            _successResultsHandled[typeToThrow] = true;
-          })
-        })
+                  setState(() {
+                    _loading = false;
+                    _successResultsHandled[typeToThrow] = true;
+                  })
+                })
             .catchError((error) => {
-          setState(() {
-            _loading = false;
-            _failureResultsHandled[typeToThrow] = Error.safeToString(error);
-          })
-        });
+                  setState(() {
+                    _loading = false;
+                    _failureResultsHandled[typeToThrow] =
+                        Error.safeToString(error);
+                  })
+                });
       }
     }
   }
 
-  Future<void> _callCrashNative(_NativePlatform nativePlatform, bool primaryLanguage) async {
-    switch(nativePlatform) {
+  Future<void> _callCrashNative(
+      _NativePlatform nativePlatform, bool primaryLanguage) async {
+    switch (nativePlatform) {
       case _NativePlatform.iOS:
         if (primaryLanguage) {
           await platform.invokeMethod('crashSwift');
@@ -288,16 +295,12 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
   }
 }
 
-enum _TypeToThrow {
-  EXCEPTION, ERROR, STRING
-}
-enum _NativePlatform {
-  iOS, Android
-}
+enum _TypeToThrow { EXCEPTION, ERROR, STRING }
+enum _NativePlatform { iOS, Android }
 
 extension _TypeToThrowPrint on _TypeToThrow {
   String name() {
-    switch(this) {
+    switch (this) {
       case _TypeToThrow.EXCEPTION:
         return 'Exception';
       case _TypeToThrow.ERROR:
@@ -318,4 +321,3 @@ class _SampleError extends Error {
     return 'Sample error: ${Error.safeToString(message)}';
   }
 }
-

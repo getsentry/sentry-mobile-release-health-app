@@ -1,5 +1,3 @@
-
-
 import 'package:json_annotation/json_annotation.dart';
 
 import 'avatar.dart';
@@ -10,8 +8,7 @@ part 'author.g.dart';
 class Author {
   Author(this.id, this.name, this.email, this.avatarUrl, this.avatar);
 
-  factory Author.fromJson(Map<String, dynamic> json) =>
-      _$AuthorFromJson(json);
+  factory Author.fromJson(Map<String, dynamic> json) => _$AuthorFromJson(json);
 
   final String id;
   final String? name;

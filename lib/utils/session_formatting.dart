@@ -1,9 +1,6 @@
-
-
 import 'package:intl/intl.dart';
 
 extension SessionFormatting on int {
-
   static final noDecimalPointFormatter = NumberFormat('###');
   static final twoDecimalPointsFormatter = NumberFormat('###.##');
   static final oneDecimalPointFormatter = NumberFormat('###.#');

@@ -6,7 +6,6 @@ import 'package:test/test.dart';
 void main() {
   group('createByHalvingPoints', () {
     test('data is points', () {
-
       final pointsBefore = [
         LineChartPoint(0, 0),
         LineChartPoint(1, 5),
@@ -22,13 +21,11 @@ void main() {
           numberOfSessions: 10,
           previousNumberOfSessions: 5,
           sessionPoints: points,
-          previousSessionPoints: pointsBefore
-      );
+          previousSessionPoints: pointsBefore);
 
       final sut = SessionsChartRowViewModel.create(sessionState);
       expect(sut.data!.points,
-        equals([LineChartPoint(0, 0), LineChartPoint(1, 10)])
-      );
+          equals([LineChartPoint(0, 0), LineChartPoint(1, 10)]));
     });
 
     test('percentChange increase', () {
@@ -47,13 +44,10 @@ void main() {
           numberOfSessions: 10,
           previousNumberOfSessions: 5,
           sessionPoints: points,
-          previousSessionPoints: pointsBefore
-      );
+          previousSessionPoints: pointsBefore);
 
       final sut = SessionsChartRowViewModel.create(sessionState);
-      expect(sut.percentChange,
-          equals(100.0)
-      );
+      expect(sut.percentChange, equals(100.0));
     });
 
     test('percentChange decrease', () {
@@ -72,13 +66,10 @@ void main() {
           numberOfSessions: 8,
           previousNumberOfSessions: 10,
           sessionPoints: points,
-          previousSessionPoints: pointsBefore
-      );
+          previousSessionPoints: pointsBefore);
 
       final sut = SessionsChartRowViewModel.create(sessionState);
-      expect(sut.percentChange,
-          equals(-20.0)
-      );
+      expect(sut.percentChange, equals(-20.0));
     });
 
     test('fallback no points', () {
@@ -87,13 +78,11 @@ void main() {
           numberOfSessions: 0,
           previousNumberOfSessions: 0,
           sessionPoints: [],
-          previousSessionPoints: []
-      );
+          previousSessionPoints: []);
 
       final sut = SessionsChartRowViewModel.create(sessionState);
       expect(sut.data!.points,
-          equals([LineChartPoint(0, 0), LineChartPoint(1, 0)])
-      );
+          equals([LineChartPoint(0, 0), LineChartPoint(1, 0)]));
     });
   });
 }
