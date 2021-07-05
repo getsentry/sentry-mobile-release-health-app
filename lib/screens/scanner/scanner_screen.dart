@@ -102,9 +102,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
       _controller = controller;
     });
     controller.scannedDataStream.listen((scanData) {
-      if (scanData.code != null) {
-        _popIfPossible(scanData.code);
-      }
+      _popIfPossible(scanData.code);
     });
   }
 
