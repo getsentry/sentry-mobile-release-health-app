@@ -1,5 +1,7 @@
 # Unreleased
 
+* Use Sentry Flutter 6.0.0-beta.1 (#200)
+
 # 1.0.2
 
 * Only consider sentry_mobile as in app frames (#192) 
