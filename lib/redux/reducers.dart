@@ -67,7 +67,8 @@ GlobalState _rehydrateSuccessAction(
       hydrated: true,
       authToken: action.authToken,
       sentrySdkEnabled: action.sentrySdkEnabled,
-      version: action.version);
+      version: action.version,
+      numberOfRatingEvents: action.numberOfRatingEvents);
 }
 
 GlobalState _loginAction(GlobalState state, LoginSuccessAction action) {

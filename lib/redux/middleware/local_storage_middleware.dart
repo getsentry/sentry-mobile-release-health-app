@@ -14,6 +14,7 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
 
   final _keyAuthToken = 'authToken';
   final _keySentrySdkEnabled = 'sentrySdkEnabled';
+  final _keyNumberOfRatingEvents = 'numberOfRatingEvents';
 
   @override
   dynamic call(
@@ -29,8 +30,10 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
       final version =
           'Version ${packageInfo.version} (${packageInfo.buildNumber})';
 
+      final numberOfRatingEvents = await _incrementAndReturnNumberOfRatingEvents();
+
       store.dispatch(
-          RehydrateSuccessAction(authToken, sentrySdkEnabled, version));
+          RehydrateSuccessAction(authToken, sentrySdkEnabled, version, numberOfRatingEvents));
       if (authToken != null) {
         store.dispatch(FetchAuthenticatedUserAction(authToken));
       }
@@ -52,5 +55,13 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
       await preferences.clear();
     }
     next(action);
+  }
+
+  Future<int> _incrementAndReturnNumberOfRatingEvents() async {
+    final numberOfRatingEventsString = await secureStorage.read(key: _keyNumberOfRatingEvents) ?? '0';
+    var numberOfRatingEvents = int.parse(numberOfRatingEventsString);
+    numberOfRatingEvents += 1;
+    await secureStorage.write(key: _keyNumberOfRatingEvents, value: '$numberOfRatingEvents');
+    return numberOfRatingEvents;
   }
 }

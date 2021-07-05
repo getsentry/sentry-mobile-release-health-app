@@ -10,11 +10,16 @@ class RehydrateAction {
   RehydrateAction();
 }
 
+class AppStartAction {
+  AppStartAction();
+}
+
 class RehydrateSuccessAction {
-  RehydrateSuccessAction(this.authToken, this.sentrySdkEnabled, this.version);
+  RehydrateSuccessAction(this.authToken, this.sentrySdkEnabled, this.version, this.numberOfRatingEvents);
   final String? authToken;
   final bool sentrySdkEnabled;
   final String version;
+  final int numberOfRatingEvents;
 }
 
 class SwitchTabAction {
