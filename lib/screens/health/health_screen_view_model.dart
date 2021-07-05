@@ -202,7 +202,7 @@ class HealthScreenViewModel {
   // }
 
   bool shouldPresentRating() {
-    return _store.state.globalState.numberOfRatingEvents > 3;
+    return _store.state.globalState.numberOfRatingEvents > 10;
   }
 
   void didPresentRating() {

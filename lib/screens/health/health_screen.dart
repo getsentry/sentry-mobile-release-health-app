@@ -14,7 +14,6 @@ import 'health_divider.dart';
 import 'health_screen_view_model.dart';
 import 'sessions_chart_row.dart';
 
-
 class HealthScreen extends StatefulWidget {
   const HealthScreen({Key? key}) : super(key: key);
 
@@ -116,7 +115,9 @@ class _HealthScreenState extends State<HealthScreen>
 
       final index = _index ?? 0;
 
-      if (viewModel.shouldPresentRating() && !_ratingPresented && _userInteracted) {
+      if (viewModel.shouldPresentRating() &&
+          !_ratingPresented &&
+          _userInteracted) {
         _ratingPresented = true;
         inAppReview.requestReview();
         viewModel.didPresentRating();

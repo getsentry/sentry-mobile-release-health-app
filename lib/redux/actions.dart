@@ -15,7 +15,8 @@ class AppStartAction {
 }
 
 class RehydrateSuccessAction {
-  RehydrateSuccessAction(this.authToken, this.sentrySdkEnabled, this.version, this.numberOfRatingEvents);
+  RehydrateSuccessAction(this.authToken, this.sentrySdkEnabled, this.version,
+      this.numberOfRatingEvents);
   final String? authToken;
   final bool sentrySdkEnabled;
   final String version;
@@ -240,4 +241,3 @@ class SelectProjectAction {
   SelectProjectAction(this.project);
   final Project project;
 }
-

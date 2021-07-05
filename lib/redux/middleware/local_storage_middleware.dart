@@ -30,10 +30,11 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
       final version =
           'Version ${packageInfo.version} (${packageInfo.buildNumber})';
 
-      final numberOfRatingEvents = await _incrementAndReturnNumberOfRatingEvents();
+      final numberOfRatingEvents =
+          await _incrementAndReturnNumberOfRatingEvents();
 
-      store.dispatch(
-          RehydrateSuccessAction(authToken, sentrySdkEnabled, version, numberOfRatingEvents));
+      store.dispatch(RehydrateSuccessAction(
+          authToken, sentrySdkEnabled, version, numberOfRatingEvents));
       if (authToken != null) {
         store.dispatch(FetchAuthenticatedUserAction(authToken));
       }
@@ -61,10 +62,12 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
   }
 
   Future<int> _incrementAndReturnNumberOfRatingEvents() async {
-    final numberOfRatingEventsString = await secureStorage.read(key: _keyNumberOfRatingEvents) ?? '0';
+    final numberOfRatingEventsString =
+        await secureStorage.read(key: _keyNumberOfRatingEvents) ?? '0';
     var numberOfRatingEvents = int.parse(numberOfRatingEventsString);
     numberOfRatingEvents += 1;
-    await secureStorage.write(key: _keyNumberOfRatingEvents, value: '$numberOfRatingEvents');
+    await secureStorage.write(
+        key: _keyNumberOfRatingEvents, value: '$numberOfRatingEvents');
     return numberOfRatingEvents;
   }
 
