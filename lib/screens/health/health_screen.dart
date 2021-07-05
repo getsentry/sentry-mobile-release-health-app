@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:sentry_mobile/redux/actions.dart';
+import 'package:in_app_review/in_app_review.dart';
 
 import '../../redux/state/app_state.dart';
 import '../../screens/empty/empty_screen.dart';
@@ -12,6 +13,7 @@ import 'health_card.dart';
 import 'health_divider.dart';
 import 'health_screen_view_model.dart';
 import 'sessions_chart_row.dart';
+
 
 class HealthScreen extends StatefulWidget {
   const HealthScreen({Key? key}) : super(key: key);
@@ -25,6 +27,8 @@ class _HealthScreenState extends State<HealthScreen>
   int? _index;
 
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
+  final InAppReview inAppReview = InAppReview.instance;
+
   PageController? _pageController;
 
   @override
@@ -109,6 +113,8 @@ class _HealthScreenState extends State<HealthScreen>
       }
 
       final index = _index ?? 0;
+
+      //inAppReview.requestReview();
 
       return RefreshIndicator(
         key: _refreshKey,
