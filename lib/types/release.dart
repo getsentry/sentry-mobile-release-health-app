@@ -1,7 +1,4 @@
-
 // TODO(denis): Change to JsonSerializable and generate Json code,
-
-
 
 import 'author.dart';
 import 'deploy.dart';
@@ -12,29 +9,31 @@ class Release {
       : version = json['versionInfo']['description'] as String?,
         project = json['projects'][0]['slug'] as String?,
         dateCreated = json['dateCreated'] != null
-          ? DateTime.parse(json['dateCreated'] as String)
-          : null,
+            ? DateTime.parse(json['dateCreated'] as String)
+            : null,
         issues = json['newGroups'] as int?,
         crashes = json['projects'][0]['healthData']['sessionsCrashed'] as int?,
         crashFreeUsers =
-          json['projects'][0]['healthData']['crashFreeUsers'] as double?,
+            json['projects'][0]['healthData']['crashFreeUsers'] as double?,
         crashFreeSessions =
-          json['projects'][0]['healthData']['crashFreeSessions'] as double?,
+            json['projects'][0]['healthData']['crashFreeSessions'] as double?,
         stats24h = (json['projects'][0]['healthData']['stats']['24h'] as List)
-          .map((e) => Stat.fromJson(e as List)).toList(),
+            .map((e) => Stat.fromJson(e as List))
+            .toList(),
         users24h = json['projects'][0]['healthData']['totalUsers24h'] as int?,
         usersTotal = json['projects'][0]['healthData']['totalUsers'] as int?,
         sessions24h =
-          json['projects'][0]['healthData']['totalSessions24h'] as int?,
+            json['projects'][0]['healthData']['totalSessions24h'] as int?,
         sessionsTotal =
-          json['projects'][0]['healthData']['totalSessions'] as int?,
+            json['projects'][0]['healthData']['totalSessions'] as int?,
         durationP90 =
-          json['projects'][0]['healthData']['durationP90'] as double?,
+            json['projects'][0]['healthData']['durationP90'] as double?,
         deploy = json['deploy'] == null
-          ? null
-          : Deploy.fromJson(json['deploy'] as Map<String, dynamic>),
-        authors = (json['authors'] as List).map((e) =>
-          Author.fromJson(e as Map<String, dynamic>)).toList();
+            ? null
+            : Deploy.fromJson(json['deploy'] as Map<String, dynamic>),
+        authors = (json['authors'] as List)
+            .map((e) => Author.fromJson(e as Map<String, dynamic>))
+            .toList();
 
   final String? version;
   final String? project;

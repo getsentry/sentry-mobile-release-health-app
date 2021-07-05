@@ -1,13 +1,12 @@
-
-
 import 'package:intl/intl.dart';
 
 // Source: https://api.flutter.dev/flutter/dart-core/DateTime/toIso8601String.html
 extension DateTimeFormat on DateTime {
-
   String utcDateTime() {
     final utc = toUtc();
-    final String y = (utc.year >= -9999 && utc.year <= 9999) ? _fourDigits(utc.year) : _sixDigits(utc.year);
+    final String y = (utc.year >= -9999 && utc.year <= 9999)
+        ? _fourDigits(utc.year)
+        : _sixDigits(utc.year);
     final String m = _twoDigits(utc.month);
     final String d = _twoDigits(utc.day);
     final String h = _twoDigits(utc.hour);

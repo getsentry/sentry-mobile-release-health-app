@@ -12,25 +12,41 @@ import '../../types/session_status.dart';
 
 class HealthScreenViewModel {
   HealthScreenViewModel.fromStore(Store<AppState> store)
-    : _store = store,
-      projects = store.state.globalState.projectsWithLatestReleases(),
-      _totalSessionStateByProjectId = store.state.globalState.sessionStateByProjectId(SessionStatus.values.toSet()),
-      _healthySessionsStateByProjectId = store.state.globalState.sessionStateByProjectId({SessionStatus.healthy}),
-      _erroredSessionsStateByProjectId = store.state.globalState.sessionStateByProjectId({SessionStatus.errored}),
-      _abnormalSessionsStateByProjectId = store.state.globalState.sessionStateByProjectId({SessionStatus.abnormal}),
-      _crashedSessionStateByProjectId = store.state.globalState.sessionStateByProjectId({SessionStatus.crashed}),
-      _crashFreeSessionsByProjectId = store.state.globalState.crashFreeSessionsByProjectId,
-      _crashFreeSessionsBeforeByProjectId = store.state.globalState.crashFreeSessionsBeforeByProjectId,
-      _crashFreeUsersByProjectId = store.state.globalState.crashFreeUsersByProjectId,
-      _crashFreeUsersBeforeByProjectId = store.state.globalState.crashFreeUsersBeforeByProjectId,
-      _apdexByProjectId = store.state.globalState.apdexByProjectId,
-      _apdexBeforeByProjectId = store.state.globalState.apdexBeforeByProjectId,
-      showProjectEmptyScreen = store.state.globalState.projectsWithSessions.isEmpty && !store.state.globalState.orgsAndProjectsLoading,
-      showLoadingScreen = store.state.globalState.projectsWithSessions.isEmpty && store.state.globalState.orgsAndProjectsLoading,
-      showErrorScreen = store.state.globalState.orgsAndProjectsError != null,
-      showErrorNoConnectionScreen = store.state.globalState.orgsAndProjectsError is TimeoutException || store.state.globalState.orgsAndProjectsError is SocketException,
-      loadingProgress = store.state.globalState.orgsAndProjectsProgress,
-      loadingText = store.state.globalState.orgsAndProjectsProgressText;
+      : _store = store,
+        projects = store.state.globalState.projectsWithLatestReleases(),
+        _totalSessionStateByProjectId = store.state.globalState
+            .sessionStateByProjectId(SessionStatus.values.toSet()),
+        _healthySessionsStateByProjectId = store.state.globalState
+            .sessionStateByProjectId({SessionStatus.healthy}),
+        _erroredSessionsStateByProjectId = store.state.globalState
+            .sessionStateByProjectId({SessionStatus.errored}),
+        _abnormalSessionsStateByProjectId = store.state.globalState
+            .sessionStateByProjectId({SessionStatus.abnormal}),
+        _crashedSessionStateByProjectId = store.state.globalState
+            .sessionStateByProjectId({SessionStatus.crashed}),
+        _crashFreeSessionsByProjectId =
+            store.state.globalState.crashFreeSessionsByProjectId,
+        _crashFreeSessionsBeforeByProjectId =
+            store.state.globalState.crashFreeSessionsBeforeByProjectId,
+        _crashFreeUsersByProjectId =
+            store.state.globalState.crashFreeUsersByProjectId,
+        _crashFreeUsersBeforeByProjectId =
+            store.state.globalState.crashFreeUsersBeforeByProjectId,
+        _apdexByProjectId = store.state.globalState.apdexByProjectId,
+        _apdexBeforeByProjectId =
+            store.state.globalState.apdexBeforeByProjectId,
+        showProjectEmptyScreen =
+            store.state.globalState.projectsWithSessions.isEmpty &&
+                !store.state.globalState.orgsAndProjectsLoading,
+        showLoadingScreen =
+            store.state.globalState.projectsWithSessions.isEmpty &&
+                store.state.globalState.orgsAndProjectsLoading,
+        showErrorScreen = store.state.globalState.orgsAndProjectsError != null,
+        showErrorNoConnectionScreen =
+            store.state.globalState.orgsAndProjectsError is TimeoutException ||
+                store.state.globalState.orgsAndProjectsError is SocketException,
+        loadingProgress = store.state.globalState.orgsAndProjectsProgress,
+        loadingText = store.state.globalState.orgsAndProjectsProgressText;
 
   final Store<AppState> _store;
 
@@ -69,11 +85,12 @@ class HealthScreenViewModel {
   ProjectCard projectCard(int index) {
     final projectWitLatestRelease = projects[index];
     return ProjectCard(
-        _store.state.globalState.organizationForProjectSlug(projectWitLatestRelease.project.slug)?.name,
+        _store.state.globalState
+            .organizationForProjectSlug(projectWitLatestRelease.project.slug)
+            ?.name,
         projectWitLatestRelease.project,
         projectWitLatestRelease.release,
-        _totalSessionStateByProjectId[projectWitLatestRelease.project.id]
-    );
+        _totalSessionStateByProjectId[projectWitLatestRelease.project.id]);
   }
 
   SessionState? sessionState(int index, SessionStatus sessionStatus) {
@@ -123,7 +140,7 @@ class HealthScreenViewModel {
       _apdexBeforeByProjectId[project.id],
     );
   }
-  
+
   void fetchDataForProject(int index) {
     if (index < 0 || index >= projects.length) {
       return;
@@ -156,19 +173,18 @@ class HealthScreenViewModel {
   // }
 
   void _fetchSessions(ProjectWithLatestRelease projectWithLatestRelease) {
-    final organizationSlug = _store.state.globalState.organizationsSlugByProjectSlug[projectWithLatestRelease.project.slug];
+    final organizationSlug = _store.state.globalState
+        .organizationsSlugByProjectSlug[projectWithLatestRelease.project.slug];
     if (organizationSlug == null) {
       return;
     }
-    if (_store.state.globalState.sessionsByProjectId[projectWithLatestRelease.project.id] != null) {
+    if (_store.state.globalState
+            .sessionsByProjectId[projectWithLatestRelease.project.id] !=
+        null) {
       return; // Only fetch when there is no data available yet
     }
-    _store.dispatch(
-        FetchSessionsAction(
-            organizationSlug,
-            projectWithLatestRelease.project.id
-        )
-    );
+    _store.dispatch(FetchSessionsAction(
+        organizationSlug, projectWithLatestRelease.project.id));
   }
 
   // void _fetchApdex(ProjectWithLatestRelease projectWithLatestRelease) {

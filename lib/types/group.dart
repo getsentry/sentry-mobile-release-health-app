@@ -1,5 +1,3 @@
-
-
 import 'package:json_annotation/json_annotation.dart';
 
 import '../types/stats.dart';
@@ -23,8 +21,7 @@ class Group {
       this.metadata,
       this.firstRelease,
       this.lastRelease,
-      this.stats
-      });
+      this.stats});
   factory Group.fromJson(Map<String, dynamic> json) => _$GroupFromJson(json);
 
   final String? id;

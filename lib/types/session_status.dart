@@ -1,7 +1,1 @@
-
-
-
-
-enum SessionStatus {
-  healthy, errored, crashed, abnormal
-}
+enum SessionStatus { healthy, errored, crashed, abnormal }

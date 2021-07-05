@@ -1,6 +1,3 @@
-
-
-
 import 'package:json_annotation/json_annotation.dart';
 
 import 'session_group_by.dart';
@@ -12,7 +9,8 @@ part 'session_group.g.dart';
 @JsonSerializable()
 class SessionGroup {
   SessionGroup(this.by, this.totals, this.series);
-  factory SessionGroup.fromJson(Map<String, dynamic> json) => _$SessionGroupFromJson(json);
+  factory SessionGroup.fromJson(Map<String, dynamic> json) =>
+      _$SessionGroupFromJson(json);
 
   static const sumSessionKey = 'sum(session)';
   static const countUniqueUsersKey = 'count_unique(user)';

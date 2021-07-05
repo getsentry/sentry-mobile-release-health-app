@@ -1,10 +1,6 @@
-
-
-
 import 'package:intl/intl.dart';
 
 extension CrashFreeFormatting on double {
-
   static final noDecimalPointFormatter = NumberFormat('###');
   static final decimalFormatter = NumberFormat('###.###');
 

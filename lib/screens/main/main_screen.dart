@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -15,7 +13,6 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-
   // final _children = [
   //   ReleaseHealth(),
   //   IssuesScreenBuilder()
@@ -24,13 +21,10 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, Store<AppState>>(
-      builder: (_, state) => _content(state),
-      converter: (store) => store
-    );
+        builder: (_, state) => _content(state), converter: (store) => store);
   }
 
   Widget _content(Store<AppState> store) {
-
     // todo(denis): Change back once issues are implemented.
 
     return Scaffold(
@@ -44,7 +38,3 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 }
-
-
-
-

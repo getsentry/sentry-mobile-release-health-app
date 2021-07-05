@@ -1,11 +1,8 @@
-
-
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
 // Source: https://github.com/getsentry/sentry/blob/c62499d1de8414e119e8a199eee4c73a01393e44/src/sentry/utils/avatar.py
 class LetterAvatar {
-
   static const LETTER_AVATAR_COLORS = [
     Color(0xff4674ca), // blue
     Color(0xff315cac), // blue_dark
@@ -30,8 +27,8 @@ class LetterAvatar {
     final initials = names.length == 1
         ? names[0][0]
         : names.length > 1
-          ? '${names[0][0]}${names[1][0]}'
-          : '?';
+            ? '${names[0][0]}${names[1][0]}'
+            : '?';
     return initials.toUpperCase();
   }
 

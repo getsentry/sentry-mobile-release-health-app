@@ -1,5 +1,3 @@
-
-
 import 'dart:ui';
 import 'dart:ui' as ui;
 
@@ -9,7 +7,13 @@ import 'line_chart_data.dart';
 import 'line_chart_point.dart';
 
 class LineChart extends StatelessWidget {
-  LineChart({required this.data, required this.lineWidth, required this.lineColor, required this.gradientStart, required this.gradientEnd, required this.cubicLines});
+  LineChart(
+      {required this.data,
+      required this.lineWidth,
+      required this.lineColor,
+      required this.gradientStart,
+      required this.gradientEnd,
+      required this.cubicLines});
 
   final LineChartData? data;
   final double lineWidth;
@@ -21,14 +25,16 @@ class LineChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      painter: _LineChartPainter.create(data, lineWidth, lineColor, gradientStart, gradientEnd, cubicLines),
+      painter: _LineChartPainter.create(
+          data, lineWidth, lineColor, gradientStart, gradientEnd, cubicLines),
       child: Center(),
     );
   }
 }
 
 class _LineChartPainter extends CustomPainter {
-  _LineChartPainter.create(this.data, double lineWidth, Color lineColor, this.gradientStart, this.gradientEnd, this.cubicLines) {
+  _LineChartPainter.create(this.data, double lineWidth, Color lineColor,
+      this.gradientStart, this.gradientEnd, this.cubicLines) {
     linePaint = Paint()
       ..isAntiAlias = true
       ..style = PaintingStyle.stroke
@@ -68,19 +74,16 @@ class _LineChartPainter extends CustomPainter {
       return (size.height - linePadding) - y;
     };
 
-    final pointsWithoutFirst = data.points.map((point) => LineChartPoint(point.x, point.y)).toList();
+    final pointsWithoutFirst =
+        data.points.map((point) => LineChartPoint(point.x, point.y)).toList();
     final firstPoint = pointsWithoutFirst.removeAt(0);
     var previous = LineChartPoint(
-        screenCoordinateX(firstPoint.x),
-        screenCoordinateY(firstPoint.y)
-    );
+        screenCoordinateX(firstPoint.x), screenCoordinateY(firstPoint.y));
 
     // Line
 
     final linePath = Path();
-    linePath.moveTo(
-        previous.x, flipY(previous.y)
-    );
+    linePath.moveTo(previous.x, flipY(previous.y));
 
     final updateLinePath = (int index, LineChartPoint point) {
       final x1 = previous.x;
@@ -100,13 +103,14 @@ class _LineChartPainter extends CustomPainter {
       } else {
         linePath.cubicTo(cx1, flipY(cy1), cx2, flipY(cy2), x2, flipY(y2));
       }
-      previous = LineChartPoint(x2 , y2);
+      previous = LineChartPoint(x2, y2);
     };
     pointsWithoutFirst.asMap().forEach(updateLinePath);
 
     // Gradient
 
-    final gradientPaint = _createGradientPaint(size, gradientStart, gradientEnd);
+    final gradientPaint =
+        _createGradientPaint(size, gradientStart, gradientEnd);
     final gradientPath = _createGradientPath(linePath, size, firstPoint);
 
     // Draw
@@ -123,7 +127,8 @@ class _LineChartPainter extends CustomPainter {
 
   // Helper
 
-  Paint _createGradientPaint(Size size, Color gradientStart, Color gradientEnd) {
+  Paint _createGradientPaint(
+      Size size, Color gradientStart, Color gradientEnd) {
     return Paint()
       ..isAntiAlias = true
       ..shader = ui.Gradient.linear(
@@ -134,7 +139,8 @@ class _LineChartPainter extends CustomPainter {
       ..style = PaintingStyle.fill;
   }
 
-  Path _createGradientPath(Path linePath, Size size, LineChartPoint firstPoint) {
+  Path _createGradientPath(
+      Path linePath, Size size, LineChartPoint firstPoint) {
     final gradientPath = Path.from(linePath);
     gradientPath.lineTo(size.width, size.height);
     gradientPath.lineTo(0, size.height);

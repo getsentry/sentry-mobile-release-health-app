@@ -1,5 +1,3 @@
-
-
 import '../types/session_group.dart';
 import '../types/session_status.dart';
 import '../types/sessions.dart';
@@ -34,7 +32,10 @@ extension StabilityScore on Sessions {
         crashed = valueFromGroup(group);
       }
     }
-    if (healthy == null || errored == null || abnormal == null || crashed == null) {
+    if (healthy == null ||
+        errored == null ||
+        abnormal == null ||
+        crashed == null) {
       return null;
     }
     final sum = healthy + abnormal + crashed + errored;

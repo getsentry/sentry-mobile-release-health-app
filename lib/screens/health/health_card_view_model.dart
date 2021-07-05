@@ -1,6 +1,3 @@
-
-
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -72,12 +69,12 @@ class HealthCardViewModel {
 
   static Color colorForValue(double? value) {
     return value == null
-      ? SentryColors.lavenderGray
-      : value > warningThreshold
-        ? SentryColors.shamrock
-        : value > dangerThreshold
-          ? SentryColors.lightningYellow
-          : SentryColors.burntSienna;
+        ? SentryColors.lavenderGray
+        : value > warningThreshold
+            ? SentryColors.shamrock
+            : value > dangerThreshold
+                ? SentryColors.lightningYellow
+                : SentryColors.burntSienna;
   }
 
   static Icon? getTrendIcon(double? change) {
@@ -85,7 +82,8 @@ class HealthCardViewModel {
       return null;
     }
     return change > 0
-      ? Icon(SentryIcons.trend_up, color: SentryColors.shamrock, size: 8.0)
-      : Icon(SentryIcons.trend_down, color: SentryColors.burntSienna, size: 8.0);
+        ? Icon(SentryIcons.trend_up, color: SentryColors.shamrock, size: 8.0)
+        : Icon(SentryIcons.trend_down,
+            color: SentryColors.burntSienna, size: 8.0);
   }
 }

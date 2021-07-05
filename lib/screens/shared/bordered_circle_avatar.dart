@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 
 import '../../utils/sentry_colors.dart';
@@ -15,35 +13,29 @@ class BorderedCircleAvatar extends StatelessWidget {
   final double radius;
   final double border;
   final BorderedCircleAvatarViewModel viewModel;
-  
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(border),
-      decoration: BoxDecoration(
-        color: SentryColors.whisper, // border color
-        shape: BoxShape.circle,
-      ),
-      child:
-        viewModel.url != null
-        ? CircleAvatar(
-            backgroundImage: NetworkImage(viewModel.url!),
-            radius: radius,
-        )
-        : viewModel.initials != null
-          ? CircleAvatar(
-            child: Text(
-              viewModel.initials!,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: radius,
-                color: Colors.white
+        padding: EdgeInsets.all(border),
+        decoration: BoxDecoration(
+          color: SentryColors.whisper, // border color
+          shape: BoxShape.circle,
+        ),
+        child: viewModel.url != null
+            ? CircleAvatar(
+                backgroundImage: NetworkImage(viewModel.url!),
+                radius: radius,
               )
-            ),
-            backgroundColor: viewModel.backgroundColor,
-            radius: radius,
-          )
-          : null
-    );
+            : viewModel.initials != null
+                ? CircleAvatar(
+                    child: Text(viewModel.initials!,
+                        textAlign: TextAlign.center,
+                        style:
+                            TextStyle(fontSize: radius, color: Colors.white)),
+                    backgroundColor: viewModel.backgroundColor,
+                    radius: radius,
+                  )
+                : null);
   }
 }

@@ -47,14 +47,10 @@ void main() {
       final sessions = Sessions([], [healthy, errored, abnormal, crashed]);
       expect(sessions.crashFreeSessions(), isNull);
     });
-
   });
 }
 
 SessionGroup _givenSessionGroup(SessionStatus status, int num) {
-  return SessionGroup(
-      SessionGroupBy(status, null),
-      SessionGroupTotals(num, num),
-      SessionGroupSeries([], [])
-  );
+  return SessionGroup(SessionGroupBy(status, null),
+      SessionGroupTotals(num, num), SessionGroupSeries([], []));
 }

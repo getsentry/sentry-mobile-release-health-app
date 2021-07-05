@@ -1,5 +1,3 @@
-
-
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -354,7 +352,11 @@ class Contexts extends StatelessWidget {
 }
 
 class IssueSeenRelease extends StatelessWidget {
-  IssueSeenRelease({required this.title, required this.version, required this.when, required this.time});
+  IssueSeenRelease(
+      {required this.title,
+      required this.version,
+      required this.when,
+      required this.time});
   final String title;
   final String version;
   final String when;

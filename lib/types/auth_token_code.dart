@@ -1,5 +1,3 @@
-
-
 import 'package:json_annotation/json_annotation.dart';
 
 part 'auth_token_code.g.dart';
@@ -9,7 +7,7 @@ class AuthTokenCode {
   AuthTokenCode(this.authToken);
 
   factory AuthTokenCode.fromJson(Map<String, dynamic> json) =>
-       _$AuthTokenCodeFromJson(json);
+      _$AuthTokenCodeFromJson(json);
 
   final String? authToken;
 

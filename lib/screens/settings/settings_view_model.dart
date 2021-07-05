@@ -1,5 +1,3 @@
-
-
 import 'package:redux/redux.dart';
 
 import '../../redux/actions.dart';
@@ -9,10 +7,10 @@ class SettingsViewModel {
   SettingsViewModel.fromStore(Store<AppState> store) {
     _store = store;
 
-    final projects = store.state.globalState
-        .projectsByOrganizationSlug
-        .values.expand((element) => element)
-        .where((element) => element.latestRelease != null && element.isBookmarked == true)
+    final projects = store.state.globalState.projectsByOrganizationSlug.values
+        .expand((element) => element)
+        .where((element) =>
+            element.latestRelease != null && element.isBookmarked == true)
         .map((e) => e.slug)
         .join(', ');
 

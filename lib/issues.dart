@@ -1,5 +1,3 @@
-
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -15,7 +13,8 @@ import 'types/group.dart';
 import 'types/organization.dart';
 import 'types/project.dart';
 
-Future<List<Group>> fetchGroups(String orgSlug, String projSlug, Cookie? cookie) async {
+Future<List<Group>> fetchGroups(
+    String orgSlug, String projSlug, Cookie? cookie) async {
   final api = SentryApi(null);
   try {
     return await api.issues(organizationSlug: orgSlug, projectSlug: projSlug);
@@ -74,8 +73,7 @@ class IssuesViewModel {
   static IssuesViewModel fromStore(Store<AppState> store) => IssuesViewModel(
       selectedOrganization: store.state.globalState.selectedOrganization,
       selectedProject: store.state.globalState.selectedProject,
-      sessionCookie: null
-  );
+      sessionCookie: null);
 }
 
 class IssuesScreenStateWrapper extends StatefulWidget {
@@ -106,11 +104,8 @@ class _IssuesScreenState extends State<IssuesScreenStateWrapper> {
       final selectedProjectSlug = viewModel.selectedProject?.slug;
 
       if (selectedOrganizationSlug != null && selectedProjectSlug != null) {
-        groupsFuture = fetchGroups(
-            selectedOrganizationSlug,
-            selectedProjectSlug,
-            viewModel.sessionCookie
-        );
+        groupsFuture = fetchGroups(selectedOrganizationSlug,
+            selectedProjectSlug, viewModel.sessionCookie);
       } else {
         groupsFuture = Future.value(<Group>[]);
       }
@@ -127,10 +122,10 @@ class _IssuesScreenState extends State<IssuesScreenStateWrapper> {
 
             if (groups.isEmpty) {
               return Center(
-                child: Text('No issues',
-                  textAlign: TextAlign.center,
-                )
-              );
+                  child: Text(
+                'No issues',
+                textAlign: TextAlign.center,
+              ));
             } else {
               return ListView.builder(
                 itemCount: groups.length,
@@ -143,18 +138,16 @@ class _IssuesScreenState extends State<IssuesScreenStateWrapper> {
                       userCount: group.userCount ?? 0,
                       count: group.count ?? '--',
                       lastSeen: group.lastSeen,
-                      firstSeen: group.lastSeen
-                  );
+                      firstSeen: group.lastSeen);
                 },
               );
             }
           } else if (snapshot.hasError) {
             return Center(
-              child:
-                Text('Error fetching issues. Please try again.',
-                  textAlign: TextAlign.center,
-                )
-            );
+                child: Text(
+              'Error fetching issues. Please try again.',
+              textAlign: TextAlign.center,
+            ));
           }
 
           return Center(
@@ -172,7 +165,7 @@ class Issue extends StatelessWidget {
       required this.userCount,
       required this.count,
       this.firstSeen,
-     this.lastSeen});
+      this.lastSeen});
 
   final String title;
   final String value;
@@ -205,9 +198,8 @@ class Issue extends StatelessWidget {
                       Text(value, style: TextStyle(color: Colors.black87)),
                       if (lastSeen != null && firstSeen != null)
                         Text(
-                          '${timeago.format(lastSeen!)} — ${timeago.format(firstSeen!)}',
-                          style: TextStyle(color: Colors.black54)
-                        )
+                            '${timeago.format(lastSeen!)} — ${timeago.format(firstSeen!)}',
+                            style: TextStyle(color: Colors.black54))
                     ],
                   )),
               Row(

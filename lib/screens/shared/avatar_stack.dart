@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 
 import '../../screens/shared/bordered_circle_avatar_view_model.dart';
@@ -25,31 +23,24 @@ class AvatarStack extends StatelessWidget {
 
     final children = <Widget>[];
 
-    for (var index = 0 ; index < viewModels.length; index++ ) {
+    for (var index = 0; index < viewModels.length; index++) {
       final reversedIndex = (viewModels.length - 1) - index;
 
       final avatarViewModel = viewModels[reversedIndex];
       final avatarOffset = offset * reversedIndex;
 
       if (avatarOffset > 0) {
-        children.add(
-          Positioned(
+        children.add(Positioned(
             left: avatarOffset,
             child: BorderedCircleAvatar(
-              radius: radius - border,
-              border: border,
-              viewModel: avatarViewModel
-            )
-          )
-        );
+                radius: radius - border,
+                border: border,
+                viewModel: avatarViewModel)));
       } else {
-        children.add(
-          BorderedCircleAvatar(
+        children.add(BorderedCircleAvatar(
             radius: radius - border,
             border: border,
-            viewModel: avatarViewModel
-          )
-        );
+            viewModel: avatarViewModel));
       }
     }
 

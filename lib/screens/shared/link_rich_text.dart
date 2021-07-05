@@ -1,6 +1,3 @@
-
-
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -8,7 +5,8 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../utils/sentry_colors.dart';
 
 class LinkRichText extends StatelessWidget {
-  LinkRichText(this._prefix, this._link, this._linkText, this._suffix, this._textStyle);
+  LinkRichText(
+      this._prefix, this._link, this._linkText, this._suffix, this._textStyle);
 
   final String _prefix;
   final String _link;
@@ -29,12 +27,13 @@ class LinkRichText extends StatelessWidget {
           TextSpan(
             text: _linkText,
             style: TextStyle(
-              fontFamily: _textStyle?.fontFamily,
-              fontSize: _textStyle?.fontSize,
-              color: SentryColors.royalBlue
-            ),
+                fontFamily: _textStyle?.fontFamily,
+                fontSize: _textStyle?.fontSize,
+                color: SentryColors.royalBlue),
             recognizer: TapGestureRecognizer()
-              ..onTap = () { launch(_link); },
+              ..onTap = () {
+                launch(_link);
+              },
           ),
           TextSpan(
             text: _suffix,

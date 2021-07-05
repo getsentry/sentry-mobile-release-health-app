@@ -1,5 +1,3 @@
-
-
 import '../types/group.dart';
 import '../types/organization.dart';
 import '../types/project.dart';
@@ -53,20 +51,23 @@ class FetchOrgsAndProjectsProgressAction {
 }
 
 class FetchOrgsAndProjectsSuccessAction {
-  FetchOrgsAndProjectsSuccessAction(this.organizations, this.projectsByOrganizationSlug, this.projectIdsWithSessions);
+  FetchOrgsAndProjectsSuccessAction(this.organizations,
+      this.projectsByOrganizationSlug, this.projectIdsWithSessions);
   final List<Organization> organizations;
   final Map<String, List<Project>> projectsByOrganizationSlug;
   final Set<String> projectIdsWithSessions;
 }
 
 class FetchOrgsAndProjectsFailureAction extends ApiFailureAction {
-  FetchOrgsAndProjectsFailureAction(error, StackTrace stackTrace) : super(error, stackTrace);
+  FetchOrgsAndProjectsFailureAction(error, StackTrace stackTrace)
+      : super(error, stackTrace);
 }
 
 // FetchLatestRelease
 
 class FetchLatestReleaseAction {
-  FetchLatestReleaseAction(this.organizationSlug, this.projectSlug, this.projectId, this.releaseId);
+  FetchLatestReleaseAction(
+      this.organizationSlug, this.projectSlug, this.projectId, this.releaseId);
   final String organizationSlug;
   final String projectSlug;
   final String projectId;
@@ -80,7 +81,8 @@ class FetchLatestReleaseSuccessAction {
 }
 
 class FetchLatestReleaseFailureAction extends ApiFailureAction {
-  FetchLatestReleaseFailureAction(error, StackTrace stackTrace) : super(error, stackTrace);
+  FetchLatestReleaseFailureAction(error, StackTrace stackTrace)
+      : super(error, stackTrace);
 }
 
 // FetchLatestReleases
@@ -96,7 +98,8 @@ class FetchLatestReleasesSuccessAction {
 }
 
 class FetchLatestReleasesFailureAction extends ApiFailureAction {
-  FetchLatestReleasesFailureAction(error, StackTrace stackTrace) : super(error, stackTrace);
+  FetchLatestReleasesFailureAction(error, StackTrace stackTrace)
+      : super(error, stackTrace);
 }
 
 // FetchIssues
@@ -114,7 +117,8 @@ class FetchIssuesSuccessAction {
 }
 
 class FetchIssuesFailureAction extends ApiFailureAction {
-  FetchIssuesFailureAction(error, StackTrace stackTrace) : super(error, stackTrace);
+  FetchIssuesFailureAction(error, StackTrace stackTrace)
+      : super(error, stackTrace);
 }
 
 // FetchAuthenticatedUser
@@ -130,7 +134,8 @@ class FetchAuthenticatedUserSuccessAction {
 }
 
 class FetchAuthenticatedUserFailureAction extends ApiFailureAction {
-  FetchAuthenticatedUserFailureAction(error, StackTrace stackTrace) : super(error, stackTrace);
+  FetchAuthenticatedUserFailureAction(error, StackTrace stackTrace)
+      : super(error, stackTrace);
 }
 
 // FetchSessions
@@ -143,20 +148,23 @@ class FetchSessionsAction {
 }
 
 class FetchSessionsSuccessAction {
-  FetchSessionsSuccessAction(this.projectId, this.sessions, this.sessionsBefore);
+  FetchSessionsSuccessAction(
+      this.projectId, this.sessions, this.sessionsBefore);
   final String projectId;
   final Sessions sessions;
   final Sessions sessionsBefore;
 }
 
 class FetchSessionsFailureAction extends ApiFailureAction {
-  FetchSessionsFailureAction(error, StackTrace stackTrace) : super(error, stackTrace);
+  FetchSessionsFailureAction(error, StackTrace stackTrace)
+      : super(error, stackTrace);
 }
 
 // BookmarkProject
 
 class BookmarkProjectAction {
-  BookmarkProjectAction(this.organizationSlug, this.projectSlug, this.bookmarked);
+  BookmarkProjectAction(
+      this.organizationSlug, this.projectSlug, this.bookmarked);
 
   final String organizationSlug;
   final String projectSlug;
@@ -171,7 +179,9 @@ class BookmarkProjectSuccessAction {
 }
 
 class BookmarkProjectFailureAction extends ApiFailureAction {
-  BookmarkProjectFailureAction(this.projectSlug, this.bookmarked, error, StackTrace stackTrace) : super(error, stackTrace);
+  BookmarkProjectFailureAction(
+      this.projectSlug, this.bookmarked, error, StackTrace stackTrace)
+      : super(error, stackTrace);
   final String projectSlug;
   final bool bookmarked;
 }
@@ -195,7 +205,8 @@ class FetchApdexSuccessAction {
 }
 
 class FetchApdexFailureAction extends ApiFailureAction {
-  FetchApdexFailureAction(error, StackTrace stackTrace) : super(error, stackTrace);
+  FetchApdexFailureAction(error, StackTrace stackTrace)
+      : super(error, stackTrace);
 }
 
 // SentrySdkToggle
