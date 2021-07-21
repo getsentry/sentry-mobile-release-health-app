@@ -28,6 +28,8 @@ jobs:
         - name: Fix iOS build bug
           if: matrix.target == 'ios'
           run: rm ios/Podfile
+        - name: Build Runner
+          run: flutter pub run build_runner build
         - name: Test
           run: flutter test
         - name: Analyze
