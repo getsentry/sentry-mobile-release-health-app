@@ -1,9 +1,18 @@
 
-class RatingActionAppStart {}
+class RatingRehydrateAction {
+  RatingRehydrateAction(
+    this.appStarts,
+    this.lastRatingPresentation,
+  );
+  final int appStarts;
+  final DateTime? lastRatingPresentation;
+}
 
-class RatingActionRatingPresentation {
-  RatingActionRatingPresentation(
+class RatingAppStartAction {}
+
+class RatingPresentationAction {
+  RatingPresentationAction(
     this.date,
   );
-  DateTime date;
+  final DateTime date;
 }

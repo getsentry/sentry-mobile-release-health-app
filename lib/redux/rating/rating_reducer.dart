@@ -1,22 +1,21 @@
-
-import 'package:sentry_mobile/redux/rating/rating_actions.dart';
-
+import 'rating_actions.dart';
 import 'rating_state.dart';
 
 RatingState ratingReducer(RatingState state, dynamic action) {
-
-  if (action is RatingActionAppStart) {
-    final appStarts = state.appStarts + 1;
-    final now = DateTime.now();
-    final threeMonthsAgo = now.add(Duration(days: -90));
-    final lastRatingPresentation = state.lastRatingPresentation;
-    final enoughTimePassed = lastRatingPresentation == null
-        || lastRatingPresentation.millisecondsSinceEpoch < threeMonthsAgo.millisecondsSinceEpoch;
-    return state.copyWith(
-        appStarts: appStarts,
-        needsRatingPresentation: appStarts >= 10 && enoughTimePassed
+  if (action is RatingRehydrateAction) {
+    return _evaluate(
+      state.copyWith(
+        appStarts: action.appStarts,
+        lastRatingPresentation: action.lastRatingPresentation,
+      )
     );
-  } else if (action is RatingActionRatingPresentation) {
+  } else if (action is RatingAppStartAction) {
+    return _evaluate(
+      state.copyWith(
+          appStarts: state.appStarts + 1
+      )
+    );
+  } else if (action is RatingPresentationAction) {
     return state.copyWith(
         appStarts: 0,
         needsRatingPresentation: false,
@@ -24,4 +23,15 @@ RatingState ratingReducer(RatingState state, dynamic action) {
     );
   }
   return state;
+}
+
+RatingState _evaluate(RatingState state) {
+  final now = DateTime.now();
+  final threeMonthsAgo = now.add(Duration(days: -90));
+  final lastRatingPresentation = state.lastRatingPresentation;
+  final enoughTimePassed = lastRatingPresentation == null
+      || lastRatingPresentation.millisecondsSinceEpoch < threeMonthsAgo.millisecondsSinceEpoch;
+  return state.copyWith(
+      needsRatingPresentation: state.appStarts >= 10 && enoughTimePassed
+  );
 }

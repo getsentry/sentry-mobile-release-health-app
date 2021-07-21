@@ -5,9 +5,19 @@ import 'package:sentry_mobile/redux/rating/rating_state.dart';
 
 void main() {
   group('RatingReducer', () {
+
+    test('rehydrate', () {
+      final state = RatingState.initial();
+      final dateTime = DateTime.now();
+      final action = RatingRehydrateAction(9, dateTime);
+      final reducedState = ratingReducer(state, action);
+      expect(reducedState.appStarts, 9);
+      expect(reducedState.lastRatingPresentation, dateTime);
+    });
+
     test('app start action increments app start', () {
       final state = RatingState.initial();
-      final action = RatingActionAppStart();
+      final action = RatingAppStartAction();
       final reducedState = ratingReducer(state, action);
       expect(reducedState.appStarts, 1);
     });
@@ -16,7 +26,7 @@ void main() {
       final state = RatingState.initial().copyWith(
         appStarts: 9
       );
-      final action = RatingActionAppStart();
+      final action = RatingAppStartAction();
       final reducedState = ratingReducer(state, action);
       expect(reducedState.appStarts, 10);
       expect(reducedState.needsRatingPresentation, true);
@@ -28,7 +38,7 @@ void main() {
         needsRatingPresentation: true,
       );
       final dateTime = DateTime.now();
-      final action = RatingActionRatingPresentation(dateTime);
+      final action = RatingPresentationAction(dateTime);
       final reducedState = ratingReducer(state, action);
       expect(reducedState.appStarts, 0);
       expect(reducedState.needsRatingPresentation, false);
@@ -40,7 +50,7 @@ void main() {
         appStarts: 9,
         lastRatingPresentation: DateTime.now()
       );
-      final action = RatingActionAppStart();
+      final action = RatingAppStartAction();
       final reducedState = ratingReducer(state, action);
       expect(reducedState.appStarts, 10);
       expect(reducedState.needsRatingPresentation, false);
@@ -51,7 +61,15 @@ void main() {
         appStarts: 9,
         lastRatingPresentation: DateTime.now().subtract(const Duration(days: 91))
       );
-      final action = RatingActionAppStart();
+      final action = RatingAppStartAction();
+      final reducedState = ratingReducer(state, action);
+      expect(reducedState.appStarts, 10);
+      expect(reducedState.needsRatingPresentation, true);
+    });
+
+    test('rating presentation needed after 10 rehydrate', () {
+      final state = RatingState.initial();
+      final action = RatingRehydrateAction(10, null);
       final reducedState = ratingReducer(state, action);
       expect(reducedState.appStarts, 10);
       expect(reducedState.needsRatingPresentation, true);
