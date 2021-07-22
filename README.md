@@ -37,7 +37,7 @@ https://flutter.dev/docs/get-started/editor
 
 5. Generate Transient Files
 
-Files used for JSON decoding are generated using [`build_runner`](https://dart.dev/tools/build_runner).
+Files used for JSON decoding are generated using [`build_runner`](https://dart.dev/tools/build_runner). When run with [`watch`](https://pub.dev/packages/build_runner#built-in-commands) option, rebuilds are done automatically when files change.
 
 ```
 flutter pub run build_runner build
