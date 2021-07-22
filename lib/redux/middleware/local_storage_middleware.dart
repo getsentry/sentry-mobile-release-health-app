@@ -1,6 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:redux/redux.dart';
+import 'package:sentry_mobile/redux/rating/rating_actions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../actions.dart';
@@ -14,7 +15,9 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
 
   final _keyAuthToken = 'authToken';
   final _keySentrySdkEnabled = 'sentrySdkEnabled';
-  final _keyNumberOfRatingEvents = 'numberOfRatingEvents';
+
+  final _keyAppStarts = 'appStarts';
+  final _keyLastRatingPresentation = 'lastRatingPresentation';
 
   @override
   dynamic call(
@@ -30,11 +33,13 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
       final version =
           'Version ${packageInfo.version} (${packageInfo.buildNumber})';
 
-      final numberOfRatingEvents =
-          await _incrementAndReturnNumberOfRatingEvents();
-
       store.dispatch(RehydrateSuccessAction(
-          authToken, sentrySdkEnabled, version, numberOfRatingEvents));
+          authToken, sentrySdkEnabled, version,));
+
+      final appStarts = await _incrementAndReturnAppStarts();
+      final lastRatingPresentation = await _lastRatingPresentation();
+      store.dispatch(RatingRehydrateAction(appStarts, lastRatingPresentation));
+
       if (authToken != null) {
         store.dispatch(FetchAuthenticatedUserAction(authToken));
       }
@@ -46,8 +51,9 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
         await secureStorage.delete(key: _keySentrySdkEnabled);
       }
     }
-    if (action is PresentRatingAction) {
-      await _resetNumberOfRatingEvents();
+    if (action is RatingPresentationAction) {
+      await _resetAppStarts();
+      await _persistLastRatingPresentation(action.date);
     }
     if (action is LoginSuccessAction) {
       await secureStorage.write(key: _keyAuthToken, value: action.authToken);
@@ -61,17 +67,28 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
     next(action);
   }
 
-  Future<int> _incrementAndReturnNumberOfRatingEvents() async {
-    final numberOfRatingEventsString =
-        await secureStorage.read(key: _keyNumberOfRatingEvents) ?? '0';
-    var numberOfRatingEvents = int.parse(numberOfRatingEventsString);
-    numberOfRatingEvents += 1;
-    await secureStorage.write(
-        key: _keyNumberOfRatingEvents, value: '$numberOfRatingEvents');
-    return numberOfRatingEvents;
+  // Rating
+
+  Future<int> _incrementAndReturnAppStarts() async {
+    var appStarts = preferences.getInt(_keyAppStarts) ?? 0;
+    appStarts += 1;
+    await preferences.setInt(_keyAppStarts, appStarts);
+    return appStarts;
   }
 
-  Future<void> _resetNumberOfRatingEvents() async {
-    await secureStorage.write(key: _keyNumberOfRatingEvents, value: '0');
+  Future<void> _resetAppStarts() async {
+    await secureStorage.write(key: _keyAppStarts, value: '0');
+  }
+
+  Future<DateTime?> _lastRatingPresentation() async {
+    final lastRatingPresentation = preferences.getInt(_keyLastRatingPresentation);
+    if (lastRatingPresentation == null) {
+      return null;
+    }
+    return DateTime.fromMillisecondsSinceEpoch(lastRatingPresentation);
+  }
+
+  Future<bool> _persistLastRatingPresentation(DateTime date) async {
+    return preferences.setInt(_keyLastRatingPresentation, date.millisecondsSinceEpoch,);
   }
 }

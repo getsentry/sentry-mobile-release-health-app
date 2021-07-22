@@ -9,12 +9,6 @@ RatingState ratingReducer(RatingState state, dynamic action) {
         lastRatingPresentation: action.lastRatingPresentation,
       )
     );
-  } else if (action is RatingAppStartAction) {
-    return _evaluate(
-      state.copyWith(
-          appStarts: state.appStarts + 1
-      )
-    );
   } else if (action is RatingPresentationAction) {
     return state.copyWith(
         appStarts: 0,

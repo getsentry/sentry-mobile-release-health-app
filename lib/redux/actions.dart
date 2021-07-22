@@ -15,12 +15,10 @@ class AppStartAction {
 }
 
 class RehydrateSuccessAction {
-  RehydrateSuccessAction(this.authToken, this.sentrySdkEnabled, this.version,
-      this.numberOfRatingEvents);
+  RehydrateSuccessAction(this.authToken, this.sentrySdkEnabled, this.version);
   final String? authToken;
   final bool sentrySdkEnabled;
   final String version;
-  final int numberOfRatingEvents;
 }
 
 class SwitchTabAction {
@@ -220,12 +218,6 @@ class FetchApdexFailureAction extends ApiFailureAction {
 class SentrySdkToggleAction {
   SentrySdkToggleAction(this.enabled);
   final bool enabled;
-}
-
-// PresentRatingAction
-
-class PresentRatingAction {
-  PresentRatingAction();
 }
 
 // SelectOrganization

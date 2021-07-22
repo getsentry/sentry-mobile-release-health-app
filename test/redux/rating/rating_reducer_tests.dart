@@ -15,18 +15,9 @@ void main() {
       expect(reducedState.lastRatingPresentation, dateTime);
     });
 
-    test('app start action increments app start', () {
-      final state = RatingState.initial();
-      final action = RatingAppStartAction();
-      final reducedState = ratingReducer(state, action);
-      expect(reducedState.appStarts, 1);
-    });
-
     test('rating presentation needed after 10 app starts', () {
-      final state = RatingState.initial().copyWith(
-        appStarts: 9
-      );
-      final action = RatingAppStartAction();
+      final state = RatingState.initial();
+      final action = RatingRehydrateAction(10, null);
       final reducedState = ratingReducer(state, action);
       expect(reducedState.appStarts, 10);
       expect(reducedState.needsRatingPresentation, true);
@@ -46,22 +37,19 @@ void main() {
     });
 
     test('no rating presentation needed when already presented for app starts', () {
-      final state = RatingState.initial().copyWith(
-        appStarts: 9,
-        lastRatingPresentation: DateTime.now()
-      );
-      final action = RatingAppStartAction();
+      final state = RatingState.initial();
+      final action = RatingRehydrateAction(10, DateTime.now());
       final reducedState = ratingReducer(state, action);
       expect(reducedState.appStarts, 10);
       expect(reducedState.needsRatingPresentation, false);
     });
 
     test('rating presentation needed after 10 app starts and three months', () {
-      final state = RatingState.initial().copyWith(
-        appStarts: 9,
-        lastRatingPresentation: DateTime.now().subtract(const Duration(days: 91))
+      final state = RatingState.initial();
+      final action = RatingRehydrateAction(
+        10,
+        DateTime.now().subtract(const Duration(days: 91)),
       );
-      final action = RatingAppStartAction();
       final reducedState = ratingReducer(state, action);
       expect(reducedState.appStarts, 10);
       expect(reducedState.needsRatingPresentation, true);

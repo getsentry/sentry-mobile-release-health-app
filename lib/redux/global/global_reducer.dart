@@ -43,7 +43,6 @@ final globalReducer = combineReducers<GlobalState>([
   TypedReducer<GlobalState, BookmarkProjectFailureAction>(
       _bookmarkProjectFailureAction),
   TypedReducer<GlobalState, SentrySdkToggleAction>(_sentrySdkToggle),
-  TypedReducer<GlobalState, PresentRatingAction>(_presentRating),
   TypedReducer<GlobalState, ApiFailureAction>(_apiFailureAction)
 ]);
 
@@ -65,7 +64,7 @@ GlobalState _rehydrateSuccessAction(
       authToken: action.authToken,
       sentrySdkEnabled: action.sentrySdkEnabled,
       version: action.version,
-      numberOfRatingEvents: action.numberOfRatingEvents);
+  );
 }
 
 GlobalState _loginAction(GlobalState state, LoginSuccessAction action) {
@@ -295,10 +294,6 @@ GlobalState _bookmarkProjectFailureAction(
 
 GlobalState _sentrySdkToggle(GlobalState state, SentrySdkToggleAction action) {
   return state.copyWith(sentrySdkEnabled: action.enabled);
-}
-
-GlobalState _presentRating(GlobalState state, PresentRatingAction action) {
-  return state.copyWith(numberOfRatingEvents: 0);
 }
 
 GlobalState _apiFailureAction(GlobalState state, ApiFailureAction action) {

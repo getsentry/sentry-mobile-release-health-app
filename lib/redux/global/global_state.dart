@@ -35,7 +35,6 @@ class GlobalState {
         required this.apdexByProjectId,
         required this.apdexBeforeByProjectId,
         required this.issuesByProjectSlug,
-        required this.numberOfRatingEvents,
         this.selectedOrganization,
         this.selectedProject,
         this.me});
@@ -66,7 +65,6 @@ class GlobalState {
         apdexByProjectId: {},
         apdexBeforeByProjectId: {},
         issuesByProjectSlug: {},
-        numberOfRatingEvents: 0,
         selectedOrganization: null,
         selectedProject: null,
         me: null);
@@ -105,7 +103,6 @@ class GlobalState {
   apdexBeforeByProjectId; // Interval before apdexByProjectId
 
   final Map<String, List<Group>> issuesByProjectSlug;
-  final int numberOfRatingEvents;
 
   final Organization? selectedOrganization;
   final Project? selectedProject;
@@ -141,7 +138,6 @@ class GlobalState {
     Map<String, List<Group>>? issuesByProjectSlug,
     Organization? selectedOrganization,
     Project? selectedProject,
-    int? numberOfRatingEvents,
     User? me,
   }) {
     return GlobalState(
@@ -191,7 +187,6 @@ class GlobalState {
         issuesByProjectSlug: issuesByProjectSlug ?? this.issuesByProjectSlug,
         selectedOrganization: selectedOrganization ?? this.selectedOrganization,
         selectedProject: selectedProject ?? this.selectedProject,
-        numberOfRatingEvents: numberOfRatingEvents ?? this.numberOfRatingEvents,
         me: me ?? this.me);
   }
 
