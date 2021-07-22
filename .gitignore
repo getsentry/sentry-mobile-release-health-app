@@ -32,7 +32,7 @@
 /build/
 
 # Generated
-lib/types/*.g.dart
+*.g.dart
 
 # Web related
 lib/generated_plugin_registrant.dart
