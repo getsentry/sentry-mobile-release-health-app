@@ -34,7 +34,10 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
           'Version ${packageInfo.version} (${packageInfo.buildNumber})';
 
       store.dispatch(RehydrateSuccessAction(
-          authToken, sentrySdkEnabled, version,));
+        authToken,
+        sentrySdkEnabled,
+        version,
+      ));
 
       final appStarts = await _incrementAndReturnAppStarts();
       final lastRatingPresentation = await _lastRatingPresentation();
@@ -81,7 +84,8 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
   }
 
   Future<DateTime?> _lastRatingPresentation() async {
-    final lastRatingPresentation = preferences.getInt(_keyLastRatingPresentation);
+    final lastRatingPresentation =
+        preferences.getInt(_keyLastRatingPresentation);
     if (lastRatingPresentation == null) {
       return null;
     }
@@ -89,6 +93,9 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
   }
 
   Future<bool> _persistLastRatingPresentation(DateTime date) async {
-    return preferences.setInt(_keyLastRatingPresentation, date.millisecondsSinceEpoch,);
+    return preferences.setInt(
+      _keyLastRatingPresentation,
+      date.millisecondsSinceEpoch,
+    );
   }
 }

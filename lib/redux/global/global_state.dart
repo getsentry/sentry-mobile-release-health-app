@@ -12,32 +12,32 @@ import '../state/session_state.dart';
 class GlobalState {
   GlobalState(
       {this.authToken,
-        required this.hydrated,
-        required this.sentrySdkEnabled,
-        required this.version,
-        required this.selectedTab,
-        required this.organizations,
-        required this.organizationsSlugByProjectSlug,
-        required this.projectsByOrganizationSlug,
-        required this.orgsAndProjectsLoading,
-        required this.orgsAndProjectsProgress,
-        required this.orgsAndProjectsProgressText,
-        required this.orgsAndProjectsError,
-        required this.projectIdsWithSessions,
-        required this.projectsWithSessions,
-        required this.latestReleasesByProjectId,
-        required this.sessionsByProjectId,
-        required this.sessionsBeforeByProjectId,
-        required this.crashFreeSessionsByProjectId,
-        required this.crashFreeSessionsBeforeByProjectId,
-        required this.crashFreeUsersByProjectId,
-        required this.crashFreeUsersBeforeByProjectId,
-        required this.apdexByProjectId,
-        required this.apdexBeforeByProjectId,
-        required this.issuesByProjectSlug,
-        this.selectedOrganization,
-        this.selectedProject,
-        this.me});
+      required this.hydrated,
+      required this.sentrySdkEnabled,
+      required this.version,
+      required this.selectedTab,
+      required this.organizations,
+      required this.organizationsSlugByProjectSlug,
+      required this.projectsByOrganizationSlug,
+      required this.orgsAndProjectsLoading,
+      required this.orgsAndProjectsProgress,
+      required this.orgsAndProjectsProgressText,
+      required this.orgsAndProjectsError,
+      required this.projectIdsWithSessions,
+      required this.projectsWithSessions,
+      required this.latestReleasesByProjectId,
+      required this.sessionsByProjectId,
+      required this.sessionsBeforeByProjectId,
+      required this.crashFreeSessionsByProjectId,
+      required this.crashFreeSessionsBeforeByProjectId,
+      required this.crashFreeUsersByProjectId,
+      required this.crashFreeUsersBeforeByProjectId,
+      required this.apdexByProjectId,
+      required this.apdexBeforeByProjectId,
+      required this.issuesByProjectSlug,
+      this.selectedOrganization,
+      this.selectedProject,
+      this.me});
 
   factory GlobalState.initial() {
     return GlobalState(
@@ -91,16 +91,16 @@ class GlobalState {
 
   final Map<String, Sessions> sessionsByProjectId;
   final Map<String, Sessions>
-  sessionsBeforeByProjectId; // Interval before sessionsByProjectId
+      sessionsBeforeByProjectId; // Interval before sessionsByProjectId
   final Map<String, double> crashFreeSessionsByProjectId;
   final Map<String, double>
-  crashFreeSessionsBeforeByProjectId; // Interval before stabilityScoreByProjectId
+      crashFreeSessionsBeforeByProjectId; // Interval before stabilityScoreByProjectId
   final Map<String, double> crashFreeUsersByProjectId;
   final Map<String, double>
-  crashFreeUsersBeforeByProjectId; // Interval before stabilityScoreByProjectId
+      crashFreeUsersBeforeByProjectId; // Interval before stabilityScoreByProjectId
   final Map<String, double> apdexByProjectId;
   final Map<String, double>
-  apdexBeforeByProjectId; // Interval before apdexByProjectId
+      apdexBeforeByProjectId; // Interval before apdexByProjectId
 
   final Map<String, List<Group>> issuesByProjectSlug;
 
@@ -150,40 +150,40 @@ class GlobalState {
         organizationsSlugByProjectSlug: organizationsSlugByProjectSlug ??
             this.organizationsSlugByProjectSlug,
         projectsByOrganizationSlug:
-        projectsByOrganizationSlug ?? this.projectsByOrganizationSlug,
+            projectsByOrganizationSlug ?? this.projectsByOrganizationSlug,
         orgsAndProjectsLoading:
-        orgsAndProjectsLoading ?? this.orgsAndProjectsLoading,
+            orgsAndProjectsLoading ?? this.orgsAndProjectsLoading,
         orgsAndProjectsProgress:
-        (orgsAndProjectsLoading ?? this.orgsAndProjectsLoading)
-            ? orgsAndProjectsProgress ?? this.orgsAndProjectsProgress
-            : null,
+            (orgsAndProjectsLoading ?? this.orgsAndProjectsLoading)
+                ? orgsAndProjectsProgress ?? this.orgsAndProjectsProgress
+                : null,
         orgsAndProjectsProgressText: (orgsAndProjectsLoading ??
-            this.orgsAndProjectsLoading)
+                this.orgsAndProjectsLoading)
             ? orgsAndProjectsProgressText ?? this.orgsAndProjectsProgressText
             : null,
         orgsAndProjectsError: setOrgsAndProjectsErrorNull
             ? null
             : orgsAndProjectsError ?? this.orgsAndProjectsError,
         projectIdsWithSessions:
-        projectIdsWithSessions ?? this.projectIdsWithSessions,
+            projectIdsWithSessions ?? this.projectIdsWithSessions,
         projectsWithSessions: projectsWithSessions ?? this.projectsWithSessions,
         latestReleasesByProjectId:
-        latestReleasesByProjectId ?? this.latestReleasesByProjectId,
+            latestReleasesByProjectId ?? this.latestReleasesByProjectId,
         sessionsByProjectId: sessionsByProjectId ?? this.sessionsByProjectId,
         sessionsBeforeByProjectId:
-        sessionsBeforeByProjectId ?? this.sessionsBeforeByProjectId,
+            sessionsBeforeByProjectId ?? this.sessionsBeforeByProjectId,
         crashFreeSessionsByProjectId:
-        crashFreeSessionsByProjectId ?? this.crashFreeSessionsByProjectId,
+            crashFreeSessionsByProjectId ?? this.crashFreeSessionsByProjectId,
         crashFreeSessionsBeforeByProjectId:
-        crashFreeSessionsBeforeByProjectId ??
-            this.crashFreeSessionsBeforeByProjectId,
+            crashFreeSessionsBeforeByProjectId ??
+                this.crashFreeSessionsBeforeByProjectId,
         crashFreeUsersByProjectId:
-        crashFreeUsersByProjectId ?? this.crashFreeUsersByProjectId,
+            crashFreeUsersByProjectId ?? this.crashFreeUsersByProjectId,
         crashFreeUsersBeforeByProjectId: crashFreeUsersBeforeByProjectId ??
             this.crashFreeUsersBeforeByProjectId,
         apdexByProjectId: apdexByProjectId ?? this.apdexByProjectId,
         apdexBeforeByProjectId:
-        apdexBeforeByProjectId ?? this.apdexBeforeByProjectId,
+            apdexBeforeByProjectId ?? this.apdexBeforeByProjectId,
         issuesByProjectSlug: issuesByProjectSlug ?? this.issuesByProjectSlug,
         selectedOrganization: selectedOrganization ?? this.selectedOrganization,
         selectedProject: selectedProject ?? this.selectedProject,
@@ -206,7 +206,7 @@ class GlobalState {
 
       if (sessions != null) {
         final totalAndPoints =
-        createTotalSessionCountAndLinePoints(sessionStatus, sessions);
+            createTotalSessionCountAndLinePoints(sessionStatus, sessions);
         total = totalAndPoints[0] as int;
         lineChartPoints = totalAndPoints[1] as List<LineChartPoint>;
       }
@@ -269,7 +269,7 @@ class GlobalState {
   List<ProjectWithLatestRelease> projectsWithLatestReleases() {
     return projectsWithSessions
         .map((project) => ProjectWithLatestRelease(
-        project, latestReleasesByProjectId[project.id]))
+            project, latestReleasesByProjectId[project.id]))
         .toList();
   }
 }

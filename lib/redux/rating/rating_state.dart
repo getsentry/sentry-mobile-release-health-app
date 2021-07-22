@@ -29,8 +29,10 @@ class RatingState {
     return RatingState(
       appStarts: appStarts ?? this.appStarts,
       userDidInteract: userDidInteract ?? this.userDidInteract,
-      lastRatingPresentation: lastRatingPresentation ?? this.lastRatingPresentation,
-      needsRatingPresentation: needsRatingPresentation ?? this.needsRatingPresentation,
+      lastRatingPresentation:
+          lastRatingPresentation ?? this.lastRatingPresentation,
+      needsRatingPresentation:
+          needsRatingPresentation ?? this.needsRatingPresentation,
     );
   }
 }

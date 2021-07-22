@@ -1,4 +1,3 @@
-
 class RatingRehydrateAction {
   RatingRehydrateAction(
     this.appStarts,

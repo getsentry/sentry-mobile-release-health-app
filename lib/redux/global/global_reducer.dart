@@ -60,10 +60,10 @@ GlobalState _switchTabAction(GlobalState state, SwitchTabAction action) {
 GlobalState _rehydrateSuccessAction(
     GlobalState state, RehydrateSuccessAction action) {
   return state.copyWith(
-      hydrated: true,
-      authToken: action.authToken,
-      sentrySdkEnabled: action.sentrySdkEnabled,
-      version: action.version,
+    hydrated: true,
+    authToken: action.authToken,
+    sentrySdkEnabled: action.sentrySdkEnabled,
+    version: action.version,
   );
 }
 
@@ -100,7 +100,7 @@ GlobalState _fetchOrgsAndProjectsSuccessAction(
 
   for (final organizationSlug in action.projectsByOrganizationSlug.keys) {
     for (final project
-    in action.projectsByOrganizationSlug[organizationSlug]!) {
+        in action.projectsByOrganizationSlug[organizationSlug]!) {
       organizationsSlugByProjectSlug[project.slug] = organizationSlug;
 
       if (action.projectIdsWithSessions.contains(project.id)) {
@@ -169,7 +169,7 @@ GlobalState _fetchLatestReleasesSuccessAction(
 GlobalState _fetchLatestReleaseSuccessAction(
     GlobalState state, FetchLatestReleaseSuccessAction action) {
   final organizationSlug =
-  state.organizationsSlugByProjectSlug[action.projectSlug];
+      state.organizationsSlugByProjectSlug[action.projectSlug];
   final project = state.projectsByOrganizationSlug[organizationSlug!]!
       .where((element) => element.slug == action.projectSlug)
       .first;
@@ -214,7 +214,7 @@ GlobalState _fetchSessionsSuccessAction(
   final Map<String, double> crashFreeSessionsBeforeByProjectId =
       state.crashFreeSessionsBeforeByProjectId;
   final sessionsBeforeCrashFreeSessions =
-  action.sessionsBefore.crashFreeSessions();
+      action.sessionsBefore.crashFreeSessions();
   if (sessionsBeforeCrashFreeSessions != null) {
     crashFreeSessionsBeforeByProjectId[action.projectId] =
         sessionsBeforeCrashFreeSessions;
