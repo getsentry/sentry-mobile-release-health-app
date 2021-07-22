@@ -10,10 +10,6 @@ class RehydrateAction {
   RehydrateAction();
 }
 
-class AppStartAction {
-  AppStartAction();
-}
-
 class RehydrateSuccessAction {
   RehydrateSuccessAction(this.authToken, this.sentrySdkEnabled, this.version);
   final String? authToken;

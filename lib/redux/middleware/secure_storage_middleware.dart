@@ -7,17 +7,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../actions.dart';
 import '../state/app_state.dart';
 
-class LocalStorageMiddleware extends MiddlewareClass<AppState> {
-  LocalStorageMiddleware(this.preferences, this.secureStorage);
+class SecureStorageMiddleware extends MiddlewareClass<AppState> {
+  SecureStorageMiddleware(this.secureStorage);
 
-  final SharedPreferences preferences;
   final FlutterSecureStorage secureStorage;
 
   final _keyAuthToken = 'authToken';
   final _keySentrySdkEnabled = 'sentrySdkEnabled';
-
-  final _keyAppStarts = 'appStarts';
-  final _keyLastRatingPresentation = 'lastRatingPresentation';
 
   @override
   dynamic call(
@@ -38,11 +34,6 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
         sentrySdkEnabled,
         version,
       ));
-
-      final appStarts = await _incrementAndReturnAppStarts();
-      final lastRatingPresentation = await _lastRatingPresentation();
-      store.dispatch(RatingRehydrateAction(appStarts, lastRatingPresentation));
-
       if (authToken != null) {
         store.dispatch(FetchAuthenticatedUserAction(authToken));
       }
@@ -54,10 +45,6 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
         await secureStorage.delete(key: _keySentrySdkEnabled);
       }
     }
-    if (action is RatingPresentationAction) {
-      await _resetAppStarts();
-      await _persistLastRatingPresentation(action.date);
-    }
     if (action is LoginSuccessAction) {
       await secureStorage.write(key: _keyAuthToken, value: action.authToken);
       store.dispatch(FetchAuthenticatedUserAction(action.authToken));
@@ -65,37 +52,10 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
     if (action is LogoutAction) {
       await secureStorage.delete(key: _keyAuthToken);
       await secureStorage.delete(key: _keySentrySdkEnabled);
-      await preferences.clear();
     }
     next(action);
   }
 
   // Rating
 
-  Future<int> _incrementAndReturnAppStarts() async {
-    var appStarts = preferences.getInt(_keyAppStarts) ?? 0;
-    appStarts += 1;
-    await preferences.setInt(_keyAppStarts, appStarts);
-    return appStarts;
-  }
-
-  Future<void> _resetAppStarts() async {
-    await secureStorage.write(key: _keyAppStarts, value: '0');
-  }
-
-  Future<DateTime?> _lastRatingPresentation() async {
-    final lastRatingPresentation =
-        preferences.getInt(_keyLastRatingPresentation);
-    if (lastRatingPresentation == null) {
-      return null;
-    }
-    return DateTime.fromMillisecondsSinceEpoch(lastRatingPresentation);
-  }
-
-  Future<bool> _persistLastRatingPresentation(DateTime date) async {
-    return preferences.setInt(
-      _keyLastRatingPresentation,
-      date.millisecondsSinceEpoch,
-    );
-  }
 }
