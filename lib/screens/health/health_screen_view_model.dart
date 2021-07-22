@@ -206,6 +206,10 @@ class HealthScreenViewModel {
     return _store.state.ratingState.needsRatingPresentation;
   }
 
+  void didInteract() {
+    _store.dispatch(RatingUserInteractionAction());
+  }
+
   void didPresentRating() {
     _store.dispatch(RatingPresentationAction(DateTime.now()));
   }

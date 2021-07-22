@@ -25,7 +25,6 @@ class _HealthScreenState extends State<HealthScreen>
     with WidgetsBindingObserver {
   int? _index;
   bool _ratingPresented = false;
-  bool _userInteracted = false;
 
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
   final InAppReview inAppReview = InAppReview.instance;
@@ -115,9 +114,7 @@ class _HealthScreenState extends State<HealthScreen>
 
       final index = _index ?? 0;
 
-      if (viewModel.shouldPresentRating() &&
-          !_ratingPresented &&
-          _userInteracted) {
+      if (viewModel.shouldPresentRating() && !_ratingPresented) {
         _ratingPresented = true;
         inAppReview.requestReview();
         viewModel.didPresentRating();
@@ -154,8 +151,8 @@ class _HealthScreenState extends State<HealthScreen>
                         itemCount: viewModel.projects.length,
                         controller: _pageController,
                         onPageChanged: (int index) {
+                          viewModel.didInteract();
                           setState(() {
-                            _userInteracted = true;
                             updateIndex(index);
                             // Fetch next projects at end
                             if (index == viewModel.projects.length - 1) {
@@ -225,9 +222,7 @@ class _HealthScreenState extends State<HealthScreen>
           );
         }),
         onRefresh: () => Future.delayed(Duration(microseconds: 100), () {
-          setState(() {
-            _userInteracted = true;
-          });
+          viewModel.didInteract();
           viewModel.reloadProjects();
           reloadSessionData(viewModel, _index ?? 0);
         }),

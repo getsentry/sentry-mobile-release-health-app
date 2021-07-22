@@ -8,6 +8,8 @@ class RatingRehydrateAction {
   final DateTime? lastRatingPresentation;
 }
 
+class RatingUserInteractionAction {}
+
 class RatingPresentationAction {
   RatingPresentationAction(
     this.date,

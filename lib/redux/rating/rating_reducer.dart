@@ -9,6 +9,8 @@ RatingState ratingReducer(RatingState state, dynamic action) {
         lastRatingPresentation: action.lastRatingPresentation,
       )
     );
+  } if (action is RatingUserInteractionAction) {
+    return _evaluate(state.copyWith(userDidInteract: true));
   } else if (action is RatingPresentationAction) {
     return state.copyWith(
         appStarts: 0,
@@ -26,6 +28,6 @@ RatingState _evaluate(RatingState state) {
   final enoughTimePassed = lastRatingPresentation == null
       || lastRatingPresentation.millisecondsSinceEpoch < threeMonthsAgo.millisecondsSinceEpoch;
   return state.copyWith(
-      needsRatingPresentation: state.appStarts >= 10 && enoughTimePassed
+      needsRatingPresentation: state.appStarts >= 10 && state.userDidInteract && enoughTimePassed
   );
 }

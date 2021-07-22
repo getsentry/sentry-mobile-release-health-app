@@ -15,11 +15,12 @@ void main() {
       expect(reducedState.lastRatingPresentation, dateTime);
     });
 
-    test('rating presentation needed after 10 app starts', () {
-      final state = RatingState.initial();
-      final action = RatingRehydrateAction(10, null);
+    test('rating presentation needed after 10 app starts and interaction', () {
+      final state = RatingState.initial().copyWith(
+          appStarts: 10
+      );
+      final action = RatingUserInteractionAction();
       final reducedState = ratingReducer(state, action);
-      expect(reducedState.appStarts, 10);
       expect(reducedState.needsRatingPresentation, true);
     });
 
@@ -45,19 +46,11 @@ void main() {
     });
 
     test('rating presentation needed after 10 app starts and three months', () {
-      final state = RatingState.initial();
-      final action = RatingRehydrateAction(
-        10,
-        DateTime.now().subtract(const Duration(days: 91)),
+      final state = RatingState.initial().copyWith(
+        appStarts: 10,
+        lastRatingPresentation: DateTime.now().subtract(const Duration(days: 91))
       );
-      final reducedState = ratingReducer(state, action);
-      expect(reducedState.appStarts, 10);
-      expect(reducedState.needsRatingPresentation, true);
-    });
-
-    test('rating presentation needed after 10 rehydrate', () {
-      final state = RatingState.initial();
-      final action = RatingRehydrateAction(10, null);
+      final action = RatingUserInteractionAction();
       final reducedState = ratingReducer(state, action);
       expect(reducedState.appStarts, 10);
       expect(reducedState.needsRatingPresentation, true);
