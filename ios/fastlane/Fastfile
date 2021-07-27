@@ -68,6 +68,7 @@ platform :ios do
 				:DEVELOPMENT_TEAM => team_id,
 				:CODE_SIGN_IDENTITY => "iPhone Distribution"
 			},
+			export_method: "app-store",
 			export_options: {
 				method: "app-store",
 				provisioningProfiles: { 
