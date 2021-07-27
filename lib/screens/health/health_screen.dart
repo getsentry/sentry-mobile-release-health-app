@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:sentry_mobile/redux/actions.dart';
+import 'package:in_app_review/in_app_review.dart';
 
 import '../../redux/state/app_state.dart';
 import '../../screens/empty/empty_screen.dart';
@@ -23,8 +24,11 @@ class HealthScreen extends StatefulWidget {
 class _HealthScreenState extends State<HealthScreen>
     with WidgetsBindingObserver {
   int? _index;
+  bool _ratingPresented = false;
 
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
+  final InAppReview inAppReview = InAppReview.instance;
+
   PageController? _pageController;
 
   @override
@@ -110,6 +114,12 @@ class _HealthScreenState extends State<HealthScreen>
 
       final index = _index ?? 0;
 
+      if (viewModel.shouldPresentRating() && !_ratingPresented) {
+        _ratingPresented = true;
+        inAppReview.requestReview();
+        viewModel.didPresentRating();
+      }
+
       return RefreshIndicator(
         key: _refreshKey,
         backgroundColor: Colors.white,
@@ -141,6 +151,7 @@ class _HealthScreenState extends State<HealthScreen>
                         itemCount: viewModel.projects.length,
                         controller: _pageController,
                         onPageChanged: (int index) {
+                          viewModel.didInteract();
                           setState(() {
                             updateIndex(index);
                             // Fetch next projects at end
@@ -211,6 +222,7 @@ class _HealthScreenState extends State<HealthScreen>
           );
         }),
         onRefresh: () => Future.delayed(Duration(microseconds: 100), () {
+          viewModel.didInteract();
           viewModel.reloadProjects();
           reloadSessionData(viewModel, _index ?? 0);
         }),

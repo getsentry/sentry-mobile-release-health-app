@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:redux/redux.dart';
+import 'package:sentry_mobile/redux/rating/rating_actions.dart';
 
 import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
@@ -200,4 +201,16 @@ class HealthScreenViewModel {
   //       )
   //   );
   // }
+
+  bool shouldPresentRating() {
+    return _store.state.ratingState.needsRatingPresentation;
+  }
+
+  void didInteract() {
+    _store.dispatch(RatingUserInteractionAction());
+  }
+
+  void didPresentRating() {
+    _store.dispatch(RatingPresentationAction(DateTime.now()));
+  }
 }

@@ -1,15 +1,13 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:redux/redux.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../actions.dart';
 import '../state/app_state.dart';
 
-class LocalStorageMiddleware extends MiddlewareClass<AppState> {
-  LocalStorageMiddleware(this.preferences, this.secureStorage);
+class SecureStorageMiddleware extends MiddlewareClass<AppState> {
+  SecureStorageMiddleware(this.secureStorage);
 
-  final SharedPreferences preferences;
   final FlutterSecureStorage secureStorage;
 
   final _keyAuthToken = 'authToken';
@@ -29,8 +27,11 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
       final version =
           'Version ${packageInfo.version} (${packageInfo.buildNumber})';
 
-      store.dispatch(
-          RehydrateSuccessAction(authToken, sentrySdkEnabled, version));
+      store.dispatch(RehydrateSuccessAction(
+        authToken,
+        sentrySdkEnabled,
+        version,
+      ));
       if (authToken != null) {
         store.dispatch(FetchAuthenticatedUserAction(authToken));
       }
@@ -49,8 +50,10 @@ class LocalStorageMiddleware extends MiddlewareClass<AppState> {
     if (action is LogoutAction) {
       await secureStorage.delete(key: _keyAuthToken);
       await secureStorage.delete(key: _keySentrySdkEnabled);
-      await preferences.clear();
     }
     next(action);
   }
+
+  // Rating
+
 }
