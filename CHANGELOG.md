@@ -8,6 +8,7 @@
 * Fix code generation (#204)
 * In-App Rating (#205)
 * Bump Sentry Flutter (#208)
+* Repair Lock File (#209)
 
 # 1.0.2
 
