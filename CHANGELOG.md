@@ -5,6 +5,7 @@
 * Bump Dependencies (#202)
 * Fix code generation (#204)
 * In-App Rating (#205)
+* Bump Sentry Flutter (#208)
 
 # 1.0.2
 
