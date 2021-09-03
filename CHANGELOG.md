@@ -1,5 +1,7 @@
 # Unreleased
 
+* Bump Sentry Flutter 6.0.0 (#211)
+
 # 1.0.3
 
 * Check formatting in CI (#203)
