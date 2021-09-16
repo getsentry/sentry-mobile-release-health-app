@@ -28,7 +28,7 @@ class ProjectsScreenViewModel {
         items.add(ProjectOrganizationItem(organization.name!));
         for (final Project project in projectsWithSessions) {
           items.add(ProjectProjectItem(
-              organization.slug, project.slug, project.isBookmarked!));
+              project.platform, organization.slug, project.slug, project.isBookmarked ?? false));
         }
       }
     }
