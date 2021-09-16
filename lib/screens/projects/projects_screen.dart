@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:sentry_mobile/utils/platform_icons.dart';
 
 import '../../redux/actions.dart';
