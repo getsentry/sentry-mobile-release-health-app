@@ -90,23 +90,28 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
   }
 
   Widget? _platformImage(String? platform) {
+    const width = 22.0;
+    const height = 22.0;
     Widget? platformImage;
     if (platform != null) {
-      platformImage = PlatformIcons.svgPicture(platform, 20, 20);
+      platformImage = PlatformIcons.svgPicture(platform, width, height);
     } else {
-      platformImage = Container(width: 20, height: 20,);
+      platformImage = Container(
+        width: width,
+        height: height,
+      );
     }
     return Padding(
-        padding: const EdgeInsets.only(left: 8),
-        child: ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(2)),
-            child: Container(
-              width: 20,
-              height: 20,
-              color: SentryColors.snuff,
-              child: platformImage,
-            ),
+      padding: const EdgeInsets.only(left: 8),
+      child: ClipRRect(
+        borderRadius: BorderRadius.all(Radius.circular(2)),
+        child: Container(
+          width: width,
+          height: height,
+          color: SentryColors.snuff,
+          child: platformImage,
         ),
+      ),
     );
   }
 }

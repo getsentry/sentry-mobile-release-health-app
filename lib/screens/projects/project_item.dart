@@ -11,8 +11,8 @@ class ProjectOrganizationItem extends ProjectItem {
 }
 
 class ProjectProjectItem extends ProjectItem {
-  ProjectProjectItem(
-      this.platform, this.organizationSlug, this.projectSlug, this.isBookmarked);
+  ProjectProjectItem(this.platform, this.organizationSlug, this.projectSlug,
+      this.isBookmarked);
 
   final String? platform;
   final String organizationSlug;
