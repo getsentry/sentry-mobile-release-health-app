@@ -5,9 +5,11 @@
   <br />
 </p>
 
-# Sentry Mobile
+# Sentry Mobile [![build](https://github.com/getsentry/sentry-mobile/workflows/build/badge.svg?branch=main)](https://github.com/getsentry/sentry-mobile/actions?query=branch%3Amain)
 
-[![build](https://github.com/getsentry/sentry-mobile/workflows/build/badge.svg?branch=main)](https://github.com/getsentry/sentry-mobile/actions?query=branch%3Amain)
+| Android | iOS |
+|:-:|:-:|
+| [<img src=".github/google-play-logo.png" height="50">](https://play.google.com/store/apps/details?id=io.sentry.mobile.app) | [<img src=".github/appstore-logo.png" height="50">](https://apps.apple.com/app/sentry-io/id1546709967) |
 
 # Run source generators
 
