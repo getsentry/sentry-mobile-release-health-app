@@ -21,7 +21,7 @@
 
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="Sentry Mobile"
+        android:label="Release Health"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

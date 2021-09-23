@@ -5,7 +5,9 @@
   <br />
 </p>
 
-# Sentry Mobile [![build](https://github.com/getsentry/sentry-mobile/workflows/build/badge.svg?branch=main)](https://github.com/getsentry/sentry-mobile/actions?query=branch%3Amain)
+# Release Health [![build](https://github.com/getsentry/sentry-mobile/workflows/build/badge.svg?branch=main)](https://github.com/getsentry/sentry-mobile/actions?query=branch%3Amain)
+
+A flutter application with the focus on [Release Health](https://docs.sentry.io/product/releases/health/setup/).
 
 | Android | iOS |
 |:-:|:-:|
