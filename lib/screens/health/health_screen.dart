@@ -87,9 +87,9 @@ class _HealthScreenState extends State<HealthScreen>
       }
     } else if (viewModel.showProjectEmptyScreen) {
       return EmptyScreen(
-          title: 'Have you set up Release Health?',
+          title: 'Have you set up\nRelease Health?',
           text:
-              'In order to view session data, you need to have release health setup for your projects. Head over to our the documentation to learn more.',
+              'We have identified that none of your projects are configured to support Release Health. Head over to our the documentation to learn more.',
           button: 'Open Documentation',
           action: () async {
             const url = 'https://docs.sentry.io/product/releases/health/setup/';
@@ -99,7 +99,7 @@ class _HealthScreenState extends State<HealthScreen>
               throw 'Could not launch $url';
             }
           },
-          secondaryButton: 'Refresh',
+          secondaryButton: 'Refresh Projects',
           secondaryAction: () {
             viewModel.fetchProjects();
             reloadSessionData(viewModel, _index ?? 0);
