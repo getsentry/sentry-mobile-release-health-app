@@ -42,8 +42,7 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Sentry Flutter SDK - Debug'),
-          brightness: Brightness.dark,
+          title: Text('Sentry Flutter SDK - Debug')
         ),
         body: SingleChildScrollView(
           child: Column(

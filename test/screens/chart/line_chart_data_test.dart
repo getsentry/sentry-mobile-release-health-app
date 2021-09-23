@@ -1,7 +1,6 @@
-import 'package:test/test.dart';
-
 import 'package:sentry_mobile/screens/chart/line_chart_data.dart';
 import 'package:sentry_mobile/screens/chart/line_chart_point.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('prepareData', () {

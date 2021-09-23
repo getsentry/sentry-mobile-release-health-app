@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 // Source: https://github.com/getsentry/sentry/blob/c62499d1de8414e119e8a199eee4c73a01393e44/src/sentry/utils/avatar.py
+// ignore: avoid_classes_with_only_static_members
 class LetterAvatar {
   static const LETTER_AVATAR_COLORS = [
     Color(0xff4674ca), // blue
