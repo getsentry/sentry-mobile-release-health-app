@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:sentry_mobile/redux/actions.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:sentry_mobile/redux/actions.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../redux/state/app_state.dart';
@@ -87,23 +87,23 @@ class _HealthScreenState extends State<HealthScreen>
       }
     } else if (viewModel.showProjectEmptyScreen) {
       return EmptyScreen(
-          title: 'Have you set up\nRelease Health?',
-          text:
-              'We have identified that none of your projects are configured to support Release Health. Head over to our the documentation to learn more.',
-          button: 'Open Documentation',
-          action: () async {
-            const url = 'https://docs.sentry.io/product/releases/health/setup/';
-            if (await canLaunch(url)) {
-              await launch(url, forceSafariVC: false);
-            } else {
-              throw 'Could not launch $url';
-            }
-          },
-          secondaryButton: 'Refresh Projects',
-          secondaryAction: () {
-            viewModel.fetchProjects();
-            reloadSessionData(viewModel, _index ?? 0);
-          },
+        title: 'Have you set up\nRelease Health?',
+        text:
+            'We have identified that none of your projects are configured to support Release Health. Head over to our the documentation to learn more.',
+        button: 'Open Documentation',
+        action: () async {
+          const url = 'https://docs.sentry.io/product/releases/health/setup/';
+          if (await canLaunch(url)) {
+            await launch(url, forceSafariVC: false);
+          } else {
+            throw 'Could not launch $url';
+          }
+        },
+        secondaryButton: 'Refresh Projects',
+        secondaryAction: () {
+          viewModel.fetchProjects();
+          reloadSessionData(viewModel, _index ?? 0);
+        },
       );
     } else {
       WidgetsBinding.instance?.addPostFrameCallback((Duration duration) {

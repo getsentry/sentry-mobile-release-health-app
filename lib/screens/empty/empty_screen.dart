@@ -7,8 +7,7 @@ class EmptyScreen extends StatelessWidget {
       required this.button,
       required this.action,
       this.secondaryButton,
-      this.secondaryAction}
-  );
+      this.secondaryAction});
 
   final String title;
   final String text;
@@ -35,17 +34,18 @@ class EmptyScreen extends StatelessWidget {
     ];
     final secondaryButton = this.secondaryButton;
     if (secondaryButton != null) {
-      children.add(
-          TextButton(
-            child: Text(secondaryButton),
-            onPressed: secondaryAction,
-          )
-      );
+      children.add(TextButton(
+        child: Text(secondaryButton),
+        onPressed: secondaryAction,
+      ));
     }
     return Center(
       child: Container(
         margin: EdgeInsets.all(32.0),
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: children,),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: children,
+        ),
       ),
     );
   }

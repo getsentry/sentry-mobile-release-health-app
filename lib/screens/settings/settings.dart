@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:sentry_mobile/screens/html/html_screen.dart';
@@ -39,7 +38,6 @@ class _SettingsState extends State<Settings> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings'),
-        brightness: Brightness.dark,
       ),
       body: SingleChildScrollView(
         child: Container(

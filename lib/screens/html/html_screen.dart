@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -14,7 +14,6 @@ class HtmlScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(_title),
-        brightness: Brightness.dark,
       ),
       body: FutureBuilder<String>(
         future: rootBundle.loadString(_htmlFilePath),
