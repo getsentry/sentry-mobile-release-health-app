@@ -1,6 +1,5 @@
-import 'package:test/test.dart';
-
 import 'package:sentry_mobile/utils/session_formatting.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('formattedNumberOfSession', () {

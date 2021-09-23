@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
 import '../../redux/actions.dart';
@@ -32,7 +33,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
         return AppBar(
             backgroundColor: Colors.white,
             shadowColor: Colors.transparent,
-            brightness: Brightness.light,
+            systemOverlayStyle: SystemUiOverlayStyle.dark,
             centerTitle: false,
             actions: [
               IconButton(

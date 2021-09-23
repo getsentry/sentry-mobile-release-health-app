@@ -1,5 +1,6 @@
 # Unreleased
 
+* Show platform icons in project picker (#214)
 * Bump Sentry Flutter 6.0.0 (#211)
 
 # 1.0.3

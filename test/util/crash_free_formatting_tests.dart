@@ -1,6 +1,5 @@
-import 'package:test/test.dart';
-
 import 'package:sentry_mobile/utils/crash_free_formatting.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('formattedPercent', () {
