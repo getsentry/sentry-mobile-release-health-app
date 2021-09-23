@@ -5,7 +5,7 @@
   <br />
 </p>
 
-# Sentry Mobile [![build](https://github.com/getsentry/sentry-mobile/workflows/build/badge.svg?branch=main)](https://github.com/getsentry/sentry-mobile/actions?query=branch%3Amain)
+# Release Health [![build](https://github.com/getsentry/sentry-mobile/workflows/build/badge.svg?branch=main)](https://github.com/getsentry/sentry-mobile/actions?query=branch%3Amain)
 
 | Android | iOS |
 |:-:|:-:|
