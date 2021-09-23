@@ -1,6 +1,7 @@
 # Unreleased
 
 * Bump Sentry Flutter 6.0.0 (#211)
+* Update Metadata (#216)
 
 # 1.0.3
 
