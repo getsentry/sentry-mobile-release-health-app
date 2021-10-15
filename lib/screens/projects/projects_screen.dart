@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:sentry_mobile/screens/platform/platform_image.dart';
 import 'package:sentry_mobile/utils/platform_icons.dart';
 
 import '../../redux/actions.dart';
@@ -69,7 +70,7 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                           .bodyText1
                           ?.apply(color: SentryColors.revolver),
                     ),
-                    leading: _platformImage(item.platform),
+                    leading: PlatformImage(item.platform, 0),
                     trailing: Icon(
                       item.isBookmarked ? Icons.star : Icons.star_border,
                       color: item.isBookmarked
@@ -84,32 +85,6 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                   throw Exception('Unknown list item type.');
                 }
               }),
-    );
-  }
-
-  Widget? _platformImage(String? platform) {
-    const width = 22.0;
-    const height = 22.0;
-    Widget? platformImage;
-    if (platform != null) {
-      platformImage = PlatformIcons.svgPicture(platform, width, height);
-    } else {
-      platformImage = Container(
-        width: width,
-        height: height,
-      );
-    }
-    return Padding(
-      padding: const EdgeInsets.only(left: 8),
-      child: ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(2)),
-        child: Container(
-          width: width,
-          height: height,
-          color: SentryColors.snuff,
-          child: platformImage,
-        ),
-      ),
     );
   }
 }
