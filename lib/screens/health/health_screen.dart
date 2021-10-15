@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:in_app_review/in_app_review.dart';
@@ -176,13 +177,15 @@ class _HealthScreenState extends State<HealthScreen>
                           return GestureDetector(
                             child: viewModel.projectCard(index),
                             onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) => ProjectDetails(
-                                        viewModel.projectId(index)
-                                    )
-                                ),
-                              );
+                              if (!kReleaseMode) {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) => ProjectDetails(
+                                          viewModel.projectId(index)
+                                      )
+                                  ),
+                                );
+                              }
                             },
                           );
                         },
