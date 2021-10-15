@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:sentry_mobile/redux/actions.dart';
+import 'package:sentry_mobile/screens/project/project_details.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../redux/state/app_state.dart';
@@ -172,7 +173,18 @@ class _HealthScreenState extends State<HealthScreen>
                           });
                         },
                         itemBuilder: (context, index) {
-                          return viewModel.projectCard(index);
+                          return GestureDetector(
+                            child: viewModel.projectCard(index),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) => ProjectDetails(
+                                        viewModel.projectId(index)
+                                    )
+                                ),
+                              );
+                            },
+                          );
                         },
                       )),
                   Container(

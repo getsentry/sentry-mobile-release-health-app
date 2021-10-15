@@ -83,6 +83,10 @@ class HealthScreenViewModel {
     _store.dispatch(FetchOrgsAndProjectsAction(true));
   }
 
+  String projectId(int index) {
+    return projects[index].project.id;
+  }
+
   ProjectCard projectCard(int index) {
     final projectWitLatestRelease = projects[index];
     return ProjectCard(
