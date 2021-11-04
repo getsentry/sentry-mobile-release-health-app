@@ -16,10 +16,9 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
   @override
   dynamic call(Store<AppState> store, action, next) {
     if (action is FetchOrgsAndProjectsAction) {
-      final transaction =
-          Sentry.startTransaction('FetchOrgsAndProjectsAction', 'task');
-
       final thunkAction = (Store<AppState> store) async {
+        final transaction =
+            Sentry.startTransaction('FetchOrgsAndProjectsAction', 'task');
         final api = SentryApi(store.state.globalState.authToken);
         try {
           store.dispatch(FetchOrgsAndProjectsProgressAction(
