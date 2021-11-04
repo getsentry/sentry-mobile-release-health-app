@@ -1,7 +1,6 @@
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../redux/state/app_state.dart';
