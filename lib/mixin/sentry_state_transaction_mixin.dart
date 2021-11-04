@@ -9,15 +9,13 @@ mixin SentryStateTransactionMixin<T extends StatefulWidget> on State<T> {
   @override
   void initState() {
     super.initState();
-    if (mounted) {
-      transaction = Sentry.startTransaction(
-        runtimeType.toString(),
-        'ui.load',
-        bindToScope: true,
-      );
-      WidgetsBinding.instance?.addPostFrameCallback((_) {
-        transaction?.finish();
-      });
-    }
+    transaction = Sentry.startTransaction(
+      runtimeType.toString(),
+      'ui.load',
+      bindToScope: true,
+    );
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      transaction?.finish();
+    });
   }
 }
