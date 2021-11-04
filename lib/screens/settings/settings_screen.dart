@@ -23,7 +23,8 @@ class SettingsScreen extends StatefulWidget {
   _SettingsScreenState createState() => _SettingsScreenState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> with SentryStateTransactionMixin<SettingsScreen> {
+class _SettingsScreenState extends State<SettingsScreen>
+    with SentryStateTransactionMixin<SettingsScreen> {
   final InAppReview inAppReview = InAppReview.instance;
 
   @override

@@ -12,7 +12,8 @@ class SentrySDKDebugScreen extends StatefulWidget {
   _SentrySDKDebugScreenState createState() => _SentrySDKDebugScreenState();
 }
 
-class _SentrySDKDebugScreenState extends State<SentrySDKDebugScreen> with SentryStateTransactionMixin<SentrySDKDebugScreen> {
+class _SentrySDKDebugScreenState extends State<SentrySDKDebugScreen>
+    with SentryStateTransactionMixin<SentrySDKDebugScreen> {
   static const platform = MethodChannel('app.mobile.sentry.io/nativeCrash');
   bool _loading = false;
 

@@ -14,7 +14,8 @@ class OnboardingScreen extends StatefulWidget {
   _OnboardingScreenState createState() => _OnboardingScreenState();
 }
 
-class _OnboardingScreenState extends State<OnboardingScreen> with SentryStateTransactionMixin<OnboardingScreen> {
+class _OnboardingScreenState extends State<OnboardingScreen>
+    with SentryStateTransactionMixin<OnboardingScreen> {
   final _pageController = PageController();
   final _pageItems = OnboardingScreenItem.values;
   var _currentPage = 0;

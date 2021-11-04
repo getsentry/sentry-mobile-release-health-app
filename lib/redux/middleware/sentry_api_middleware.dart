@@ -16,8 +16,8 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
   @override
   dynamic call(Store<AppState> store, action, next) {
     if (action is FetchOrgsAndProjectsAction) {
-
-      final transaction = Sentry.startTransaction('FetchOrgsAndProjectsAction', 'task');
+      final transaction =
+          Sentry.startTransaction('FetchOrgsAndProjectsAction', 'task');
 
       final thunkAction = (Store<AppState> store) async {
         final api = SentryApi(store.state.globalState.authToken);
@@ -33,12 +33,12 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           var currentProgress = 0;
 
           for (final organization in organizations) {
-
-            final organizationSpan = transaction.startChild('task', description: 'organization');
+            final organizationSpan =
+                transaction.startChild('task', description: 'organization');
 
             try {
               final individualOrganization =
-              await api.organization(organization.slug);
+                  await api.organization(organization.slug);
               individualOrganizations.add(individualOrganization);
             } catch (e) {
               organizationSpan.throwable = e;
@@ -60,7 +60,8 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
                 '${organization.name}: Checking for sessions...',
                 ++currentProgress / fullProgress));
 
-            final projectIdsSpan = transaction.startChild('task', description: 'projectIds');
+            final projectIdsSpan =
+                transaction.startChild('task', description: 'projectIds');
 
             try {
               final projectsWithSessionsForOrganization =

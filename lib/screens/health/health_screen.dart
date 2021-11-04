@@ -24,7 +24,7 @@ class HealthScreen extends StatefulWidget {
 }
 
 class _HealthScreenState extends State<HealthScreen>
-    with WidgetsBindingObserver,  SentryStateTransactionMixin<HealthScreen> {
+    with WidgetsBindingObserver, SentryStateTransactionMixin<HealthScreen> {
   int? _index;
   bool _ratingPresented = false;
 

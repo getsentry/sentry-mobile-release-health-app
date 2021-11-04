@@ -16,7 +16,8 @@ class ScannerScreen extends StatefulWidget {
   State<StatefulWidget> createState() => _ScannerScreenState();
 }
 
-class _ScannerScreenState extends State<ScannerScreen> with SentryStateTransactionMixin<ScannerScreen> {
+class _ScannerScreenState extends State<ScannerScreen>
+    with SentryStateTransactionMixin<ScannerScreen> {
   QRViewController? _controller;
   final GlobalKey _scannerKey = GlobalKey(debugLabel: 'QR');
   var _popped = false;

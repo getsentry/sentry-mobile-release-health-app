@@ -15,8 +15,8 @@ class ProjectsScreen extends StatefulWidget {
   _ProjectsScreenState createState() => _ProjectsScreenState();
 }
 
-class _ProjectsScreenState extends State<ProjectsScreen> with SentryStateTransactionMixin<ProjectsScreen> {
-
+class _ProjectsScreenState extends State<ProjectsScreen>
+    with SentryStateTransactionMixin<ProjectsScreen> {
   @override
   Widget build(BuildContext context) {
     return StoreProvider<AppState>(

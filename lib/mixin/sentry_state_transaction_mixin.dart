@@ -1,11 +1,9 @@
-
 library after_layout;
 
 import 'package:flutter/widgets.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 mixin SentryStateTransactionMixin<T extends StatefulWidget> on State<T> {
-
   ISentrySpan? transaction;
 
   @override

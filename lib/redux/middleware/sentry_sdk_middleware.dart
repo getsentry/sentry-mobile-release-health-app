@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:redux/redux.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
-
 import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
 
