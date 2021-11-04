@@ -47,7 +47,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
               organizationSpan.status = SpanStatus.internalError();
               rethrow;
             } finally {
-              organizationSpan.finish(status: SpanStatus.ok());
+              await organizationSpan.finish(status: SpanStatus.ok());
             }
 
             store.dispatch(FetchOrgsAndProjectsProgressAction(
@@ -83,7 +83,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
                 rethrow;
               }
             } finally {
-              projectIdsSpan.finish(status: SpanStatus.ok());
+              await projectIdsSpan.finish(status: SpanStatus.ok());
             }
           }
           store.dispatch(FetchOrgsAndProjectsSuccessAction(
@@ -95,7 +95,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           orgsAndProjectsSpan.status = SpanStatus.internalError();
           store.dispatch(FetchOrgsAndProjectsFailureAction(e, s));
         } finally {
-          orgsAndProjectsSpan.finish(status: SpanStatus.ok());
+          await orgsAndProjectsSpan.finish(status: SpanStatus.ok());
         }
         api.close();
       };
