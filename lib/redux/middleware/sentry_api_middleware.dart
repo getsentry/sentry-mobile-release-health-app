@@ -16,6 +16,9 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
   @override
   dynamic call(Store<AppState> store, action, next) {
     if (action is FetchOrgsAndProjectsAction) {
+
+      final transaction = Sentry.startTransaction('FetchOrgsAndProjectsAction', 'task');
+
       final thunkAction = (Store<AppState> store) async {
         final api = SentryApi(store.state.globalState.authToken);
         try {
@@ -30,9 +33,20 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           var currentProgress = 0;
 
           for (final organization in organizations) {
-            final individualOrganization =
-                await api.organization(organization.slug);
-            individualOrganizations.add(individualOrganization);
+
+            final organizationSpan = transaction.startChild('task', description: 'organization');
+
+            try {
+              final individualOrganization =
+              await api.organization(organization.slug);
+              individualOrganizations.add(individualOrganization);
+            } catch (e) {
+              organizationSpan.throwable = e;
+              organizationSpan.status = SpanStatus.internalError();
+              rethrow;
+            } finally {
+              organizationSpan.finish();
+            }
 
             store.dispatch(FetchOrgsAndProjectsProgressAction(
                 '${organization.name}: Fetching projects...',
@@ -45,19 +59,27 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
             store.dispatch(FetchOrgsAndProjectsProgressAction(
                 '${organization.name}: Checking for sessions...',
                 ++currentProgress / fullProgress));
+
+            final projectIdsSpan = transaction.startChild('task', description: 'projectIds');
+
             try {
               final projectsWithSessionsForOrganization =
                   await api.projectIdsWithSessions(organization.slug);
               projectIdsWithSessions
                   .addAll(projectsWithSessionsForOrganization);
             } catch (e) {
+              projectIdsSpan.throwable = e;
               if (e is ApiError && e.statusCode == 400) {
+                projectIdsSpan.status = SpanStatus.notFound();
                 Sentry.addBreadcrumb(Breadcrumb(
                     message: 'Org has no projects -> $e',
                     level: SentryLevel.error));
               } else {
+                projectIdsSpan.status = SpanStatus.internalError();
                 rethrow;
               }
+            } finally {
+              projectIdsSpan.finish();
             }
           }
           store.dispatch(FetchOrgsAndProjectsSuccessAction(
@@ -65,7 +87,11 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
               projectsByOrganizationId,
               projectIdsWithSessions));
         } catch (e, s) {
+          transaction.throwable = e;
+          transaction.status = SpanStatus.internalError();
           store.dispatch(FetchOrgsAndProjectsFailureAction(e, s));
+        } finally {
+          transaction.finish();
         }
         api.close();
       };
