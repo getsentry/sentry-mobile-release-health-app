@@ -17,9 +17,9 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
   dynamic call(Store<AppState> store, action, next) {
     if (action is FetchOrgsAndProjectsAction) {
       final thunkAction = (Store<AppState> store) async {
-        final orgsAndProjectsSpan = Sentry.getSpan()
-                ?.startChild('FetchOrgsAndProjectsAction') ??
-            Sentry.startTransaction('FetchOrgsAndProjectsAction', 'action');
+        final orgsAndProjectsSpan =
+            Sentry.getSpan()?.startChild('FetchOrgsAndProjectsAction') ??
+                Sentry.startTransaction('FetchOrgsAndProjectsAction', 'action');
 
         final api = SentryApi(store.state.globalState.authToken);
         try {
