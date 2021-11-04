@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sentry_mobile/utils/platform_icons.dart';
 
+import '../../mixin/sentry_state_transaction_mixin.dart';
 import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
 import '../../screens/projects/project_item.dart';
@@ -15,22 +15,7 @@ class ProjectsScreen extends StatefulWidget {
   _ProjectsScreenState createState() => _ProjectsScreenState();
 }
 
-class _ProjectsScreenState extends State<ProjectsScreen> {
-
-  ISentrySpan? transaction;
-
-  @override
-  void initState() {
-    super.initState();
-    transaction = Sentry.startTransaction(
-      '_ProjectsScreenState',
-      'ui.load',
-      bindToScope: true,
-    );
-    WidgetsBinding.instance?.addPostFrameCallback((_){
-      transaction?.finish();
-    });
-  }
+class _ProjectsScreenState extends State<ProjectsScreen> with SentryStateTransactionMixin<ProjectsScreen> {
 
   @override
   Widget build(BuildContext context) {

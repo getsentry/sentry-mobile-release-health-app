@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:in_app_review/in_app_review.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sentry_mobile/redux/actions.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../mixin/sentry_state_transaction_mixin.dart';
 import '../../redux/state/app_state.dart';
 import '../../screens/empty/empty_screen.dart';
 import '../../types/session_status.dart';
@@ -24,7 +24,7 @@ class HealthScreen extends StatefulWidget {
 }
 
 class _HealthScreenState extends State<HealthScreen>
-    with WidgetsBindingObserver {
+    with WidgetsBindingObserver,  SentryStateTransactionMixin<HealthScreen> {
   int? _index;
   bool _ratingPresented = false;
 
@@ -32,22 +32,11 @@ class _HealthScreenState extends State<HealthScreen>
   final InAppReview inAppReview = InAppReview.instance;
 
   PageController? _pageController;
-  ISentrySpan? transaction;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance?.addObserver(this);
-
-    transaction = Sentry.startTransaction(
-      '_HealthScreenState',
-      'ui.load',
-      bindToScope: true,
-    );
-
-    WidgetsBinding.instance?.addPostFrameCallback((_){
-      transaction?.finish();
-    });
   }
 
   @override

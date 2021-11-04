@@ -3,8 +3,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 
+import '../../mixin/sentry_state_transaction_mixin.dart';
 import '../../utils/sentry_colors.dart';
 
 class ScannerScreen extends StatefulWidget {
@@ -16,25 +16,10 @@ class ScannerScreen extends StatefulWidget {
   State<StatefulWidget> createState() => _ScannerScreenState();
 }
 
-class _ScannerScreenState extends State<ScannerScreen> {
+class _ScannerScreenState extends State<ScannerScreen> with SentryStateTransactionMixin<ScannerScreen> {
   QRViewController? _controller;
   final GlobalKey _scannerKey = GlobalKey(debugLabel: 'QR');
   var _popped = false;
-
-  ISentrySpan? transaction;
-
-  @override
-  void initState() {
-    super.initState();
-    transaction = Sentry.startTransaction(
-      '_ScannerScreenState',
-      'ui.load',
-      bindToScope: true,
-    );
-    WidgetsBinding.instance?.addPostFrameCallback((_){
-      transaction?.finish();
-    });
-  }
 
   // In order to get hot reload to work we need to pause the camera if the platform
   // is android, or resume the camera if the platform is iOS.

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 
+import '../../mixin/sentry_state_transaction_mixin.dart';
 import '../../screens/connect/connect_screen.dart';
 import '../../screens/onboarding/onboarding_consent_screen.dart';
 import '../../screens/onboarding/onboarding_info_screen.dart';
@@ -14,25 +14,10 @@ class OnboardingScreen extends StatefulWidget {
   _OnboardingScreenState createState() => _OnboardingScreenState();
 }
 
-class _OnboardingScreenState extends State<OnboardingScreen> {
+class _OnboardingScreenState extends State<OnboardingScreen> with SentryStateTransactionMixin<OnboardingScreen> {
   final _pageController = PageController();
   final _pageItems = OnboardingScreenItem.values;
   var _currentPage = 0;
-
-  ISentrySpan? transaction;
-
-  @override
-  void initState() {
-    super.initState();
-    transaction = Sentry.startTransaction(
-      '_OnboardingScreenState',
-      'ui.load',
-      bindToScope: true,
-    );
-    WidgetsBinding.instance?.addPostFrameCallback((_){
-      transaction?.finish();
-    });
-  }
 
   @override
   void didChangeDependencies() {

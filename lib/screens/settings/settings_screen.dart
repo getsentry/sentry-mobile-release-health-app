@@ -3,11 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:in_app_review/in_app_review.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sentry_mobile/screens/html/html_screen.dart';
 import 'package:sentry_mobile/screens/license/license_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../mixin/sentry_state_transaction_mixin.dart';
 import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
 import '../../screens/debug/sentry_sdk_debug_screen.dart';
@@ -23,23 +23,8 @@ class SettingsScreen extends StatefulWidget {
   _SettingsScreenState createState() => _SettingsScreenState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> {
+class _SettingsScreenState extends State<SettingsScreen> with SentryStateTransactionMixin<SettingsScreen> {
   final InAppReview inAppReview = InAppReview.instance;
-
-  ISentrySpan? transaction;
-
-  @override
-  void initState() {
-    super.initState();
-    transaction = Sentry.startTransaction(
-      '_SettingsScreenState',
-      'ui.load',
-      bindToScope: true,
-    );
-    WidgetsBinding.instance?.addPostFrameCallback((_){
-      transaction?.finish();
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
