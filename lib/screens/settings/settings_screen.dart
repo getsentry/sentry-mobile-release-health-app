@@ -3,27 +3,43 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sentry_mobile/screens/html/html_screen.dart';
 import 'package:sentry_mobile/screens/license/license_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
-import '../../screens/debug/sentry_flutter_screen.dart';
+import '../../screens/debug/sentry_sdk_debug_screen.dart';
 import '../../screens/projects/projects_screen.dart';
 import '../../utils/sentry_colors.dart';
 import 'settings_header.dart';
 import 'settings_view_model.dart';
 
-class Settings extends StatefulWidget {
-  const Settings({Key? key}) : super(key: key);
+class SettingsScreen extends StatefulWidget {
+  const SettingsScreen({Key? key}) : super(key: key);
 
   @override
-  _SettingsState createState() => _SettingsState();
+  _SettingsScreenState createState() => _SettingsScreenState();
 }
 
-class _SettingsState extends State<Settings> {
+class _SettingsScreenState extends State<SettingsScreen> {
   final InAppReview inAppReview = InAppReview.instance;
+
+  ISentrySpan? transaction;
+
+  @override
+  void initState() {
+    super.initState();
+    transaction = Sentry.startTransaction(
+      '_SettingsScreenState',
+      'ui.load',
+      bindToScope: true,
+    );
+    WidgetsBinding.instance?.addPostFrameCallback((_){
+      transaction?.finish();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -210,7 +226,7 @@ class _SettingsState extends State<Settings> {
                           context,
                           MaterialPageRoute(
                               fullscreenDialog: true,
-                              builder: (context) => SentryFlutterScreen()),
+                              builder: (context) => SentrySDKDebugScreen()),
                         );
                       },
                       child: Text(viewModel.version,

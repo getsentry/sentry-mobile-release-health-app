@@ -6,7 +6,7 @@ import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
 import '../../utils/sentry_colors.dart';
 import '../../utils/sentry_icons.dart';
-import '../settings/settings.dart';
+import '../settings/settings_screen.dart';
 
 class MainAppBar extends StatelessWidget with PreferredSizeWidget {
   @override
@@ -51,7 +51,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
 
   Future<void> _pushSettings(BuildContext context) async {
     final bool? logout = await Navigator.of(context).push(
-      MaterialPageRoute(builder: (BuildContext context) => Settings()),
+      MaterialPageRoute(builder: (BuildContext context) => SettingsScreen()),
     );
     if (logout == true) {
       StoreProvider.of<AppState>(context).dispatch(LogoutAction());

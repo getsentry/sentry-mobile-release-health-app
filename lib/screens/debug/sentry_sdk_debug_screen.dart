@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
-class SentryFlutterScreen extends StatefulWidget {
+class SentrySDKDebugScreen extends StatefulWidget {
   @override
-  _SentryFlutterScreenState createState() => _SentryFlutterScreenState();
+  _SentrySDKDebugScreenState createState() => _SentrySDKDebugScreenState();
 }
 
-class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
+class _SentrySDKDebugScreenState extends State<SentrySDKDebugScreen> {
   static const platform = MethodChannel('app.mobile.sentry.io/nativeCrash');
   bool _loading = false;
 
@@ -37,6 +37,21 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
     _TypeToThrow.ERROR: false,
     _TypeToThrow.STRING: false,
   };
+
+  ISentrySpan? transaction;
+
+  @override
+  void initState() {
+    super.initState();
+    transaction = Sentry.startTransaction(
+      '_SentrySDKDebugScreenState',
+      'ui.load',
+      bindToScope: true,
+    );
+    WidgetsBinding.instance?.addPostFrameCallback((_){
+      transaction?.finish();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

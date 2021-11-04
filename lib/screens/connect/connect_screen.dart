@@ -1,6 +1,7 @@
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../redux/state/app_state.dart';
@@ -15,6 +16,21 @@ class ConnectScreen extends StatefulWidget {
 
 class _ConnectScreenState extends State<ConnectScreen> {
   var _loading = false;
+
+  ISentrySpan? transaction;
+
+  @override
+  void initState() {
+    super.initState();
+    transaction = Sentry.startTransaction(
+      '_ConnectScreenState',
+      'ui.load',
+      bindToScope: true,
+    );
+    WidgetsBinding.instance?.addPostFrameCallback((_){
+      transaction?.finish();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sentry_mobile/redux/actions.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -31,11 +32,22 @@ class _HealthScreenState extends State<HealthScreen>
   final InAppReview inAppReview = InAppReview.instance;
 
   PageController? _pageController;
+  ISentrySpan? transaction;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance?.addObserver(this);
+
+    transaction = Sentry.startTransaction(
+      '_HealthScreenState',
+      'ui.load',
+      bindToScope: true,
+    );
+
+    WidgetsBinding.instance?.addPostFrameCallback((_){
+      transaction?.finish();
+    });
   }
 
   @override

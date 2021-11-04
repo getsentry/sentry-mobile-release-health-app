@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import '../../screens/connect/connect_screen.dart';
 import '../../screens/onboarding/onboarding_consent_screen.dart';
@@ -17,6 +18,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final _pageController = PageController();
   final _pageItems = OnboardingScreenItem.values;
   var _currentPage = 0;
+
+  ISentrySpan? transaction;
+
+  @override
+  void initState() {
+    super.initState();
+    transaction = Sentry.startTransaction(
+      '_OnboardingScreenState',
+      'ui.load',
+      bindToScope: true,
+    );
+    WidgetsBinding.instance?.addPostFrameCallback((_){
+      transaction?.finish();
+    });
+  }
 
   @override
   void didChangeDependencies() {

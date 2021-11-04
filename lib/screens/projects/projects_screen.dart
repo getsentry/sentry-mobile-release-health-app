@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sentry_mobile/utils/platform_icons.dart';
 
 import '../../redux/actions.dart';
@@ -15,6 +16,22 @@ class ProjectsScreen extends StatefulWidget {
 }
 
 class _ProjectsScreenState extends State<ProjectsScreen> {
+
+  ISentrySpan? transaction;
+
+  @override
+  void initState() {
+    super.initState();
+    transaction = Sentry.startTransaction(
+      '_ProjectsScreenState',
+      'ui.load',
+      bindToScope: true,
+    );
+    WidgetsBinding.instance?.addPostFrameCallback((_){
+      transaction?.finish();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return StoreProvider<AppState>(
