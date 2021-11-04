@@ -74,7 +74,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
             } catch (e) {
               projectIdsSpan.throwable = e;
               if (e is ApiError && e.statusCode == 400) {
-                projectIdsSpan.status = SpanStatus.notFound();
+                projectIdsSpan.status = SpanStatus.fromHttpStatusCode(400);
                 Sentry.addBreadcrumb(Breadcrumb(
                     message: 'Org has no projects -> $e',
                     level: SentryLevel.error));
