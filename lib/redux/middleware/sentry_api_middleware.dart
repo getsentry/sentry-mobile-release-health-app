@@ -19,7 +19,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
       final thunkAction = (Store<AppState> store) async {
         final orgsAndProjectsSpan = Sentry.getSpan()
                 ?.startChild('FetchOrgsAndProjectsAction') ??
-            Sentry.startTransaction('FetchOrgsAndProjectsAction', 'ui.load');
+            Sentry.startTransaction('FetchOrgsAndProjectsAction', 'action');
 
         final api = SentryApi(store.state.globalState.authToken);
         try {
