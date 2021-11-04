@@ -58,6 +58,7 @@ class SentrySdkMiddleware extends MiddlewareClass<AppState> {
       // as a not in app frame.
       options.addInAppInclude('sentry_mobile');
       options.considerInAppFramesByDefault = false;
+      options.tracesSampleRate = 1.0;
     });
   }
 
