@@ -40,6 +40,13 @@ class _HealthScreenState extends State<HealthScreen>
   }
 
   @override
+  void didChangeDependencies() {
+    StoreProvider.of<AppState>(context)
+        .dispatch(FetchOrgsAndProjectsAction(false));
+    super.didChangeDependencies();
+  }
+
+  @override
   void dispose() {
     WidgetsBinding.instance?.removeObserver(this);
     super.dispose();
@@ -50,7 +57,6 @@ class _HealthScreenState extends State<HealthScreen>
     return StoreConnector<AppState, HealthScreenViewModel>(
       builder: (_, viewModel) => _content(viewModel),
       converter: (store) => HealthScreenViewModel.fromStore(store),
-      onInitialBuild: (viewModel) => viewModel.fetchProjects(),
     );
   }
 
