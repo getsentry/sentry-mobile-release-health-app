@@ -61,6 +61,8 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
                 Sentry.addBreadcrumb(Breadcrumb(
                     message: 'Org has no projects -> $e',
                     level: SentryLevel.error));
+              } else {
+                rethrow;
               }
             }
           }
