@@ -42,6 +42,12 @@ class _SentrySDKDebugScreenState extends State<SentrySDKDebugScreen>
   };
 
   @override
+  String transactionName() {
+    /// Example of how to override transaction name.
+    return '_DebugScreenState';
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: Text('Sentry Flutter SDK - Debug')),

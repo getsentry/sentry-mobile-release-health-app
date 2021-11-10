@@ -10,7 +10,7 @@ mixin SentryStateTransactionMixin<T extends StatefulWidget> on State<T> {
   void initState() {
     super.initState();
     transaction = Sentry.startTransaction(
-      runtimeType.toString(),
+      transactionName(),
       'ui.load',
       bindToScope: true,
     );
@@ -18,5 +18,11 @@ mixin SentryStateTransactionMixin<T extends StatefulWidget> on State<T> {
       transaction?.status ??= SpanStatus.ok();
       transaction?.finish();
     });
+  }
+
+  /// Per default this method returns `runtimeType.toString()`. Override to
+  /// provide a custom transaction name.
+  String transactionName() {
+    return runtimeType.toString();
   }
 }
