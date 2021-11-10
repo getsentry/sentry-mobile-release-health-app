@@ -1,7 +1,5 @@
 library after_layout;
 
-import 'dart:ui';
-
 import 'package:flutter/widgets.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
