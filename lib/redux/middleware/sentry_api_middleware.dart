@@ -17,12 +17,11 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
   dynamic call(Store<AppState> store, action, next) {
     if (action is FetchOrgsAndProjectsAction) {
       final thunkAction = (Store<AppState> store) async {
-        
         final syncSpan = Sentry.getSpan()?.startChild(
           'ui.load',
           description: 'Sync organizations and projects in multi-step process.',
         );
-        
+
         final api = SentryApi(store.state.globalState.authToken);
         try {
           store.dispatch(FetchOrgsAndProjectsProgressAction(
