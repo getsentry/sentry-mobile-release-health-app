@@ -15,7 +15,8 @@ mixin SentryStateTransactionMixin<T extends StatefulWidget> on State<T> {
       bindToScope: true,
     );
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      transaction?.finish(status: SpanStatus.ok());
+      transaction?.status ??= SpanStatus.ok();
+      transaction?.finish();
     });
   }
 }
