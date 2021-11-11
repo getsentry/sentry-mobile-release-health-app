@@ -1,10 +1,10 @@
-import 'line_chart_point.dart';
+import 'chart_entry.dart';
 
-class LineChartData {
-  LineChartData(this.points, this.minX, this.maxX, this.minY, this.maxY,
+class DataData {
+  DataData(this.points, this.minX, this.maxX, this.minY, this.maxY,
       this.countX, this.countY);
 
-  final List<LineChartPoint> points;
+  final List<ChartEntry> points;
   final double minX;
   final double maxX;
   final double minY;
@@ -14,8 +14,8 @@ class LineChartData {
   final double countY;
 
   /// Normalize data points so they all start at zero. Return min/max values.
-  static LineChartData prepareData(
-      {required List<LineChartPoint> points,
+  static DataData prepareData(
+      {required List<ChartEntry> points,
       double? preferredMinY,
       double? preferredMaxY}) {
     var minX = double.maxFinite;
@@ -52,15 +52,16 @@ class LineChartData {
       maxY = preferredMaxY;
     }
 
-    return LineChartData(
+    return DataData(
         points
-            .map((point) => LineChartPoint(point.x - minX, point.y - minY))
+            .map((point) => ChartEntry(point.x - minX, point.y - minY))
             .toList(),
         0,
         maxX - minX,
         0,
         maxY - minY,
         countX,
-        countY);
+        countY,
+    );
   }
 }

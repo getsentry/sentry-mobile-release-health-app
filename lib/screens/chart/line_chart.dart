@@ -3,8 +3,8 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
-import 'line_chart_data.dart';
-import 'line_chart_point.dart';
+import 'chart_data.dart';
+import 'chart_entry.dart';
 
 class LineChart extends StatelessWidget {
   LineChart(
@@ -15,7 +15,7 @@ class LineChart extends StatelessWidget {
       required this.gradientEnd,
       required this.cubicLines});
 
-  final LineChartData? data;
+  final DataData? data;
   final double lineWidth;
   final Color lineColor;
   final Color gradientStart;
@@ -43,7 +43,7 @@ class _LineChartPainter extends CustomPainter {
     linePadding = lineWidth / 2.0;
   }
 
-  LineChartData? data;
+  DataData? data;
   late Paint linePaint;
   late double linePadding;
   Color gradientStart;
@@ -75,9 +75,9 @@ class _LineChartPainter extends CustomPainter {
     };
 
     final pointsWithoutFirst =
-        data.points.map((point) => LineChartPoint(point.x, point.y)).toList();
+        data.points.map((point) => ChartEntry(point.x, point.y)).toList();
     final firstPoint = pointsWithoutFirst.removeAt(0);
-    var previous = LineChartPoint(
+    var previous = ChartEntry(
         screenCoordinateX(firstPoint.x), screenCoordinateY(firstPoint.y));
 
     // Line
@@ -85,7 +85,7 @@ class _LineChartPainter extends CustomPainter {
     final linePath = Path();
     linePath.moveTo(previous.x, flipY(previous.y));
 
-    final updateLinePath = (int index, LineChartPoint point) {
+    final updateLinePath = (int index, ChartEntry point) {
       final x1 = previous.x;
       final y1 = previous.y;
 
@@ -103,7 +103,7 @@ class _LineChartPainter extends CustomPainter {
       } else {
         linePath.cubicTo(cx1, flipY(cy1), cx2, flipY(cy2), x2, flipY(y2));
       }
-      previous = LineChartPoint(x2, y2);
+      previous = ChartEntry(x2, y2);
     };
     pointsWithoutFirst.asMap().forEach(updateLinePath);
 
@@ -140,7 +140,7 @@ class _LineChartPainter extends CustomPainter {
   }
 
   Path _createGradientPath(
-      Path linePath, Size size, LineChartPoint firstPoint) {
+      Path linePath, Size size, ChartEntry firstPoint) {
     final gradientPath = Path.from(linePath);
     gradientPath.lineTo(size.width, size.height);
     gradientPath.lineTo(0, size.height);

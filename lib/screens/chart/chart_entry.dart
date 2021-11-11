@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
-class LineChartPoint extends Equatable {
-  LineChartPoint(this.x, this.y);
+class ChartEntry extends Equatable {
+  ChartEntry(this.x, this.y);
   final double x;
   final double y;
 

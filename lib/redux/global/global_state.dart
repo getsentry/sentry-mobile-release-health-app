@@ -1,4 +1,4 @@
-import '../../screens/chart/line_chart_point.dart';
+import '../../screens/chart/chart_entry.dart';
 import '../../types/group.dart';
 import '../../types/organization.dart';
 import '../../types/project.dart';
@@ -201,21 +201,21 @@ class GlobalState {
       var total = 0;
       var previousTotal = 0;
 
-      var lineChartPoints = <LineChartPoint>[];
-      var previousLineChartPoints = <LineChartPoint>[];
+      var lineChartPoints = <ChartEntry>[];
+      var previousLineChartPoints = <ChartEntry>[];
 
       if (sessions != null) {
         final totalAndPoints =
             createTotalSessionCountAndLinePoints(sessionStatus, sessions);
         total = totalAndPoints[0] as int;
-        lineChartPoints = totalAndPoints[1] as List<LineChartPoint>;
+        lineChartPoints = totalAndPoints[1] as List<ChartEntry>;
       }
 
       if (previousSession != null) {
         final totalAndPoints = createTotalSessionCountAndLinePoints(
             sessionStatus, previousSession);
         previousTotal = totalAndPoints[0] as int;
-        previousLineChartPoints = totalAndPoints[1] as List<LineChartPoint>;
+        previousLineChartPoints = totalAndPoints[1] as List<ChartEntry>;
       }
 
       if (sessions != null) {
@@ -242,7 +242,7 @@ class GlobalState {
       total += group.totals!.sumSession!;
     }
 
-    final lineChartPoints = <LineChartPoint>[];
+    final lineChartPoints = <ChartEntry>[];
     for (var index = 0; index < sessions.intervals!.length; index++) {
       final interval = sessions.intervals![index];
       var sum = 0;
@@ -250,7 +250,7 @@ class GlobalState {
       for (final group in groups) {
         sum += group.series!.sumSession![index];
       }
-      lineChartPoints.add(LineChartPoint(
+      lineChartPoints.add(ChartEntry(
           interval.millisecondsSinceEpoch.toDouble(), sum.toDouble()));
     }
     return [total, lineChartPoints];

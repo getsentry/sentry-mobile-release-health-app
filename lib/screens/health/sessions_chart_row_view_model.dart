@@ -1,6 +1,6 @@
 import '../../redux/state/session_state.dart';
-import '../../screens/chart/line_chart_data.dart';
-import '../../screens/chart/line_chart_point.dart';
+import '../../screens/chart/chart_data.dart';
+import '../../screens/chart/chart_entry.dart';
 
 class SessionsChartRowViewModel {
   SessionsChartRowViewModel.create(SessionState? sessionState) {
@@ -9,12 +9,12 @@ class SessionsChartRowViewModel {
       percentChange = 0.0;
       numberOfIssues = 0;
     } else if (sessionState.sessionPoints.length < 2) {
-      data = LineChartData.prepareData(
-          points: [LineChartPoint(0, 0), LineChartPoint(1, 0)]);
+      data = DataData.prepareData(
+          points: [ChartEntry(0, 0), ChartEntry(1, 0)]);
       percentChange = 0.0;
       numberOfIssues = data!.countY.toInt();
     } else {
-      data = LineChartData.prepareData(points: sessionState.sessionPoints);
+      data = DataData.prepareData(points: sessionState.sessionPoints);
       final previousNumberOfSessions = sessionState.previousNumberOfSessions;
       if (previousNumberOfSessions != null) {
         percentChange = _percentChange(previousNumberOfSessions.toDouble(),
@@ -26,7 +26,7 @@ class SessionsChartRowViewModel {
     }
   }
 
-  LineChartData? data;
+  DataData? data;
   double? /*late*/ percentChange;
   late int numberOfIssues;
 

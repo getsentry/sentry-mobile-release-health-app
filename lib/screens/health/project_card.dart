@@ -8,7 +8,7 @@ import '../../utils/platform_icons.dart';
 import '../../utils/sentry_colors.dart';
 import '../../utils/session_formatting.dart';
 import '../chart/line_chart.dart';
-import '../chart/line_chart_data.dart';
+import '../chart/chart_data.dart';
 
 class ProjectCard extends StatelessWidget {
   ProjectCard(this.organizationName, this.project, this.release, this.sessions);
@@ -114,7 +114,7 @@ class ProjectCard extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(top: 12),
                             child: LineChart(
-                                data: LineChartData.prepareData(
+                                data: DataData.prepareData(
                                     points: sessions!.sessionPoints),
                                 lineWidth: 5.0,
                                 lineColor: Colors.black.withOpacity(0.05),
@@ -125,7 +125,7 @@ class ProjectCard extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(bottom: 12),
                             child: LineChart(
-                                data: LineChartData.prepareData(
+                                data: DataData.prepareData(
                                     points: sessions!.sessionPoints),
                                 lineWidth: 5.0,
                                 lineColor: Colors.white,

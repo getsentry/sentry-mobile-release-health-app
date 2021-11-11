@@ -1,5 +1,5 @@
 import 'package:sentry_mobile/redux/state/session_state.dart';
-import 'package:sentry_mobile/screens/chart/line_chart_point.dart';
+import 'package:sentry_mobile/screens/chart/chart_entry.dart';
 import 'package:sentry_mobile/screens/health/sessions_chart_row_view_model.dart';
 import 'package:test/test.dart';
 
@@ -7,13 +7,13 @@ void main() {
   group('createByHalvingPoints', () {
     test('data is points', () {
       final pointsBefore = [
-        LineChartPoint(0, 0),
-        LineChartPoint(1, 5),
+        ChartEntry(0, 0),
+        ChartEntry(1, 5),
       ];
 
       final points = [
-        LineChartPoint(0, 0),
-        LineChartPoint(1, 10),
+        ChartEntry(0, 0),
+        ChartEntry(1, 10),
       ];
 
       final sessionState = SessionState(
@@ -25,18 +25,18 @@ void main() {
 
       final sut = SessionsChartRowViewModel.create(sessionState);
       expect(sut.data!.points,
-          equals([LineChartPoint(0, 0), LineChartPoint(1, 10)]));
+          equals([ChartEntry(0, 0), ChartEntry(1, 10)]));
     });
 
     test('percentChange increase', () {
       final pointsBefore = [
-        LineChartPoint(0, 0),
-        LineChartPoint(1, 5),
+        ChartEntry(0, 0),
+        ChartEntry(1, 5),
       ];
 
       final points = [
-        LineChartPoint(0, 0),
-        LineChartPoint(1, 10),
+        ChartEntry(0, 0),
+        ChartEntry(1, 10),
       ];
 
       final sessionState = SessionState(
@@ -52,13 +52,13 @@ void main() {
 
     test('percentChange decrease', () {
       final pointsBefore = [
-        LineChartPoint(0, 0),
-        LineChartPoint(1, 10),
+        ChartEntry(0, 0),
+        ChartEntry(1, 10),
       ];
 
       final points = [
-        LineChartPoint(0, 0),
-        LineChartPoint(1, 8),
+        ChartEntry(0, 0),
+        ChartEntry(1, 8),
       ];
 
       final sessionState = SessionState(
@@ -82,7 +82,7 @@ void main() {
 
       final sut = SessionsChartRowViewModel.create(sessionState);
       expect(sut.data!.points,
-          equals([LineChartPoint(0, 0), LineChartPoint(1, 0)]));
+          equals([ChartEntry(0, 0), ChartEntry(1, 0)]));
     });
   });
 }

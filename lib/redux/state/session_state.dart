@@ -1,4 +1,4 @@
-import '../../screens/chart/line_chart_point.dart';
+import '../../screens/chart/chart_entry.dart';
 
 class SessionState {
   SessionState(
@@ -13,6 +13,6 @@ class SessionState {
   final int numberOfSessions;
   final int? previousNumberOfSessions;
 
-  final List<LineChartPoint> sessionPoints;
-  final List<LineChartPoint>? previousSessionPoints;
+  final List<ChartEntry> sessionPoints;
+  final List<ChartEntry>? previousSessionPoints;
 }

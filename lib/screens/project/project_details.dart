@@ -4,8 +4,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:sentry_mobile/redux/state/app_state.dart';
 import 'package:sentry_mobile/screens/chart/line_chart.dart';
-import 'package:sentry_mobile/screens/chart/line_chart_data.dart';
-import 'package:sentry_mobile/screens/chart/line_chart_point.dart';
+import 'package:sentry_mobile/screens/chart/chart_data.dart';
+import 'package:sentry_mobile/screens/chart/chart_entry.dart';
 import 'package:sentry_mobile/screens/health/health_card.dart';
 import 'package:sentry_mobile/screens/platform/platform_image.dart';
 import 'package:sentry_mobile/utils/sentry_colors.dart';
@@ -28,7 +28,7 @@ class _ProjectDetailsState extends State<ProjectDetails> {
 
   _ProjectDetailsState(this.projectId);
   final String projectId;
-  
+
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ProjectDetailsViewModel>(
@@ -223,32 +223,32 @@ class _ProjectDetailsState extends State<ProjectDetails> {
     );
   }
 
-  LineChartData placeholderData = LineChartData.prepareData(
+  DataData placeholderData = DataData.prepareData(
     points: [
-      LineChartPoint(0, 100),
-      LineChartPoint(1, 100),
-      LineChartPoint(2, 100),
-      LineChartPoint(3, 100),
-      LineChartPoint(4, 100),
-      LineChartPoint(5, 100),
-      LineChartPoint(6, 100),
-      LineChartPoint(7, 100),
-      LineChartPoint(8, 100),
-      LineChartPoint(9, 100),
-      LineChartPoint(10, 97),
-      LineChartPoint(11, 96),
-      LineChartPoint(12, 90),
-      LineChartPoint(13, 82),
-      LineChartPoint(14, 80),
-      LineChartPoint(15, 99),
-      LineChartPoint(16, 100),
-      LineChartPoint(17, 100),
-      LineChartPoint(18, 100),
-      LineChartPoint(19, 100),
-      LineChartPoint(20, 100),
-      LineChartPoint(21, 100),
-      LineChartPoint(22, 100),
-      LineChartPoint(23, 100),
+      ChartEntry(0, 100),
+      ChartEntry(1, 100),
+      ChartEntry(2, 100),
+      ChartEntry(3, 100),
+      ChartEntry(4, 100),
+      ChartEntry(5, 100),
+      ChartEntry(6, 100),
+      ChartEntry(7, 100),
+      ChartEntry(8, 100),
+      ChartEntry(9, 100),
+      ChartEntry(10, 97),
+      ChartEntry(11, 96),
+      ChartEntry(12, 90),
+      ChartEntry(13, 82),
+      ChartEntry(14, 80),
+      ChartEntry(15, 99),
+      ChartEntry(16, 100),
+      ChartEntry(17, 100),
+      ChartEntry(18, 100),
+      ChartEntry(19, 100),
+      ChartEntry(20, 100),
+      ChartEntry(21, 100),
+      ChartEntry(22, 100),
+      ChartEntry(23, 100),
     ],
     preferredMinY: 0,
     preferredMaxY: 100
