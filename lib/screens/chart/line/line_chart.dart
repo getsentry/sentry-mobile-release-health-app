@@ -44,7 +44,7 @@ class _LineChartPainter extends CustomPainter {
     if (data == null) {
       return;
     }
-    if (data.points.length < 2) {
+    if (data.entries.length < 2) {
       return;
     }
 
@@ -63,7 +63,7 @@ class _LineChartPainter extends CustomPainter {
     };
 
     final pointsWithoutFirst =
-        data.points.map((point) => ChartEntry(point.x, point.y)).toList();
+        data.entries.map((point) => ChartEntry(point.x, point.y)).toList();
     final firstPoint = pointsWithoutFirst.removeAt(0);
     var previous = ChartEntry(
         screenCoordinateX(firstPoint.x), screenCoordinateY(firstPoint.y));
@@ -111,7 +111,7 @@ class _LineChartPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     final oldLineChartPainter = oldDelegate as _LineChartPainter;
-    return oldLineChartPainter.data?.points != data?.points;
+    return oldLineChartPainter.data?.entries != data?.entries;
   }
 
   // Helper

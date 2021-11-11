@@ -1,39 +1,70 @@
 import 'dart:ui';
-import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:sentry_mobile/screens/chart/bar/bar_chart_options.dart';
 
 import '../chart_data.dart';
+import '../chart_entry.dart';
+import 'bar_chart_options.dart';
 
 class BarChart extends StatelessWidget {
 
-  const BarChart(this.chartData, this.options);
+  const BarChart(this.data, {required this.options});
 
-  final ChartData chartData;
+  final ChartData data;
   final BarChartOptions options;
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return CustomPaint(
+      painter: _BarChartPainter.create(data, options),
+      child: Center(),
+    );
   }
 }
 
 class _BarChartPainter extends CustomPainter {
-  _BarChartPainter(this.chartData);
-
-  ChartData chartData;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    // TODO: implement paint
+  _BarChartPainter.create(this.data, this.options) {
+    barPaint = Paint()
+      ..isAntiAlias = true
+      ..style = PaintingStyle.fill
+      ..color = options.barColor;
   }
+
+  final ChartData data;
+  final BarChartOptions options;
+
+  late Paint barPaint;
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    // TODO: implement shouldRepaint
-    throw UnimplementedError();
+    return false;
   }
 
+  @override
+  void paint(Canvas canvas, Size size) {
+    final screenCoordinateY = (double y) {
+      return _normalized(y, data.minY, data.maxY) * size.height;
+    };
+
+    final slotWidth = size.width / data.entries.length;
+    final barWidth = slotWidth * options.barWidth;
+
+    final drawBar = (int index, ChartEntry entry) {
+      final barHeight = screenCoordinateY(entry.y);
+      final dx = slotWidth * index + (slotWidth - barWidth) / 2;
+      final dy = size.height - barHeight;
+      canvas.drawRect(
+          Offset(dx, dy) & Size(barWidth, barHeight),
+          barPaint
+      );
+    };
+    data.entries.asMap().forEach(drawBar);
+  }
+
+  double _normalized(double point, double min, double max) {
+    if ((max - min) == 0) {
+      return 0;
+    }
+    return (point - min) / (max - min);
+  }
 }

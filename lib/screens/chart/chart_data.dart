@@ -1,10 +1,10 @@
 import 'chart_entry.dart';
 
 class ChartData {
-  ChartData(this.points, this.minX, this.maxX, this.minY, this.maxY,
+  ChartData(this.entries, this.minX, this.maxX, this.minY, this.maxY,
       this.countX, this.countY);
 
-  final List<ChartEntry> points;
+  final List<ChartEntry> entries;
   final double minX;
   final double maxX;
   final double minY;

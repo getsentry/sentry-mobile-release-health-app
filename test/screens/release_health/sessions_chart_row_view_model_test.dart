@@ -24,7 +24,7 @@ void main() {
           previousSessionPoints: pointsBefore);
 
       final sut = SessionsChartRowViewModel.create(sessionState);
-      expect(sut.data!.points,
+      expect(sut.data!.entries,
           equals([ChartEntry(0, 0), ChartEntry(1, 10)]));
     });
 
@@ -81,7 +81,7 @@ void main() {
           previousSessionPoints: []);
 
       final sut = SessionsChartRowViewModel.create(sessionState);
-      expect(sut.data!.points,
+      expect(sut.data!.entries,
           equals([ChartEntry(0, 0), ChartEntry(1, 0)]));
     });
   });

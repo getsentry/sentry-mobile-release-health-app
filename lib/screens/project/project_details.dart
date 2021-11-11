@@ -1,16 +1,17 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:sentry_mobile/redux/state/app_state.dart';
-import 'package:sentry_mobile/screens/chart/line/line_chart.dart';
+import 'package:sentry_mobile/screens/chart/bar/bar_chart.dart';
+import 'package:sentry_mobile/screens/chart/bar/bar_chart_options.dart';
 import 'package:sentry_mobile/screens/chart/chart_data.dart';
 import 'package:sentry_mobile/screens/chart/chart_entry.dart';
+import 'package:sentry_mobile/screens/chart/line/line_chart.dart';
 import 'package:sentry_mobile/screens/health/health_card.dart';
 import 'package:sentry_mobile/screens/platform/platform_image.dart';
 import 'package:sentry_mobile/utils/sentry_colors.dart';
-import '../chart/line/line_chart_options.dart';
 
+import '../chart/line/line_chart_options.dart';
 import 'project_details_view_model.dart';
 
 class ProjectDetails extends StatefulWidget {
@@ -91,7 +92,7 @@ class _ProjectDetailsState extends State<ProjectDetails> {
                       child: Container(
                         padding: EdgeInsets.only(left: 12, right: 12, top: 12, bottom: 12),
                         child: LineChart(
-                          placeholderData,
+                          dummyLineChartData,
                           options: LineChartOptions(
                             lineWidth: 2.0,
                             lineColor: SentryColors.buttercup,
@@ -163,14 +164,11 @@ class _ProjectDetailsState extends State<ProjectDetails> {
                     Expanded(
                         child: Container(
                           padding: EdgeInsets.only(left: 12, right: 12, top: 16, bottom: 12),
-                          child: LineChart(
-                            placeholderData,
-                            options: LineChartOptions(
-                              lineWidth: 2.0,
-                              lineColor: SentryColors.burntSienna,
-                              gradientStart: SentryColors.burntSienna.withOpacity(0.5),
-                              gradientEnd: SentryColors.burntSienna.withOpacity(0.1),
-                              cubicLines: true,
+                          child: BarChart(
+                            dummyBarChartData,
+                            options: BarChartOptions(
+                              barColor: SentryColors.burntSienna,
+                              barWidth: 0.9,
                             ),
                           ),
                         )
@@ -228,7 +226,7 @@ class _ProjectDetailsState extends State<ProjectDetails> {
     );
   }
 
-  ChartData placeholderData = ChartData.prepareData(
+  ChartData dummyLineChartData = ChartData.prepareData(
     points: [
       ChartEntry(0, 100),
       ChartEntry(1, 100),
@@ -257,5 +255,23 @@ class _ProjectDetailsState extends State<ProjectDetails> {
     ],
     preferredMinY: 0,
     preferredMaxY: 100
+  );
+
+  ChartData dummyBarChartData = ChartData.prepareData(
+      points: [
+        ChartEntry(0, 20),
+        ChartEntry(1, 50),
+        ChartEntry(2, 5),
+        ChartEntry(3, 100),
+        ChartEntry(4, 100),
+        ChartEntry(5, 20),
+        ChartEntry(6, 30),
+        ChartEntry(7, 11),
+        ChartEntry(8, 2),
+        ChartEntry(9, 9),
+        ChartEntry(10, 10),
+      ],
+      preferredMinY: 0,
+      preferredMaxY: 100
   );
 }
