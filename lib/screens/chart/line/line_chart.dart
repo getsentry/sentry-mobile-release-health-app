@@ -3,52 +3,40 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
-import 'chart_data.dart';
-import 'chart_entry.dart';
+import '../chart_data.dart';
+import '../chart_entry.dart';
+import 'line_chart_options.dart';
 
 class LineChart extends StatelessWidget {
-  LineChart(
-      {required this.data,
-      required this.lineWidth,
-      required this.lineColor,
-      required this.gradientStart,
-      required this.gradientEnd,
-      required this.cubicLines});
+  const LineChart(this.data, {required this.options});
 
-  final DataData? data;
-  final double lineWidth;
-  final Color lineColor;
-  final Color gradientStart;
-  final Color gradientEnd;
-  final bool cubicLines;
+  final ChartData? data;
+  final LineChartOptions options;
 
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      painter: _LineChartPainter.create(
-          data, lineWidth, lineColor, gradientStart, gradientEnd, cubicLines),
+      painter: _LineChartPainter.create(data, options),
       child: Center(),
     );
   }
 }
 
 class _LineChartPainter extends CustomPainter {
-  _LineChartPainter.create(this.data, double lineWidth, Color lineColor,
-      this.gradientStart, this.gradientEnd, this.cubicLines) {
+  _LineChartPainter.create(this.data, this.options) {
     linePaint = Paint()
       ..isAntiAlias = true
       ..style = PaintingStyle.stroke
-      ..strokeWidth = lineWidth
-      ..color = lineColor;
-    linePadding = lineWidth / 2.0;
+      ..strokeWidth = options.lineWidth
+      ..color = options.lineColor;
+    linePadding = options.lineWidth / 2.0;
   }
 
-  DataData? data;
+  final ChartData? data;
+  final LineChartOptions options;
+
   late Paint linePaint;
   late double linePadding;
-  Color gradientStart;
-  Color gradientEnd;
-  bool cubicLines;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -98,7 +86,7 @@ class _LineChartPainter extends CustomPainter {
       final cx2 = (x1 + x2) / 2;
       final cy2 = y2;
 
-      if (y1 == y2 || !cubicLines) {
+      if (y1 == y2 || !options.cubicLines) {
         linePath.lineTo(x2, flipY(y2));
       } else {
         linePath.cubicTo(cx1, flipY(cy1), cx2, flipY(cy2), x2, flipY(y2));
@@ -107,15 +95,16 @@ class _LineChartPainter extends CustomPainter {
     };
     pointsWithoutFirst.asMap().forEach(updateLinePath);
 
-    // Gradient
-
-    final gradientPaint =
-        _createGradientPaint(size, gradientStart, gradientEnd);
-    final gradientPath = _createGradientPath(linePath, size, firstPoint);
-
     // Draw
 
-    canvas.drawPath(gradientPath, gradientPaint);
+    final gradientStart = options.gradientStart;
+    final gradientEnd = options.gradientEnd;
+    if (gradientStart != null && gradientEnd != null) {
+      final gradientPaint =
+      _createGradientPaint(size, gradientStart, gradientEnd);
+      final gradientPath = _createGradientPath(linePath, size, firstPoint);
+      canvas.drawPath(gradientPath, gradientPaint);
+    }
     canvas.drawPath(linePath, linePaint);
   }
 

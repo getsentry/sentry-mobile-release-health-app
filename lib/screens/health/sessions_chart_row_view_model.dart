@@ -9,12 +9,12 @@ class SessionsChartRowViewModel {
       percentChange = 0.0;
       numberOfIssues = 0;
     } else if (sessionState.sessionPoints.length < 2) {
-      data = DataData.prepareData(
+      data = ChartData.prepareData(
           points: [ChartEntry(0, 0), ChartEntry(1, 0)]);
       percentChange = 0.0;
       numberOfIssues = data!.countY.toInt();
     } else {
-      data = DataData.prepareData(points: sessionState.sessionPoints);
+      data = ChartData.prepareData(points: sessionState.sessionPoints);
       final previousNumberOfSessions = sessionState.previousNumberOfSessions;
       if (previousNumberOfSessions != null) {
         percentChange = _percentChange(previousNumberOfSessions.toDouble(),
@@ -26,7 +26,7 @@ class SessionsChartRowViewModel {
     }
   }
 
-  DataData? data;
+  ChartData? data;
   double? /*late*/ percentChange;
   late int numberOfIssues;
 

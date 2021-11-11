@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import '../../redux/state/session_state.dart';
-import '../../screens/chart/line_chart.dart';
 import '../../screens/health/sessions_chart_row_view_model.dart';
 import '../../utils/sentry_colors.dart';
 import '../../utils/sentry_icons.dart';
 import '../../utils/session_formatting.dart';
+import '../chart/line/line_chart.dart';
+import '../chart/line/line_chart_options.dart';
+
 
 class SessionsChartRow extends StatelessWidget {
   SessionsChartRow(
@@ -64,12 +67,14 @@ class SessionsChartRow extends StatelessWidget {
                     : Container(
                         margin: EdgeInsets.symmetric(horizontal: 12),
                         child: LineChart(
-                            data: viewModel.data!,
-                            lineWidth: 2.0,
+                          viewModel.data!,
+                          options: LineChartOptions(
+                            lineWidth: 5.0,
                             lineColor: color,
                             gradientStart: color.withAlpha(84),
                             gradientEnd: color.withAlpha(28),
-                            cubicLines: false),
+                          ),
+                        ),
                         height: 35,
                       )),
             Container(

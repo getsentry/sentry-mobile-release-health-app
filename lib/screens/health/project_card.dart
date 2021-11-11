@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:sentry_mobile/screens/chart/line/line_chart_options.dart';
 
 import '../../redux/state/session_state.dart';
 import '../../types/project.dart';
@@ -7,7 +8,7 @@ import '../../types/release.dart';
 import '../../utils/platform_icons.dart';
 import '../../utils/sentry_colors.dart';
 import '../../utils/session_formatting.dart';
-import '../chart/line_chart.dart';
+import '../chart/line/line_chart.dart';
 import '../chart/chart_data.dart';
 
 class ProjectCard extends StatelessWidget {
@@ -114,24 +115,26 @@ class ProjectCard extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(top: 12),
                             child: LineChart(
-                                data: DataData.prepareData(
-                                    points: sessions!.sessionPoints),
-                                lineWidth: 5.0,
-                                lineColor: Colors.black.withOpacity(0.05),
-                                gradientStart: Colors.transparent,
-                                gradientEnd: Colors.transparent,
-                                cubicLines: false),
+                                ChartData.prepareData(
+                                    points: sessions!.sessionPoints,
+                                ),
+                                options: LineChartOptions(
+                                    lineWidth: 5.0,
+                                    lineColor: Colors.black.withOpacity(0.05)
+                                ),
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 12),
                             child: LineChart(
-                                data: DataData.prepareData(
-                                    points: sessions!.sessionPoints),
-                                lineWidth: 5.0,
-                                lineColor: Colors.white,
-                                gradientStart: Colors.transparent,
-                                gradientEnd: Colors.transparent,
-                                cubicLines: false),
+                                ChartData.prepareData(
+                                    points: sessions!.sessionPoints,
+                                ),
+                                options: LineChartOptions(
+                                    lineWidth: 5.0,
+                                    lineColor: Colors.white
+                                ),
+                            ),
                           ),
                         ])),
               LayoutBuilder(builder:

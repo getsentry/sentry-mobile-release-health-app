@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 void main() {
   group('prepareData', () {
     test('xMin xMax normalized', () {
-      final sut = DataData.prepareData(
+      final sut = ChartData.prepareData(
           points: [ChartEntry(10, 0), ChartEntry(12, 0)]);
 
       expect(sut.minX, equals(0));
@@ -13,14 +13,14 @@ void main() {
     });
 
     test('xMax one point', () {
-      final sut = DataData.prepareData(points: [ChartEntry(10, 0)]);
+      final sut = ChartData.prepareData(points: [ChartEntry(10, 0)]);
 
       expect(sut.minY, equals(0));
       expect(sut.maxY, equals(0));
     });
 
     test('yMin yMax normalized', () {
-      final sut = DataData.prepareData(
+      final sut = ChartData.prepareData(
           points: [ChartEntry(0, 10), ChartEntry(1, 12)]);
 
       expect(sut.minY, equals(0));
@@ -28,7 +28,7 @@ void main() {
     });
 
     test('yMax one point', () {
-      final sut = DataData.prepareData(points: [ChartEntry(0, 10)]);
+      final sut = ChartData.prepareData(points: [ChartEntry(0, 10)]);
 
       expect(sut.minY, equals(0));
       expect(sut.maxY, equals(0));

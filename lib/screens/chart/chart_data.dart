@@ -1,7 +1,7 @@
 import 'chart_entry.dart';
 
-class DataData {
-  DataData(this.points, this.minX, this.maxX, this.minY, this.maxY,
+class ChartData {
+  ChartData(this.points, this.minX, this.maxX, this.minY, this.maxY,
       this.countX, this.countY);
 
   final List<ChartEntry> points;
@@ -14,7 +14,7 @@ class DataData {
   final double countY;
 
   /// Normalize data points so they all start at zero. Return min/max values.
-  static DataData prepareData(
+  static ChartData prepareData(
       {required List<ChartEntry> points,
       double? preferredMinY,
       double? preferredMaxY}) {
@@ -52,7 +52,7 @@ class DataData {
       maxY = preferredMaxY;
     }
 
-    return DataData(
+    return ChartData(
         points
             .map((point) => ChartEntry(point.x - minX, point.y - minY))
             .toList(),

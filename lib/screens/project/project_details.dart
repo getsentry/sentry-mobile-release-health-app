@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:sentry_mobile/redux/state/app_state.dart';
-import 'package:sentry_mobile/screens/chart/line_chart.dart';
+import 'package:sentry_mobile/screens/chart/line/line_chart.dart';
 import 'package:sentry_mobile/screens/chart/chart_data.dart';
 import 'package:sentry_mobile/screens/chart/chart_entry.dart';
 import 'package:sentry_mobile/screens/health/health_card.dart';
 import 'package:sentry_mobile/screens/platform/platform_image.dart';
 import 'package:sentry_mobile/utils/sentry_colors.dart';
+import '../chart/line/line_chart_options.dart';
 
 import 'project_details_view_model.dart';
 
@@ -90,12 +91,14 @@ class _ProjectDetailsState extends State<ProjectDetails> {
                       child: Container(
                         padding: EdgeInsets.only(left: 12, right: 12, top: 12, bottom: 12),
                         child: LineChart(
-                          data: placeholderData,
-                          lineWidth: 2.0,
-                          lineColor: SentryColors.buttercup,
-                          gradientStart: SentryColors.buttercup.withOpacity(0.5),
-                          gradientEnd: SentryColors.buttercup.withOpacity(0.1),
-                          cubicLines: true,
+                          placeholderData,
+                          options: LineChartOptions(
+                            lineWidth: 2.0,
+                            lineColor: SentryColors.buttercup,
+                            gradientStart: SentryColors.buttercup.withOpacity(0.5),
+                            gradientEnd: SentryColors.buttercup.withOpacity(0.1),
+                            cubicLines: true,
+                          ),
                         ),
                       )
                     ),
@@ -161,12 +164,14 @@ class _ProjectDetailsState extends State<ProjectDetails> {
                         child: Container(
                           padding: EdgeInsets.only(left: 12, right: 12, top: 16, bottom: 12),
                           child: LineChart(
-                            data: placeholderData,
-                            lineWidth: 2.0,
-                            lineColor: SentryColors.burntSienna,
-                            gradientStart: SentryColors.burntSienna.withOpacity(0.5),
-                            gradientEnd: SentryColors.burntSienna.withOpacity(0.1),
-                            cubicLines: true,
+                            placeholderData,
+                            options: LineChartOptions(
+                              lineWidth: 2.0,
+                              lineColor: SentryColors.burntSienna,
+                              gradientStart: SentryColors.burntSienna.withOpacity(0.5),
+                              gradientEnd: SentryColors.burntSienna.withOpacity(0.1),
+                              cubicLines: true,
+                            ),
                           ),
                         )
                     ),
@@ -223,7 +228,7 @@ class _ProjectDetailsState extends State<ProjectDetails> {
     );
   }
 
-  DataData placeholderData = DataData.prepareData(
+  ChartData placeholderData = ChartData.prepareData(
     points: [
       ChartEntry(0, 100),
       ChartEntry(1, 100),
