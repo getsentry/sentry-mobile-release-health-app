@@ -28,16 +28,7 @@ class _ProjectDetailsState extends State<ProjectDetails> {
 
   _ProjectDetailsState(this.projectId);
   final String projectId;
-
-  @override
-  void initState() {
-    super.initState();
-    print('will render');
-    SchedulerBinding.instance?.addPostFrameCallback((duration) {
-      print('did render $duration}');
-    });
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ProjectDetailsViewModel>(
