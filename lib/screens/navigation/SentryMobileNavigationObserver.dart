@@ -9,9 +9,15 @@ class SentryMobileRouteObserver extends RouteObserver<PageRoute<dynamic>> {
 
   @override
   void didPush(Route route, Route? previousRoute) {
+    super.didPush(route, previousRoute);
     _finishTransaction();
     _startTransaction(route.settings.name, route.settings.arguments);
-    super.didPush(route, previousRoute);
+  }
+
+  @override
+  void didPop(Route route, Route? previousRoute) {
+    _finishTransaction();
+    super.didPop(route, previousRoute);
   }
 
   void _startTransaction(String? name, Object? arguments) {
