@@ -66,7 +66,9 @@ class _SettingsState extends State<Settings> {
                 ),
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(
-                      builder: (BuildContext context) => ProjectsScreen()),
+                    builder: (BuildContext context) => ProjectsScreen(),
+                    settings: RouteSettings(name: 'ProjectsScreen'),
+                  ),
                 ),
               ),
               Padding(
@@ -116,9 +118,13 @@ class _SettingsState extends State<Settings> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          fullscreenDialog: true,
-                          builder: (context) => HtmlScreen(
-                              'End User License Agreement', eulaFilePath)),
+                        fullscreenDialog: true,
+                        builder: (context) => HtmlScreen(
+                          'End User License Agreement',
+                          eulaFilePath,
+                        ),
+                        settings: RouteSettings(name: 'HtmlScreen'),
+                      ),
                     );
                   }),
               ListTile(
@@ -137,7 +143,8 @@ class _SettingsState extends State<Settings> {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                           builder: (BuildContext context) =>
-                              LicenseScreen(viewModel.version)),
+                              LicenseScreen(viewModel.version),
+                        settings: RouteSettings(name: 'LicenseScreen'),),
                     );
                   }),
               Padding(
@@ -209,8 +216,10 @@ class _SettingsState extends State<Settings> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              fullscreenDialog: true,
-                              builder: (context) => SentryFlutterScreen()),
+                            fullscreenDialog: true,
+                            builder: (context) => SentryFlutterScreen(),
+                            settings: RouteSettings(name: 'SentryFlutterScreen'),
+                          ),
                         );
                       },
                       child: Text(viewModel.version,

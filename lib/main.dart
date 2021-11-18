@@ -18,6 +18,7 @@ import 'redux/middleware/shared_preferences_middleware.dart';
 import 'redux/reducers.dart';
 import 'redux/state/app_state.dart';
 import 'screens/main/main_screen.dart';
+import 'screens/navigation/SentryMobileNavigationObserver.dart';
 import 'screens/onboarding/onboarding_screen.dart';
 import 'screens/splash/splash_screen.dart';
 import 'utils/sentry_colors.dart';
@@ -151,7 +152,10 @@ class SentryMobile extends StatelessWidget {
           }
         },
       ),
-      navigatorObservers: [SentryNavigatorObserver()],
+      navigatorObservers: [
+        SentryNavigatorObserver(),
+        SentryMobileRouteObserver(),
+      ],
     );
   }
 }
