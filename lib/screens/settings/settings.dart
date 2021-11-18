@@ -142,9 +142,10 @@ class _SettingsState extends State<Settings> {
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              LicenseScreen(viewModel.version),
-                        settings: RouteSettings(name: 'LicenseScreen'),),
+                        builder: (BuildContext context) =>
+                            LicenseScreen(viewModel.version),
+                        settings: RouteSettings(name: 'LicenseScreen'),
+                      ),
                     );
                   }),
               Padding(
@@ -218,7 +219,8 @@ class _SettingsState extends State<Settings> {
                           MaterialPageRoute(
                             fullscreenDialog: true,
                             builder: (context) => SentryFlutterScreen(),
-                            settings: RouteSettings(name: 'SentryFlutterScreen'),
+                            settings:
+                                RouteSettings(name: 'SentryFlutterScreen'),
                           ),
                         );
                       },

@@ -17,7 +17,6 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
   dynamic call(Store<AppState> store, action, next) {
     if (action is FetchOrgsAndProjectsAction) {
       final thunkAction = (Store<AppState> store) async {
-
         final syncSpan = Sentry.getSpan()?.startChild(
           'ui.load',
           description: 'Sync organizations and projects in multi-step process.',
@@ -67,9 +66,9 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
             }
           }
           store.dispatch(FetchOrgsAndProjectsSuccessAction(
-              individualOrganizations,
-              projectsByOrganizationId,
-              projectIdsWithSessions,
+            individualOrganizations,
+            projectsByOrganizationId,
+            projectIdsWithSessions,
           ));
           syncSpan?.status ??= SpanStatus.ok();
         } catch (e, s) {

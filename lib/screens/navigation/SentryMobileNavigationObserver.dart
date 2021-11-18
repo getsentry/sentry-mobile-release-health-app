@@ -4,7 +4,6 @@ import 'package:flutter/widgets.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 class SentryMobileRouteObserver extends RouteObserver<PageRoute<dynamic>> {
-
   ISentrySpan? _transaction;
   Timer? _idleTimer;
 
