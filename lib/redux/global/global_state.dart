@@ -24,7 +24,7 @@ class GlobalState {
       required this.orgsAndProjectsProgressText,
       required this.orgsAndProjectsError,
       required this.projectIdsWithSessions,
-      required this.projectsWithSessions,
+      required this.projects,
       required this.latestReleasesByProjectId,
       required this.sessionsByProjectId,
       required this.sessionsBeforeByProjectId,
@@ -54,7 +54,7 @@ class GlobalState {
         orgsAndProjectsProgressText: null,
         orgsAndProjectsError: null,
         projectIdsWithSessions: {},
-        projectsWithSessions: [],
+        projects: [],
         latestReleasesByProjectId: {},
         sessionsByProjectId: {},
         sessionsBeforeByProjectId: {},
@@ -86,7 +86,7 @@ class GlobalState {
   final dynamic orgsAndProjectsError;
 
   final Set<String> projectIdsWithSessions;
-  final List<Project> projectsWithSessions;
+  final List<Project> projects;
   final Map<String, Release> latestReleasesByProjectId;
 
   final Map<String, Sessions> sessionsByProjectId;
@@ -166,7 +166,7 @@ class GlobalState {
             : orgsAndProjectsError ?? this.orgsAndProjectsError,
         projectIdsWithSessions:
             projectIdsWithSessions ?? this.projectIdsWithSessions,
-        projectsWithSessions: projectsWithSessions ?? this.projectsWithSessions,
+        projects: projectsWithSessions ?? this.projects,
         latestReleasesByProjectId:
             latestReleasesByProjectId ?? this.latestReleasesByProjectId,
         sessionsByProjectId: sessionsByProjectId ?? this.sessionsByProjectId,
@@ -267,7 +267,7 @@ class GlobalState {
   }
 
   List<ProjectWithLatestRelease> projectsWithLatestReleases() {
-    return projectsWithSessions
+    return projects
         .map((project) => ProjectWithLatestRelease(
             project, latestReleasesByProjectId[project.id]))
         .toList();

@@ -94,7 +94,7 @@ GlobalState _fetchOrgsAndProjectsSuccessAction(
   final Map<String, String> organizationsSlugByProjectSlug = <String, String>{};
   final Map<String, Project> projectsById = <String, Project>{};
 
-  for (final project in state.projectsWithSessions) {
+  for (final project in state.projects) {
     projectsById[project.id] = project;
   }
 
@@ -103,9 +103,7 @@ GlobalState _fetchOrgsAndProjectsSuccessAction(
         in action.projectsByOrganizationSlug[organizationSlug]!) {
       organizationsSlugByProjectSlug[project.slug] = organizationSlug;
 
-      if (action.projectIdsWithSessions.contains(project.id)) {
-        projectsById[project.id] = project;
-      }
+      projectsById[project.id] = project;
     }
   }
 
@@ -265,7 +263,7 @@ GlobalState _fetchApdexSuccessAction(
 
 GlobalState _bookmarkProjectAction(
     GlobalState state, BookmarkProjectAction action) {
-  final project = state.projectsWithSessions
+  final project = state.projects
       .firstWhereOrNull((element) => element.slug == action.projectSlug);
   if (project != null) {
     return _replaceProject(
@@ -282,7 +280,7 @@ GlobalState _bookmarkProjectSuccessAction(
 
 GlobalState _bookmarkProjectFailureAction(
     GlobalState state, BookmarkProjectFailureAction action) {
-  final project = state.projectsWithSessions
+  final project = state.projects
       .firstWhereOrNull((element) => element.slug == action.projectSlug);
   if (project != null) {
     return _replaceProject(
@@ -311,7 +309,7 @@ GlobalState _replaceProject(GlobalState state, Project projectToReplace) {
   final projectsByOrganizationSlug = <String, List<Project>>{};
   final projects = <Project>[];
 
-  for (final project in state.projectsWithSessions) {
+  for (final project in state.projects) {
     if (project.id == projectToReplace.id) {
       projects.add(projectToReplace);
     } else {

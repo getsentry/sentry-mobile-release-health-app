@@ -37,10 +37,10 @@ class HealthScreenViewModel {
         _apdexBeforeByProjectId =
             store.state.globalState.apdexBeforeByProjectId,
         showProjectEmptyScreen =
-            store.state.globalState.projectsWithSessions.isEmpty &&
+            store.state.globalState.projects.isEmpty &&
                 !store.state.globalState.orgsAndProjectsLoading,
         showLoadingScreen =
-            store.state.globalState.projectsWithSessions.isEmpty &&
+            store.state.globalState.projects.isEmpty &&
                 store.state.globalState.orgsAndProjectsLoading,
         showErrorScreen = store.state.globalState.orgsAndProjectsError != null,
         showErrorNoConnectionScreen =
