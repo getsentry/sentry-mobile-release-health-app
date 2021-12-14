@@ -5,11 +5,8 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../utils/sentry_colors.dart';
 
 class LinkRichText extends StatelessWidget {
-  LinkRichText(
-      this._link,
-      this._linkText,
+  LinkRichText(this._link, this._linkText,
       {this.prefix, this.suffix, this.textStyle, this.linkStyle});
-
 
   final String _link;
   final String _linkText;
@@ -34,9 +31,9 @@ class LinkRichText extends StatelessWidget {
           TextSpan(
             text: _linkText,
             style: TextStyle(
-                fontFamily: linkStyle?.fontFamily ?? textStyle?.fontFamily,
-                fontSize: linkStyle?.fontSize ?? textStyle?.fontSize,
-                color: linkStyle?.color ?? SentryColors.royalBlue,
+              fontFamily: linkStyle?.fontFamily ?? textStyle?.fontFamily,
+              fontSize: linkStyle?.fontSize ?? textStyle?.fontSize,
+              color: linkStyle?.color ?? SentryColors.royalBlue,
             ),
             recognizer: TapGestureRecognizer()
               ..onTap = () {

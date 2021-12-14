@@ -150,9 +150,9 @@ class ProjectCard extends StatelessWidget {
                             _infoBox(context, _total(sessions)),
                             if (!_hasSessions(sessions))
                               LinkRichText(
-                                  'https://docs.sentry.io/product/releases/health/',
-                                  'Learn More',
-                                  linkStyle: TextStyle(color: Colors.white),
+                                'https://docs.sentry.io/product/releases/health/',
+                                'Learn More',
+                                linkStyle: TextStyle(color: Colors.white),
                               )
                             // if (release?.authors?.isNotEmpty == true)
                             //   SizedBox(width: 6),
