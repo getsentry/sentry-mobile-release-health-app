@@ -107,22 +107,21 @@ GlobalState _fetchOrgsAndProjectsSuccessAction(
     }
   }
 
-  final projectsWithSessions = projectsById.values.toList();
+  final projects = projectsById.values.toList();
 
-  projectsWithSessions.sort((Project a, Project b) {
+  projects.sort((Project a, Project b) {
     return a.slug.toLowerCase().compareTo(b.slug.toLowerCase());
   });
-  projectsWithSessions.sort((Project a, Project b) {
+  projects.sort((Project a, Project b) {
     final valueA = a.isBookmarked! ? 0 : 1;
     final valueB = b.isBookmarked! ? 0 : 1;
     return valueA.compareTo(valueB);
   });
-
   return state.copyWith(
       organizations: action.organizations,
       organizationsSlugByProjectSlug: organizationsSlugByProjectSlug,
       projectIdsWithSessions: action.projectIdsWithSessions,
-      projectsWithSessions: projectsWithSessions,
+      projects: projects,
       projectsByOrganizationSlug: action.projectsByOrganizationSlug,
       orgsAndProjectsLoading: false);
 }
@@ -340,7 +339,7 @@ GlobalState _replaceProject(GlobalState state, Project projectToReplace) {
 
   return state.copyWith(
       projectsByOrganizationSlug: projectsByOrganizationSlug,
-      projectsWithSessions: projects);
+      projects: projects);
 }
 
 // -----------------------------

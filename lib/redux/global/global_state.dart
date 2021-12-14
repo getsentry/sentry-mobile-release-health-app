@@ -125,7 +125,7 @@ class GlobalState {
     dynamic orgsAndProjectsError,
     bool setOrgsAndProjectsErrorNull = false,
     Set<String>? projectIdsWithSessions,
-    List<Project>? projectsWithSessions,
+    List<Project>? projects,
     Map<String, Release>? latestReleasesByProjectId,
     Map<String, Sessions>? sessionsByProjectId,
     Map<String, Sessions>? sessionsBeforeByProjectId,
@@ -166,7 +166,7 @@ class GlobalState {
             : orgsAndProjectsError ?? this.orgsAndProjectsError,
         projectIdsWithSessions:
             projectIdsWithSessions ?? this.projectIdsWithSessions,
-        projects: projectsWithSessions ?? this.projects,
+        projects: projects ?? this.projects,
         latestReleasesByProjectId:
             latestReleasesByProjectId ?? this.latestReleasesByProjectId,
         sessionsByProjectId: sessionsByProjectId ?? this.sessionsByProjectId,
