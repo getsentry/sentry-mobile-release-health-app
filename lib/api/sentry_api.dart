@@ -24,6 +24,7 @@ class SentryApi {
     captureFailedRequests: true,
     sendDefaultPii: false,
     failedRequestStatusCodes: [sentry.SentryStatusCode.range(400, 599)],
+    networkTracing: true,
   );
   final baseUrlName = 'sentry.io';
   final baseUrlPath = '/api/0';
