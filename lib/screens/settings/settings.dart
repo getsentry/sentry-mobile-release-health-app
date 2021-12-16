@@ -220,7 +220,7 @@ class _SettingsState extends State<Settings> {
                             fullscreenDialog: true,
                             builder: (context) => SentryFlutterScreen(),
                             settings:
-                            RouteSettings(name: 'SentryFlutterScreen'),
+                                RouteSettings(name: 'SentryFlutterScreen'),
                           ),
                         );
                       },
