@@ -59,7 +59,7 @@ flutter run
 
 # Build iOS and Upload to TestFlight
 
-- Provide environment variables needed for fastlane. For example by updating your `~/.bash_profile`
+- Provide environment variables needed for fastlane. For example by updating your `~/.bash_profile` or `~/.zshrc`, depending on which shell you are using.
 
 ```
 export FASTLANE_USER="user@sentry.io"
@@ -67,6 +67,8 @@ export FASTLANE_ITC_TEAM_ID="12345678" # The identifier of the iTunes Connect (A
 export FASTLANE_PROVISIONING_PROFILE_NAME="Profile For Appstore" # The name of the provisioning profile
 export SENTRY_AUTH_TOKEN="Sentry AuthToken" # Used for iOS dsym and debug info upload
 ```
+
+Restart terminal after entering.
 
 - You need to install the fastlane plugin https://github.com/getsentry/sentry-fastlane-plugin.
 
