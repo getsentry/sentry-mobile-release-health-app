@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 import '../../redux/state/session_state.dart';
 import '../../types/project.dart';

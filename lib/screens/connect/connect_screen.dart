@@ -134,7 +134,10 @@ class _ConnectScreenState extends State<ConnectScreen> {
 
   Future<String?> _presentScannerScreen() async {
     return await Navigator.of(context).push(
-      MaterialPageRoute(builder: (BuildContext context) => ScannerScreen()),
+      MaterialPageRoute(
+        builder: (BuildContext context) => ScannerScreen(),
+        settings: RouteSettings(name: 'ScannerScreen'),
+      ),
     ) as String?;
   }
 
