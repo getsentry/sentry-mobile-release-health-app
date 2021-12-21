@@ -4,14 +4,21 @@ import 'package:redux/redux.dart';
 
 import '../actions.dart';
 import '../state/app_state.dart';
+import 'sentry_sdk_middleware.dart';
 
 class SecureStorageMiddleware extends MiddlewareClass<AppState> {
   SecureStorageMiddleware(this.secureStorage);
 
   final FlutterSecureStorage secureStorage;
 
-  final _keyAuthToken = 'authToken';
-  final _keySentrySdkEnabled = 'sentrySdkEnabled';
+  static const _keyAuthToken = 'authToken';
+  static const _keySentrySdkEnabled = 'sentrySdkEnabled';
+
+  static Future<bool> sentrySdkEnabled(FlutterSecureStorage secureStorage) async {
+    final String? sentrySdkEnabledValue =
+        await secureStorage.read(key: _keySentrySdkEnabled);
+    return sentrySdkEnabledValue == 'true';
+  }
 
   @override
   dynamic call(
@@ -19,17 +26,12 @@ class SecureStorageMiddleware extends MiddlewareClass<AppState> {
     if (action is RehydrateAction) {
       final String? authToken = await secureStorage.read(key: _keyAuthToken);
 
-      final String? sentrySdkEnabledValue =
-          await secureStorage.read(key: _keySentrySdkEnabled);
-      final bool sentrySdkEnabled = sentrySdkEnabledValue == 'true';
-
       final packageInfo = await PackageInfo.fromPlatform();
       final version =
           'Version ${packageInfo.version} (${packageInfo.buildNumber})';
 
       store.dispatch(RehydrateSuccessAction(
         authToken,
-        sentrySdkEnabled,
         version,
       ));
       if (authToken != null) {

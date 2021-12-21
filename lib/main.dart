@@ -22,9 +22,8 @@ import 'screens/onboarding/onboarding_screen.dart';
 import 'screens/splash/splash_screen.dart';
 import 'utils/sentry_colors.dart';
 
-Future<Store<AppState>> createStore() async {
+Future<Store<AppState>> createStore(FlutterSecureStorage secStorage) async {
   final prefs = await SharedPreferences.getInstance();
-  final secStorage = FlutterSecureStorage();
 
   return Store<AppState>(
     appReducer,
@@ -53,7 +52,13 @@ Future<void> main() async {
       DeviceOrientation.portraitUp,
     ]);
 
-    final store = await createStore();
+    final secStorage = FlutterSecureStorage();
+
+    if (await SecureStorageMiddleware.sentrySdkEnabled(secStorage)) {
+      SentrySdkMiddleware.enableSentrySdk();
+    }
+
+    final store = await createStore(secStorage);
     store.dispatch(RehydrateAction());
 
     runApp(StoreProvider(

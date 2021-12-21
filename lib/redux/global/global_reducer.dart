@@ -62,7 +62,6 @@ GlobalState _rehydrateSuccessAction(
   return state.copyWith(
     hydrated: true,
     authToken: action.authToken,
-    sentrySdkEnabled: action.sentrySdkEnabled,
     version: action.version,
   );
 }
