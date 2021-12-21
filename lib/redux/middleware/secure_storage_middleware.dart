@@ -4,7 +4,6 @@ import 'package:redux/redux.dart';
 
 import '../actions.dart';
 import '../state/app_state.dart';
-import 'sentry_sdk_middleware.dart';
 
 class SecureStorageMiddleware extends MiddlewareClass<AppState> {
   SecureStorageMiddleware(this.secureStorage);
@@ -14,7 +13,8 @@ class SecureStorageMiddleware extends MiddlewareClass<AppState> {
   static const _keyAuthToken = 'authToken';
   static const _keySentrySdkEnabled = 'sentrySdkEnabled';
 
-  static Future<bool> sentrySdkEnabled(FlutterSecureStorage secureStorage) async {
+  static Future<bool> sentrySdkEnabled(
+      FlutterSecureStorage secureStorage) async {
     final String? sentrySdkEnabledValue =
         await secureStorage.read(key: _keySentrySdkEnabled);
     return sentrySdkEnabledValue == 'true';

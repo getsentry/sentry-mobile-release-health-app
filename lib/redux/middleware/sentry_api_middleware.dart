@@ -65,9 +65,9 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
             }
           }
           store.dispatch(FetchOrgsAndProjectsSuccessAction(
-              individualOrganizations,
-              projectsByOrganizationId,
-              projectIdsWithSessions,
+            individualOrganizations,
+            projectsByOrganizationId,
+            projectIdsWithSessions,
           ));
           syncSpan?.status ??= SpanStatus.ok();
         } catch (e, s) {
