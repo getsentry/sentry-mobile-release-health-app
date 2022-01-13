@@ -11,8 +11,9 @@ class RehydrateAction {
 }
 
 class RehydrateSuccessAction {
-  RehydrateSuccessAction(this.authToken, this.version);
+  RehydrateSuccessAction(this.authToken, this.sentrySdkEnabled, this.version);
   final String? authToken;
+  final bool sentrySdkEnabled;
   final String version;
 }
 
