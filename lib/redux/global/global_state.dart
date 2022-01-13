@@ -221,6 +221,7 @@ class GlobalState {
       if (sessions != null) {
         sessionStateByProjectId[projectId] = SessionState(
             projectId: projectId,
+            projectHasSessions: projectIdsWithSessions.contains(projectId),
             numberOfSessions: total,
             previousNumberOfSessions: previousTotal,
             sessionPoints: lineChartPoints,

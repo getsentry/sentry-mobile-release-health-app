@@ -113,6 +113,11 @@ GlobalState _fetchOrgsAndProjectsSuccessAction(
     return a.slug.toLowerCase().compareTo(b.slug.toLowerCase());
   });
   projects.sort((Project a, Project b) {
+    final valueA = action.projectIdsWithSessions.contains(a.id) ? 0 : 1;
+    final valueB = action.projectIdsWithSessions.contains(b.id) ? 0 : 1;
+    return valueA.compareTo(valueB);
+  });
+  projects.sort((Project a, Project b) {
     final valueA = a.isBookmarked! ? 0 : 1;
     final valueB = b.isBookmarked! ? 0 : 1;
     return valueA.compareTo(valueB);
@@ -330,6 +335,11 @@ GlobalState _replaceProject(GlobalState state, Project projectToReplace) {
 
   projects.sort((Project a, Project b) {
     return a.slug.toLowerCase().compareTo(b.slug.toLowerCase());
+  });
+  projects.sort((Project a, Project b) {
+    final valueA = state.projectIdsWithSessions.contains(a.id) ? 0 : 1;
+    final valueB = state.projectIdsWithSessions.contains(b.id) ? 0 : 1;
+    return valueA.compareTo(valueB);
   });
   projects.sort((Project a, Project b) {
     final valueA = a.isBookmarked! ? 0 : 1;

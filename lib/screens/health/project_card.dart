@@ -176,10 +176,10 @@ class ProjectCard extends StatelessWidget {
   }
 
   bool _hasSessions(SessionState? sessionState) {
-    if (sessionState == null) {
+    if (sessionState == null) { // Loading...
       return true;
     }
-    return sessionState.numberOfSessions > 0;
+    return sessionState.projectHasSessions;
   }
 
   String _total(SessionState? sessionState) {
