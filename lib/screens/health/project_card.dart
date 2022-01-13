@@ -176,7 +176,8 @@ class ProjectCard extends StatelessWidget {
   }
 
   bool _hasSessions(SessionState? sessionState) {
-    if (sessionState == null) { // Loading...
+    if (sessionState == null) {
+      // Loading...
       return true;
     }
     return sessionState.projectHasSessions;
