@@ -94,7 +94,7 @@ GlobalState _fetchOrgsAndProjectsSuccessAction(
   final Map<String, String> organizationsSlugByProjectSlug = <String, String>{};
   final Map<String, Project> projectsById = <String, Project>{};
 
-  for (final project in state.projectsWithSessions) {
+  for (final project in state.projects) {
     projectsById[project.id] = project;
   }
 
@@ -103,28 +103,30 @@ GlobalState _fetchOrgsAndProjectsSuccessAction(
         in action.projectsByOrganizationSlug[organizationSlug]!) {
       organizationsSlugByProjectSlug[project.slug] = organizationSlug;
 
-      if (action.projectIdsWithSessions.contains(project.id)) {
-        projectsById[project.id] = project;
-      }
+      projectsById[project.id] = project;
     }
   }
 
-  final projectsWithSessions = projectsById.values.toList();
+  final projects = projectsById.values.toList();
 
-  projectsWithSessions.sort((Project a, Project b) {
+  projects.sort((Project a, Project b) {
     return a.slug.toLowerCase().compareTo(b.slug.toLowerCase());
   });
-  projectsWithSessions.sort((Project a, Project b) {
+  projects.sort((Project a, Project b) {
+    final valueA = action.projectIdsWithSessions.contains(a.id) ? 0 : 1;
+    final valueB = action.projectIdsWithSessions.contains(b.id) ? 0 : 1;
+    return valueA.compareTo(valueB);
+  });
+  projects.sort((Project a, Project b) {
     final valueA = a.isBookmarked! ? 0 : 1;
     final valueB = b.isBookmarked! ? 0 : 1;
     return valueA.compareTo(valueB);
   });
-
   return state.copyWith(
       organizations: action.organizations,
       organizationsSlugByProjectSlug: organizationsSlugByProjectSlug,
       projectIdsWithSessions: action.projectIdsWithSessions,
-      projectsWithSessions: projectsWithSessions,
+      projects: projects,
       projectsByOrganizationSlug: action.projectsByOrganizationSlug,
       orgsAndProjectsLoading: false);
 }
@@ -265,7 +267,7 @@ GlobalState _fetchApdexSuccessAction(
 
 GlobalState _bookmarkProjectAction(
     GlobalState state, BookmarkProjectAction action) {
-  final project = state.projectsWithSessions
+  final project = state.projects
       .firstWhereOrNull((element) => element.slug == action.projectSlug);
   if (project != null) {
     return _replaceProject(
@@ -282,7 +284,7 @@ GlobalState _bookmarkProjectSuccessAction(
 
 GlobalState _bookmarkProjectFailureAction(
     GlobalState state, BookmarkProjectFailureAction action) {
-  final project = state.projectsWithSessions
+  final project = state.projects
       .firstWhereOrNull((element) => element.slug == action.projectSlug);
   if (project != null) {
     return _replaceProject(
@@ -311,7 +313,7 @@ GlobalState _replaceProject(GlobalState state, Project projectToReplace) {
   final projectsByOrganizationSlug = <String, List<Project>>{};
   final projects = <Project>[];
 
-  for (final project in state.projectsWithSessions) {
+  for (final project in state.projects) {
     if (project.id == projectToReplace.id) {
       projects.add(projectToReplace);
     } else {
@@ -335,6 +337,11 @@ GlobalState _replaceProject(GlobalState state, Project projectToReplace) {
     return a.slug.toLowerCase().compareTo(b.slug.toLowerCase());
   });
   projects.sort((Project a, Project b) {
+    final valueA = state.projectIdsWithSessions.contains(a.id) ? 0 : 1;
+    final valueB = state.projectIdsWithSessions.contains(b.id) ? 0 : 1;
+    return valueA.compareTo(valueB);
+  });
+  projects.sort((Project a, Project b) {
     final valueA = a.isBookmarked! ? 0 : 1;
     final valueB = b.isBookmarked! ? 0 : 1;
     return valueA.compareTo(valueB);
@@ -342,7 +349,7 @@ GlobalState _replaceProject(GlobalState state, Project projectToReplace) {
 
   return state.copyWith(
       projectsByOrganizationSlug: projectsByOrganizationSlug,
-      projectsWithSessions: projects);
+      projects: projects);
 }
 
 // -----------------------------
