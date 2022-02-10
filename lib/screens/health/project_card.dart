@@ -8,6 +8,7 @@ import '../../utils/sentry_colors.dart';
 import '../../utils/session_formatting.dart';
 import '../chart/line_chart.dart';
 import '../chart/line_chart_data.dart';
+import '../shared/link_rich_text.dart';
 
 class ProjectCard extends StatelessWidget {
   ProjectCard(this.organizationName, this.project, this.release, this.sessions);
@@ -146,8 +147,13 @@ class ProjectCard extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            _infoBox(context,
-                                "Total: ${sessions?.numberOfSessions.formattedNumberOfSession() ?? '--'}"),
+                            _infoBox(context, _total(sessions)),
+                            if (!_hasSessions(sessions))
+                              LinkRichText(
+                                'https://docs.sentry.io/product/releases/health/',
+                                'Learn More',
+                                linkStyle: TextStyle(color: Colors.white),
+                              )
                             // if (release?.authors?.isNotEmpty == true)
                             //   SizedBox(width: 6),
                             // AvatarStack(
@@ -167,6 +173,25 @@ class ProjectCard extends StatelessWidget {
             ]),
           ),
         ));
+  }
+
+  bool _hasSessions(SessionState? sessionState) {
+    if (sessionState == null) {
+      // Loading...
+      return true;
+    }
+    return sessionState.projectHasSessions;
+  }
+
+  String _total(SessionState? sessionState) {
+    if (sessionState == null) {
+      return 'Total: --';
+    }
+    if (_hasSessions(sessionState)) {
+      return 'Total: ${sessionState.numberOfSessions.formattedNumberOfSession()}';
+    } else {
+      return 'No session data.';
+    }
   }
 
   Widget _infoBox(BuildContext context, String text) {

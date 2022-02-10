@@ -5,40 +5,46 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../utils/sentry_colors.dart';
 
 class LinkRichText extends StatelessWidget {
-  LinkRichText(
-      this._prefix, this._link, this._linkText, this._suffix, this._textStyle);
+  LinkRichText(this._link, this._linkText,
+      {this.prefix, this.suffix, this.textStyle, this.linkStyle});
 
-  final String _prefix;
   final String _link;
   final String _linkText;
-  final String _suffix;
-  final TextStyle? _textStyle;
+
+  final String? prefix;
+  final String? suffix;
+  final TextStyle? textStyle;
+  final TextStyle? linkStyle;
 
   @override
   Widget build(BuildContext context) {
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
+        style: textStyle,
         children: [
-          TextSpan(
-            text: _prefix,
-            style: _textStyle,
-          ),
+          if (prefix != null)
+            TextSpan(
+              text: prefix,
+              style: textStyle,
+            ),
           TextSpan(
             text: _linkText,
             style: TextStyle(
-                fontFamily: _textStyle?.fontFamily,
-                fontSize: _textStyle?.fontSize,
-                color: SentryColors.royalBlue),
+              fontFamily: linkStyle?.fontFamily ?? textStyle?.fontFamily,
+              fontSize: linkStyle?.fontSize ?? textStyle?.fontSize,
+              color: linkStyle?.color ?? SentryColors.royalBlue,
+            ),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
                 launch(_link);
               },
           ),
-          TextSpan(
-            text: _suffix,
-            style: _textStyle,
-          ),
+          if (suffix != null)
+            TextSpan(
+              text: suffix,
+              style: textStyle,
+            ),
         ],
       ),
     );
