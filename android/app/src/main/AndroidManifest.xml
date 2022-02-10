@@ -20,7 +20,7 @@
     <!-- END HERE -->
 
     <application
-        android:name="io.flutter.app.FlutterApplication"
+        android:name="${applicationName}"
         android:label="Release Health"
         android:icon="@mipmap/ic_launcher">
         <activity
