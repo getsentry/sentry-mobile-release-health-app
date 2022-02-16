@@ -17,7 +17,7 @@ class GlobalState {
       required this.version,
       required this.selectedTab,
       required this.organizations,
-      required this.organizationsSlugByProjectSlug,
+      required this.organizationsSlugByProjectId,
       required this.projectsByOrganizationSlug,
       required this.orgsAndProjectsLoading,
       required this.orgsAndProjectsProgress,
@@ -47,7 +47,7 @@ class GlobalState {
         version: '--',
         selectedTab: 0,
         organizations: [],
-        organizationsSlugByProjectSlug: {},
+        organizationsSlugByProjectId: {},
         projectsByOrganizationSlug: {},
         orgsAndProjectsLoading: true,
         orgsAndProjectsProgress: null,
@@ -77,7 +77,7 @@ class GlobalState {
   final int selectedTab;
 
   final List<Organization> organizations;
-  final Map<String, String> organizationsSlugByProjectSlug;
+  final Map<String, String> organizationsSlugByProjectId;
   final Map<String, List<Project>> projectsByOrganizationSlug;
 
   final bool orgsAndProjectsLoading;
@@ -117,7 +117,7 @@ class GlobalState {
     int? selectedTab,
     bool setTokenNull = false,
     List<Organization>? organizations,
-    Map<String, String>? organizationsSlugByProjectSlug,
+    Map<String, String>? organizationsSlugByProjectId,
     Map<String, List<Project>>? projectsByOrganizationSlug,
     bool? orgsAndProjectsLoading,
     double? orgsAndProjectsProgress,
@@ -147,8 +147,8 @@ class GlobalState {
         version: version ?? this.version,
         selectedTab: selectedTab ?? this.selectedTab,
         organizations: organizations ?? this.organizations,
-        organizationsSlugByProjectSlug: organizationsSlugByProjectSlug ??
-            this.organizationsSlugByProjectSlug,
+        organizationsSlugByProjectId: organizationsSlugByProjectId ??
+            this.organizationsSlugByProjectId,
         projectsByOrganizationSlug:
             projectsByOrganizationSlug ?? this.projectsByOrganizationSlug,
         orgsAndProjectsLoading:
@@ -257,8 +257,8 @@ class GlobalState {
     return [total, lineChartPoints];
   }
 
-  Organization? organizationForProjectSlug(String projectSlug) {
-    final organizationSlug = organizationsSlugByProjectSlug[projectSlug];
+  Organization? organizationForProjectId(String projectId) {
+    final organizationSlug = organizationsSlugByProjectId[projectId];
     if (organizationSlug != null) {
       return organizations
           .firstWhere((element) => element.slug == organizationSlug);

@@ -124,7 +124,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
               projectId: action.projectId,
               releaseId: action.releaseId);
           store.dispatch(FetchLatestReleaseSuccessAction(
-              action.projectSlug, latestRelease));
+              action.projectId, latestRelease));
         } catch (e, s) {
           store.dispatch(FetchLatestReleaseFailureAction(e, s));
         }

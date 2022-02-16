@@ -91,7 +91,7 @@ GlobalState _fetchOrganizationsAndProjectsAction(
 
 GlobalState _fetchOrgsAndProjectsSuccessAction(
     GlobalState state, FetchOrgsAndProjectsSuccessAction action) {
-  final Map<String, String> organizationsSlugByProjectSlug = <String, String>{};
+  final Map<String, String> organizationsSlugByProjectId = <String, String>{};
   final Map<String, Project> projectsById = <String, Project>{};
 
   for (final project in state.projects) {
@@ -101,7 +101,7 @@ GlobalState _fetchOrgsAndProjectsSuccessAction(
   for (final organizationSlug in action.projectsByOrganizationSlug.keys) {
     for (final project
         in action.projectsByOrganizationSlug[organizationSlug]!) {
-      organizationsSlugByProjectSlug[project.slug] = organizationSlug;
+      organizationsSlugByProjectId[project.id] = organizationSlug;
 
       projectsById[project.id] = project;
     }
@@ -124,7 +124,7 @@ GlobalState _fetchOrgsAndProjectsSuccessAction(
   });
   return state.copyWith(
       organizations: action.organizations,
-      organizationsSlugByProjectSlug: organizationsSlugByProjectSlug,
+      organizationsSlugByProjectId: organizationsSlugByProjectId,
       projectIdsWithSessions: action.projectIdsWithSessions,
       projects: projects,
       projectsByOrganizationSlug: action.projectsByOrganizationSlug,
@@ -171,9 +171,9 @@ GlobalState _fetchLatestReleasesSuccessAction(
 GlobalState _fetchLatestReleaseSuccessAction(
     GlobalState state, FetchLatestReleaseSuccessAction action) {
   final organizationSlug =
-      state.organizationsSlugByProjectSlug[action.projectSlug];
+      state.organizationsSlugByProjectId[action.projectId];
   final project = state.projectsByOrganizationSlug[organizationSlug!]!
-      .where((element) => element.slug == action.projectSlug)
+      .where((element) => element.id == action.projectId)
       .first;
 
   final Map<String, Release> latestReleasesByProjectId =

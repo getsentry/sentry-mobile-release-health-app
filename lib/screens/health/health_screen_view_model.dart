@@ -85,7 +85,7 @@ class HealthScreenViewModel {
     final projectWitLatestRelease = projects[index];
     return ProjectCard(
         _store.state.globalState
-            .organizationForProjectSlug(projectWitLatestRelease.project.slug)
+            .organizationForProjectId(projectWitLatestRelease.project.id)
             ?.name,
         projectWitLatestRelease.project,
         projectWitLatestRelease.release,
@@ -164,7 +164,6 @@ class HealthScreenViewModel {
   //   _store.dispatch(
   //     FetchLatestReleaseAction(
   //         organizationSlug,
-  //         projectWithLatestRelease.project.slug,
   //         projectWithLatestRelease.project.id,
   //         projectWithLatestRelease.project.latestRelease.version
   //     )
@@ -173,7 +172,7 @@ class HealthScreenViewModel {
 
   void _fetchSessions(ProjectWithLatestRelease projectWithLatestRelease) {
     final organizationSlug = _store.state.globalState
-        .organizationsSlugByProjectSlug[projectWithLatestRelease.project.slug];
+        .organizationsSlugByProjectId[projectWithLatestRelease.project.id];
     if (organizationSlug == null) {
       return;
     }
