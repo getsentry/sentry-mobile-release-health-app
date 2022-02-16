@@ -15,18 +15,14 @@ class ProjectsScreenViewModel {
       final organizationProjects = store.state.globalState
               .projectsByOrganizationSlug[organization.slug] ??
           [];
-      final projectsWithSessions = organizationProjects
-          .where((project) => store.state.globalState.projectIdsWithSessions
-              .contains(project.id))
-          .toList();
-      projectsWithSessions.sort((Project a, Project b) {
+      organizationProjects.sort((Project a, Project b) {
         return a.name?.toLowerCase().compareTo(b.name?.toLowerCase() ?? '') ??
             0;
       });
 
-      if (projectsWithSessions.isNotEmpty) {
+      if (organizationProjects.isNotEmpty) {
         items.add(ProjectOrganizationItem(organization.name!));
-        for (final Project project in projectsWithSessions) {
+        for (final Project project in organizationProjects) {
           items.add(ProjectProjectItem(project.platform, organization.slug,
               project.slug, project.isBookmarked ?? false));
         }
@@ -37,8 +33,7 @@ class ProjectsScreenViewModel {
       items.insert(
           0,
           ProjectHeadlineItem(
-              'Bookmarked projects are shown before others on the main screen. '
-              'Additionally, only projects with sessions in the last 90 days are shown.'));
+              'Bookmarked projects are shown before others on the main screen. '));
     }
     _store = store;
     this.items = items;
