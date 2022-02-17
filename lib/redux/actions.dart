@@ -155,8 +155,10 @@ class FetchSessionsSuccessAction {
 }
 
 class FetchSessionsFailureAction extends ApiFailureAction {
-  FetchSessionsFailureAction(error, StackTrace stackTrace)
+  FetchSessionsFailureAction(this.projectId, error, StackTrace stackTrace)
       : super(error, stackTrace);
+
+  final String projectId;
 }
 
 // BookmarkProject

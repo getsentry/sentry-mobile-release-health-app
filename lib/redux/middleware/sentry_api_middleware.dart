@@ -123,8 +123,8 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
               organizationSlug: action.organizationSlug,
               projectId: action.projectId,
               releaseId: action.releaseId);
-          store.dispatch(FetchLatestReleaseSuccessAction(
-              action.projectId, latestRelease));
+          store.dispatch(
+              FetchLatestReleaseSuccessAction(action.projectId, latestRelease));
         } catch (e, s) {
           store.dispatch(FetchLatestReleaseFailureAction(e, s));
         }
@@ -191,7 +191,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           store.dispatch(FetchSessionsSuccessAction(
               action.projectId, sessions, sessionsBefore));
         } catch (e, s) {
-          store.dispatch(FetchSessionsFailureAction(e, s));
+          store.dispatch(FetchSessionsFailureAction(action.projectId, e, s));
         }
         api.close();
       };

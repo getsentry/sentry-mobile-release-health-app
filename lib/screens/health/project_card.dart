@@ -110,30 +110,41 @@ class ProjectCard extends StatelessWidget {
                                       valueColor: AlwaysStoppedAnimation<Color>(
                                           Colors.white)))
                             ])
-                      : Stack(children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 12),
-                            child: LineChart(
-                                data: LineChartData.prepareData(
-                                    points: sessions!.sessionPoints),
-                                lineWidth: 5.0,
-                                lineColor: Colors.black.withOpacity(0.05),
-                                gradientStart: Colors.transparent,
-                                gradientEnd: Colors.transparent,
-                                cubicLines: false),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 12),
-                            child: LineChart(
-                                data: LineChartData.prepareData(
-                                    points: sessions!.sessionPoints),
-                                lineWidth: 5.0,
-                                lineColor: Colors.white,
-                                gradientStart: Colors.transparent,
-                                gradientEnd: Colors.transparent,
-                                cubicLines: false),
-                          ),
-                        ])),
+                      : sessions!.failed
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Failure fetching data. Please try again.',
+                                  style: TextStyle(
+                                      color: Colors.white70, fontSize: 12),
+                                )
+                              ],
+                            )
+                          : Stack(children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 12),
+                                child: LineChart(
+                                    data: LineChartData.prepareData(
+                                        points: sessions!.sessionPoints),
+                                    lineWidth: 5.0,
+                                    lineColor: Colors.black.withOpacity(0.05),
+                                    gradientStart: Colors.transparent,
+                                    gradientEnd: Colors.transparent,
+                                    cubicLines: false),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 12),
+                                child: LineChart(
+                                    data: LineChartData.prepareData(
+                                        points: sessions!.sessionPoints),
+                                    lineWidth: 5.0,
+                                    lineColor: Colors.white,
+                                    gradientStart: Colors.transparent,
+                                    gradientEnd: Colors.transparent,
+                                    cubicLines: false),
+                              ),
+                            ])),
               LayoutBuilder(builder:
                   (BuildContext context, BoxConstraints viewportConstraints) {
                 return SingleChildScrollView(
@@ -147,7 +158,8 @@ class ProjectCard extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            _infoBox(context, _total(sessions)),
+                            if (sessions == null || sessions?.failed == false)
+                              _infoBox(context, _total(sessions)),
                             if (!_hasSessions(sessions))
                               LinkRichText(
                                 'https://docs.sentry.io/product/releases/health/',

@@ -36,6 +36,8 @@ final globalReducer = combineReducers<GlobalState>([
       _fetchAuthenticatedUserSuccessAction),
   TypedReducer<GlobalState, FetchSessionsSuccessAction>(
       _fetchSessionsSuccessAction),
+  TypedReducer<GlobalState, FetchSessionsFailureAction>(
+      _fetchSessionFailureAction),
   TypedReducer<GlobalState, FetchApdexSuccessAction>(_fetchApdexSuccessAction),
   TypedReducer<GlobalState, BookmarkProjectAction>(_bookmarkProjectAction),
   TypedReducer<GlobalState, BookmarkProjectSuccessAction>(
@@ -79,6 +81,7 @@ GlobalState _fetchOrganizationsAndProjectsAction(
     GlobalState state, FetchOrgsAndProjectsAction action) {
   if (action.resetSessionData) {
     return state.copyWith(
+        failedSessionsProjectIds: {},
         sessionsByProjectId: {},
         sessionsBeforeByProjectId: {},
         orgsAndProjectsLoading: true,
@@ -170,8 +173,7 @@ GlobalState _fetchLatestReleasesSuccessAction(
 
 GlobalState _fetchLatestReleaseSuccessAction(
     GlobalState state, FetchLatestReleaseSuccessAction action) {
-  final organizationSlug =
-      state.organizationsSlugByProjectId[action.projectId];
+  final organizationSlug = state.organizationsSlugByProjectId[action.projectId];
   final project = state.projectsByOrganizationSlug[organizationSlug!]!
       .where((element) => element.id == action.projectId)
       .first;
@@ -200,6 +202,9 @@ GlobalState _fetchAuthenticatedUserSuccessAction(
 
 GlobalState _fetchSessionsSuccessAction(
     GlobalState state, FetchSessionsSuccessAction action) {
+  final failedSessionsProjectIds = state.failedSessionsProjectIds;
+  failedSessionsProjectIds.remove(action.projectId);
+
   final sessionsByProjectId = state.sessionsByProjectId;
   sessionsByProjectId[action.projectId] = action.sessions;
 
@@ -238,12 +243,23 @@ GlobalState _fetchSessionsSuccessAction(
   }
 
   return state.copyWith(
+      failedSessionsProjectIds: failedSessionsProjectIds,
       sessionsByProjectId: sessionsByProjectId,
       sessionsBeforeByProjectId: sessionsBeforeByProjectId,
       crashFreeSessionsByProjectId: crashFreeSessionsByProjectId,
       crashFreeSessionsBeforeByProjectId: crashFreeSessionsBeforeByProjectId,
       crashFreeUsersByProjectId: crashFreeUsersByProjectId,
       crashFreeUsersBeforeByProjectId: crashFreeUsersBeforeByProjectId);
+}
+
+GlobalState _fetchSessionFailureAction(
+    GlobalState state, FetchSessionsFailureAction action) {
+  final failedSessionsProjectIds = state.failedSessionsProjectIds;
+  failedSessionsProjectIds.add(action.projectId);
+
+  return state.copyWith(
+    failedSessionsProjectIds: failedSessionsProjectIds,
+  );
 }
 
 GlobalState _fetchApdexSuccessAction(
