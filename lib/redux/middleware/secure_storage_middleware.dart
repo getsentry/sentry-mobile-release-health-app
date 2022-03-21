@@ -13,15 +13,19 @@ class SecureStorageMiddleware extends MiddlewareClass<AppState> {
   final _keyAuthToken = 'authToken';
   final _keySentrySdkEnabled = 'sentrySdkEnabled';
 
+  Future<bool> sentrySdkEnabled() async {
+    final String? sentrySdkEnabledValue =
+        await _secureStorage.read(key: _keySentrySdkEnabled);
+    return sentrySdkEnabledValue == 'true';
+  }
+
   @override
   dynamic call(
       Store<AppState> store, dynamic action, NextDispatcher next) async {
     if (action is RehydrateAction) {
       final String? authToken = await _secureStorage.read(key: _keyAuthToken);
 
-      final String? sentrySdkEnabledValue =
-          await _secureStorage.read(key: _keySentrySdkEnabled);
-      final bool sentrySdkEnabled = sentrySdkEnabledValue == 'true';
+      final bool sentrySdkEnabled = await this.sentrySdkEnabled();
 
       final packageInfo = await PackageInfo.fromPlatform();
       final version =

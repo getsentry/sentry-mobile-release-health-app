@@ -22,17 +22,19 @@ import 'screens/onboarding/onboarding_screen.dart';
 import 'screens/splash/splash_screen.dart';
 import 'utils/sentry_colors.dart';
 
-Future<Store<AppState>> createStore() async {
+Future<Store<AppState>> createStore(
+  SentrySdkMiddleware sentrySdkMiddleware,
+  SecureStorageMiddleware secureStorageMiddleware,
+) async {
   final prefs = await SharedPreferences.getInstance();
-  final secStorage = FlutterSecureStorage();
 
   return Store<AppState>(
     appReducer,
     initialState: AppState.initial(),
     middleware: [
       SentryApiMiddleware(),
-      SentrySdkMiddleware(),
-      SecureStorageMiddleware(secStorage),
+      sentrySdkMiddleware,
+      secureStorageMiddleware,
       SharedPreferencesMiddleware(prefs),
 
 //      ValidationMiddleware(),
@@ -45,18 +47,28 @@ Future<Store<AppState>> createStore() async {
 }
 
 Future<void> main() async {
-  final appStartEnd = DateTime.now();
-
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      SentryFlutter.setAppStartEnd(DateTime.now());
+    });
+
+    final secureStorage = FlutterSecureStorage();
+    final secureStorageMiddleware = SecureStorageMiddleware(secureStorage);
+    final sentrySdkMiddleware = SentrySdkMiddleware();
+
+    if (await secureStorageMiddleware.sentrySdkEnabled()) {
+      sentrySdkMiddleware.enableSentrySdk();
+    }
 
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitDown,
       DeviceOrientation.portraitUp,
     ]);
 
-    final store = await createStore();
-    store.dispatch(RehydrateAction(appStartEnd));
+    final store =
+        await createStore(sentrySdkMiddleware, secureStorageMiddleware);
+    store.dispatch(RehydrateAction());
 
     runApp(StoreProvider(
       store: store,

@@ -6,25 +6,20 @@ import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
 
 class SentrySdkMiddleware extends MiddlewareClass<AppState> {
-  DateTime? _appStartEnd;
-
   @override
   dynamic call(
     Store<AppState> store,
     dynamic action,
     NextDispatcher next,
   ) async {
-    if (action is RehydrateAction) {
-      _appStartEnd = action.appStartEnd;
-    }
     if (action is RehydrateSuccessAction) {
       if (action.sentrySdkEnabled && !Sentry.isEnabled) {
-        _enableSentrySdk();
+        enableSentrySdk();
       }
     }
     if (action is SentrySdkToggleAction) {
       if (action.enabled && !Sentry.isEnabled) {
-        _enableSentrySdk();
+        enableSentrySdk();
       } else if (!action.enabled && Sentry.isEnabled) {
         _disableSentrySdk();
       }
@@ -49,7 +44,7 @@ class SentrySdkMiddleware extends MiddlewareClass<AppState> {
     next(action);
   }
 
-  Future<void> _enableSentrySdk() async {
+  Future<void> enableSentrySdk() async {
     await SentryFlutter.init((options) {
       if (kReleaseMode) {
         options.dsn =
@@ -70,10 +65,6 @@ class SentrySdkMiddleware extends MiddlewareClass<AppState> {
         options.tracesSampleRate = 1.0;
       }
     });
-    final appStartEnd = _appStartEnd;
-    if (appStartEnd != null) {
-      SentryFlutter.setAppStartEnd(appStartEnd);
-    }
   }
 
   void _disableSentrySdk() {
