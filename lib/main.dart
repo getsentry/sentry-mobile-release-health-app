@@ -45,6 +45,9 @@ Future<Store<AppState>> createStore() async {
 }
 
 Future<void> main() async {
+
+  final appStartEnd = DateTime.now();
+
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
 
@@ -54,7 +57,7 @@ Future<void> main() async {
     ]);
 
     final store = await createStore();
-    store.dispatch(RehydrateAction());
+    store.dispatch(RehydrateAction(appStartEnd));
 
     runApp(StoreProvider(
       store: store,

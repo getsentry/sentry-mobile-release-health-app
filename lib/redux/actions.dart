@@ -7,7 +7,8 @@ import '../types/sessions.dart';
 import '../types/user.dart';
 
 class RehydrateAction {
-  RehydrateAction();
+  RehydrateAction(this.appStartEnd);
+  final DateTime appStartEnd;
 }
 
 class RehydrateSuccessAction {

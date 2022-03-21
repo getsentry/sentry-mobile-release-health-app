@@ -6,9 +6,9 @@ import '../actions.dart';
 import '../state/app_state.dart';
 
 class SecureStorageMiddleware extends MiddlewareClass<AppState> {
-  SecureStorageMiddleware(this.secureStorage);
+  SecureStorageMiddleware(this._secureStorage);
 
-  final FlutterSecureStorage secureStorage;
+  final FlutterSecureStorage _secureStorage;
 
   final _keyAuthToken = 'authToken';
   final _keySentrySdkEnabled = 'sentrySdkEnabled';
@@ -17,10 +17,10 @@ class SecureStorageMiddleware extends MiddlewareClass<AppState> {
   dynamic call(
       Store<AppState> store, dynamic action, NextDispatcher next) async {
     if (action is RehydrateAction) {
-      final String? authToken = await secureStorage.read(key: _keyAuthToken);
+      final String? authToken = await _secureStorage.read(key: _keyAuthToken);
 
       final String? sentrySdkEnabledValue =
-          await secureStorage.read(key: _keySentrySdkEnabled);
+          await _secureStorage.read(key: _keySentrySdkEnabled);
       final bool sentrySdkEnabled = sentrySdkEnabledValue == 'true';
 
       final packageInfo = await PackageInfo.fromPlatform();
@@ -38,18 +38,18 @@ class SecureStorageMiddleware extends MiddlewareClass<AppState> {
     }
     if (action is SentrySdkToggleAction) {
       if (action.enabled) {
-        await secureStorage.write(key: _keySentrySdkEnabled, value: 'true');
+        await _secureStorage.write(key: _keySentrySdkEnabled, value: 'true');
       } else {
-        await secureStorage.delete(key: _keySentrySdkEnabled);
+        await _secureStorage.delete(key: _keySentrySdkEnabled);
       }
     }
     if (action is LoginSuccessAction) {
-      await secureStorage.write(key: _keyAuthToken, value: action.authToken);
+      await _secureStorage.write(key: _keyAuthToken, value: action.authToken);
       store.dispatch(FetchAuthenticatedUserAction(action.authToken));
     }
     if (action is LogoutAction) {
-      await secureStorage.delete(key: _keyAuthToken);
-      await secureStorage.delete(key: _keySentrySdkEnabled);
+      await _secureStorage.delete(key: _keyAuthToken);
+      await _secureStorage.delete(key: _keySentrySdkEnabled);
     }
     next(action);
   }
