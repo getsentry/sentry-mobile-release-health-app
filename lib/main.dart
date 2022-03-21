@@ -45,7 +45,6 @@ Future<Store<AppState>> createStore() async {
 }
 
 Future<void> main() async {
-
   final appStartEnd = DateTime.now();
 
   runZonedGuarded(() async {

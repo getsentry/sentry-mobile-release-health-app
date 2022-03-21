@@ -6,7 +6,6 @@ import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
 
 class SentrySdkMiddleware extends MiddlewareClass<AppState> {
-
   DateTime? _appStartEnd;
 
   @override
