@@ -1,4 +1,4 @@
-# Unreleased
+# 1.0.5
 
 * Bump: Sentry Flutter to 6.5.0-alpha.1
 
