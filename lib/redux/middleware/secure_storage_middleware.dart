@@ -26,7 +26,7 @@ class SecureStorageMiddleware extends MiddlewareClass<AppState> {
       final String? authToken = await _secureStorage.read(key: _keyAuthToken);
 
       final sentrySdkEnabled = await this.sentrySdkEnabled();
-      
+
       final packageInfo = await PackageInfo.fromPlatform();
       final version =
           'Version ${packageInfo.version} (${packageInfo.buildNumber})';
