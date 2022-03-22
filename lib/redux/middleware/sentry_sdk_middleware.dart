@@ -14,12 +14,12 @@ class SentrySdkMiddleware extends MiddlewareClass<AppState> {
   ) async {
     if (action is RehydrateSuccessAction) {
       if (action.sentrySdkEnabled && !Sentry.isEnabled) {
-        _enableSentrySdk();
+        enableSentrySdk();
       }
     }
     if (action is SentrySdkToggleAction) {
       if (action.enabled && !Sentry.isEnabled) {
-        _enableSentrySdk();
+        enableSentrySdk();
       } else if (!action.enabled && Sentry.isEnabled) {
         _disableSentrySdk();
       }
@@ -44,7 +44,7 @@ class SentrySdkMiddleware extends MiddlewareClass<AppState> {
     next(action);
   }
 
-  Future<void> _enableSentrySdk() async {
+  Future<void> enableSentrySdk() async {
     await SentryFlutter.init((options) {
       if (kReleaseMode) {
         options.dsn =
@@ -58,6 +58,7 @@ class SentrySdkMiddleware extends MiddlewareClass<AppState> {
       // as a not in app frame.
       options.addInAppInclude('sentry_mobile');
       options.considerInAppFramesByDefault = false;
+      options.autoAppStart = false;
       if (kReleaseMode) {
         options.tracesSampleRate = 0.1;
       } else {
