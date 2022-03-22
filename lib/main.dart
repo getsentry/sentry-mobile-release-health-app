@@ -50,7 +50,7 @@ Future<void> main() async {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      SentryFlutter.setAppStartEnd(DateTime.now());
+      SentryFlutter.setAppStartEnd(DateTime.now().toUtc());
     });
 
     final secureStorage = FlutterSecureStorage();
