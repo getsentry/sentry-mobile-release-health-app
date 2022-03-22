@@ -73,7 +73,7 @@ class _HealthScreenState extends State<HealthScreen>
             button: 'Retry',
             action: () {
               viewModel.fetchProjects();
-              reloadSessionData(viewModel, _index ?? 0);
+              _reloadSessionData(viewModel, _index ?? 0);
             });
       } else {
         return EmptyScreen(
@@ -82,7 +82,7 @@ class _HealthScreenState extends State<HealthScreen>
             button: 'Retry',
             action: () {
               viewModel.fetchProjects();
-              reloadSessionData(viewModel, _index ?? 0);
+              _reloadSessionData(viewModel, _index ?? 0);
             });
       }
     } else if (viewModel.showProjectEmptyScreen) {
@@ -102,7 +102,7 @@ class _HealthScreenState extends State<HealthScreen>
         secondaryButton: 'Refresh Projects',
         secondaryAction: () {
           viewModel.fetchProjects();
-          reloadSessionData(viewModel, _index ?? 0);
+          _reloadSessionData(viewModel, _index ?? 0);
         },
       );
     } else {
@@ -235,14 +235,14 @@ class _HealthScreenState extends State<HealthScreen>
         onRefresh: () => Future.delayed(Duration(microseconds: 100), () {
           viewModel.didInteract();
           viewModel.reloadProjects();
-          reloadSessionData(viewModel, _index ?? 0);
+          _reloadSessionData(viewModel, _index ?? 0);
         }),
       );
     }
   }
 
   // Reload session data for previous, current and next index.
-  void reloadSessionData(HealthScreenViewModel viewModel, int currentIndex) {
+  void _reloadSessionData(HealthScreenViewModel viewModel, int currentIndex) {
     viewModel.fetchDataForProject(currentIndex - 1);
     viewModel.fetchDataForProject(currentIndex);
     viewModel.fetchDataForProject(currentIndex + 1);
@@ -253,14 +253,14 @@ class _HealthScreenState extends State<HealthScreen>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.resumed &&
-        StoreProvider.of<AppState>(context)
-                .state
-                .globalState
-                .orgsAndProjectsError !=
-            null) {
-      StoreProvider.of<AppState>(context)
-          .dispatch(FetchOrgsAndProjectsAction(true));
+
+    final store = StoreProvider.of<AppState>(context);
+    final orgsAndProjectsError = store.state.globalState.orgsAndProjectsError;
+
+    if (state == AppLifecycleState.resumed && orgsAndProjectsError != null) {
+      final viewModel = HealthScreenViewModel.fromStore(store);
+      viewModel.reloadProjects();
+      viewModel.fetchDataForProject(_index ?? 0);
     }
   }
 }
