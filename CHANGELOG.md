@@ -1,6 +1,7 @@
 # Unreleased
 
 * Bump: Sentry Flutter to 6.5.0-alpha.1
+* Fix endless loading on resume (#234)
 
 # 1.0.4
 
