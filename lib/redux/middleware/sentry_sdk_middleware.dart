@@ -12,6 +12,11 @@ class SentrySdkMiddleware extends MiddlewareClass<AppState> {
     dynamic action,
     NextDispatcher next,
   ) async {
+    if (action is RehydrateSuccessAction) {
+      if (action.sentrySdkEnabled && !Sentry.isEnabled) {
+        await enableSentrySdk();
+      }
+    }
     if (action is SentrySdkToggleAction) {
       if (action.enabled && !Sentry.isEnabled) {
         await enableSentrySdk();
@@ -39,7 +44,7 @@ class SentrySdkMiddleware extends MiddlewareClass<AppState> {
     next(action);
   }
 
-  static Future<void> enableSentrySdk() async {
+  Future<void> enableSentrySdk() async {
     await SentryFlutter.init((options) {
       if (kReleaseMode) {
         options.dsn =
@@ -53,12 +58,12 @@ class SentrySdkMiddleware extends MiddlewareClass<AppState> {
       // as a not in app frame.
       options.addInAppInclude('sentry_mobile');
       options.considerInAppFramesByDefault = false;
-      // TODO(denrase): Consider reducing sample rate for store release.
-      // if (kReleaseMode) {
-      //   options.tracesSampleRate = 0.1;
-      // } else {
-      options.tracesSampleRate = 1.0;
-      // }
+      options.autoAppStart = false;
+      if (kReleaseMode) {
+        options.tracesSampleRate = 0.1;
+      } else {
+        options.tracesSampleRate = 1.0;
+      }
     });
   }
 
