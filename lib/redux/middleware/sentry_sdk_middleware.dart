@@ -25,7 +25,8 @@ class SentrySdkMiddleware extends MiddlewareClass<AppState> {
       }
     }
     if (action is ApiFailureAction) {
-      await Sentry.captureException(action.error, stackTrace: action.stackTrace);
+      await Sentry.captureException(action.error,
+          stackTrace: action.stackTrace);
     }
     if (action is FetchAuthenticatedUserSuccessAction) {
       // https://docs.sentry.io/platforms/flutter/enriching-events/identify-user/

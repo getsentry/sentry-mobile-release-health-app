@@ -154,8 +154,9 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
             : fatal
                 ? Text('Throw')
                 : Text('Send'),
-        onPressed:
-            _loading ? null : () async => await _captureException(typeToThrow, fatal),
+        onPressed: _loading
+            ? null
+            : () async => await _captureException(typeToThrow, fatal),
       ),
     );
   }
