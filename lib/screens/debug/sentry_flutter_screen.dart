@@ -121,7 +121,7 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
         subtitle: Text(subtitle),
         trailing: ElevatedButton(
           child: _loading ? Text('Loading...') : Text('Send'),
-          onPressed: _loading ? null : () => _captureMessage(),
+          onPressed: _loading ? null : () async => await _captureMessage(),
         ));
   }
 
@@ -155,7 +155,7 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
                 ? Text('Throw')
                 : Text('Send'),
         onPressed:
-            _loading ? null : () => _captureException(typeToThrow, fatal),
+            _loading ? null : () async => await _captureException(typeToThrow, fatal),
       ),
     );
   }
@@ -181,12 +181,12 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
     );
   }
 
-  void _captureEvent() {
+  Future<void> _captureEvent() async {
     setState(() {
       _loading = true;
     });
     final event = SentryEvent(message: SentryMessage('Sentry.captureEvent'));
-    Sentry.captureEvent(event)
+    await Sentry.captureEvent(event)
         .then((value) => {
               setState(() {
                 _loading = false;
@@ -201,11 +201,11 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
             });
   }
 
-  void _captureMessage() {
+  Future<void> _captureMessage() async {
     setState(() {
       _loading = true;
     });
-    Sentry.captureMessage('Sentry.captureMessage')
+    await Sentry.captureMessage('Sentry.captureMessage')
         .then((value) => {
               setState(() {
                 _loading = false;
@@ -220,7 +220,7 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
             });
   }
 
-  void _captureException(_TypeToThrow typeToThrow, bool fatal) {
+  Future<void> _captureException(_TypeToThrow typeToThrow, bool fatal) async {
     setState(() {
       _loading = !fatal;
     });
@@ -253,7 +253,7 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
       try {
         throw exceptionObject as Object;
       } catch (exception, stackTrace) {
-        Sentry.captureException(exception, stackTrace: stackTrace)
+        await Sentry.captureException(exception, stackTrace: stackTrace)
             .then((value) => {
                   setState(() {
                     _loading = false;
