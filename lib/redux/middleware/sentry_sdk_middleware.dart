@@ -21,11 +21,12 @@ class SentrySdkMiddleware extends MiddlewareClass<AppState> {
       if (action.enabled && !Sentry.isEnabled) {
         await enableSentrySdk();
       } else if (!action.enabled && Sentry.isEnabled) {
-        await disableSentrySdk();
+        await _disableSentrySdk();
       }
     }
     if (action is ApiFailureAction) {
-      Sentry.captureException(action.error, stackTrace: action.stackTrace);
+      await Sentry.captureException(action.error,
+          stackTrace: action.stackTrace);
     }
     if (action is FetchAuthenticatedUserSuccessAction) {
       // https://docs.sentry.io/platforms/flutter/enriching-events/identify-user/
@@ -67,7 +68,7 @@ class SentrySdkMiddleware extends MiddlewareClass<AppState> {
     });
   }
 
-  static Future<void> disableSentrySdk() async {
-    Sentry.close();
+  Future<void> _disableSentrySdk() async {
+    await Sentry.close();
   }
 }

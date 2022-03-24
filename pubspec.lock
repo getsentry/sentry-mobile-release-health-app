@@ -631,14 +631,14 @@ packages:
       name: sentry
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.5.0-alpha.1"
+    version: "6.5.0-alpha.2"
   sentry_flutter:
     dependency: "direct main"
     description:
       name: sentry_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.5.0-alpha.1"
+    version: "6.5.0-alpha.2"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -944,7 +944,7 @@ packages:
       name: win32
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.4.2"
+    version: "2.4.4"
   xdg_directories:
     dependency: transitive
     description:

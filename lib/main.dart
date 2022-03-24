@@ -58,7 +58,7 @@ Future<void> main() async {
     final sentrySdkMiddleware = SentrySdkMiddleware();
 
     if (await secureStorageMiddleware.sentrySdkEnabled()) {
-      sentrySdkMiddleware.enableSentrySdk();
+      await sentrySdkMiddleware.enableSentrySdk();
     }
 
     SystemChrome.setPreferredOrientations([
