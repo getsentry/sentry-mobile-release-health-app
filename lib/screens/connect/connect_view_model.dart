@@ -26,7 +26,7 @@ class ConnectViewModel {
       final authTokenCode = AuthTokenCode.fromJson(json);
       return onToken(authTokenCode.authToken);
     } catch (exception, stackTrace) {
-      Sentry.captureException(exception, stackTrace: stackTrace);
+      await Sentry.captureException(exception, stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -41,7 +41,7 @@ class ConnectViewModel {
       sentryApi.close();
       store.dispatch(LoginSuccessAction(token));
     } catch (exception, stackTrace) {
-      Sentry.captureException(exception, stackTrace: stackTrace);
+      await Sentry.captureException(exception, stackTrace: stackTrace);
       rethrow;
     }
   }
