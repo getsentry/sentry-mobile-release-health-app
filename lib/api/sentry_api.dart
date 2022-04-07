@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:http/http.dart';
 import 'package:sentry_flutter/sentry_flutter.dart' as sentry;
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import '../api/api_errors.dart';
 import '../types/group.dart';
@@ -22,9 +23,10 @@ class SentryApi {
 
   final client = sentry.SentryHttpClient(
     captureFailedRequests: true,
-    sendDefaultPii: false,
+    sendDefaultPii: true,
     failedRequestStatusCodes: [sentry.SentryStatusCode.range(400, 599)],
     networkTracing: true,
+    maxRequestBodySize: MaxRequestBodySize.always,
   );
   final baseUrlName = 'sentry.io';
   final baseUrlPath = '/api/0';

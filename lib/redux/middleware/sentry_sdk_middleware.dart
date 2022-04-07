@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:redux/redux.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -65,6 +67,7 @@ class SentrySdkMiddleware extends MiddlewareClass<AppState> {
       } else {
         options.tracesSampleRate = 1.0;
       }
+      options.sendDefaultPii = true;
     });
   }
 
