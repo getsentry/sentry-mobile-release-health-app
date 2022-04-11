@@ -168,9 +168,7 @@ class SentryMobile extends StatelessWidget {
               }
             },
           ),
-          navigatorObservers: [
-            SentryNavigatorObserver()
-          ],
+          navigatorObservers: [SentryNavigatorObserver()],
         ));
   }
 }
