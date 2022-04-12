@@ -96,7 +96,7 @@ class SentryMobile extends StatelessWidget {
         SystemUiOverlayStyle(statusBarColor: Colors.transparent));
 
     return DefaultAssetBundle(
-        bundle: SentryAssetBundle(),
+        bundle: SentryAssetBundle(enableStructuredDataTracing: true),
         child: MaterialApp(
           title: 'Sentry',
           theme: ThemeData(
