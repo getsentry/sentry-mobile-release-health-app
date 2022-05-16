@@ -62,11 +62,7 @@ class SentrySdkMiddleware extends MiddlewareClass<AppState> {
       options.addInAppInclude('sentry_mobile');
       options.considerInAppFramesByDefault = false;
       options.autoAppStart = false;
-      if (kReleaseMode) {
-        options.tracesSampleRate = 0.1;
-      } else {
-        options.tracesSampleRate = 1.0;
-      }
+      options.tracesSampleRate = 1.0;
       options.sendDefaultPii = true;
     });
   }
