@@ -722,21 +722,21 @@ packages:
       name: sentry
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.5.1"
+    version: "6.6.0-alpha.2"
   sentry_flutter:
     dependency: "direct main"
     description:
       name: sentry_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.5.1"
+    version: "6.6.0-alpha.2"
   sentry_flutter_plus:
     dependency: "direct main"
     description:
       name: sentry_flutter_plus
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.2"
+    version: "0.0.3"
   sentry_plus:
     dependency: transitive
     description:
