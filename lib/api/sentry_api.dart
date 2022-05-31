@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:http/http.dart';
 import 'package:sentry_flutter/sentry_flutter.dart' as sentry;
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:sentry_plus/sentry_plus.dart';
 
 import '../api/api_errors.dart';
 import '../types/group.dart';
@@ -15,6 +16,8 @@ import '../types/session_group_by.dart';
 import '../types/sessions.dart';
 import '../types/user.dart';
 import '../utils/date_time_format.dart';
+
+final _jsonDecoder = utf8.decoder.fuse(json.decoder).wrapWithTraces();
 
 class SentryApi {
   SentryApi(this.authToken);
@@ -181,7 +184,7 @@ class SentryApi {
         headers: _defaultHeader());
     if (response.statusCode == 200) {
       final responseJson =
-          json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
+          _jsonDecoder.convert(response.bodyBytes) as Map<String, dynamic>;
       final data = responseJson['data'] as List<dynamic>;
       if (data.isNotEmpty) {
         final apdexData = data.first as Map<String, dynamic>;
@@ -254,7 +257,7 @@ class SentryApi {
   List<T> _parseResponseList<T>(
       Response response, T Function(Map<String, dynamic> r) map) {
     if (response.statusCode == 200) {
-      final responseJson = json.decode(utf8.decode(response.bodyBytes)) as List;
+      final responseJson = _jsonDecoder.convert(response.bodyBytes) as List;
       final orgList = List<Map<String, dynamic>>.from(responseJson);
       return orgList.map((Map<String, dynamic> r) => map(r)).toList();
     } else {
@@ -266,7 +269,7 @@ class SentryApi {
       Response response, T Function(Map<String, dynamic>? r) map) {
     if (response.statusCode == 200) {
       final responseJson =
-          json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>?;
+          _jsonDecoder.convert(response.bodyBytes) as Map<String, dynamic>?;
       return map(responseJson);
     } else {
       throw ApiError(response.statusCode, response.body);

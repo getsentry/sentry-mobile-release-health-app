@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:http/http.dart' as http;
 import 'package:redux/redux.dart';
+import 'package:sentry_plus/sentry_plus.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
 
@@ -32,7 +33,7 @@ Future<Group> fetchGroup() async {
     // If the server did return a 200 OK response,
     // then parse the JSON.
     final Map<String, dynamic> responseJson =
-        json.decode(response.body) as Map<String, dynamic>;
+        json.wrapWithTraces().decode(response.body) as Map<String, dynamic>;
     return Group.fromJson(responseJson);
   } else {
     // If the server did not return a 200 OK response,
