@@ -4,6 +4,7 @@ class SessionState {
   SessionState(
       {required this.projectId,
       required this.projectHasSessions,
+      required this.failed,
       required this.numberOfSessions,
       this.previousNumberOfSessions,
       required this.sessionPoints,
@@ -11,6 +12,7 @@ class SessionState {
 
   final String projectId;
   final bool projectHasSessions;
+  final bool failed;
 
   final int numberOfSessions;
   final int? previousNumberOfSessions;

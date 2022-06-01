@@ -36,6 +36,8 @@ final globalReducer = combineReducers<GlobalState>([
       _fetchAuthenticatedUserSuccessAction),
   TypedReducer<GlobalState, FetchSessionsSuccessAction>(
       _fetchSessionsSuccessAction),
+  TypedReducer<GlobalState, FetchSessionsFailureAction>(
+      _fetchSessionFailureAction),
   TypedReducer<GlobalState, FetchApdexSuccessAction>(_fetchApdexSuccessAction),
   TypedReducer<GlobalState, BookmarkProjectAction>(_bookmarkProjectAction),
   TypedReducer<GlobalState, BookmarkProjectSuccessAction>(
@@ -79,6 +81,7 @@ GlobalState _fetchOrganizationsAndProjectsAction(
     GlobalState state, FetchOrgsAndProjectsAction action) {
   if (action.resetSessionData) {
     return state.copyWith(
+        failedSessionsProjectIds: {},
         sessionsByProjectId: {},
         sessionsBeforeByProjectId: {},
         orgsAndProjectsLoading: true,
@@ -91,7 +94,7 @@ GlobalState _fetchOrganizationsAndProjectsAction(
 
 GlobalState _fetchOrgsAndProjectsSuccessAction(
     GlobalState state, FetchOrgsAndProjectsSuccessAction action) {
-  final Map<String, String> organizationsSlugByProjectSlug = <String, String>{};
+  final Map<String, String> organizationsSlugByProjectId = <String, String>{};
   final Map<String, Project> projectsById = <String, Project>{};
 
   for (final project in state.projects) {
@@ -101,7 +104,7 @@ GlobalState _fetchOrgsAndProjectsSuccessAction(
   for (final organizationSlug in action.projectsByOrganizationSlug.keys) {
     for (final project
         in action.projectsByOrganizationSlug[organizationSlug]!) {
-      organizationsSlugByProjectSlug[project.slug] = organizationSlug;
+      organizationsSlugByProjectId[project.id] = organizationSlug;
 
       projectsById[project.id] = project;
     }
@@ -124,7 +127,7 @@ GlobalState _fetchOrgsAndProjectsSuccessAction(
   });
   return state.copyWith(
       organizations: action.organizations,
-      organizationsSlugByProjectSlug: organizationsSlugByProjectSlug,
+      organizationsSlugByProjectId: organizationsSlugByProjectId,
       projectIdsWithSessions: action.projectIdsWithSessions,
       projects: projects,
       projectsByOrganizationSlug: action.projectsByOrganizationSlug,
@@ -170,10 +173,9 @@ GlobalState _fetchLatestReleasesSuccessAction(
 
 GlobalState _fetchLatestReleaseSuccessAction(
     GlobalState state, FetchLatestReleaseSuccessAction action) {
-  final organizationSlug =
-      state.organizationsSlugByProjectSlug[action.projectSlug];
+  final organizationSlug = state.organizationsSlugByProjectId[action.projectId];
   final project = state.projectsByOrganizationSlug[organizationSlug!]!
-      .where((element) => element.slug == action.projectSlug)
+      .where((element) => element.id == action.projectId)
       .first;
 
   final Map<String, Release> latestReleasesByProjectId =
@@ -200,6 +202,9 @@ GlobalState _fetchAuthenticatedUserSuccessAction(
 
 GlobalState _fetchSessionsSuccessAction(
     GlobalState state, FetchSessionsSuccessAction action) {
+  final failedSessionsProjectIds = state.failedSessionsProjectIds;
+  failedSessionsProjectIds.remove(action.projectId);
+
   final sessionsByProjectId = state.sessionsByProjectId;
   sessionsByProjectId[action.projectId] = action.sessions;
 
@@ -238,12 +243,23 @@ GlobalState _fetchSessionsSuccessAction(
   }
 
   return state.copyWith(
+      failedSessionsProjectIds: failedSessionsProjectIds,
       sessionsByProjectId: sessionsByProjectId,
       sessionsBeforeByProjectId: sessionsBeforeByProjectId,
       crashFreeSessionsByProjectId: crashFreeSessionsByProjectId,
       crashFreeSessionsBeforeByProjectId: crashFreeSessionsBeforeByProjectId,
       crashFreeUsersByProjectId: crashFreeUsersByProjectId,
       crashFreeUsersBeforeByProjectId: crashFreeUsersBeforeByProjectId);
+}
+
+GlobalState _fetchSessionFailureAction(
+    GlobalState state, FetchSessionsFailureAction action) {
+  final failedSessionsProjectIds = state.failedSessionsProjectIds;
+  failedSessionsProjectIds.add(action.projectId);
+
+  return state.copyWith(
+    failedSessionsProjectIds: failedSessionsProjectIds,
+  );
 }
 
 GlobalState _fetchApdexSuccessAction(

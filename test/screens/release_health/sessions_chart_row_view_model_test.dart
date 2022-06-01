@@ -19,6 +19,7 @@ void main() {
       final sessionState = SessionState(
           projectId: 'fixture-projectId',
           projectHasSessions: true,
+          failed: false,
           numberOfSessions: 10,
           previousNumberOfSessions: 5,
           sessionPoints: points,
@@ -43,6 +44,7 @@ void main() {
       final sessionState = SessionState(
           projectId: 'fixture-projectId',
           projectHasSessions: true,
+          failed: false,
           numberOfSessions: 10,
           previousNumberOfSessions: 5,
           sessionPoints: points,
@@ -66,6 +68,7 @@ void main() {
       final sessionState = SessionState(
           projectId: 'fixture-projectId',
           projectHasSessions: true,
+          failed: false,
           numberOfSessions: 8,
           previousNumberOfSessions: 10,
           sessionPoints: points,
@@ -79,6 +82,7 @@ void main() {
       final sessionState = SessionState(
           projectId: 'fixture-projectId',
           projectHasSessions: true,
+          failed: false,
           numberOfSessions: 0,
           previousNumberOfSessions: 0,
           sessionPoints: [],

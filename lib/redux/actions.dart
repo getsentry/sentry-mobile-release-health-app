@@ -67,16 +67,15 @@ class FetchOrgsAndProjectsFailureAction extends ApiFailureAction {
 
 class FetchLatestReleaseAction {
   FetchLatestReleaseAction(
-      this.organizationSlug, this.projectSlug, this.projectId, this.releaseId);
+      this.organizationSlug, this.projectId, this.releaseId);
   final String organizationSlug;
-  final String projectSlug;
   final String projectId;
   final String releaseId;
 }
 
 class FetchLatestReleaseSuccessAction {
-  FetchLatestReleaseSuccessAction(this.projectSlug, this.latestRelease);
-  final String projectSlug;
+  FetchLatestReleaseSuccessAction(this.projectId, this.latestRelease);
+  final String projectId;
   final Release latestRelease;
 }
 
@@ -156,8 +155,10 @@ class FetchSessionsSuccessAction {
 }
 
 class FetchSessionsFailureAction extends ApiFailureAction {
-  FetchSessionsFailureAction(error, StackTrace stackTrace)
+  FetchSessionsFailureAction(this.projectId, error, StackTrace stackTrace)
       : super(error, stackTrace);
+
+  final String projectId;
 }
 
 // BookmarkProject

@@ -17,6 +17,10 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
   dynamic call(Store<AppState> store, action, next) {
     if (action is FetchOrgsAndProjectsAction) {
       final thunkAction = (Store<AppState> store) async {
+        final syncSpan = Sentry.getSpan()?.startChild(
+          'ui.load',
+          description: 'Sync organizations and projects in multi-step process.',
+        );
         final api = SentryApi(store.state.globalState.authToken);
         try {
           store.dispatch(FetchOrgsAndProjectsProgressAction(
@@ -61,11 +65,17 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
             }
           }
           store.dispatch(FetchOrgsAndProjectsSuccessAction(
-              individualOrganizations,
-              projectsByOrganizationId,
-              projectIdsWithSessions));
+            individualOrganizations,
+            projectsByOrganizationId,
+            projectIdsWithSessions,
+          ));
+          syncSpan?.status ??= SpanStatus.ok();
         } catch (e, s) {
+          syncSpan?.throwable = e;
+          syncSpan?.status = SpanStatus.internalError();
           store.dispatch(FetchOrgsAndProjectsFailureAction(e, s));
+        } finally {
+          syncSpan?.finish();
         }
         api.close();
       };
@@ -113,8 +123,8 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
               organizationSlug: action.organizationSlug,
               projectId: action.projectId,
               releaseId: action.releaseId);
-          store.dispatch(FetchLatestReleaseSuccessAction(
-              action.projectSlug, latestRelease));
+          store.dispatch(
+              FetchLatestReleaseSuccessAction(action.projectId, latestRelease));
         } catch (e, s) {
           store.dispatch(FetchLatestReleaseFailureAction(e, s));
         }
@@ -181,7 +191,7 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           store.dispatch(FetchSessionsSuccessAction(
               action.projectId, sessions, sessionsBefore));
         } catch (e, s) {
-          store.dispatch(FetchSessionsFailureAction(e, s));
+          store.dispatch(FetchSessionsFailureAction(action.projectId, e, s));
         }
         api.close();
       };

@@ -25,7 +25,7 @@ class SecureStorageMiddleware extends MiddlewareClass<AppState> {
     if (action is RehydrateAction) {
       final String? authToken = await _secureStorage.read(key: _keyAuthToken);
 
-      final bool sentrySdkEnabled = await this.sentrySdkEnabled();
+      final sentrySdkEnabled = await this.sentrySdkEnabled();
 
       final packageInfo = await PackageInfo.fromPlatform();
       final version =

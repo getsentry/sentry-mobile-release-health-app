@@ -1,7 +1,10 @@
-# Unreleased
+# 1.1.0
 
-* Bump: Sentry Flutter to 6.5.0-alpha.1
-* Fix endless loading on resume (#234)
+* Feat: Show All Projects (#222)
+* Fix: Endless loading on resume (#234)
+* Fix: Project loading indicator does not stop (#231)
+* Fix: Wrong order for projects without session (#230)
+* Bump: Sentry Flutter to 6.5.0-alpha.1 (#232)
 
 # 1.0.4
 

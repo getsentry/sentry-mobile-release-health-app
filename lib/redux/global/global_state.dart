@@ -17,7 +17,7 @@ class GlobalState {
       required this.version,
       required this.selectedTab,
       required this.organizations,
-      required this.organizationsSlugByProjectSlug,
+      required this.organizationsSlugByProjectId,
       required this.projectsByOrganizationSlug,
       required this.orgsAndProjectsLoading,
       required this.orgsAndProjectsProgress,
@@ -26,6 +26,7 @@ class GlobalState {
       required this.projectIdsWithSessions,
       required this.projects,
       required this.latestReleasesByProjectId,
+      required this.failedSessionsProjectIds,
       required this.sessionsByProjectId,
       required this.sessionsBeforeByProjectId,
       required this.crashFreeSessionsByProjectId,
@@ -47,7 +48,7 @@ class GlobalState {
         version: '--',
         selectedTab: 0,
         organizations: [],
-        organizationsSlugByProjectSlug: {},
+        organizationsSlugByProjectId: {},
         projectsByOrganizationSlug: {},
         orgsAndProjectsLoading: true,
         orgsAndProjectsProgress: null,
@@ -56,6 +57,7 @@ class GlobalState {
         projectIdsWithSessions: {},
         projects: [],
         latestReleasesByProjectId: {},
+        failedSessionsProjectIds: {},
         sessionsByProjectId: {},
         sessionsBeforeByProjectId: {},
         crashFreeSessionsByProjectId: {},
@@ -77,7 +79,7 @@ class GlobalState {
   final int selectedTab;
 
   final List<Organization> organizations;
-  final Map<String, String> organizationsSlugByProjectSlug;
+  final Map<String, String> organizationsSlugByProjectId;
   final Map<String, List<Project>> projectsByOrganizationSlug;
 
   final bool orgsAndProjectsLoading;
@@ -89,6 +91,7 @@ class GlobalState {
   final List<Project> projects;
   final Map<String, Release> latestReleasesByProjectId;
 
+  final Set<String> failedSessionsProjectIds;
   final Map<String, Sessions> sessionsByProjectId;
   final Map<String, Sessions>
       sessionsBeforeByProjectId; // Interval before sessionsByProjectId
@@ -117,7 +120,7 @@ class GlobalState {
     int? selectedTab,
     bool setTokenNull = false,
     List<Organization>? organizations,
-    Map<String, String>? organizationsSlugByProjectSlug,
+    Map<String, String>? organizationsSlugByProjectId,
     Map<String, List<Project>>? projectsByOrganizationSlug,
     bool? orgsAndProjectsLoading,
     double? orgsAndProjectsProgress,
@@ -127,6 +130,7 @@ class GlobalState {
     Set<String>? projectIdsWithSessions,
     List<Project>? projects,
     Map<String, Release>? latestReleasesByProjectId,
+    Set<String>? failedSessionsProjectIds,
     Map<String, Sessions>? sessionsByProjectId,
     Map<String, Sessions>? sessionsBeforeByProjectId,
     Map<String, double>? crashFreeSessionsByProjectId,
@@ -147,8 +151,8 @@ class GlobalState {
         version: version ?? this.version,
         selectedTab: selectedTab ?? this.selectedTab,
         organizations: organizations ?? this.organizations,
-        organizationsSlugByProjectSlug: organizationsSlugByProjectSlug ??
-            this.organizationsSlugByProjectSlug,
+        organizationsSlugByProjectId:
+            organizationsSlugByProjectId ?? this.organizationsSlugByProjectId,
         projectsByOrganizationSlug:
             projectsByOrganizationSlug ?? this.projectsByOrganizationSlug,
         orgsAndProjectsLoading:
@@ -169,6 +173,8 @@ class GlobalState {
         projects: projects ?? this.projects,
         latestReleasesByProjectId:
             latestReleasesByProjectId ?? this.latestReleasesByProjectId,
+        failedSessionsProjectIds:
+            failedSessionsProjectIds ?? this.failedSessionsProjectIds,
         sessionsByProjectId: sessionsByProjectId ?? this.sessionsByProjectId,
         sessionsBeforeByProjectId:
             sessionsBeforeByProjectId ?? this.sessionsBeforeByProjectId,
@@ -222,11 +228,23 @@ class GlobalState {
         sessionStateByProjectId[projectId] = SessionState(
             projectId: projectId,
             projectHasSessions: projectIdsWithSessions.contains(projectId),
+            failed: false,
             numberOfSessions: total,
             previousNumberOfSessions: previousTotal,
             sessionPoints: lineChartPoints,
             previousSessionPoints: previousLineChartPoints);
       }
+    }
+    for (final projectId in failedSessionsProjectIds) {
+      if (sessionsByProjectId.containsKey(projectId)) {
+        continue; // Keep Previous data if requests fail.
+      }
+      sessionStateByProjectId[projectId] = SessionState(
+          projectId: projectId,
+          projectHasSessions: true,
+          failed: true,
+          numberOfSessions: 0,
+          sessionPoints: []);
     }
     return sessionStateByProjectId;
   }
@@ -257,8 +275,8 @@ class GlobalState {
     return [total, lineChartPoints];
   }
 
-  Organization? organizationForProjectSlug(String projectSlug) {
-    final organizationSlug = organizationsSlugByProjectSlug[projectSlug];
+  Organization? organizationForProjectId(String projectId) {
+    final organizationSlug = organizationsSlugByProjectId[projectId];
     if (organizationSlug != null) {
       return organizations
           .firstWhere((element) => element.slug == organizationSlug);
