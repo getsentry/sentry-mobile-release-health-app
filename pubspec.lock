@@ -738,12 +738,12 @@ packages:
     source: hosted
     version: "0.0.3"
   sentry_plus:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: sentry_plus
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.3"
+    version: "0.0.4"
   shared_preferences:
     dependency: "direct main"
     description:
