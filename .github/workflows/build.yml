@@ -49,3 +49,7 @@ jobs:
             flutter build appbundle
             ;;
             esac
+        - name: Release
+          uses: getsentry/action-release@v1.1.6
+          with:
+            environment: 'production'
