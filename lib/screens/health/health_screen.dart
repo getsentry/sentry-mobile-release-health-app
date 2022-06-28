@@ -34,12 +34,12 @@ class _HealthScreenState extends State<HealthScreen>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -105,7 +105,7 @@ class _HealthScreenState extends State<HealthScreen>
         },
       );
     } else {
-      WidgetsBinding.instance?.addPostFrameCallback((Duration duration) {
+      WidgetsBinding.instance.addPostFrameCallback((Duration duration) {
         if (viewModel.showLoadingScreen) {
           _refreshKey.currentState!.show();
         } else {

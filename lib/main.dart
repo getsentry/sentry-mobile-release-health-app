@@ -49,7 +49,7 @@ Future<Store<AppState>> createStore(
 Future<void> main() async {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       SentryFlutter.setAppStartEnd(DateTime.now().toUtc());
     });
 
