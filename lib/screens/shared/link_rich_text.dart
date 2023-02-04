@@ -8,7 +8,7 @@ class LinkRichText extends StatelessWidget {
   LinkRichText(this._link, this._linkText,
       {this.prefix, this.suffix, this.textStyle, this.linkStyle});
 
-  final String _link;
+  final Uri _link;
   final String _linkText;
 
   final String? prefix;
@@ -37,7 +37,7 @@ class LinkRichText extends StatelessWidget {
             ),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                launch(_link);
+                launchUrl(_link);
               },
           ),
           if (suffix != null)

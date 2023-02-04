@@ -118,11 +118,11 @@ class IssueView extends StatelessWidget {
 
   /// Launches the issue in a web browser.
   Future<void> launchEventUrl() async {
-    final url =
-        'https://sentry.io/organizations/${viewModel.selectedOrganization!.slug}/issues/${latestEvent.groupID}';
+    final url = Uri.parse(
+        'https://sentry.io/organizations/${viewModel.selectedOrganization!.slug}/issues/${latestEvent.groupID}');
 
-    if (await canLaunch(url)) {
-      await launch(url, forceSafariVC: false);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
     } else {
       throw 'Could not launch $url';
     }

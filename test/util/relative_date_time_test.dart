@@ -1,5 +1,5 @@
+import 'package:flutter_test/flutter_test.dart';
 import 'package:sentry_mobile/utils/relative_date_time.dart';
-import 'package:test/test.dart';
 
 // Source: https://github.com/moment/moment/blob/f5233ee5d44ba20079cd4b389262719bb20e23bd/src/test/moment/relative_time.js
 void main() {

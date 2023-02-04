@@ -23,10 +23,15 @@ class HtmlScreen extends StatelessWidget {
                 data: snapshot.data!,
                 padding: EdgeInsets.symmetric(horizontal: 22, vertical: 16),
                 onTapLink: (String text, String? href, String title) async {
-                  if (href != null && await canLaunch(href)) {
-                    await launch(href, forceSafariVC: false);
-                  } else {
+                  if (href == null) {
                     throw 'Could not launch $href';
+                  }
+                  final url = Uri.tryParse(href);
+                  if (url == null) {
+                    throw 'Could not launch $href';
+                  }
+                  if (await canLaunchUrl(url)) {
+                    await launchUrl(url);
                   }
                 });
           } else {
