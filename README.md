@@ -10,13 +10,9 @@
 
 # Release Health [![build](https://github.com/getsentry/sentry-mobile/workflows/build/badge.svg?branch=main)](https://github.com/getsentry/sentry-mobile/actions?query=branch%3Amain)
 
-> Please be aware that this project is currently not actively maintained. PRs will not be merged.
+> Note: Please be aware that this project is currently not actively maintained. PRs will not be merged.
 
 A flutter application with the focus on [Release Health](https://docs.sentry.io/product/releases/health/setup/).
-
-| Android | iOS |
-|:-:|:-:|
-| [<img src=".github/google-play-logo.png" height="50">](https://play.google.com/store/apps/details?id=io.sentry.mobile.app) | [<img src=".github/appstore-logo.png" height="50">](https://apps.apple.com/app/sentry-io/id1546709967) |
 
 # Run source generators
 
