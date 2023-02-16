@@ -34,15 +34,17 @@ class SentrySdkMiddleware extends MiddlewareClass<AppState> {
       // https://docs.sentry.io/platforms/flutter/enriching-events/identify-user/
       // Set to auto to let the server decide the IP
       Sentry.configureScope(
-        (scope) => scope.user = SentryUser(
-          email: action.me.email,
-          id: action.me.id,
-          ipAddress: '{{auto}}',
+        (scope) => scope.setUser(
+          SentryUser(
+            email: action.me.email,
+            id: action.me.id,
+            ipAddress: '{{auto}}',
+          ),
         ),
       );
     }
     if (action is LogoutAction) {
-      Sentry.configureScope((scope) => scope.user = null);
+      Sentry.configureScope((scope) => scope.setUser(null));
     }
     next(action);
   }

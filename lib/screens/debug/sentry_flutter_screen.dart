@@ -294,6 +294,7 @@ class _SentryFlutterScreenState extends State<SentryFlutterScreen> {
 }
 
 enum _TypeToThrow { EXCEPTION, ERROR, STRING }
+
 enum _NativePlatform { iOS, Android }
 
 extension _TypeToThrowPrint on _TypeToThrow {

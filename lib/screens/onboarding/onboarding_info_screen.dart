@@ -21,7 +21,7 @@ class OnboardingInfoScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 12),
                 LinkRichText(
-                  'https://www.sentry.io/',
+                  Uri.parse('https://www.sentry.io/'),
                   'sentry.io',
                   prefix:
                       'Sentry Mobile is available only to the cool folks, our Early Adopters. We\'re starting out with Release Health. For other Sentry features, please use ',

@@ -88,9 +88,9 @@ class _SettingsState extends State<Settings> {
                     color: SentryColors.royalBlue,
                   ),
                   onTap: () async {
-                    const url = 'https://sentry.io/privacy/';
-                    if (await canLaunch(url)) {
-                      await launch(url, forceSafariVC: false);
+                    final url = Uri.parse('https://sentry.io/privacy/');
+                    if (await canLaunchUrl(url)) {
+                      await launchUrl(url);
                     } else {
                       throw 'Could not launch $url';
                     }

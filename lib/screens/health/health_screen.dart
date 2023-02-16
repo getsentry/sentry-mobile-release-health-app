@@ -34,12 +34,12 @@ class _HealthScreenState extends State<HealthScreen>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -91,9 +91,10 @@ class _HealthScreenState extends State<HealthScreen>
             'We have identified that none of your projects are configured to support Release Health. Head over to our the documentation to learn more.',
         button: 'Open Documentation',
         action: () async {
-          const url = 'https://docs.sentry.io/product/releases/health/setup/';
-          if (await canLaunch(url)) {
-            await launch(url, forceSafariVC: false);
+          final url = Uri.parse(
+              'https://docs.sentry.io/product/releases/health/setup/');
+          if (await canLaunchUrl(url)) {
+            await launchUrl(url);
           } else {
             throw 'Could not launch $url';
           }
@@ -105,7 +106,7 @@ class _HealthScreenState extends State<HealthScreen>
         },
       );
     } else {
-      WidgetsBinding.instance?.addPostFrameCallback((Duration duration) {
+      WidgetsBinding.instance.addPostFrameCallback((Duration duration) {
         if (viewModel.showLoadingScreen) {
           _refreshKey.currentState!.show();
         } else {
