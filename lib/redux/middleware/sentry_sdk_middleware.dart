@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:redux/redux.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:sentry_flutter_plus/sentry_flutter_plus.dart';
 
 import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
@@ -64,6 +65,16 @@ class SentrySdkMiddleware extends MiddlewareClass<AppState> {
       options.autoAppStart = false;
       options.tracesSampleRate = 1.0;
       options.sendDefaultPii = true;
+      options.addSentryFlutterPlus(
+        addFileTracing: true,
+        addHttpTracing: false,
+        addUnhandledEventProcessor: false,
+        automaticInAppExcludes: true,
+        evenMoreEventEnrichment: false, // not that useful for mobile
+        methodChannelTracing: true,
+        onErrorHandler: true, // only useful for Flutter >= 3.1.0
+        platformMenuIntegration: false, // doesn't do anything on mobile
+      );
     });
   }
 

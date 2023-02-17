@@ -2,11 +2,15 @@ import 'dart:convert';
 
 import 'package:redux/redux.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:sentry_plus/sentry_plus.dart';
 
 import '../../api/sentry_api.dart';
 import '../../redux/actions.dart';
 import '../../redux/state/app_state.dart';
 import '../../types/auth_token_code.dart';
+
+final _decoder =
+    json.decoder.fuse(base64.decoder.fuse(utf8.decoder)).wrapWithTraces();
 
 class ConnectViewModel {
   ConnectViewModel(this.store);
@@ -21,8 +25,7 @@ class ConnectViewModel {
       return;
     }
     try {
-      final decoded = utf8.decode(base64.decode(encoded));
-      final json = jsonDecode(decoded) as Map<String, dynamic>;
+      final json = _decoder.convert(encoded) as Map<String, dynamic>;
       final authTokenCode = AuthTokenCode.fromJson(json);
       return onToken(authTokenCode.authToken);
     } catch (exception, stackTrace) {

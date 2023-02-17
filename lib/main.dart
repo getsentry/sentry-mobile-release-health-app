@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:sentry_flutter_plus/sentry_flutter_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'redux/actions.dart';
@@ -48,7 +49,9 @@ Future<Store<AppState>> createStore(
 
 Future<void> main() async {
   runZonedGuarded(() async {
-    WidgetsFlutterBinding.ensureInitialized();
+    // Needed for MethodChannel observation
+    WidgetsSentryBinding.ensureInitialized();
+    // WidgetsFlutterBinding.ensureInitialized();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       SentryFlutter.setAppStartEnd(DateTime.now().toUtc());
     });
