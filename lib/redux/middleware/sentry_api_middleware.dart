@@ -13,6 +13,21 @@ import '../actions.dart';
 import '../state/app_state.dart';
 
 class SentryApiMiddleware extends MiddlewareClass<AppState> {
+  /// Handles API errors, checking for authentication failures.
+  /// Returns true if the error was an authentication error and was handled.
+  bool _handleApiError(Store<AppState> store, dynamic error) {
+    if (error is ApiError && error.isAuthenticationError) {
+      // Token is invalid/expired/revoked - trigger re-authentication
+      Sentry.addBreadcrumb(Breadcrumb(
+          message: 'Authentication required: HTTP ${error.statusCode}',
+          level: SentryLevel.warning,
+          category: 'auth'));
+      store.dispatch(AuthenticationRequiredAction());
+      return true;
+    }
+    return false;
+  }
+
   @override
   dynamic call(Store<AppState> store, action, next) {
     if (action is FetchOrgsAndProjectsAction) {
@@ -73,7 +88,9 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
         } catch (e, s) {
           syncSpan?.throwable = e;
           syncSpan?.status = SpanStatus.internalError();
-          store.dispatch(FetchOrgsAndProjectsFailureAction(e, s));
+          if (!_handleApiError(store, e)) {
+            store.dispatch(FetchOrgsAndProjectsFailureAction(e, s));
+          }
         } finally {
           syncSpan?.finish();
         }
@@ -109,7 +126,9 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           store.dispatch(
               FetchLatestReleasesSuccessAction(projectsWithLatestRelease));
         } catch (e, s) {
-          store.dispatch(FetchLatestReleasesFailureAction(e, s));
+          if (!_handleApiError(store, e)) {
+            store.dispatch(FetchLatestReleasesFailureAction(e, s));
+          }
         }
         api.close();
       };
@@ -126,7 +145,9 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           store.dispatch(
               FetchLatestReleaseSuccessAction(action.projectId, latestRelease));
         } catch (e, s) {
-          store.dispatch(FetchLatestReleaseFailureAction(e, s));
+          if (!_handleApiError(store, e)) {
+            store.dispatch(FetchLatestReleaseFailureAction(e, s));
+          }
         }
         api.close();
       };
@@ -142,7 +163,9 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           );
           store.dispatch(FetchIssuesSuccessAction(action.projectSlug, issues));
         } catch (e, s) {
-          store.dispatch(FetchIssuesFailureAction(e, s));
+          if (!_handleApiError(store, e)) {
+            store.dispatch(FetchIssuesFailureAction(e, s));
+          }
         }
         api.close();
       };
@@ -156,7 +179,9 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           final me = await api.authenticatedUser();
           store.dispatch(FetchAuthenticatedUserSuccessAction(me));
         } catch (e, s) {
-          store.dispatch(FetchAuthenticatedUserFailureAction(e, s));
+          if (!_handleApiError(store, e)) {
+            store.dispatch(FetchAuthenticatedUserFailureAction(e, s));
+          }
         }
         api.close();
       };
@@ -191,7 +216,9 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           store.dispatch(FetchSessionsSuccessAction(
               action.projectId, sessions, sessionsBefore));
         } catch (e, s) {
-          store.dispatch(FetchSessionsFailureAction(action.projectId, e, s));
+          if (!_handleApiError(store, e)) {
+            store.dispatch(FetchSessionsFailureAction(action.projectId, e, s));
+          }
         }
         api.close();
       };
@@ -206,8 +233,10 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           store.dispatch(
               BookmarkProjectSuccessAction(action.organizationSlug, project));
         } catch (e, s) {
-          store.dispatch(BookmarkProjectFailureAction(
-              action.projectSlug, !action.bookmarked, e, s));
+          if (!_handleApiError(store, e)) {
+            store.dispatch(BookmarkProjectFailureAction(
+                action.projectSlug, !action.bookmarked, e, s));
+          }
         }
         api.close();
       };
@@ -238,7 +267,9 @@ class SentryApiMiddleware extends MiddlewareClass<AppState> {
           store.dispatch(
               FetchApdexSuccessAction(action.projectId, apdex, apdexBefore));
         } catch (e, s) {
-          store.dispatch(FetchApdexFailureAction(e, s));
+          if (!_handleApiError(store, e)) {
+            store.dispatch(FetchApdexFailureAction(e, s));
+          }
         }
         api.close();
       };

@@ -1,6 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:redux/redux.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import '../actions.dart';
 import '../state/app_state.dart';
@@ -54,6 +55,12 @@ class SecureStorageMiddleware extends MiddlewareClass<AppState> {
     if (action is LogoutAction) {
       await _secureStorage.delete(key: _keyAuthToken);
       await _secureStorage.delete(key: _keySentrySdkEnabled);
+    }
+    if (action is AuthenticationRequiredAction) {
+      // Clear stored credentials when authentication fails (token expired/revoked)
+      await _secureStorage.delete(key: _keyAuthToken);
+      // Dispatch logout to reset app state and navigate to login
+      store.dispatch(LogoutAction());
     }
     next(action);
   }
