@@ -37,6 +37,12 @@ class ApiFailureAction {
   final StackTrace stackTrace;
 }
 
+/// Action dispatched when authentication is required (e.g., token expired/revoked).
+/// This triggers logout and navigation to the login screen.
+class AuthenticationRequiredAction {
+  AuthenticationRequiredAction();
+}
+
 // FetchOrganizationsAndProjects
 
 class FetchOrgsAndProjectsAction {
